@@ -1,0 +1,55 @@
+{
+  "name": "smsblog",
+  "version": "0.0.0",
+  "description": "microblog",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./ --cache --ignore-pattern .gitignore",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+  },
+  "pre-commit": [
+    "precommit-msg",
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "C:\\\\Users\\\\Public\\\\Documents\\\\GitRepos\\\\smsblog.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "gitHead": "dac462c6852696878ddc80b9514e0517b8d0af2d",
+  "readmeFilename": "readme.md",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^0.6.2",
+    "eslint-plugin-react": "^4.3.0",
+    "eslint_d": "^3.1.0"
+  },
+  "dependencies": {
+    "async": "^2.0.0-rc.6",
+    "axios": "^0.11.0",
+    "compression-webpack-plugin": "^0.4.0",
+    "graceful-fs": "^4.1.11",
+    "immutable": "^3.8.1",
+    "inherits": "^2.0.3",
+    "json-loader": "^0.5.4",
+    "moment": "^2.13.0",
+    "prettier": "^1.12.1",
+    "query-string": "^6.1.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-markdown": "^2.5.0",
+    "react-redux": "5.0.4",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.3.1",
+    "webpack": "^3"
+  }
+}

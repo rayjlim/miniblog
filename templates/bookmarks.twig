@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bookmark Age Graph</title>
+  <script src="//d3js.org/d3.v4.min.js"></script>
+  <style>
+    .chart {
+      background: lightgray;
+      border: 1px solid black;
+    }
+
+    div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 80px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+  </style>
+</head>
+<body>
+[<a href="?path=">All</a>]
+ {% for x in paths %}
+    [<a href="?path={{x.path}}">{{x.path}}</a>]
+  {% endfor %}
+
+  <div class="chart"></div>
+
+  <script src="../../_rsc/js/bookmark.js"></script>
+</body>
+</html>
+
+<!--
+
+tech_articles/es6
+tech_articles/react
+tech_articles/functional
+tech_articles
+interesting articles
+
+[<a href="?tech_articles\/redux">tech/redux</a>]  
+[<a href="?tech_articles\/react-testing">tech/react-testing</a>]  
+[<a href="?tech_articles\/css">tech/css</a>]
+[<a href="?tech_articles\/backburner">tech/backburner</a>]  
+[<a href="?tech_articles\/guides">tech/guides</a>]  
+  -->

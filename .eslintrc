@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb/legacy",
+  "env": {
+    "browser": 1
+  },
+  "globals": {
+    "angular": 1,
+    "$": 1
+  },
+  "rules": {
+        "indent": [
+            2,4
+        ]
+        }
+}

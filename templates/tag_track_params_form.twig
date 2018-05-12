@@ -1,0 +1,70 @@
+<form method="get" action="#" class="form-inline">
+    <input type="hidden" name="cmd" value="track_graph">
+    <input type="hidden" name="label" value="{{data['passThroughLabel']}}">
+
+    <div class="container">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div class='input-group date' id='datetimepickerStart'>
+                    <input type='text' class="form-control" name="startdate" value="{{data['param'][startDate]}}"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar">
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+         <div class="col-sm-6" >
+            <div class="form-group">
+                <div class='input-group date' id='datetimepickerEnd'>
+                    <input type='text' class="form-control" name="enddate" value="{{data['param'][endDate]}}"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar">
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+   
+    <label>Page count:</label>     
+    <input type="text" name="count" value="{{data['param'][resultLimit]}}" id="inputCount"
+        class="input-mini"
+    >
+    <a href="#" id="btnCount">V</a>
+
+    <ul id="dropdownCount" class="cdropdown">
+        <li>50</li>
+        <li>100</li>
+        <li>200</li>
+        <li>300</li>
+        <li>500</li>
+    </ul>
+    <label>Sample Size:</label>
+    <input type="text" name="sampleSize" value="{{data['param'][sampleSize]}}"  id="inputSample"
+        class="input-mini"
+    >
+    <a href="#" id="btnSample">V</a>
+    <ul id="dropdownSample" class="cdropdown">
+        <li>10</li>
+        <li>15</li>
+        <li>20</li>
+        <li>30</li>
+    </ul>
+    <label>Weight Factor:</label>     
+    <input type="text" name="weightFactor" value="{{data['param'][weightFactor]}}"  id="inputFactor"
+        class="input-mini"
+    >
+    <a href="#" id="btnFactor">V</a>
+    <ul id="dropdownFactor" class="cdropdown">
+        <li>0.5</li>
+        <li>0.7</li>
+        <li>0.9</li>
+        <li>1.0</li>
+    </ul>
+    <input type="submit">
+</div>
+
+</form>

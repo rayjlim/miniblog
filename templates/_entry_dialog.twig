@@ -1,0 +1,27 @@
+<div id="dialog" title="Edit Blog Entry">
+    <form id="edit_form" method="post" action="index.php">
+        <fieldset>
+        <input type="hidden" name="id" id="edit_id_field">
+
+        <div class="modal-header">
+        <h3 id="myModalLabel">Edit Blog Entry</h3>
+        </div>
+
+        <div class="modal-body">
+        <textarea name="content" cols="70" rows="5" id="edit_content_field"></textarea> 
+        <input type="text" name="date" value="" id="edit_date_field" class="date_field" maxlength="20" />
+        <span>What I'm eating / drinking / playing; I'm thinking / loving /feeling; I'm listening /watching /reading</span>
+
+        </div>
+        <a href="#" id="edit_date_field_yesterday_link" class="previous_day_link">Previous Day</a>
+        <div class="modal-footer">
+            
+        <input type="submit" name="" value="Submit Post!"  id="dialog_submit"/>
+        <button type="button" id="dialog_cancel">Cancel</button>
+
+        <button type="button" id="edit_delete_link">Delete</button>
+        
+        </div>
+        </fieldset>
+    </form> 
+</div>

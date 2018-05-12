@@ -1,0 +1,22 @@
+
+{% include '_header.twig' %}
+<link rel="stylesheet" type="text/css" 
+	href="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/jquery.jqplot.min.css" />
+
+<link href="{$rooturl}_rsc/css/blog.css" rel="stylesheet" type="text/css">
+
+{% include '_banner.twig' %}
+<div id="chart"></div>
+<div id="chartStack"></div>
+
+{% include '_footer.twig' %}
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/jquery.jqplot.min.js">
+  </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/plugins/jqplot.dateAxisRenderer.min.js">
+  </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/plugins/jqplot.highlighter.min.js">
+  </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/plugins/jqplot.trendline.min.js">
+  </script>
+<script src="../../_rsc/js/sleepstats.js"></script>

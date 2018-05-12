@@ -1,0 +1,63 @@
+{% include '_header.twig' %}
+<link href="{{rooturl}}_rsc/css/blog.css" rel="stylesheet" type="text/css">
+<link href="{{rooturl}}_rsc/vendor/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css">
+
+<link href="{{rooturl}}_rsc/vendor/jquery-ui-1.11.0.custom/jquery-ui.min.css" rel="stylesheet" type="text/css">
+
+{% include '_banner.twig' %}
+
+<h1 class="command_title">Entries for {{user_fullname}}</h1>
+
+<div class="row">
+    <div class="span4">
+    <form id="filter" class="form-inline">
+        Show: <input type="checkbox" id="filter_untagged" checked="checked"><label for="filter_untagged">Untagged</label>
+        <input type="checkbox" id="filter_tagged" checked="checked"><label for="filter_tagged"> Tagged</label>
+        {% if admin %}
+        <input type="checkbox" id="filter_goals" checked="checked"><label for="filter_goals">Goals</label>
+        {% endif %}
+    </form>
+</div>
+
+<div class="span3">
+<form id="gotoForm" method="get"  class="form-inline" action="">
+    <input type="text" name="gotoYearMonth" value="{{showDate|date("Y-m")}}"  class="input-small"/>
+    <input type="submit" value="Goto Month"  />
+</form> 
+</div>
+
+</div>
+<div id='calendar'></div>
+
+<span id="highlightDate" class="hide">
+    {% if highlightDate is defined %}{{highlightDate}}{% endif %}
+</span>
+<span id="showDate" class="hide">
+    {{showDate|date("Y-m")}}
+</span>
+{% include '_footer.twig' %}
+{% include '_entry_dialog.twig' %}
+
+<script src="{{rooturl}}_rsc/vendor/jquery-ui-1.11.0.custom/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
+
+<script src="{{rooturl}}_rsc/js/CalendarHelper.js"></script>
+<script>
+  var baseurl = '{{baseurl}}';
+
+  $(document).ready(function docReady() {
+    var showDateStr = $('#showDate').html().trim();
+    var showDate = moment(showDateStr);
+    var viewYearMonth = showDate.format('YYYY-MM');
+    $('#dialog_submit').bind('click', LptCal.saveEvent);
+    $('#dialog_cancel').bind('click', LptCal.cancelEvent);
+    $('#edit_delete_link').bind('click', LptCal.deleteEvent);
+    $('#edit_date_field_yesterday_link').bind('click', LptCal.yesterdayClick);
+    $('#calendar').fullCalendar(LptCal);
+
+    console.log('viewYearMonth: ' + viewYearMonth);
+    $('#calendar').fullCalendar('gotoDate', $.fullCalendar.moment(viewYearMonth + '-01',
+      'YYYY-MM-DD'));
+  });
+</script>

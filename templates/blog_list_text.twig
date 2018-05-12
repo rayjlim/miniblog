@@ -1,0 +1,136 @@
+{% include '_header.twig' %}
+<link href="{{rooturl}}_rsc/css/blog.css" rel="stylesheet" type="text/css">
+<link href="{{rooturl}}_rsc/vendor/jquery-ui-1.11.0.custom/jquery-ui.min.css" rel="stylesheet" type="text/css">
+<style>
+.postEntry{ list-style-type: none;width:100%;
+overflow:hidden; }
+.postEntry a{ float:left;
+width:10%;}
+.postEntry div{ margin-left: 5px;  float:left;
+width:70%;}
+</style>
+{% include '_banner.twig' %}
+<h1 class="command_title">Entries</h1>
+
+
+<a href="#" id="addlink">Add Entry</a><br>
+
+<a href="#" id="searchLink">Search</a>
+<input type="text" name="searchValue" value="" id="searchValue">
+
+<a href="#" id="sameDayLink">Same Day</a>
+<input type="text" name="sameDayValue" value="" id="sameDayValue">
+<a href="#" id="wordpressLink">Wordpress</a>
+<select name="wordpressYear" id="wordpressYear">
+    <option value="2018">2018</option>
+    <option value="2017">2017</option>
+    <option value="2016">2016</option>
+    <option value="2015">2015</option>
+    <option value="2014">2014</option>
+    <option value="2013">2013</option>
+    <option value="2012">2012</option>
+    <option value="2011">2011</option>
+    <option value="2010">2010</option>
+    <option value="2009">2009</option>
+    <option value="2009">2009</option>
+    <option value="2008">2008</option>
+    <option value="2007">2007</option>
+    <option value="2006">2006</option>
+    <option value="2005">2005</option>
+    <option value="2004">2004</option>
+    <option value="2003">2003</option>
+    <option value="2002">2002</option>
+    <option value="2001">2001</option>
+    <option value="2000">2000</option>
+    <option value="1999">1999</option>
+    <option value="1998">1998</option>
+    <option value="1997">1997</option>
+    <option value="1996">1996</option>
+    <option value="1995">1995</option>
+</select>
+<a href="#" id="recentPostsLink">Recent Posts</a>
+<ul id="resultsList">
+</ul>
+{% include '_footer.twig' %}
+{% include '_entry_dialog.twig' %}
+<script src="{{rooturl}}_rsc/vendor/jquery-ui-1.11.0.custom/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="{{rooturl}}_rsc/js/CalendarHelper.js"></script>
+<script >
+  var baseurl = '{{baseurl}}';
+  $(document).ready(function() {
+    $("#dialog_submit").bind("click", LptCal.saveEvent);
+    $("#dialog_cancel").bind("click", LptCal.cancelEvent);
+    $("#edit_delete_link").bind("click", LptCal.deleteEvent);
+    $("#edit_date_field_yesterday_link").bind("click", LptCal.yesterdayClick);
+    
+    $('#addlink').click(function(){
+        LptCal.dayClick(moment());
+    });
+    $('.entryContent').click(function(){
+        var event = { };
+        event.id = $(this).attr('id');
+        LptCal.eventClick(event);
+        
+        return false;
+    });
+    $('#searchLink').click(function(){
+        $.ajax({
+        url: "../api/posts/?searchParam="+$('#searchValue').val()
+        }).then(function(data){ handleListData(data);} );
+    });
+    $('#sameDayLink').click(function(){
+        $.ajax({
+        url: "../api/sameDayEntries/?day="+$('#sameDayValue').val()
+        }).then(function(data){ handleListData(data);} );
+    });
+    $('#wordpressLink').click(function(){  
+      $.ajax({
+        url: "../api/wordpressEntries/?year=" + $('#wordpressYear').find(":selected").text()
+      }).then(function(data){ handleListData(data);} );
+    });
+    $('#recentPostsLink').click(function(){
+      $.ajax({
+        url: "../api/posts/"
+      }).then(function(data){ handleListData(data); });
+    });
+  });
+  function formatDate (dateValue){
+      var month = dateValue.getMonth() + 1;
+      month = (month < 10) ? '0' + month : month;
+      var day = dateValue.getDate();
+      var year = dateValue.getFullYear();
+      return year + "-" +month + "-" + day;
+  }
+  
+  $.ajax({
+      url: "../api/posts/"
+  }).then(function(data){ handleListData(data);} );
+  
+  function handleListData(data){
+    console.log(data);
+    var cList = $('ul#resultsList');
+    var currentDate = '';
+    cList.empty();
+    $.each(data.entries, function(i)
+    {
+    var li = $('<li/>').addClass('postEntry').appendTo(cList);
+    var aLink;
+    if(currentDate !== data.entries[i].date){
+      aLink = $('<a/>').text(data.entries[i].date);
+    }
+    else{
+       aLink = $('<a/>').text('_');
+    }
+    aLink.attr("href", '?gotoYearMonth='+data.entries[i].date).appendTo(li);
+    var titleContent = (data.entries[i].title !== undefined) ? 
+      '<div>"'+data.entries[i].title+'"</div>'
+      : '';
+    
+    $('<div/>')
+      .empty().append(titleContent + data.entries[i].content)
+      .appendTo(li);
+      currentDate = data.entries[i].date;
+    });
+  }
+</script>

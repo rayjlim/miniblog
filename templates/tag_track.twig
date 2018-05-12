@@ -1,0 +1,111 @@
+{% include '_header.twig' %}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/jquery.jqplot.min.css">
+
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+<link href="{{rooturl}}_rsc/css/blog.css" rel="stylesheet" type="text/css">
+<style>
+    #weekDays li em { width: 100px; display: inline-block;}
+    #weekDays li div { display: inline-block;}
+    .cdropdown { position:absolute; width:200px; display:none; 
+                z-index: 200; background-color: #FFF}
+    .cdropdown li:hover { background:#ccc; cursor:pointer; z-index: 201}
+    
+    #chart2{ width:800px; height:500px; display:block;}
+    #chartex{ width:800px; height:500px; display:block;}
+    .highlight { bg-color: #00f;}
+</style>
+{% include '_banner.twig' %}
+<h1 class="command_title">{{data['pageLabels']['title']}}</h1>
+
+{% include 'tag_track_params_form.twig' %}
+
+<div id="chart"></div>
+
+<br><br>
+<div id="clickdata"></div>
+
+<div class="row">
+    <div class="span3">
+        <ul>
+            <li>{{data['pageLabels']['highest']}}: {{data['milestone']['highest']}} - {{data['milestone']['highestDate']}}</li>
+            <li>{{data['pageLabels']['lowest']}}: {{data['milestone']['lowest']}} - {{data['milestone']['lowestDate']}}</li>
+            
+           <li>Biggest Drop Diff: {{data['milestone']['diffhighest']}} - {{data['milestone']['diffhighestDate']}}</li>
+           <li>Biggest Gain Diff: {{data['milestone']['difflowest']}} - {{data['milestone']['difflowestDate']}}</li>
+
+        </ul>
+    </div>
+</div>
+
+<h2>Goal: {{data['goal']}}</h2>
+<h3>This week: {{data['milestone']['thisWeeksAverage']}}</h3>
+<h3>Last week: {{data['milestone']['lastWeeksAverage']}}</h3>
+<h3>Rest of Month: {{data['milestone']['prev2WeeksAverage']}}</h3>
+
+<h3>Overall Average: {{data['overallAverage']}}</h3>
+<ul id="weekDays">
+   <li><em>Monday:</em><div>{{data['dayArray']['Monday']['average']}}</div></li>
+   <li><em>Tuesday:</em><div>{{data['dayArray']['Tuesday']['average']}}</div></li>
+   <li><em>Wednesday:</em><div>{{data['dayArray']['Wednesday']['average']}}</div></li>
+   <li><em>Thursday:</em><div>{{data['dayArray']['Thursday']['average']}}</div></li>
+   <li><em>Friday:</em><div>{{data['dayArray']['Friday']['average']}}</div></li>
+   <li><em>Saturday:</em><div>{{data['dayArray']['Saturday']['average']}}</li>
+   <li><em>Sunday:</em><div>{{data['dayArray']['Sunday']['average']}}</div></li>
+   <li><em>Baseline:</em><div>0</div></li>
+</ul>
+
+<h2>Entries - {{ data['entries']|length}}</h2>
+<table id="chart-data">
+ {% for entry in data['entries'] %}
+    
+    <tr>
+        <td class="hide">{{entry['date']| date('U') }}000</td>
+        <td>{{entry['main']}}</td>
+        <td>{{entry['comment']|e}}</td>
+        <td class="hide">{{entry['average']}}</td>
+        <td>{{entry['date']|date('d/m/Y')}}</td>        
+    </tr>
+    {% endfor %}
+</table>
+{% include '_footer.twig' %}
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.2/lodash.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/jquery.jqplot.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/plugins/jqplot.dateAxisRenderer.min.js">
+  </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/plugins/jqplot.highlighter.min.js">
+  </script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+<script src="{{rooturl}}_rsc/js/tag_track.js"></script>
+<script>
+  $(function () {
+    $('#datetimepickerStart').datetimepicker({
+      viewMode: 'years',
+      format: 'YYYY-MM'
+    });
+    $('#datetimepickerEnd').datetimepicker({
+      viewMode: 'years',
+      format: 'YYYY-MM'
+    });      
+  });
+</script>
+<!-- 
+    //DYNAMIC VARS BLOCK
+    var milestones = new Array();
+    milestones['highDate']     = {$data['milestone']['highestDate']|strtotime}000;
+    milestones['lowDate']      = {$data['milestone']['lowestDate']|strtotime}000;
+    milestones['highDiffDate'] = {$data['milestone']['diffhighestDate']|strtotime}000;
+    milestones['lowDiffDate']  = {$data['milestone']['difflowestDate']|strtotime};
+    milestones['goal']  = {$data['goal']};
+
+
+    var weight_comments = [ {foreach $data['entries'] as $entry name="foo"}
+{if ($smarty.foreach.foo.index != 0)},
+{/if}
+        ' {$entry['date']} {$entry['comment']|escape:'html'}'{/foreach}
+    ];
+ -->

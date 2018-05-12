@@ -1,0 +1,67 @@
+{% include '_header.twig' %}
+
+{% include '_banner.twig' %}
+
+<h1>Logs</h1>
+
+<ul>
+ {% for file in filelist %}
+    
+        <li><a href="{{baseurl}}logs/{{file}}">{{file}}</a>
+        - <a href="{{baseurl}}logs/{{file}}" class="delete">X</a>
+        </li>
+  {% endfor %}
+</ul>
+{% if logfile is defined %}
+    <h3>File Contents - {{logfileName}}</h3>
+    <pre>
+    {{logfile}}
+    </pre>
+{% endif %}
+
+{% include '_footer.twig' %}
+<script>
+
+$(document).ready(function(){
+    $('.delete').click(LogObject.deleteLog);
+   
+});
+
+ var LogObject = function(){
+    
+    var deleteLog = function() {
+        console.log('start delete log');
+         console.log(this.href);
+         $elementTarget = this;
+         $.ajax({
+           type: "DELETE",
+           url: $elementTarget.href, 
+           data: "",
+           error: function(msg){ 
+                alert ("Error on Submit:"+msg);
+            },
+           success: function(msg){
+            var jsonObj = jQuery.parseJSON(msg);
+            
+             if(jsonObj == null){
+                alert( "Data not Saved due to Sql Error: "+ jsonObj );
+             }else{
+                alert(jsonObj.pageMessage);
+
+                console.log($($elementTarget).parents('li:first'));
+                $($elementTarget).parents('li:first').remove();
+               
+             }
+                 return false;
+             }
+           }); 
+         
+         return false;          
+    };
+    
+    return {
+        deleteLog:deleteLog
+    }
+}();
+
+</script>

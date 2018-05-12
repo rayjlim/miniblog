@@ -1,0 +1,10 @@
+*.DS_Store
+/config
+/node_modules
+/.build
+/npm-debug.log
+/*.log
+/report
+/tasks
+/public/js/npm.js
+/public/js/angularjs-datetime-picker.min.js

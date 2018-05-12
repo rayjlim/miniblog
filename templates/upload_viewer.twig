@@ -1,0 +1,87 @@
+{% include '_header.twig' %}
+
+{% include '_banner.twig' %}
+
+<div class="container">
+  <p class="lead">Prepare the image for use</p>
+
+  <form action="../uploadRename/" method="post">
+      <input type="hidden" name="fileName" value="{{fileName}}">
+      <input type="hidden" name="filePath" value="{{filePath}}">
+
+      <label for="newFileName">Rename Image:</label>
+      <input type="text" name="newFileName" value="{{fileName}}" size="50" id="filenameChange" class="form-control">
+      <input type="submit" value="Change Name" name="submit" class="btn btn-info"/>
+      <a href="#" class="btn btn-warning pull-right" id="fixNameLink">Fix Name</a>
+  </form>
+ 
+<hr>
+<a href="{{baseurl}}uploadRotate/?left=true&fileName={{fileName}}&filePath={{filePath}}" class="btn btn-default">Rotate left</a>
+<a href="{{baseurl}}uploadRotate/?fileName={{fileName}}&filePath={{filePath}}" class="btn btn-default">Rotate Right</a>
+<a href="{{baseurl}}uploadResize/?fileName={{fileName}}&filePath={{filePath}}" class="btn btn-default">Resize</a>
+<img src="{{rooturl}}uploads/{{filePath}}{{fileName}}">
+<hr>
+<form style="margin-bottom: 70px">
+  <h2>New Post</h2>
+  <div class="form-group" >
+    <input type="text" class="form-control" id="postDateField" value="" />
+  </div>
+  <div class="form-group">
+    <textarea class="form-control"  id="postContent" rows=4></textarea>
+  </div>
+  <h5>Image is automatically prepended on submit</h5>
+  <button type="button" class="btn btn-default" id="saveNewEntryLink">Submit</button>
+</form>
+
+</div>
+  <nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container">
+      <a href="{{baseurl}}main#/text" class="btn btn-default navbar-btn">Blog Page</a>
+    </div>
+  </nav>
+</body>
+</html>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script>
+
+var currentTime = moment();
+console.log(currentTime.format('Y-MM'));
+$('#postDateField').val(currentTime.format('Y-MM-DD'));
+
+let url = '{{baseurl}}api/posts/';
+let fileReference = '{{filePath}}{{fileName}}';
+
+$('#saveNewEntryLink').click((event)=> {
+  let imgStr =  `![](../uploads/${fileReference})`;
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    dataType: "json",
+    url,
+    data: (()=> {
+        return JSON.stringify({
+            "content": imgStr + $("#postContent").val(),
+            "date": $("#postDateField").val()
+        });
+    })(),
+    success: ()=>{
+      alert('saved');
+    },
+    error: (e)=>console.log(e)
+  });
+});
+
+$('#fixNameLink').click((event)=> {
+  event.preventDefault();
+  let oldName = $('#filenameChange').val();
+  console.log( oldName );
+  let splitVal = oldName.split('.');
+
+  let newVal = splitVal[0] + '.jpg';
+  $('#filenameChange').val(newVal);
+});
+</script>

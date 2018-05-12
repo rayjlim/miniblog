@@ -1,0 +1,87 @@
+{% include '_header.twig' %}
+
+<link href="_rsc/css/blog.css" rel="stylesheet" type="text/css">
+
+{% include '_banner.twig' %}
+<div class="container">
+    <h2>User Login</h2>
+    <form action="index.php/" method="post">
+        <input type="hidden" name="cmd" value="blog_list" />
+     
+         {% if target != "" %}
+        <input type="hidden" name="target" value="{{target}}"/>
+        {% endif %}
+        <div class="form-group">
+          <label for="password" class="password-label">Password:</label>
+          <input type="password" name="password" value="" id="password" maxlength="15" size="25" class="password">
+        </div>    
+        <input class="btn btn-secondary" type="submit" name="" value="Secret!"  /> 
+    </form>
+    <h2>Login via</h2>
+    <div>
+        <a href="{{fbLoginUrl}}" class="btn btn-primary btn-large">Facebook</a>
+        <a href="{{githubLoginUrl}}" class="btn btn-success btn-large">Github</a>
+        
+        <a href="{{googleLoginUrl}}" class="btn btn-danger btn-large">Google</a>
+
+    </div>
+</div>
+{% include '_footer.twig' %}
+
+<script>
+    $(document).ready(function() {
+        $('.password-label').animate({ opacity: "0.4" }).click(function() {
+            var thisFor = $(this).attr('for');
+            $('.'+thisFor).focus();
+        });
+
+        $('.password').focus(function() {
+            $('.password-label').animate({ marginLeft: "5em" }, "fast");
+            if($(this).val() == "password") {
+                $(this).val() == "";
+            }
+        }).blur(function() {
+            if($(this).val() == "") {
+                $(this).val() == "password";
+                $('.password-label').animate({ marginLeft: "1em" }, "fast");
+            }
+        });
+        $('#password').focus();
+    }); 
+</script>
+<!-- include stats/analytics -->
+{% if not DEVELOPMENT %}
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-39088080-1']);
+  _gaq.push(['_setDomainName', 'lilplaytime.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=321610; 
+var sc_invisible=0; 
+var sc_security=""; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/321610/0//0/" alt="click
+tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+{% endif %}
+<!-- include stats/analytics -->
