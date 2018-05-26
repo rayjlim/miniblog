@@ -1,10 +1,11 @@
 *.swp
 *.sublime*
 /_config/*
-/_rsc/js/app.bundle*
 /_rsc/js_build
 /backend/core/_mdb-config.php
 /node_modules
 /vendor
 /uploads/
 /side/node_modules
+work-lap.code-workspace
+_rsc/js/main.bundle*

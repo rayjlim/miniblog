@@ -21,7 +21,7 @@ module.exports = {
           exclude: /node_modules/,
           use: {
             loader: "babel-loader",
-            options: {presets: ['react']}
+            options: {presets: ['react', 'env']}
           }
         }
     ]
@@ -40,4 +40,9 @@ module.exports = {
 
 /**
  for production version, use ./node_modules/.bin/webpack --config webpack-prod.config.js -p 
+
+ seeing this error, but doesn't effect bundle
+ ERROR in ./app.bundle.js from UglifyJs
+Invalid assignment [./app.bundle.js:39363,30]
+
 */

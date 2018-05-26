@@ -2,10 +2,9 @@
 
 smsblog relies on phpcurl; if FB login is not working look if the module is enabled in the xampp php config
 
-Setup
------
+## Setup
 
-    see basic setup in link below  
+    see basic setup in link below
 
 
     php.ini
@@ -18,10 +17,10 @@ Setup
 
         set timezone date.timezone = "America/Los_Angeles"
 
-	for JS/React
-		install webpack globally
+    for JS/React
+       install webpack globally
 
-http://nimb.ws/YRF4AD
+[dropbox link](https://paper.dropbox.com/doc/Project-notes-To-remember-Aqk90sy9YHyVkkxkMuqaZ)
 
     Basic Setup - Composer
     Deploying to Production
@@ -40,12 +39,10 @@ Unit Tests
 
     grunt watchsingle --phpsingletarget=parsers/LongUrlParser
 
-
 special handling:
 in fullcalendar.css, line 625.
 commented out .fc-content {word-wrap:nowrap}
 so the events display multi line instead of forced to one line
-
 
 ----
 using node ver. 7.2.1
@@ -53,11 +50,10 @@ using node ver. 7.2.1
 ++ start linux dev server
 sudo /opt/lampp/lampp start
 php directory: /opt/lampp/bin
-http://localhost/projects/smsblog/index.php/
+    [http://localhost/miniblog/index.php/](http://localhost/miniblog/index.php/)
 
  node_modules/.bin/webpack -w (for development)
  node_modules/.bin/webpack --config webpack-prod.config.js
-
 
  running composer
  /opt/lampp/bin/php /usr/local/bin/composer install

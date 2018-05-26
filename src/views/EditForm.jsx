@@ -11,6 +11,9 @@ class EditForm extends React.Component {
     this.addToDate = this.addToDate.bind(this);
   }
   render() {
+    let escapedContent = this.props.entry.content.replace(/<br\s*\/>/g, `
+  `);;
+
     return (
       <div className="well">
         <h3>Edit Entry</h3>
@@ -21,9 +24,7 @@ class EditForm extends React.Component {
             className="form-control"
             placeholder="Add ..."
             rows="8"
-          >
-            {this.props.entry.content}
-          </textarea>
+          >{escapedContent}</textarea>
         </div>
         <div className="form-group">
           <input
