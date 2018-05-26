@@ -22,6 +22,6 @@ before_install:
   # https://github.com/bcoe/nyc/issues/190
   - npm install -g npm@latest
 
-script: webpack -p --config webpack.config.js
+script: webpack --config webpack.config.js
 
 # after_success: npm run coverage

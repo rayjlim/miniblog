@@ -1,5 +1,5 @@
 {
-  "name": "smsblog",
+  "name": "miniblog",
   "version": "0.0.0",
   "description": "microblog",
   "main": "index.js",
