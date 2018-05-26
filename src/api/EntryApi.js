@@ -5,7 +5,7 @@ import * as types from "../actions/action-types";
 function getEntrys(queryField, queryParam) {
   queryParam = queryParam || "";
   console.log("getEntrys" + queryParam);
-  const url =  `${BASE_URL}api/posts/?${queryField}=` + encodeURIComponent(queryParam)
+  const url = `${BASE_URL}api/posts/?${queryField}=` + encodeURIComponent(queryParam)
   console.log("url: " + url);
   return axios.get(url)
     .then(response => {
