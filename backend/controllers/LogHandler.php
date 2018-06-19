@@ -18,14 +18,11 @@ class LogHandler extends AbstractController
         parent::__construct($app);
     }
     public function getUrlHandler() {
-       
         return function () {
-            
             \Lpt\DevHelp::debugMsg('start logs list');
             
             $logfileName = '';
-            $filelist = $this->readFilelist();
-            
+            $filelist = $this->readFilelist(LOGS_DIR);
             if (count($filelist) > 0) {
                 \Lpt\DevHelp::debugMsg('reading first file');
                 $logfileName = $filelist[count($filelist) - 1];
@@ -37,7 +34,7 @@ class LogHandler extends AbstractController
     public function getUrlHandlerWithParam() {
         return function ($logfileName) {
             \Lpt\DevHelp::debugMsg('start logs list with param');
-            $filelist = $this->readFilelist();
+            $filelist = $this->readFilelist(LOGS_DIR);
             $this->readFileAndRender($logfileName, $filelist);
         };
     }
@@ -62,9 +59,9 @@ class LogHandler extends AbstractController
         };
     }
     
-    public function readFilelist() {
+    public function readFilelist($targetDir) {
        
-        $filelist = $this->resource->readdir(LOGS_DIR);
+        $filelist = $this->resource->readdir($targetDir);
         
         //NEED TO REMOVE NON EP CAL ENTRIES
         for ($i = count($filelist) - 1; $i >= 0; $i--) {

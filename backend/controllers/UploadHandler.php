@@ -261,5 +261,71 @@ class UploadHandler extends AbstractController
             
         };
     }
+
+    public function listMediaWithParam() {
+        return function ($mediaDir) {
+            \Lpt\DevHelp::debugMsg('start media list with param');
+            
+            $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
+
+            $this->readFileAndRender($mediaDir, $filelist);
+        };
+    }
+
+    public function listMedia() {
+        return function () {
+            \Lpt\DevHelp::debugMsg('start listMedia');
+            $logHandler = DAOFactory::LogHandler($this->app);
+            
+            $currentDir = '';
+            $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
+            if (count($filelist) > 0) {
+                \Lpt\DevHelp::debugMsg('reading first file');
+                $currentDir = $filelist[count($filelist) - 1];
+            }
+            $this->readFileAndRender($currentDir, $filelist);
+        };
+    }
+    
+    public function deleteMedia() {
+        return function () {
+            DevHelp::debugMsg('delete media');
+            $fileName = $_GET["fileName"];
+            $filePath = $_GET["filePath"];
+            DevHelp::debugMsg('$fileName' . $fileName);
+            DevHelp::debugMsg('$filePath' . $filePath);
+            
+
+             $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
+            
+             $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
+            
+            
+            //forward to xhr_action
+            $_SESSION['page_message'] = $data['pageMessage'];
+            
+            if ($this->app->request()->isAjax()) {
+                echo json_encode($data);
+            } 
+            else {
+                DevHelp::redirectHelper($baseurl . 'media/');
+            }
+        };
+    }
+
+    public function readFileAndRender($currentDir, $uploadDirs) {
+        
+        // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
+        $dirContent = '';
+        if ($currentDir != '') {
+            \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
+            $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
+        }
+        $this->app->view()->appendData(["uploadDirs" => $uploadDirs]);
+        $this->app->view()->appendData(["currentDir" => $currentDir]);
+        $this->app->view()->appendData(["dirContent" => $dirContent]);
+        $this->app->render('media_list.twig');
+    }
+    
 }
 

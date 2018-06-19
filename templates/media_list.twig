@@ -1,0 +1,116 @@
+{% include '_header.twig' %}
+{% include '_banner.twig' %}
+
+<h1>Media</h1>
+
+<ul>
+ {% for dirs in uploadDirs %}
+        <li><a href="{{baseurl}}media/{{dirs}}">{{dirs}}</a></li>
+  {% endfor %}
+</ul>
+{% if dirContent is defined %}
+    <h3>File Contents - {{currentDir}}</h3>
+    <pre>
+    {% for file in dirContent %}
+        <li><a href="{{baseurl}}uploadViewer/?fileName={{file}}&filePath={{currentDir}}/">{{file}}</a>
+        - <a href="{{baseurl}}media/?debug=on&fileName={{file}}&filePath={{currentDir}}/" class="delete">X</a>
+        - <a href="{{baseurl}}media/?fileName={{file}}&filePath={{currentDir}}/" class="addPost">Use in New Entry</a>
+        <img src="../../uploads/{{currentDir}}/{{file}}" />
+        </li>
+  {% endfor %}
+  
+    </pre>
+{% endif %}
+
+{% include '_footer.twig' %}
+<script>
+const BASE_URL = '{{baseurl}}';
+
+$(document).ready(function(){
+    $('.delete').click(MediaObject.deleteMedia);
+    $('.addPost').click(MediaObject.addPost);
+   
+});
+
+ var MediaObject = function(){
+    return {
+        deleteMedia: function() {
+        console.log('start delete media');
+         console.log(this.href);
+        // console.log(getUrlParams(this.href));
+         $elementTarget = this;
+         $.ajax({
+           type: "DELETE",
+           url: $elementTarget.href, 
+           data: "",
+           error: function(msg){ 
+                alert ("Error on Submit:"+msg);
+            },
+           success: function(msg){
+            var jsonObj = jQuery.parseJSON(msg);
+            
+             if(jsonObj == null){
+                alert( "Data not Saved due to Sql Error: "+ jsonObj );
+             }else{
+                alert(jsonObj.pageMessage);
+
+                console.log($($elementTarget).parents('li:first'));
+                $($elementTarget).parents('li:first').remove();
+               
+             }
+                 return false;
+             }
+           }); 
+         
+         return false;          
+    },
+        addPost: function(){
+            console.log('start add post');
+            console.log(this.href);
+            let params = getUrlParams(this.href);
+            console.log();
+            let fileReference = params.filePath + params.fileName;
+            let content = `![](../uploads/${fileReference})`;
+            let  prepContent = JSON.stringify({
+            content
+            });
+            console.log("BASE_URL " + BASE_URL);
+            $.ajax(
+            {
+           type: "POST",
+           url: BASE_URL + "/api/posts/", 
+           data: prepContent,
+           error: function(msg){ 
+                alert ("Error on Submit:" + msg);
+            },
+           success: function(msg){
+            var jsonObj = jQuery.parseJSON(msg);
+            
+             if(jsonObj == null){
+                alert( "Data not Saved due to Sql Error: "+ jsonObj );
+             }else{
+                alert("Saved");
+             }
+                 return false;
+             }
+           });
+
+            return false; 
+        }
+    }
+}();
+
+
+function getUrlParams( url ) {
+    var params = {};
+    var search = decodeURIComponent( url.slice(url.indexOf( '?' ) + 1 ) );
+    var definitions = search.split( '&' );
+
+    definitions.forEach( function( val, key ) {
+        var parts = val.split( '=', 2 );
+        params[ parts[ 0 ] ] = parts[ 1 ];
+    } );
+
+    return  params;
+}
+</script>

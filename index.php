@@ -1,5 +1,7 @@
 <?php
+
 require 'backend/core/common_header.php';
+
 use Slim\Views\Twig as Twig;
 use Slim\Slim;
 
@@ -89,6 +91,11 @@ $app->get('/uploadViewer/', $uploadHandler->view());
 $app->get('/uploadRotate/', $uploadHandler->rotate());
 $app->get('/uploadResize/', $uploadHandler->resize());
 $app->post('/uploadRename/', $uploadHandler->rename());
+
+// $mediaHandler = DAOFactory::MediaHandler($app);
+$app->get('/media/', $uploadHandler->listMedia());
+$app->get('/media/:mediaDir', $uploadHandler->listMediaWithParam());
+$app->delete('/media/', $uploadHandler->deleteMedia());
 
 $app->run();
 
