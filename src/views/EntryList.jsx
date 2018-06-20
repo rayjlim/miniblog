@@ -1,5 +1,6 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import TagLister from './TagLister.jsx';
 import moment from "moment";
 
 const EntryList = props => {
@@ -30,6 +31,7 @@ const EntryList = props => {
                         {showEntryDate} | 
                         <a href={ calLinkDate }>Cal</a>
                         |<ReactMarkdown source={newText} />
+                        <TagLister source={newText} />
                     </li>
                 );
             })}
