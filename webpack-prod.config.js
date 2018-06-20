@@ -28,6 +28,24 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+  /*  new webpack.optimize.UglifyJsPlugin({
+    minimize: true,
+    inline: false,
+    uglifyOptions: { ecma: 8,
+      compress: {
+           dead_code: true,
+           global_defs: {
+                    'process.env.NODE_ENV': JSON.stringify('production')
+            }
+       } }
+  }),*/
+
+  new webpack.LoaderOptionsPlugin({
+    minimize: true
+  }),
     new CompressionPlugin({
       asset: "[path].gz[query]",
       algorithm: "gzip",
@@ -44,5 +62,5 @@ module.exports = {
  seeing this error, but doesn't effect bundle
  ERROR in ./app.bundle.js from UglifyJs
 Invalid assignment [./app.bundle.js:39363,30]
-
+has to do with webpack uglify not able to handle ES2015 code
 */

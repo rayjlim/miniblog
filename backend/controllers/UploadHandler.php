@@ -267,9 +267,10 @@ class UploadHandler extends AbstractController
             \Lpt\DevHelp::debugMsg('start listMedia');
             $currentDir = $currentDir != '' ? $currentDir : '';
             $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
+
             if (count($filelist) > 0 && $currentDir == '') {
                 \Lpt\DevHelp::debugMsg('reading first file');
-                $currentDir = $filelist[count($filelist) - 1];
+                $currentDir = end($filelist);
             }
             
                     // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
@@ -277,6 +278,10 @@ class UploadHandler extends AbstractController
         
         \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
         $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
+
+        // usort($dirContent, function($a, $b){
+        //     return filemtime($a) > filemtime($b);
+        // });
         
         $this->app->view()->appendData(["uploadDirs" => $filelist]);
         $this->app->view()->appendData(["currentDir" => $currentDir]);

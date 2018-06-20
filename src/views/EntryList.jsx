@@ -25,10 +25,10 @@ const EntryList = props => {
                         </a>
                     );
                 }
-
+                let oneDayLink = `main#/oneDay?date=` + moment(entry.date).format("YYYY-MM-DD");
                 return (
                     <li key={entry.id} className="blogEntry">
-                        {showEntryDate} | 
+                        <a href={ oneDayLink }>{showEntryDate}</a> | 
                         <a href={ calLinkDate }>Cal</a>
                         |<ReactMarkdown source={newText} />
                         <TagLister source={newText} />

@@ -12,7 +12,7 @@ import qs from "query-string";
 
 class UploadViewerController extends Component {
   componentDidMount() {
-    console.log("UVC: componentDidMount"+this.props.location.search);
+    console.log("UVC: componentDidMount" + this.props.location.search);
     let query = qs.parse(this.props.location.search);
     let fileName = query.fileName;
     let filePath = query.filePath;
