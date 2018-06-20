@@ -94,7 +94,7 @@ $app->post('/uploadRename/', $uploadHandler->rename());
 
 // $mediaHandler = DAOFactory::MediaHandler($app);
 $app->get('/media/', $uploadHandler->listMedia());
-$app->get('/media/:mediaDir', $uploadHandler->listMediaWithParam());
+$app->get('/media/:currentDir', $uploadHandler->listMedia());
 $app->delete('/media/', $uploadHandler->deleteMedia());
 
 $app->run();

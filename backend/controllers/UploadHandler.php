@@ -262,28 +262,26 @@ class UploadHandler extends AbstractController
         };
     }
 
-    public function listMediaWithParam() {
-        return function ($mediaDir) {
-            \Lpt\DevHelp::debugMsg('start media list with param');
-            
-            $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
-
-            $this->readFileAndRender($mediaDir, $filelist);
-        };
-    }
-
     public function listMedia() {
-        return function () {
+        return function ($currentDir='') {
             \Lpt\DevHelp::debugMsg('start listMedia');
-            $logHandler = DAOFactory::LogHandler($this->app);
-            
-            $currentDir = '';
+            $currentDir = $currentDir != '' ? $currentDir : '';
             $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
-            if (count($filelist) > 0) {
+            if (count($filelist) > 0 && $currentDir == '') {
                 \Lpt\DevHelp::debugMsg('reading first file');
                 $currentDir = $filelist[count($filelist) - 1];
             }
-            $this->readFileAndRender($currentDir, $filelist);
+            
+                    // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
+        $dirContent = '';
+        
+        \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
+        $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
+        
+        $this->app->view()->appendData(["uploadDirs" => $filelist]);
+        $this->app->view()->appendData(["currentDir" => $currentDir]);
+        $this->app->view()->appendData(["dirContent" => $dirContent]);
+        $this->app->render('media_list.twig');
         };
     }
     
@@ -312,20 +310,6 @@ class UploadHandler extends AbstractController
             }
         };
     }
-
-    public function readFileAndRender($currentDir, $uploadDirs) {
-        
-        // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
-        $dirContent = '';
-        if ($currentDir != '') {
-            \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
-            $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
-        }
-        $this->app->view()->appendData(["uploadDirs" => $uploadDirs]);
-        $this->app->view()->appendData(["currentDir" => $currentDir]);
-        $this->app->view()->appendData(["dirContent" => $dirContent]);
-        $this->app->render('media_list.twig');
-    }
-    
+  
 }
 
