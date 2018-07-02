@@ -31,7 +31,13 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-  /*  new webpack.optimize.UglifyJsPlugin({
+    // new webpack.optimize.UglifyJsPlugin({
+    //   sourceMap: true,
+    //   output: {
+    //     comments: false,
+    //   },
+    // }),
+    new webpack.optimize.UglifyJsPlugin({
     minimize: true,
     inline: false,
     uglifyOptions: { ecma: 8,
@@ -41,7 +47,7 @@ module.exports = {
                     'process.env.NODE_ENV': JSON.stringify('production')
             }
        } }
-  }),*/
+  }),
 
   new webpack.LoaderOptionsPlugin({
     minimize: true
@@ -57,7 +63,7 @@ module.exports = {
 };
 
 /**
- for production version, use ./node_modules/.bin/webpack --config webpack-prod.config.js -p 
+ for production version, use ./node_modules/.bin/webpack --config webpack-prod.config.js -p
 
  seeing this error, but doesn't effect bundle
  ERROR in ./app.bundle.js from UglifyJs

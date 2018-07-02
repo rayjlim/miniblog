@@ -8,16 +8,15 @@ import AddForm from "../views/AddForm.jsx";
 import store from "../reducers/store";
 import * as types from "../actions/action-types";
 import EntryApi from "../api/EntryApi";
-import qs from "query-string";
 
 class UploadViewerController extends Component {
   componentDidMount() {
     console.log("UVC: componentDidMount" + this.props.location.search);
-    let query = qs.parse(this.props.location.search);
-    let fileName = query.fileName;
-    let filePath = query.filePath;
-    console.log(query);
-    
+    let urlParams = new URLSearchParams(window.location.search);
+    let fileName = urlParams.get('fileName');
+    let filePath = urlParams.get('filePath');
+    console.log(urlParams);
+
     store.dispatch({
       type: types.UPDATE_FILEVIEW,
       fileName: query.fileName,

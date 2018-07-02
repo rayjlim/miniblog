@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
-import qs from "query-string";
 
 import OneDayView from "../views/OneDayView.jsx";
 import EntryList from "../views/EntryList.jsx";
@@ -16,8 +15,8 @@ class OneDayBox extends Component {
 
   componentDidMount() {
     console.log("ODB: componentDidMount");
-    let query = qs.parse(this.props.location.search);
-    let date = query.date !== null ? query.date : moment().format('YYYY-MM-DD');
+    let urlParams = new URLSearchParams(window.location.search);
+    let date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
     console.log('passed date: ' + date)
 
     this.loadDay(date);
