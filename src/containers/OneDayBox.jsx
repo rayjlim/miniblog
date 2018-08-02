@@ -15,9 +15,16 @@ class OneDayBox extends Component {
 
   componentDidMount() {
     console.log("ODB: componentDidMount");
-    let urlParams = new URLSearchParams(window.location.search);
+
+    let loc = window.location+``;
+
+    let param = loc.substring(loc.indexOf('?'));
+    console.log(param);
+    let urlParams = new URLSearchParams(param);
+
+    console.log('urlParams.has: ' + urlParams.has('date'));
     let date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-    console.log('passed date: ' + date)
+    console.log('passed date: ' + date);
 
     this.loadDay(date);
     this.handleButtonDirection = this.handleButtonDirection.bind(this);

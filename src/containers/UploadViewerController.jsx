@@ -19,8 +19,8 @@ class UploadViewerController extends Component {
 
     store.dispatch({
       type: types.UPDATE_FILEVIEW,
-      fileName: query.fileName,
-      filePath: query.filePath
+      fileName,
+      filePath
     });
     this.handleAdd = this.handleAdd.bind(this);
     this.rotateLeft = this.rotateLeft.bind(this);
