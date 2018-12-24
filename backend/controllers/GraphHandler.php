@@ -85,35 +85,6 @@ class GraphHandler extends AbstractController
     };
   }
       
-  public function aggregate(){
-    return function () {
-      DevHelp::debugMsg(__FILE__);
-      $params = new GraphParams();
-      $params = $params->loadParams($this->app->request()->params(), $this->resource->getDateTime());
-      $params->resultLimit = 5000;
-      $entries = $this->dao->queryGraphData($this->resource->getSession(SESSION_USER_ID), $params);
-      
-      $entries = array_map("weightSubstr", $entries);
-      $entries = array_reduce($entries, "groupByYearMonth");
-      $final = [];
-      foreach($entries as $key=>$value){
-        $average = array_sum($value) / count($value);
-        $final[$key] = number_format($average, 1);
-      }
-      $this->app->response()->header('Content-Type', 'application/json');
-      $this->resource->echoOut('{"averages": ' . json_encode($final) . '}');
-    };
-  }
-}
-
-
-function nonWeightEntrys($item){
-  return stripos($item['content'], '#weight') == false;
-}
-
-function weightEntrys($item){
-  return stripos($item['content'], '#weight') !== false;
-}
 
 function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
@@ -129,10 +100,4 @@ function groupByYearMonth($carry, $item){
   return $carry;
 }
 
-function weightSubstr($x){
-  $x['weight'] = substr($x['content'], 0, 5);
-  unset($x['content']);
-  unset($x['user_id']);
-  unset($x['id']);
-  return $x;
 }

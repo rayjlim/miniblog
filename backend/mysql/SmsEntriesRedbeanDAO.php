@@ -98,6 +98,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         
         return $sequencedArray;
     }
+    
     function getWeightAYearAgo($userId, $date) {
         
         $targetYear =  ($date->format('Y') - 1);
