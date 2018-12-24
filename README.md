@@ -1,6 +1,6 @@
 # miniblog
 
-smsblog relies on phpcurl; if FB login is not working look if the module is enabled in the xampp php config
+miniblog relies on phpcurl; if FB login is not working look if the module is enabled in the xampp php config
 
 ## Setup
 
@@ -49,11 +49,13 @@ using node ver. 7.2.1
 
 ++ start linux dev server
 sudo /opt/lampp/lampp start
+(in linux terminal)
 php directory: /opt/lampp/bin
     [http://localhost/miniblog/index.php/](http://localhost/miniblog/index.php/)
 
  node_modules/.bin/webpack -w (for development)
- node_modules/.bin/webpack --config webpack-prod.config.js
-
+ npm run build
+ npm run build-prod
+ 
  running composer
  /opt/lampp/bin/php /usr/local/bin/composer install

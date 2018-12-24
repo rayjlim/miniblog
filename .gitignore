@@ -1,5 +1,4 @@
 *.swp
-*.sublime*
 /_config/*
 /_rsc/js/app.bundle*
 /_rsc/js_build
@@ -8,5 +7,4 @@
 /vendor
 /uploads/
 /side/node_modules
-work-desk-nodeapps.code-workspace
-dell-laptop-home.code-workspace
+*.code-workspace

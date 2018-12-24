@@ -66,20 +66,20 @@ class GraphHandler extends AbstractController
     $targetDay = $date;
     
     $entries = $this->dao->getSameDayEntries($userId, $targetDay);
-    
-    $nonWeightEntrys = array_filter($entries, "nonWeightEntrys");
-    $weightEntrys = array_filter($entries, "weightEntrys");
 
-    $printedNonWeight = array_reduce($nonWeightEntrys, "printEntrys");
-    $printedWeight = array_reduce($weightEntrys, "printEntrys");
-
-    $message = $printedNonWeight."\n".$printedWeight;
+    $printedNonWeight = array_reduce($entries, "printEntrys");
+ 
+    $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul></BODY></HTML>";
 
     $subject = "On this day ". $targetDay->format('M d'); 
     $to = 'rayjlim1@gmail.com';
     
-    $headers = 'From: smsblog@lilplaytime.com' . "\r\n" . 'Reply-To: rayjlim1@gmail.com' . "\r\n" . 
-      'X-Mailer: PHP/' . phpversion();
+      $headers = "From: smsblog@lilplaytime.com\r\n";
+      $headers .= "Reply-To: rayjlim1@gmail.com". "\r\n";
+      $headers .= "X-Mailer: PHP/" . phpversion();
+      $headers .= "MIME-Version: 1.0\r\n";
+      $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
     mail($to, $subject, $message, $headers);
     echo "{ \"cron\":\"email\"}";
     };
@@ -117,7 +117,7 @@ function weightEntrys($item){
 
 function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
-  $message =  $entryDay->format('Y-D') . ': ' . $item['content'] . "\n";
+  $message =  "<li>". $entryDay->format('Y-D') . ': ' . $item['content'] . "</li>";
   return $carry.=$message;
 }
 
