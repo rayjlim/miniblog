@@ -100,30 +100,19 @@ class EntryHandler extends AbstractController
       $this->resource->echoOut('{"entry": ' . json_encode($entry) . '}');
     };
   }
-    
-  function weightGraphSmall() {
+
+  function yearMonthsApi() {
     return function () {
-      $currentDate = $this->resource->getDateTime();
       $userId = $this->resource->getSession(SESSION_USER_ID);
+      DevHelp::debugMsg('start ' . __FILE__);
       
-      // get the data for the graph
-      $graphParams = new GraphParams();
-      $graphParams->label = "#weight";
-      $graphParams->resultLimit = "50";
-      $graphParams->sampleSize = "10";
-      $graphParams->weightFactor = ".7";
-      $graphParams->startDate = null;
-      $graphParams->endDate = $currentDate->format('Y-m-d');
-      $posts = $this->dao->queryGraphData($userId, $graphParams);
-      
-      // TODO: CALCULATE THE WEIGHTED AVERAGE
-      // $helper = DAOFactory::getGraphHelper();
-      // $data = $helper->calculateFields($params, $posts);
-      
-      $this->resource->echoOut('{"entry": ' . json_encode($posts) . '}');
+      // TODO: secure this by checking the user session id
+      $entry = $this->dao->getYearMonths($userId);
+      $this->app->response()->header('Content-Type', 'application/json');
+      $this->resource->echoOut('{"data": ' . json_encode($entry) . '}');
     };
-  }
-    
+  }  
+
   function setTemplateVariables($listParams, $currentDate) {
     $showCalendarMonth = isset($listParams->gotoYearMonth) ? $listParams->gotoYearMonth :
          $currentDate;

@@ -46,6 +46,9 @@ $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
 $app->get('/api/wordpressEntries/', $entryHandler->wordpressEntries());
 $app->get('/api/pebble', $entryHandler->pebbleInfo());
+$app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
+
+
 
 $cudHandler = DAOFactory::CUDHandler($app);
 $app->post('/api/posts/', $cudHandler->addEntry());
@@ -55,8 +58,6 @@ $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
 $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/graph/', $graphHandler->handle());
 $app->get('/api/graph/', $graphHandler->handleApi());
-$app->get('/api/graph/weight/small', $entryHandler->weightGraphSmall());
-$app->get('/api/graph/weight/aggregate', $graphHandler->aggregate());
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
 
 

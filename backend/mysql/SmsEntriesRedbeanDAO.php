@@ -98,33 +98,16 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         
         return $sequencedArray;
     }
-    
-    function getWeightAYearAgo($userId, $date) {
+
+    function getYearMonths($userId) {
         
-        $targetYear =  ($date->format('Y') - 1);
-        $whereClause = ' where user_id = ? and date = \'' . $targetYear. $date->format('-m-d') 
-            . '\' and content  like "%#weight%"';
-        $posts = R::findAll(POSTS, $whereClause . ' ', [$userId]);
-        // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
+        $whereClause = ' where user_id = ? GROUP BY Year(date), Month(date)';
+        $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
-
-        return (count($sequencedArray)) ? substr($sequencedArray[0]['content'],0,5) : 'none';
-    }
-    function getWeightAYearAgoAverage($userId, $date) {
         
-        // $sqlParam = $this->listParamsToSqlParam($listParams);
-        //select * from sms_entries
-
-        $targetYear =  ($date->format('Y') - 1);
-        $whereClause = ' where user_id = ? and date <= \'' . $targetYear. $date->format('-m-d') 
-            . '\' and content  like "%#weight%"'
-            . ' order by date desc limit 10';
-        $posts = R::findAll(POSTS, $whereClause . ' ', [$userId]);
-        // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-
-        return $sequencedArray;
-    }
+        $b = array_map("pickDate", $sequencedArray);
+        return $b;
+    }    
 
     function listParamsToSqlParam($listParams) {
         $sqlParam = '';
@@ -155,6 +138,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         }
         return $sqlParam;
     }
+
     function queryLastTagEntry($userId, $label) {
         $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label . '%\' order by date desc limit 1', [$userId]);
         
@@ -171,8 +155,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         // $sqlQuery = new SqlQuery($sql);
         // $sqlQuery->setNumber($userId);
         // return $this->getList($sqlQuery);
-        
-        
+
     }
     
     /**
@@ -194,5 +177,10 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         
         
     }
+}
+
+function pickDate($n)
+{
+    return($n['date']);
 }
 
