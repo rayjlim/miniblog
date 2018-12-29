@@ -11,8 +11,9 @@ import EntryApi from "../api/EntryApi";
 
 class UploadViewerController extends Component {
   componentDidMount() {
-    console.log("UVC: componentDidMount" + this.props.location.search);
-    let urlParams = new URLSearchParams(window.location.search);
+    let loc = window.location + ``;
+    let param = loc.substring(loc.indexOf('?'));
+    let urlParams = new URLSearchParams(param);
     let fileName = urlParams.get('fileName');
     let filePath = urlParams.get('filePath');
     console.log(urlParams);

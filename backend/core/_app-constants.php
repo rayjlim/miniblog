@@ -27,7 +27,7 @@ define("MID_DAY_HOUR", 12);
 define("SECONDS_PER_DAY", 60*60*24);
 
 define("DEFAULT_LIMIT_SIZE", 50);
-define("DEFAULT_MONTHS_TO_SHOW", 3);
+define("DEFAULT_MONTHS_TO_SHOW", 2);
 define("DEFAULT_SAMPLE_SIZE", 15);
 define("DEFAULT_WEIGHT_FACTOR", .7);
 

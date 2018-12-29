@@ -59,7 +59,6 @@ class TextEntryContainer extends Component {
       this.setState({ month });
       this.monthCall(month);
     }
-    
   }
 
   search(event) {
