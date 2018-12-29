@@ -72,10 +72,10 @@ class GraphHandler extends AbstractController
     $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul></BODY></HTML>";
 
     $subject = "On this day ". $targetDay->format('M d'); 
-    $to = 'rayjlim1@gmail.com';
+    $to = MY_EMAIL;
     
       $headers = "From: smsblog@lilplaytime.com\r\n";
-      $headers .= "Reply-To: rayjlim1@gmail.com". "\r\n";
+      $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
       $headers .= "X-Mailer: PHP/" . phpversion();
       $headers .= "MIME-Version: 1.0\r\n";
       $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";

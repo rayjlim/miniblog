@@ -39,7 +39,7 @@ class AuthMiddleware extends \Slim\Middleware
   }
 
   function setViewVars($app){
-        $app->view()->appendData(["user_fullname" => $app->smsUser->fullname]);
+    $app->view()->appendData(["user_fullname" => $app->smsUser->fullname]);
     $app->view()->appendData(["authenticated"=> $app->smsUser->isAuthenticated]);
     $app->view()->appendData(["admin" => (isset($app->userId) && $app->userId == 0) ? true : false]);
     $app->view()->appendData(["userId"=> isset($app->userId) ? $app->userId : -1]);

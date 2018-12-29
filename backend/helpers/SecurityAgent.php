@@ -13,19 +13,19 @@ class SecurityAgent
       $this->iResource = $iResource;
       $this->facebook = $facebook;
   }
-      
+
   function checkPassword($password){
     DevHelp::debugMsg('-PASSWORD passed');
     $smsUser = new SmsUser();
     $dbUser = $this->iDao->lookupByPassword($password);
-    
+
     if ($dbUser != null) {
       DevHelp::debugMsg('password correct, set vars');
-      
+
       $smsUser->id = $dbUser['id'];
       $smsUser->isAuthenticated = true;
       $smsUser->fullname =  (!defined("DEVELOPMENT")) ?  'Ray': "dev 1";
- 
+
       $this->logLogin( 'password: ' . $smsUser->id);
     } else {
       DevHelp::debugMsg('record bad password');
@@ -34,7 +34,7 @@ class SecurityAgent
       $content = 'bad password attempt: ' . $password;
       $this->logLogin($content);
 
-      $this->iResource->sendEmail('rayjlim1@gmail.com', $content, '');       
+      $this->iResource->sendEmail(MY_EMAIL, $content, '');
     }
     return $smsUser;
   }
@@ -43,18 +43,18 @@ class SecurityAgent
     DevHelp::debugMsg('cookie available, set vars');
     $smsUser = new SmsUser();
     $cookieId = trim(SecurityAgent::decrypt($cookieValue));
-    
+
     // LOOKUP KEY: USERID
     $dbUser = $this->iDao->load($cookieId);
     if(isset($dbUser)){
       $smsUser->id = $dbUser['id'];
       $smsUser->isAuthenticated = true;
       $smsUser->fullname = $dbUser['email'];
-      $this->logLogin( 'cookie success: ' . $dbUser['email']);          
+      $this->logLogin( 'cookie success: ' . $dbUser['email']);
     }else{
       $smsUser = null;
       $this->logLogin( 'cookie invalid: ' .$cookieId );
-      $this->iResource->setSession('page_message', 'Unregistered Facebook account');        
+      $this->iResource->setSession('page_message', 'Unregistered Facebook account');
     }
     return $smsUser;
   }
@@ -78,7 +78,7 @@ class SecurityAgent
 
       $user = $response->getGraphUser();
       $fbUserId = $user['id'];
-      
+
       DevHelp::debugMsg('-logged in by FB, Set the Auth vars' . $fbUserId);
 
       $dbUser = $this->iDao->lookupByFacebook($fbUserId); //lookup the id from db
@@ -88,16 +88,16 @@ class SecurityAgent
         $smsUser->id = $dbUser['id'];
         $smsUser->isAuthenticated = true;
         $smsUser->fullname = $user['name'];
-        $this->logLogin( 'fb success: ' .$fbUserId .'-'. $smsUser->id );          
+        $this->logLogin( 'fb success: ' .$fbUserId .'-'. $smsUser->id );
       }else{
         $smsUser = null;
         $this->logLogin( 'fb invalid: ' .$fbUserId );
-        $this->iResource->setSession('page_message', 'Unregistered Facebook account');        
+        $this->iResource->setSession('page_message', 'Unregistered Facebook account');
       }
 
-      
+
     }
-    
+
     return $smsUser;
   }
   function githubLoggedIn(){
@@ -125,7 +125,7 @@ class SecurityAgent
           $smsUser = null;
       }
     }
-    
+
     return $smsUser;
   }
   function googleLoggedIn(){
@@ -137,7 +137,7 @@ class SecurityAgent
       DevHelp::debugMsg('SESSION_GOOGLE_TOKEN' . session(SESSION_GOOGLE_TOKEN));
 
       $MY_GOOGLE_SUB_ID = 116755003025018433075;
-      if(session(SESSION_GOOGLE_TOKEN) == 'rayjlim1@gmail.com'){
+      if(session(SESSION_GOOGLE_TOKEN) == MY_EMAIL){
         $smsUser->id = 1;
         $smsUser->isAuthenticated = true;
         $smsUser->fullname = session(SESSION_GOOGLE_TOKEN) ;
@@ -150,7 +150,7 @@ class SecurityAgent
           $smsUser = null;
       }
     }
-    
+
     return $smsUser;
   }
 
@@ -161,7 +161,7 @@ class SecurityAgent
   function logoutUser(){
     DevHelp::debugMsg('logging out');
     $this->logLogin( 'logout');
-    
+
     $this->iResource->setCookie(COOKIE_USER, "", time() - 3600);
     $smsUser = null;
     $this->iResource->setSession(SESSION_USER_ID, null);
@@ -173,7 +173,7 @@ class SecurityAgent
   function handleSessionUser($smsUser){
 
     DevHelp::debugMsg('authenticated USER');
-    
+
     $smsUser->id = $this->iResource->getSession(SESSION_USER_ID);
     $smsUser->fullname = $this->iResource->getSession(SESSION_USER_FULLNAME);
     $smsUser->isAuthenticated = true;
@@ -182,7 +182,7 @@ class SecurityAgent
   function authenticate($req, $isLoginPage) {
     $smsUser = new SmsUser();
     $cookieExpiration = time() + SECONDS_PER_DAY * 30;  // 30 DAYS
-    DevHelp::debugMsg('$this->iResource->issetSession(SESSION_USER_ID): ' . 
+    DevHelp::debugMsg('$this->iResource->issetSession(SESSION_USER_ID): ' .
       $this->iResource->issetSession(SESSION_USER_ID));
     if (! $this->iResource->issetSession(SESSION_USER_ID)) {
       DevHelp::debugMsg('not logged in, then check url param, $isLoginPage: ' . $isLoginPage);
@@ -203,11 +203,11 @@ class SecurityAgent
         }
       }
       if($smsUser !== null){
-        $this->iResource->setCookie(COOKIE_USER, SecurityAgent::encrypt($smsUser->id), 
+        $this->iResource->setCookie(COOKIE_USER, SecurityAgent::encrypt($smsUser->id),
           $cookieExpiration);
         $this->iResource->setSession(SESSION_USER_ID, $smsUser->id);
         $this->iResource->setSession(SESSION_USER_FULLNAME, $smsUser->fullname);
-      } 
+      }
     } else {
       DevHelp::debugMsg(' ELSE user is in session');
       DevHelp::debugMsg('$this->iResource->getSession(SESSION_USER_ID)' .
@@ -230,29 +230,30 @@ class SecurityAgent
       $fileData.= $message . "\n";
       $this->iResource->writeFile($filename, $fileData);
   }
-    
+
   static private function encrypt($plaintext) {
     // create a random IV to use with CBC encoding
-    
-    $iv = mcrypt_create_iv(IV_SIZE, MCRYPT_RAND);
-    
-    // $plaintext = "This string was AES-256 / CBC / ZeroBytePadding encrypted.";
-    $plaintext_utf8 = utf8_encode($plaintext);
-    $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, KEY, $plaintext_utf8, MCRYPT_MODE_CBC, $iv);
-    
-    $ciphertext = $iv . $ciphertext;
-    // encode the resulting cipher text so it can be represented by a string
-    $ciphertext_base64 = base64_encode($ciphertext);
-    return $ciphertext_base64;
+
+    // $iv = mcrypt_create_iv(IV_SIZE, MCRYPT_RAND);
+
+    // // $plaintext = "This string was AES-256 / CBC / ZeroBytePadding encrypted.";
+    // $plaintext_utf8 = utf8_encode($plaintext);
+    // $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, KEY, $plaintext_utf8, MCRYPT_MODE_CBC, $iv);
+
+    // $ciphertext = $iv . $ciphertext;
+    // // encode the resulting cipher text so it can be represented by a string
+    // $ciphertext_base64 = base64_encode($ciphertext);
+    // return $ciphertext_base64;
+    return $plaintext;
   }
-    
+
   static private function decrypt($ciphertext_base64) {
     // echo $ciphertext_base64;
     // === WARNING ===
     // Resulting cipher text has no integrity or authenticity added
     // and is not protected against padding oracle attacks.
     // --- DECRYPTION ---
-    
+
     $ciphertext_dec = base64_decode($ciphertext_base64);
     // retrieves the IV, IV_SIZE should be created using mcrypt_get_IV_SIZE()
     $iv_dec = substr($ciphertext_dec, 0, IV_SIZE);
@@ -260,7 +261,7 @@ class SecurityAgent
     $ciphertext_dec = substr($ciphertext_dec, IV_SIZE);
     // may remove 00h valued characters from end of plain text
     $plaintext_utf8_dec = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, KEY, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
-    
+
     // echo "decrypted: ".$plaintext_utf8_dec;
     return $plaintext_utf8_dec;
   }

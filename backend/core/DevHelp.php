@@ -7,7 +7,6 @@
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* @author   Raymond Lim <rayjlim1@gmail.com>
 * @license  lilplaytime http://www.lilplaytime.com
 * @link     www.lilplaytime.com
 * 
@@ -21,7 +20,6 @@ namespace Lpt;
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* @author   Raymond Lim <rayjlim1@gmail.com>
 * @license  lilplaytime http://www.lilplaytime.com
 * @link     www.lilplaytime.com
 */ 
