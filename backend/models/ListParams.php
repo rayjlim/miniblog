@@ -1,11 +1,9 @@
 <?php
-
 /**
  * ListParams Class Doc Comment
  *
  * @category Class
  * @package  Smsblog2
- * @author   Raymond Lim <raymond@lilplaytime.com>
  * @license  http://moviedb.lilplaytime.com None
  * @link     http://moviedb.lilplaytime.com
  */

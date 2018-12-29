@@ -1,22 +1,18 @@
 <?php
-
 /**
  * EntryHelper File
  *
  * @category Class
  * @package  Smsblog2
- * @author   Raymond Lim <raymond@lilplaytime.com>
  * @license  http://smsblog2.lilplaytime.com None
  * @link     http://smsblog2.lilplaytime.com
  */
 use \Lpt\DevHelp;
-
 /**
  * EntryHelper Class Doc Comment
  *
  * @category Class
  * @package  Smsblog2
- * @author   Raymond Lim <raymond@lilplaytime.com>
  * @license  http://smsblog2.lilplaytime.com None
  * @link     http://smsblog2.lilplaytime.com
  */

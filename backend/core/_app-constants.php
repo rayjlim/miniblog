@@ -5,7 +5,6 @@
  *
  * @category PHP
  * @package  Smsblog
- * @author   Raymond Lim <raymond@lilplaytime.com>
  * @license  http://smsblog.lilplaytime.com None
  * @version  SVN: 1.0
  * @link     http://smsblog.lilplaytime.com

@@ -74,11 +74,11 @@ class GraphHandler extends AbstractController
     $subject = "On this day ". $targetDay->format('M d'); 
     $to = MY_EMAIL;
     
-      $headers = "From: smsblog@lilplaytime.com\r\n";
-      $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
-      $headers .= "X-Mailer: PHP/" . phpversion();
-      $headers .= "MIME-Version: 1.0\r\n";
-      $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    $headers = "From: smsblog@lilplaytime.com\r\n";
+    $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion();
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
     mail($to, $subject, $message, $headers);
     echo "{ \"cron\":\"email\"}";

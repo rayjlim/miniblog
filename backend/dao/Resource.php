@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Resource.php
  *
@@ -12,7 +11,6 @@
  * @link     www.lilplaytime.com
  *
  */
-
 /**
  * Resource
  *

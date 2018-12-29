@@ -8,3 +8,4 @@
 /uploads/
 /side/node_modules
 *.code-workspace
+backend/core/prod/*

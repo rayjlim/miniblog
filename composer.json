@@ -4,7 +4,8 @@
     "slim/slim": "2.*",
     "slim/views": "0.*",
     "slim/extras": "2.0.3",
-    "twig/twig": "1.*"
+    "twig/twig": "1.*",
+    "squizlabs/php_codesniffer": "*"
   },
   "require-dev": {
 
