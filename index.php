@@ -39,6 +39,7 @@ $app->post('/', function () use ($app) {
 });
 
 $entryHandler = DAOFactory::EntryHandler($app);
+$app->get('/main/', $entryHandler->showMain());
 $app->get('/posts/', $entryHandler->listItems());
 
 $app->get('/api/posts/:id', $entryHandler->itemDetailsApi());
@@ -47,8 +48,6 @@ $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
 $app->get('/api/wordpressEntries/', $entryHandler->wordpressEntries());
 $app->get('/api/pebble', $entryHandler->pebbleInfo());
 $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
-
-
 
 $cudHandler = DAOFactory::CUDHandler($app);
 $app->post('/api/posts/', $cudHandler->addEntry());
@@ -59,7 +58,6 @@ $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/graph/', $graphHandler->handle());
 $app->get('/api/graph/', $graphHandler->handleApi());
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
-
 
 $logHandler = DAOFactory::LogHandler($app);
 $app->get('/logs/:logfileName', $logHandler->getUrlHandlerWithParam());
@@ -83,7 +81,7 @@ $app->get('/sleepstats', function () use ($app) {
 $app->get('/sleepstats/', $utilityHandler->showSleepStats());
 $app->get('/api/sleepstats/', $utilityHandler->getSleepStats());
 
-$app->get('/main/', $utilityHandler->showMain());
+
 
 $uploadHandler = DAOFactory::UploadHandler($app);
 $app->get('/uploadForm/', $uploadHandler->form());

@@ -44,11 +44,5 @@ class UtilityHandler extends AbstractController
             $userId = $this->resource->getSession(SESSION_USER_ID);
             $this->app->render('sleep_track.twig');
         };
-    }
-
-    function showMain() {
-        return function () {
-            $this->app->render('main.twig');
-        };
-    }    
+    }   
 }

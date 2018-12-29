@@ -4,8 +4,8 @@
  *
  * @category Class
  * @package  Smsblog2
- * @license  http://moviedb.lilplaytime.com None
- * @link     http://moviedb.lilplaytime.com
+ * @license  http://www.lilplaytime.com None
+ * @link     http://www.lilplaytime.com
  */
 class ListParams extends BaseModel
 {

@@ -11,6 +11,19 @@ class EntryHandler extends AbstractController
     parent::__construct($app);
   }
     
+  function showMain() {
+    return function () {
+      $userId = $this->resource->getSession(SESSION_USER_ID);
+      DevHelp::debugMsg('start ' . __FILE__);
+      
+      // TODO: secure this by checking the user session id
+      $entries = $this->dao->getYearMonths($userId);
+      DevHelp::debugMsg('start ' . implode("|",$entries));
+      $this->app->view()->appendData(["yearmonth" => $entries]);
+      $this->app->render('main.twig');
+    };
+  } 
+
   function listItemsApi() {
     return function () {
       $request = $this->app->request();

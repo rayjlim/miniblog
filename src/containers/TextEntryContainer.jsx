@@ -7,16 +7,6 @@ import YearMonthList from "./YearMonthList.jsx";
 
 import EntryApi from "../api/EntryApi";
 
-const leftStyle = {
-  width: '200px'
-};
-const rightStyle = {
-  flex: '1'
-};
-const flexStyle = {
-  display: 'flex'
-};
-
 class TextEntryContainer extends Component {
 
   constructor(props) {
@@ -26,7 +16,8 @@ class TextEntryContainer extends Component {
 
     this.state = {
       searchText: "",
-      sameDayInput: current.format("YYYY-MM-DD")
+      sameDayInput: current.format("YYYY-MM-DD"),
+      month: ""
     };
     this.search = this.search.bind(this);
     this.handleSameDayChange = this.handleSameDayChange.bind(this);
@@ -34,39 +25,41 @@ class TextEntryContainer extends Component {
   }
 
   componentDidMount() {
-
+    console.log("TEC: componentDidMount");
     let loc = window.location + ``;
 
     let param = loc.substring(loc.indexOf('?'));
     console.log(param);
     let urlParams = new URLSearchParams(param);
 
-    console.log('urlParams.has: ' + urlParams.has('yearmonth'));
-    let yearmonth = urlParams.get('yearmonth');
-    console.log('passed yearmonth: ' + yearmonth);
+    console.log('urlParams.has: ' + urlParams.has('month'));
+    let month = urlParams.get('month');
+    console.log('passed month: ' + month);
 
-    // this.loadDay(date);
-
-    console.log("TEC: componentDidMount");
-    this.searchCall(this.state.searchText);
+    if (month !== null) {
+      this.monthCall(month);
+    } else {
+      this.searchCall(this.state.searchText);
+    }
   }
 
   componentWillUpdate() {
-
+    console.log("TEC: componentWillUpdate");
     let loc = window.location + ``;
 
     let param = loc.substring(loc.indexOf('?'));
     console.log(param);
     let urlParams = new URLSearchParams(param);
 
-    console.log('62.urlParams.has: ' + urlParams.has('yearmonth'));
-    let yearmonth = urlParams.get('yearmonth');
-    console.log('62.passed yearmonth: ' + yearmonth);
+    console.log('62.urlParams.has: ' + urlParams.has('month'));
+    let month = urlParams.get('month');
+    console.log('62.passed month: ' + month);
 
-    // this.loadDay(date);
-
-    console.log("TEC: componentWillUpdate");
-
+    if(this.state.month != month){
+      this.setState({ month });
+      this.monthCall(month);
+    }
+    
   }
 
   search(event) {
@@ -85,7 +78,9 @@ class TextEntryContainer extends Component {
       this.searchCall(text);
     }, 300);
   }
-
+  monthCall(searchParam) {
+    EntryApi.getEntrys("month", searchParam);
+  }
   searchCall(searchParam) {
     EntryApi.getEntrys("searchParam", searchParam);
   }
@@ -114,16 +109,7 @@ class TextEntryContainer extends Component {
           handleSameDayChange={this.handleSameDayChange}
           sameDayInput={this.state.sameDayInput}
         />
-        <div style={flexStyle}>
-          <div style={leftStyle}>
-            <YearMonthList 
-              choose={this.searchYearMonth}
-            />
-          </div>
-          <div style={rightStyle}>
-            <EntryList entrys={this.props.entrys} handleDelete={this.deleteEntry} />
-          </div>
-        </div>
+        <EntryList entrys={this.props.entrys} handleDelete={this.deleteEntry} />
       </div>
     );
   }
