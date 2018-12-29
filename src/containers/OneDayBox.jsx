@@ -16,7 +16,7 @@ class OneDayBox extends Component {
   componentDidMount() {
     console.log("ODB: componentDidMount");
 
-    let loc = window.location+``;
+    let loc = window.location + ``;
 
     let param = loc.substring(loc.indexOf('?'));
     console.log(param);
@@ -31,13 +31,13 @@ class OneDayBox extends Component {
     this.handleDatePicker = this.handleDatePicker.bind(this);
   }
 
-  loadDay (targetDate = this.props.date)  {
+  loadDay(targetDate = this.props.date) {
     console.log("odb: loadDay " + targetDate);
     EntryApi.getEntrys("date", targetDate);
   };
 
   // TODO: convert to redux reducer
-  handleButtonDirection (e){
+  handleButtonDirection(e) {
     console.log("event" + e.target);
 
     console.log("hbd." + e.target.value);
@@ -51,7 +51,7 @@ class OneDayBox extends Component {
     this.loadDay(updateDate);
   };
 
-  handleDatePicker ( date ) {
+  handleDatePicker(date) {
     console.log("handleDatePicker." + date);
 
     let updateDate = date.format("YYYY-MM-DD");
@@ -61,7 +61,7 @@ class OneDayBox extends Component {
     });
     this.loadDay(updateDate);
   }
-  editEntry (entry)  {
+  editEntry(entry) {
     console.log(entry);
     store.dispatch({
       type: types.GET_EDIT_POST,
@@ -69,19 +69,19 @@ class OneDayBox extends Component {
     });
   }
 
-  handleAdd ( entry ) {
+  handleAdd(entry) {
     EntryApi.createEntry(entry.content, entry.date);
   }
 
-  handleUpdate ( entry ) {
+  handleUpdate(entry) {
     EntryApi.updateEntry(entry);
   }
 
-  clearForm ( e ) {
+  clearForm(e) {
     EntryApi.clearForm();
   }
 
-  delete ( e ) {
+  delete(e) {
     EntryApi.deleteEntry(e.target.id);
   }
 
@@ -115,20 +115,19 @@ class OneDayBox extends Component {
     }
     return (
       <div>
-
         <OneDayView
           date={this.props.date}
           handleButtonDirection={this.handleButtonDirection}
           handleDatePicker={this.handleDatePicker}
         />
-        { entryForm }
+        {entryForm}
         <hr />
         <EntryList entrys={this.props.entrys} editLink={this.editEntry} />
       </div>
     );
   }
 }
-const mapStateToProps = function(store) {
+const mapStateToProps = function (store) {
   let state = store.postState;
   return {
     entrys: state.posts,

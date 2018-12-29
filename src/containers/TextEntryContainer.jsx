@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Immutable from "immutable";
 import moment from "moment";
 import EntryList from "../views/EntryList.jsx";
 import EntrySearchBar from "../views/EntrySearchBar.jsx";
+import YearMonthList from "./YearMonthList.jsx";
 
 import EntryApi from "../api/EntryApi";
-import sameDayEntrys from "../api/EntryApi";
+
+const leftStyle = {
+  width: '200px'
+};
+const rightStyle = {
+  flex: '1'
+};
+const flexStyle = {
+  display: 'flex'
+};
 
 class TextEntryContainer extends Component {
 
   constructor(props) {
-      console.log('TextEntryContainer');
+    console.log('TextEntryContainer');
     super(props);
     var current = moment();
 
@@ -25,8 +34,39 @@ class TextEntryContainer extends Component {
   }
 
   componentDidMount() {
+
+    let loc = window.location + ``;
+
+    let param = loc.substring(loc.indexOf('?'));
+    console.log(param);
+    let urlParams = new URLSearchParams(param);
+
+    console.log('urlParams.has: ' + urlParams.has('yearmonth'));
+    let yearmonth = urlParams.get('yearmonth');
+    console.log('passed yearmonth: ' + yearmonth);
+
+    // this.loadDay(date);
+
     console.log("TEC: componentDidMount");
     this.searchCall(this.state.searchText);
+  }
+
+  componentWillUpdate() {
+
+    let loc = window.location + ``;
+
+    let param = loc.substring(loc.indexOf('?'));
+    console.log(param);
+    let urlParams = new URLSearchParams(param);
+
+    console.log('62.urlParams.has: ' + urlParams.has('yearmonth'));
+    let yearmonth = urlParams.get('yearmonth');
+    console.log('62.passed yearmonth: ' + yearmonth);
+
+    // this.loadDay(date);
+
+    console.log("TEC: componentWillUpdate");
+
   }
 
   search(event) {
@@ -46,16 +86,21 @@ class TextEntryContainer extends Component {
     }, 300);
   }
 
-  searchCall ( searchParam ) {
+  searchCall(searchParam) {
     EntryApi.getEntrys("searchParam", searchParam);
   }
 
-  handleSameDayChange ( event) {
+  handleSameDayChange(event) {
     this.setState({ sameDayInput: event.target.value });
   }
 
-  searchSameDay  ()  {
+  searchSameDay() {
     EntryApi.sameDayEntrys(this.state.sameDayInput);
+  }
+
+  searchYearMonth(text) {
+    console.log("YM: yearmonth" + text);
+    EntryApi.getEntrys("month", text);
   }
 
   render() {
@@ -69,45 +114,23 @@ class TextEntryContainer extends Component {
           handleSameDayChange={this.handleSameDayChange}
           sameDayInput={this.state.sameDayInput}
         />
-        <hr />
-        <EntryList entrys={this.props.entrys} handleDelete={this.deleteEntry} />
+        <div style={flexStyle}>
+          <div style={leftStyle}>
+            <YearMonthList 
+              choose={this.searchYearMonth}
+            />
+          </div>
+          <div style={rightStyle}>
+            <EntryList entrys={this.props.entrys} handleDelete={this.deleteEntry} />
+          </div>
+        </div>
       </div>
     );
   }
 }
-const mapStateToProps = function(store) {
+const mapStateToProps = function (store) {
   return {
     entrys: store.postState.posts
   };
 };
 export default connect(mapStateToProps)(TextEntryContainer);
-
-// addEntry() {
-//   var map1 = Immutable.List(this.state.entrys);
-//   console.log('addEntry was clicked' + map1.size);
-//   var newEntry = {
-//     id: map1.size + 1,
-//     content: "next blog entry",
-//     date: "2016-05-16 00:00:00"
-//   };
-
-//   map1 = map1.push(newEntry);
-//   console.log(map1.toJS());
-//   this.setState({
-//     entrys: map1.toJS()
-//   })
-// }
-
-// deleteEntry(entryId) {
-//   var map1 = Immutable.List(this.state.entrys);
-//   map1 = map1.filter(function(x) {
-//     return x.id !== entryId;
-//   });
-//   this.setState({
-//       entrys: map1.toJS()
-//     })
-//     // userApi.deleteUser(userId).then(() => {
-//     //   const newUsers = _.filter(this.state.users, user => user.id != userId);
-//     //   this.setState({users: newUsers})
-//     // });
-// }

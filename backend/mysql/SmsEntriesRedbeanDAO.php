@@ -145,42 +145,11 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         return $sequencedArray[0];
     }
-    
-    /**
-     * @LPT_V2
-     */
-    function queryAll($userId) {
-        
-        // $sql = 'SELECT * FROM sms_entries where user_id = ?';
-        // $sqlQuery = new SqlQuery($sql);
-        // $sqlQuery->setNumber($userId);
-        // return $this->getList($sqlQuery);
 
-    }
-    
-    /**
-     * @LPT_V2
-     */
-    function queryTagChain($userId, $label, $resultLimit) {
-        
-        //          $sql = <<<SQL
-        //          SELECT * FROM sms_entries where user_id = ? and content LIKE ? order by date desc limit ?
-        // SQL;
-        //         $sqlQuery = new SqlQuery($sql);
-        //         $sqlQuery->setNumber($userId);
-        //         $sqlQuery->set("%".$label."%");
-        //         $sqlQuery->setPlain($resultLimit);
-        
-        //         //TODO: CREATE QUERY DEPENDANT IF LIMIT BASED ON COUNT OR DATE RANGE
-        
-        //         return $this->getList($sqlQuery);
-        
-        
-    }
 }
 
 function pickDate($n)
 {
-    return($n['date']);
+    return(substr($n['date'], 0, 7));
 }
 

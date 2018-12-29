@@ -39,10 +39,6 @@ function sameDayEntrys(searchParam = "") {
     });
 }
 
-function getWeights(searchParam = "") {
-  return axios.get(`${BASE_URL}api/graph/?tag=weight` + searchParam);
-}
-
 function createEntry(content, dateParam = null) {
   console.log("createEntry " + content);
   let prepContent =
@@ -200,7 +196,6 @@ function showForm() {
 
 export default {
   getEntrys,
-  getWeights,
   createEntry,
   updateEntry,
   deleteEntry,

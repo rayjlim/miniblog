@@ -38,7 +38,7 @@ class OneDayView extends Component {
           value="1"
         >Next-&gt;&gt;</button>
         <div className="input-group date datetimepickerOneDay">
-          <input type="text" className="form-control" id="formDpInput" />
+          <input type="text" className="form-control" id="formDpInput" defaultValue={this.props.date}/>
           <span className="input-group-addon">
             <span className="glyphicon glyphicon-calendar" />
           </span>

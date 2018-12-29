@@ -40,6 +40,7 @@ class ListParams extends BaseModel
             $oListParams->startDate = $request['date'];
             $oListParams->endDate = $request['date'];
         }
+        
         if (getValue($request, 'month') != '') {
             $oListParams->startDate = $request['month'] . '-1';
             $oListParams->endDate = $request['month'] . '-31';

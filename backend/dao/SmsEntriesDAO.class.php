@@ -16,11 +16,6 @@ interface SmsEntriesDAO{
     public function load($id);
     
     /**
-     * Get all records from table
-     */
-    public function queryAll($userId);
-    
-    /**
      * Delete record from table
      * @param smsEntrie primary key
      */
@@ -42,7 +37,6 @@ interface SmsEntriesDAO{
 
     public function queryGraphData($userId, $graphParams);
     public function queryBlogList($userId, $listParams);
-    public function queryTagChain($userId, $label, $resultLimit);
     public function queryLastTagEntry($userId, $label);
 
 }
