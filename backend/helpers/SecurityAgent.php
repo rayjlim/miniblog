@@ -254,16 +254,16 @@ class SecurityAgent
     // and is not protected against padding oracle attacks.
     // --- DECRYPTION ---
 
-    $ciphertext_dec = base64_decode($ciphertext_base64);
-    // retrieves the IV, IV_SIZE should be created using mcrypt_get_IV_SIZE()
-    $iv_dec = substr($ciphertext_dec, 0, IV_SIZE);
-    // retrieves the cipher text (everything except the $IV_SIZE in the front)
-    $ciphertext_dec = substr($ciphertext_dec, IV_SIZE);
-    // may remove 00h valued characters from end of plain text
-    $plaintext_utf8_dec = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, KEY, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
+    // $ciphertext_dec = base64_decode($ciphertext_base64);
+    // // retrieves the IV, IV_SIZE should be created using mcrypt_get_IV_SIZE()
+    // $iv_dec = substr($ciphertext_dec, 0, IV_SIZE);
+    // // retrieves the cipher text (everything except the $IV_SIZE in the front)
+    // $ciphertext_dec = substr($ciphertext_dec, IV_SIZE);
+    // // may remove 00h valued characters from end of plain text
+    // $plaintext_utf8_dec = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, KEY, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
 
     // echo "decrypted: ".$plaintext_utf8_dec;
-    return $plaintext_utf8_dec;
+    return $ciphertext_base64;
   }
 }
 
