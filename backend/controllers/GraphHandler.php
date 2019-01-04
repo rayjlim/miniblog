@@ -1,6 +1,12 @@
 <?php
 use \Lpt\DevHelp;
 
+function printEntrys($carry, $item){
+  $entryDay = new DateTime($item['date']);
+  $message =  "<li>". $entryDay->format('Y-D') . ': ' . $item['content'] . "</li>";
+  return $carry.=$message;
+}
+
 class GraphHandler extends AbstractController
 {
   var $dao = null;
@@ -54,6 +60,7 @@ class GraphHandler extends AbstractController
   }
 
 
+
   public function logCronCall($message) {
     return function () use ($message) {
     $date = $this->resource->getDateTime();
@@ -79,25 +86,21 @@ class GraphHandler extends AbstractController
     $headers .= "X-Mailer: PHP/" . phpversion();
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
+    echo $message;
     mail($to, $subject, $message, $headers);
     echo "{ \"cron\":\"email\"}";
     };
   }
       
 
-function printEntrys($carry, $item){
-  $entryDay = new DateTime($item['date']);
-  $message =  "<li>". $entryDay->format('Y-D') . ': ' . $item['content'] . "</li>";
-  return $carry.=$message;
-}
+  
 
-function groupByYearMonth($carry, $item){
-  $year = substr($item['date'], 0,4);
-  $month = substr($item['date'], 5, 2);
-  if(!isset($carry[$year.'-'.$month])){$carry[$year.'-'.$month] = [];}
-  array_push($carry[$year.'-'.$month], $item['weight']);
-  return $carry;
-}
+  function groupByYearMonth($carry, $item){
+    $year = substr($item['date'], 0,4);
+    $month = substr($item['date'], 5, 2);
+    if(!isset($carry[$year.'-'.$month])){$carry[$year.'-'.$month] = [];}
+    array_push($carry[$year.'-'.$month], $item['weight']);
+    return $carry;
+  }
 
 }
