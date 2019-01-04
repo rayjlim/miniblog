@@ -21,14 +21,14 @@ if(get('code')) {
   ));
   $_SESSION[SESSION_GH_ACCESS_TOKEN] = $token->access_token;
 
-  $url='http://www.lilplaytime.com/smsblog/index.php/main#/oneDay';
+  $url="http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay";
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"1  ; url=$url\"></head>";
   echo "Have access token <a href=\"$url\">Posts page</a>";
 
 } else {
-  $url = 'http://www.lilplaytime.com/smsblog/login.php';
+  $url = 'http://'.DOMAIN."/".ROOT_URL.'/login.php';
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"5; url=$url\"></head>";

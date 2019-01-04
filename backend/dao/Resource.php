@@ -7,8 +7,6 @@
  * @date     2007-11-28
  * @category Personal
  * @package  default
- * @license  lilplaytime http://www.lilplaytime.com
- * @link     www.lilplaytime.com
  *
  */
 /**
@@ -19,18 +17,16 @@
  * @date     2007-11-28
  * @category Personal
  * @package  default
- * @license  lilplaytime http://www.lilplaytime.com
- * @link     www.lilplaytime.com
  */
 class Resource implements IResourceDAO
 {
     
     /**
-     * Content from URL
+     * setSession
      *
-     * @param string $url site url
+     * @param string $key site url
      *
-     * @return site content
+     * @return
      */
     public function setSession($key, $value) {
         if (session_id() == '') {
@@ -44,9 +40,9 @@ class Resource implements IResourceDAO
     }
     
     /**
-     * appendToFile
+     * getSession
      *
-     * @param string $file    location for the file
+     * @param string $key    reference
      *
      * @return mixed value
      */
@@ -71,9 +67,11 @@ class Resource implements IResourceDAO
         }
         return isset($_SESSION[$key]);
     }
+
     public function setCookie($key, $value, $expiration) {
         setcookie($key, $value, $expiration);
     }
+
     public function destroySession() {
         session_destroy();
     }
@@ -125,6 +123,7 @@ class Resource implements IResourceDAO
     public function sendEmail($email, $subject, $message) {
         mail($email, $subject, $message);
     }
+
     public function load($url) {
         
         //echo 'url loadings: '.$url;
@@ -142,6 +141,7 @@ class Resource implements IResourceDAO
         curl_close($curl);
         return $response;
     }
+    
     public function shortCodes() {
         $shortCodes = [];
         $shortCodes['#a'] = "#awake";

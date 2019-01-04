@@ -3,9 +3,7 @@
  * ListParams Class Doc Comment
  *
  * @category Class
- * @package  Smsblog2
- * @license  http://www.lilplaytime.com None
- * @link     http://www.lilplaytime.com
+ * @package  Smsblog
  */
 class ListParams extends BaseModel
 {

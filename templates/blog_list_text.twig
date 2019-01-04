@@ -83,11 +83,6 @@
         url: "../api/sameDayEntries/?day="+$('#sameDayValue').val()
         }).then(function(data){ handleListData(data);} );
     });
-    $('#wordpressLink').click(function(){  
-      $.ajax({
-        url: "../api/wordpressEntries/?year=" + $('#wordpressYear').find(":selected").text()
-      }).then(function(data){ handleListData(data);} );
-    });
     $('#recentPostsLink').click(function(){
       $.ajax({
         url: "../api/posts/"

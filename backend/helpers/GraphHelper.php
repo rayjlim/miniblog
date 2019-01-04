@@ -1,12 +1,9 @@
 <?php
-
 /**
  * GraphHelper File
  *
  * @category Class
- * @package  Smsblog2
- * @license  http://smsblog2.lilplaytime.com None
- * @link     http://smsblog2.lilplaytime.com
+ * @package  Smsblog
  */
 use \Lpt\DevHelp;
 
@@ -14,9 +11,7 @@ use \Lpt\DevHelp;
  * GraphHelper Class Doc Comment
  *
  * @category Class
- * @package  Smsblog2
- * @license  http://smsblog2.lilplaytime.com None
- * @link     http://smsblog2.lilplaytime.com
+ * @package  Smsblog
  */
 class GraphHelper
 {
@@ -28,10 +23,9 @@ class GraphHelper
      *
      * Initialize dependancies
      *
-     * @param object $_iDao Connection to database
      * @param object $_currentDate Connection to database
      *
-     * @return array of page params
+     * @return
      */
     function __construct($currentDate) {
         $this->currentDate = $currentDate;
@@ -46,7 +40,7 @@ class GraphHelper
      * @param float   $weightFactor number to use as the low weight value
      * @param integer $precision    number of values after the decimal to display
      *
-     * @return boolean update successful
+     * @return array distributed values
      */
     public function createWeightedArray($sampleSize, $weightFactor, $precision = 2) {
         $baseSize = $sampleSize - 1;
@@ -67,7 +61,7 @@ class GraphHelper
      *
      * @param object $graphParams Object defining Graph details
      *
-     * @return n/a
+     * @return array page labels
      */
     public function generatePageLabels($graphParams) {
         $pageLabels = array();
@@ -123,7 +117,7 @@ class GraphHelper
      * @param array   $graphParams      Connection to database
      * @param integer $entries   Size of the sample
      *
-     * @return mixed data
+     * @return array associative
      */
     public function calculateFields($graphParams, $entries) {
         
@@ -303,8 +297,7 @@ class GraphHelper
                 
                 break;
 
-            default:
-                
+            default:   
                 //wake
                 $findme = ',';
                 $pos = strpos($entry['content'], $findme);
@@ -312,15 +305,6 @@ class GraphHelper
                 $entry['main'] = $asleepTotal;
                 $entry['comment'] = '';
                 
-                /* // Not using the wake time yet
-                $wakeTime = substr($entry['content'], 0, $pos);
-                
-                $a = explode(":",$wakeTime);
-                $hourValue = $a[0];
-                $hourNumerical = ($hourValue > 12)? ($hourValue - $hoursPerDay):$hourValue;
-                
-                $wholeValue = $hourNumerical + ($a[1] / MINUTES_PER_HOUR);
-                */
                 break;
         }
         return $entry;

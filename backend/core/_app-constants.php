@@ -5,9 +5,6 @@
  *
  * @category PHP
  * @package  Smsblog
- * @license  http://smsblog.lilplaytime.com None
- * @version  SVN: 1.0
- * @link     http://smsblog.lilplaytime.com
 */
 date_default_timezone_set('America/Los_Angeles');
 $getcwd = getcwd();

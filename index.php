@@ -45,7 +45,6 @@ $app->get('/posts/', $entryHandler->listItems());
 $app->get('/api/posts/:id', $entryHandler->itemDetailsApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
-$app->get('/api/wordpressEntries/', $entryHandler->wordpressEntries());
 $app->get('/api/pebble', $entryHandler->pebbleInfo());
 $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
 

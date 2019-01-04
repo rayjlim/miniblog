@@ -86,22 +86,7 @@ class EntryHandler extends AbstractController
       $this->resource->echoOut('{"entries": ' . json_encode($entries) . '}');
     };
   }
-  function wordpressEntries() {
-    return function () {
-      DevHelp::debugMsg(__file__);
-      
-      $request = $this->app->request();
-      $requestParams = $request->params();
-      $year = getValue($requestParams, 'year') != '' ? getValue($requestParams, 'year') : 2015;
-      $userId = $this->resource->getSession(SESSION_USER_ID);
-      $currentDate = $this->resource->getDateTime();
-      
-      $entries = $this->resource->load('http://lilplaytime.com/blog/wp-json/posts?filter[year]=' 
-        . $year);
-      $this->app->response()->header('Content-Type', 'application/json');
-      $this->resource->echoOut('{"entries": ' . $entries . '}');
-    };
-  }
+
     
   function itemDetailsApi() {
     return function ($id) {

@@ -3,18 +3,14 @@
  * EntryHelper File
  *
  * @category Class
- * @package  Smsblog2
- * @license  http://smsblog2.lilplaytime.com None
- * @link     http://smsblog2.lilplaytime.com
+ * @package  Smsblog
  */
 use \Lpt\DevHelp;
 /**
  * EntryHelper Class Doc Comment
  *
  * @category Class
- * @package  Smsblog2
- * @license  http://smsblog2.lilplaytime.com None
- * @link     http://smsblog2.lilplaytime.com
+ * @package  Smsblog
  */
 class ContentHelper implements ContentHelperInterface
 {

@@ -37,7 +37,7 @@ $_SESSION['fb_access_token'] = (string) $accessToken;
 
 // User is logged in with a long-lived access token.
 // You can redirect them to a members-only page.
-$url='http://www.lilplaytime.com/smsblog/index.php/main#/weightEntry';
+$url='http://'.DOMAIN."/".ROOT_URL.'/index.php/main#/weightEntry';
 
 header("Location: $url");
 echo "<head><meta http-equiv=\"refresh\" content=\"0; url=$url\"></head>";

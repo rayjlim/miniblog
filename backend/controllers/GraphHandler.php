@@ -3,6 +3,7 @@ use \Lpt\DevHelp;
 
 function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
+  $link = "http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay?date=" . $entryDay->format('Y-M-d');
   $message =  "<li>". $entryDay->format('Y-D') . ': ' . $item['content'] . "</li>";
   return $carry.=$message;
 }

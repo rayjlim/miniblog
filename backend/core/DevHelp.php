@@ -7,8 +7,6 @@
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* @license  lilplaytime http://www.lilplaytime.com
-* @link     www.lilplaytime.com
 * 
 */
 namespace Lpt;
@@ -20,8 +18,6 @@ namespace Lpt;
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* @license  lilplaytime http://www.lilplaytime.com
-* @link     www.lilplaytime.com
 */ 
 class DevHelp
 {

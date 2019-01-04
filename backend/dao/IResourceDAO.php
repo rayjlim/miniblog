@@ -7,8 +7,6 @@
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* @license  lilplaytime http://www.lilplaytime.com
-* @link     www.lilplaytime.com
 * 
 */
 /**
@@ -17,8 +15,6 @@
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* @license  lilplaytime http://www.lilplaytime.com
-* @link     www.lilplaytime.com
 */  
 interface IResourceDAO
 {

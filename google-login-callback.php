@@ -23,14 +23,14 @@ if(get('code')) {
 
   $decodedToken = JWT::decode($token->id_token, null, false);
   $_SESSION[SESSION_GOOGLE_TOKEN] = $decodedToken->email;
-  $url='http://www.lilplaytime.com/smsblog/index.php/posts/';
+  $url='http://'.DOMAIN."/".ROOT_URL.'/index.php/posts/';
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"5; url=$url\"></head>";
   echo "Have access token <a href=\"$url\">Posts page</a>";
 
 } else {
-  $url = 'http://www.lilplaytime.com/smsblog/login.php';
+  $url = 'http://'.DOMAIN."/".ROOT_URL.'/login.php';
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"5; url=$url\"></head>";
