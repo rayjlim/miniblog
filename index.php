@@ -80,8 +80,6 @@ $app->get('/sleepstats', function () use ($app) {
 $app->get('/sleepstats/', $utilityHandler->showSleepStats());
 $app->get('/api/sleepstats/', $utilityHandler->getSleepStats());
 
-
-
 $uploadHandler = DAOFactory::UploadHandler($app);
 $app->get('/uploadForm/', $uploadHandler->form());
 $app->post('/uploadImage/', $uploadHandler->upload());

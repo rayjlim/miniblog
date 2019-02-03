@@ -4,7 +4,7 @@ use \Lpt\DevHelp;
 function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
   $link = "http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay?date=" . $entryDay->format('Y-M-d');
-  $message =  "<li>". $entryDay->format('Y-D') . ': ' . $item['content'] . "</li>";
+  $message =  "<li><strong><a href=\"".$link."\">". $entryDay->format('Y-D') . '</a>:</strong> ' . $item['content'] . "</li>";
   return $carry.=$message;
 }
 
@@ -60,8 +60,6 @@ class GraphHandler extends AbstractController
     };
   }
 
-
-
   public function logCronCall($message) {
     return function () use ($message) {
     $date = $this->resource->getDateTime();
@@ -76,8 +74,22 @@ class GraphHandler extends AbstractController
     $entries = $this->dao->getSameDayEntries($userId, $targetDay);
 
     $printedNonWeight = array_reduce($entries, "printEntrys");
- 
-    $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul></BODY></HTML>";
+    
+    $weekNumber =  idate('W', time()); 
+    $virtueLength = sizeof(VIRTUES);
+    $additions = '<strong>Virtue:</strong> '.VIRTUES[$weekNumber%$virtueLength]."<br><br>";
+
+    $dayNumber =  idate('z', time());
+    $mantraLength = sizeof(MANTRAS);
+    $additions .= '<strong>Mantra of the Day:</strong> '.MANTRAS[$dayNumber%$mantraLength]."<br><br>";
+
+    $qLength = sizeof(QUESTIONOTDAY);
+    $link = "http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay?pretext=#qod";
+    $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
+      .QUESTIONOTDAY[$dayNumber%$qLength]."<br><br>";
+
+    $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul>" . 
+      $additions . "</BODY></HTML>";
 
     $subject = "On this day ". $targetDay->format('M d'); 
     $to = MY_EMAIL;
@@ -88,14 +100,14 @@ class GraphHandler extends AbstractController
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     echo $message;
-    mail($to, $subject, $message, $headers);
+    if(!DEVELOPMENT){
+      mail($to, $subject, $message, $headers);
+    
     echo "{ \"cron\":\"email\"}";
+    }
     };
   }
       
-
-  
-
   function groupByYearMonth($carry, $item){
     $year = substr($item['date'], 0,4);
     $month = substr($item['date'], 5, 2);
