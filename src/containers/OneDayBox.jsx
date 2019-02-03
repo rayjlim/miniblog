@@ -103,6 +103,7 @@ class OneDayBox extends Component {
         />
       );
       if (this.props.currentEntry != null) {
+
         entryForm = (
           <EditForm
             entry={this.props.currentEntry}

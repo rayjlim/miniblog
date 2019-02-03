@@ -4,14 +4,21 @@ class AddForm extends React.Component {
   constructor(props) {
     super(props);
     // create a ref to store the textInput DOM element
-
+    this.handleTemplate = this.handleTemplate.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
   }
   render() {
+    var templateStyle = {
+      float: 'right'
+    };
     return (
       <div className="well">
+        <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
+          Template
+        </button>
         <strong>Add Entry</strong>
         <p>link: [link text](URL) <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">Cheatsheet</a></p>
+
         <div className="form-group">
           <textarea
             ref="content"
@@ -48,6 +55,13 @@ class AddForm extends React.Component {
       date: this.refs.date.value.trim()
     };
     this.props.submit(entry);
+  };
+  handleTemplate ( e ) {
+    this.refs.content.value= `
+### Tomorrow
+
+### Obstacles
+    `;
   };
 }
 
