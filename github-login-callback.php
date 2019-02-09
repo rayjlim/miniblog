@@ -19,7 +19,7 @@ if(get('code')) {
     // 'state' => $_SESSION['state'],
     'code' => get('code')
   ));
-  $_SESSION[SESSION_GH_ACCESS_TOKEN] = $token->access_token;
+  $_SESSION[SESSION_GH_ACCESS_TOKEN] = "access_token"; // $token->access_token;
 
   $url="http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay";
 
