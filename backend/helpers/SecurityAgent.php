@@ -33,8 +33,8 @@ class SecurityAgent
       $this->iResource->setSession('page_message', 'Invalid Password');
       $content = 'bad password attempt: ' . $password;
       $this->logLogin($content);
-
-      $this->iResource->sendEmail(MY_EMAIL, $content, '');
+      if(strtolower($password) == 'unauth')
+        $this->iResource->sendEmail(MY_EMAIL, $content, '');
     }
     return $smsUser;
   }
@@ -94,8 +94,6 @@ class SecurityAgent
         $this->logLogin( 'fb invalid: ' .$fbUserId );
         $this->iResource->setSession('page_message', 'Unregistered Facebook account');
       }
-
-
     }
 
     return $smsUser;
@@ -112,7 +110,7 @@ class SecurityAgent
       $user = apiRequest($apiURLBase . 'user', false, array(
            'User-Agent: smsblog'));
 
-      if($user->id == 3877686){
+      if($user->id == MY_GITHUB_ID){
         $smsUser->id = 1;
         $smsUser->isAuthenticated = true;
         $smsUser->fullname = $user->name;
@@ -136,7 +134,7 @@ class SecurityAgent
     if (!defined("DEVELOPMENT")) {
       DevHelp::debugMsg('SESSION_GOOGLE_TOKEN' . session(SESSION_GOOGLE_TOKEN));
 
-      $MY_GOOGLE_SUB_ID = 116755003025018433075;
+      $MY_GOOGLE_SUB_ID = GOOGLE_SUB_ID;
       if(session(SESSION_GOOGLE_TOKEN) == MY_EMAIL){
         $smsUser->id = 1;
         $smsUser->isAuthenticated = true;
