@@ -49,15 +49,15 @@ class AddForm extends React.Component {
     );
   }
 
-  handleAdd ( e ) {
+  handleAdd(e) {
     const entry = {
       content: this.refs.content.value.trim(),
       date: this.refs.date.value.trim()
     };
     this.props.submit(entry);
   };
-  handleTemplate ( e ) {
-    this.refs.content.value= `
+  handleTemplate(e) {
+    this.refs.content.value += `
 ### Tomorrow
 
 ### Obstacles

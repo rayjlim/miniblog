@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navigator = props => {
-    // const prefix = '/smsblog/index.php/';
-    // const prefix = '/projects/miniblog/';
- 
+	// const prefix = '/smsblog/index.php/';
+	// const prefix = '/projects/miniblog/';
+
 	return (
 		<div className="navigator btn-group" role="group" aria-label="...">
 			<Link to='/text' className="btn btn-default">
@@ -16,5 +16,4 @@ const Navigator = props => {
 		</div>
 	);
 };
-
 export default Navigator;

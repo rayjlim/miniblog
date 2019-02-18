@@ -38,7 +38,7 @@ class EditForm extends React.Component {
         </div>
         <button onClick={this.subToDate} className="btn btn-info">
           subToDate
-        </button>        
+        </button>
         <button onClick={this.addToDate} className="btn btn-success">
           addToDate
         </button>
@@ -64,7 +64,7 @@ class EditForm extends React.Component {
     );
   }
 
-  save ( e ) {
+  save(e) {
     const entry = {
       id: this.props.entry.id,
       content: this.refs.content.value.trim(),
@@ -73,12 +73,12 @@ class EditForm extends React.Component {
     this.props.submit(entry);
   }
 
-  subToDate ( e ) {
-    this.refs.date.value = moment(this.refs.date.value.trim()).subtract(1,'days').format('YYYY-MM-DD');
+  subToDate(e) {
+    this.refs.date.value = moment(this.refs.date.value.trim()).subtract(1, 'days').format('YYYY-MM-DD');
   }
-  
-  addToDate ( e ) {
-    this.refs.date.value = moment(this.refs.date.value.trim()).add(1,'days').format('YYYY-MM-DD');
+
+  addToDate(e) {
+    this.refs.date.value = moment(this.refs.date.value.trim()).add(1, 'days').format('YYYY-MM-DD');
   }
 }
 
