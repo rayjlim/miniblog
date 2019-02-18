@@ -53,6 +53,7 @@ $params = array(
 
 $githubLoginUrl = $authorizeURL . http_build_query($params);
 $app->view()->appendData(["githubLoginUrl" => $githubLoginUrl]);
+$app->view()->appendData(["FB_APP_ID" => FB_APP_ID]);
 
 //GOOGLE
 $gAuthorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth?';

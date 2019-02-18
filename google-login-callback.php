@@ -5,7 +5,7 @@ use \Lpt\DevHelp;
 
 if(get('code')) {
   // Verify the state matches our stored state
-  if(!get('state') || (isset($_SESSION['state']) && $_SESSION['state'] != get('state'))) {  
+  if(!get('state') || (isset($_SESSION['state']) && $_SESSION['state'] != get('state'))) {
     header('Location: ' . $_SERVER['PHP_SELF']);
     return new Response('Invalid state parameter', 401);
     die();
@@ -20,17 +20,17 @@ if(get('code')) {
     'grant_type' => 'authorization_code',
     'code' => get('code')
   ));
-
+  //echo "<pre>" . var_dump($token) . "</pre>";
   $decodedToken = JWT::decode($token->id_token, null, false);
   $_SESSION[SESSION_GOOGLE_TOKEN] = $decodedToken->email;
-  $url='http://'.DOMAIN."/".ROOT_URL.'/index.php/posts/';
+  $url='http://www.lilplaytime.com/smsblog/index.php/posts/';
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"5; url=$url\"></head>";
   echo "Have access token <a href=\"$url\">Posts page</a>";
 
 } else {
-  $url = 'http://'.DOMAIN."/".ROOT_URL.'/login.php';
+  $url = 'http://www.lilplaytime.com/smsblog/login.php';
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"5; url=$url\"></head>";

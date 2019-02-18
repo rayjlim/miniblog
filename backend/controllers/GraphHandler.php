@@ -13,12 +13,12 @@ class GraphHandler extends AbstractController
   var $dao = null;
   var $graphHelper = null;
   var $resource = null;
-  
+
   function __construct($app, $_smsEntriesDAO, $resource, $graphHelper) {
     $this->dao = $_smsEntriesDAO;
     $this->graphHelper = $graphHelper;
     $this->resource = $resource;
-    
+
     parent::__construct($app);
   }
 
@@ -26,7 +26,7 @@ class GraphHandler extends AbstractController
           DevHelp::debugMsg(__FILE__);
       $params = new GraphParams();
       $params = $params->loadParams($req->params(), $this->resource->getDateTime());
-      
+
       $sqlParam = '';
       if ($params->startDate != '') {
           $sqlParam.= ' and date > \'' . $params->startDate . '\'';
@@ -34,7 +34,7 @@ class GraphHandler extends AbstractController
       if ($params->endDate != '') {
           $sqlParam.= ' and date <= \'' . $params->endDate . '\'';
       }
-      
+
       $entries = $this->dao->queryGraphData($this->resource->getSession(SESSION_USER_ID), $params);
       return $this->graphHelper->calculateFields($params, $entries);
   }
@@ -54,7 +54,7 @@ class GraphHandler extends AbstractController
 
       $entryString = json_encode(array_values($data['entries']));
       $data['entries'] = null;
-      $this->resource->echoOut('{"metrics": ' . json_encode($data) . 
+      $this->resource->echoOut('{"metrics": ' . json_encode($data) .
         ', "entrys": ' . $entryString .
         '}');
     };
@@ -67,15 +67,15 @@ class GraphHandler extends AbstractController
     $fileData = $date->format("Y-m-d G:i:s") . "\t" . getenv("REMOTE_ADDR") . "\t";
     $fileData.= $message . "\n";
     $this->resource->writeFile($filename, $fileData);
-    
+
     $userId = $this->resource->getSession(SESSION_USER_ID);
     $targetDay = $date;
-    
+
     $entries = $this->dao->getSameDayEntries($userId, $targetDay);
 
     $printedNonWeight = array_reduce($entries, "printEntrys");
-    
-    $weekNumber =  idate('W', time()); 
+
+    $weekNumber =  idate('W', time());
     $virtueLength = sizeof($this->VIRTUES);
     $modulo = $weekNumber%$virtueLength;
     $text = $this->VIRTUES[$modulo];
@@ -94,12 +94,12 @@ class GraphHandler extends AbstractController
     $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
       .$text."<br><br>";
 
-    $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul>" . 
+    $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul>" .
       $additions . "</BODY></HTML>";
 
-    $subject = "On this day ". $targetDay->format('M d'); 
+    $subject = "On this day ". $targetDay->format('M d');
     $to = MY_EMAIL;
-    
+
     $headers = "From: smsblog@lilplaytime.com\r\n";
     $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
     $headers .= "X-Mailer: PHP/" . phpversion();
@@ -110,7 +110,7 @@ class GraphHandler extends AbstractController
       echo "{ \"cron\":\"email\"}";
     };
   }
-      
+
   function groupByYearMonth($carry, $item){
     $year = substr($item['date'], 0,4);
     $month = substr($item['date'], 5, 2);
@@ -198,7 +198,40 @@ var $QUESTIONOTDAY =  array(
 "What are the little things you stop to appreciate and enjoy?",
 "What does home mean to you?",
 "What do you want to do before you die?",
-"How do you show your love?"
+"How do you show your love?",
+
+"How do I feel at the moment?",
+"What do I need more of in my life?",
+"What would make me happy right now?",
+"What is going right in my life?",
+"What am I grateful for?",
+"When did I experience joy this week?",
+"List all my small victories and successes."
+"What's bothering me? Why?",
+"What are my priorities at the moment?",
+"What do I love about myself?",
+"Who means the world to me and why?",
+"If I could share one message with the world, what would it be?",
+"What advice would I give to my younger self? (Do I follow this advice now?)",
+"What lesson did I learn this week?",
+"If I had all the time in the world, what would I want to do first?",
+"What's draining my energy? How can I reduce or cut it out?",
+"What does my ideal morning look like?",
+"What does my ideal day look like?",
+"What makes me come alive? When was the last time I felt truly alive?",
+"What/Who inspires me the most? Why am I drawn to those inspirations?",
+"Where does my pain originate? What would need to happen for me to heal?",
+"What are my strengths? What am I really good at?",
+"What is something I\'ve always wanted to do but was too scared?",
+"What is something I would love to learn?",
+"What hobbies would I like to try?",
+"Where would I want to live my ideal life?",
+"Where would I like to travel in the next 5 years?",
+"What can I do to take better care of myself?",
+"When have I done something that I thought I couldn't do?",
+"At the end of my life, what do I want my legacy to be?"
+
+
 );
 
 
