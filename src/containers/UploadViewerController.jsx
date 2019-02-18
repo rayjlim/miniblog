@@ -93,6 +93,9 @@ class UploadViewerController extends Component {
             <Link to="/text" className="btn btn-default navbar-btn">
               Blog Page
             </Link>
+            <a href="../uploadForm/" className="btn btn-default navbar-btn">
+              Upload Pix
+            </a>
           </div>
         </nav>
       </div>
