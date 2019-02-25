@@ -3,7 +3,7 @@ var gutil = require('gulp-util');
 var minimist = require('minimist');
 var args = minimist(process.argv.slice(2));
 gulp.task('deploy', function() {
-  var remotePath = '/public_html/travis-test';
+  var remotePath = '/travis-test';
   var conn = ftp.create({
     host: '50.63.37.1',
     user: args.user,
