@@ -1,27 +1,21 @@
 sudo: false
 language: node_js
-
 node_js:
-  - '8'
-
-# fail asap when there is a failure
+- '8'
 matrix:
   fast_finish: true
-
-# cache node modules
 cache:
   directories:
-    - node_modules
-
+  - node_modules
 before_install:
-  # remove useless/non listed deps
-  - npm prune
-  # faster npm install
-  - npm set progress=false
-  # nyc fail on npm@3.7.1. Remove this patch when node upgrade npm
-  # https://github.com/bcoe/nyc/issues/190
-  - npm install -g npm@latest
-
+- npm prune
+- npm set progress=false
+- npm install -g npm@latest
 script: webpack --config webpack.config.js
+env:
+  global:
+  - secure: TFoEvaneEgoNSPr5wdpJMokXHD66Wbkh1ek8Unmc4RTlq1tAWqIheDkZ0vg5fFKFshBOlsEgosrVzDWqVVGZjnuvOzZ9SgABQecaObPeqETmQl7IQwnLeOP7+Ac1uP2Kl9mgmWjTAlfTMozqgR7rFnWOAPabsB/WDcCRYvgbIPzS8uR8I0kKLK1RkhUuXh5WdGXvvS1j4V1EGn9JNlaz+ZwSgplBa4xud3ASaUPD4UWADwVW+sluvFBvH/mKjyUIN8bMntuSjvznQkw7hSw91gbYowzhH7oSq/JQoDmrPww8Mz4Ic/Gwfm1d/wEXRQtVo/FAZHaBBRHbG5dHSYDOs6j3KQ1evKh5xpZ2b2piGOgnj/3IJMyJKkponorAmJiv7lRUYNC/JGc3Oj4DncJWfr7V99Bp/Sz5g9HjD/16iLp2dCDLOyipueM2SALu8Zt0sQME3ckYrl8HQPJPmoBo/r0vTPkfgwUb9qcHtnPciZxFNoh3fA29eAjF6D4oSwlLEpG0qmp5Patg+CFzN9SlJ8VODQPp4E4+P2AmtU1IErTxNveVUPMb0ZQ9Sh/KMBO5HpNoDUY8vwqP3jcqWkatrBWKmtClDFalwuyNTeKsPhjeK6JkjmdeKtc0fiRFZ4TMT+qz4LUnYVpR6IQ8NfF/+3IfF/LReZLwhJtE3kGARP4=
+  - secure: X5P3717+tfcbak5uJEpwXRxcF22Bh2lMOv30wAgrmDbiN7ii+VeuNcHtZ3ET7CtDSMkEYycef9PELAZkxpCZBL/BYFRwbe1yBbm4xAmIRginAgJXwQJysfY5ZugYOJ7k6DaEioRkMF9bVnlFmjXGgPU9eWnwK1B2m+ZVYsV/GUWoBUKqY/ogVQ3C0t5/fP+Ugpd6j347PgXVTGD1BmVy1+n34OJN4vYPrMmouNb+ZlIY6TBNwb3vqI/cFrH93R1dxUoMwgDlsS2CT5k/bdKe21RVxdz4mpkSv0t5G2cxllwCob+FbxAqJfeQn+J0Z70SCGTge7tpE1v09HGdLVqfNKcDak5kh646332d6Vizm+l5PfecdZwvidDoXTcyrBYa1PgyCQeazj2k7ihdNbAE3C96FW30ZGXoplewoez639ls5DfdjejYkS9MIVz/t4UJEBsEiurfL5l9fPAl1JPEWIaY2KtIQ6wqxDWfUotCeV4bM2NNW2BNN2MmGAmfpnkEOMb2OVElFplfY4Ad1sRz3qKSlsysbpWcVGneSX/EA4JwGvNyzbdd31o8buYpgY2JxYJetjherXdTjABVVbP/xQ898vcYv2GViBJSSZDoPL6XLpDe6evh1cZiSx6imb/fSjg8tMYslsz9ZedZgYeB3rt4PDS+F2RC/HkInogruO4=
 
-# after_success: npm run coverage
+after_success:
+  gulp deploy --user $FTP_USER --password $FTP_PASSWORD
