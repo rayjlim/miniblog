@@ -12,7 +12,7 @@ gulp.task('deploy', function() {
     password: args.password,
     log: gutil.log
   });
-  gulp.src(['*.php', './**/*.css'])
+  gulp.src(['*.php'])
     .pipe(conn.newer(remotePath))
     .pipe(conn.dest(remotePath));
 });
