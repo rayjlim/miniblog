@@ -9,6 +9,7 @@ $app = new Slim(array(
     'view' => new Twig
 ));
 
+
 $app->add(new AuthMiddleware());
 
 $app->view()->appendData(["rooturl" => '/'.ROOT_URL.'/']);
