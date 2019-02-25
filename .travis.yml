@@ -11,7 +11,7 @@ before_install:
 - npm prune
 - npm set progress=false
 - npm install -g npm@latest
-script: webpack --config webpack.config.js
+script: npm run build-prod
 env:
   global:
   - secure: TFoEvaneEgoNSPr5wdpJMokXHD66Wbkh1ek8Unmc4RTlq1tAWqIheDkZ0vg5fFKFshBOlsEgosrVzDWqVVGZjnuvOzZ9SgABQecaObPeqETmQl7IQwnLeOP7+Ac1uP2Kl9mgmWjTAlfTMozqgR7rFnWOAPabsB/WDcCRYvgbIPzS8uR8I0kKLK1RkhUuXh5WdGXvvS1j4V1EGn9JNlaz+ZwSgplBa4xud3ASaUPD4UWADwVW+sluvFBvH/mKjyUIN8bMntuSjvznQkw7hSw91gbYowzhH7oSq/JQoDmrPww8Mz4Ic/Gwfm1d/wEXRQtVo/FAZHaBBRHbG5dHSYDOs6j3KQ1evKh5xpZ2b2piGOgnj/3IJMyJKkponorAmJiv7lRUYNC/JGc3Oj4DncJWfr7V99Bp/Sz5g9HjD/16iLp2dCDLOyipueM2SALu8Zt0sQME3ckYrl8HQPJPmoBo/r0vTPkfgwUb9qcHtnPciZxFNoh3fA29eAjF6D4oSwlLEpG0qmp5Patg+CFzN9SlJ8VODQPp4E4+P2AmtU1IErTxNveVUPMb0ZQ9Sh/KMBO5HpNoDUY8vwqP3jcqWkatrBWKmtClDFalwuyNTeKsPhjeK6JkjmdeKtc0fiRFZ4TMT+qz4LUnYVpR6IQ8NfF/+3IfF/LReZLwhJtE3kGARP4=
