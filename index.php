@@ -9,7 +9,6 @@ $app = new Slim(array(
     'view' => new Twig
 ));
 
-
 $app->add(new AuthMiddleware());
 
 $app->view()->appendData(["rooturl" => '/'.ROOT_URL.'/']);
@@ -95,15 +94,3 @@ $app->get('/media/:currentDir', $uploadHandler->listMedia());
 $app->delete('/media/', $uploadHandler->deleteMedia());
 
 $app->run();
-
-//localhost/smsblog/index.php/api/morpheuz
-
-
-// <?php
-
-// $TAG_CLOUD_ARRAY = array('2r' => 1 , 'Dream' => 1 , 'Tv' => 11 , 'Weight' => 6 , );
-//     $GOAL_LIST_ARRAY = array(
-// array('name' => 'chores', 'code' => 'chores', 'type' => 'daily', 'Description' => 'check house for clean up before playing', 'startdate'=>'2011-04-24')
-// , array('name' => 'pushups', 'code' => 'pushups', 'type' => '3x', 'Description' => 'Do 100 pushups 3x a week')
-// , array('name' => 'situps', 'code' => 'situps', 'type' => '3x', 'Description' => 'Do 100 pushups 3x a week')
-// );
