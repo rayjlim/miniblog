@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import moment from "moment";
 import EntryList from "../views/EntryList.jsx";
 import EntrySearchBar from "../views/EntrySearchBar.jsx";
-import YearMonthList from "./YearMonthList.jsx";
 
 import EntryApi from "../api/EntryApi";
 
@@ -55,7 +54,7 @@ class TextEntryContainer extends Component {
     let month = urlParams.get('month');
     console.log('62.passed month: ' + month);
 
-    if(this.state.month != month){
+    if (this.state.month != month) {
       this.setState({ month });
       this.monthCall(month);
     }
@@ -77,9 +76,11 @@ class TextEntryContainer extends Component {
       this.searchCall(text);
     }, 300);
   }
+
   monthCall(searchParam) {
     EntryApi.getEntrys("month", searchParam);
   }
+
   searchCall(searchParam) {
     EntryApi.getEntrys("searchParam", searchParam);
   }

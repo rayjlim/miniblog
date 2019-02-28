@@ -44,12 +44,12 @@ function createEntry(content, dateParam = null) {
   let prepContent =
     dateParam === null
       ? {
-          content: content
-        }
+        content: content
+      }
       : {
-          content: content,
-          date: dateParam
-        };
+        content: content,
+        date: dateParam
+      };
   prepContent = JSON.stringify(prepContent);
   console.log("BASE_URL " + BASE_URL);
   axios
@@ -62,7 +62,7 @@ function createEntry(content, dateParam = null) {
         post: response.data
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       alert(error);
     });
@@ -82,7 +82,7 @@ function updateEntry(entry) {
         entry
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       alert(error);
     });
@@ -100,7 +100,7 @@ function deleteEntry(id) {
         id
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       alert(error);
     });
@@ -131,7 +131,7 @@ function rotate(URL) {
         filePath: response.data.filePath
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       alert(error);
     });
@@ -150,7 +150,7 @@ function resizeImg(fileName, filePath) {
         filePath: response.data.filePath
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       alert(error);
     });
@@ -176,7 +176,7 @@ function renameImg(originalName, filePath, newFileName) {
         filePath: response.data.filePath
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       alert(error);
     });

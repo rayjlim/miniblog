@@ -61,6 +61,7 @@ class OneDayBox extends Component {
     });
     this.loadDay(updateDate);
   }
+
   editEntry(entry) {
     console.log(entry);
     store.dispatch({
@@ -128,6 +129,7 @@ class OneDayBox extends Component {
     );
   }
 }
+
 const mapStateToProps = function (store) {
   let state = store.postState;
   return {
@@ -137,4 +139,5 @@ const mapStateToProps = function (store) {
     showAddEditForm: state.showAddEditForm
   };
 };
+
 export default connect(mapStateToProps)(OneDayBox);
