@@ -8,7 +8,7 @@ const Navigator = props => {
 	return (
 		<div className="navigator btn-group" role="group" aria-label="...">
 			<Link to='/text' className="btn btn-default">
-				Text
+				List
 			</Link>
 			<Link to='/oneDay' className="btn btn-default">
 				OneDay
