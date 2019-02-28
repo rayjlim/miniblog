@@ -90,7 +90,7 @@ class OneDayBox extends Component {
     let entryForm = (
       <div className="text-center">
         <button onClick={e => EntryApi.showForm()} className="btn btn-default">
-          Show Add Forms
+          Show Add Form
         </button>
       </div>
     );
