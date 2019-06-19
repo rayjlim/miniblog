@@ -206,7 +206,7 @@ var $QUESTIONOTDAY =  array(
 "What is going right in my life?",
 "What am I grateful for?",
 "When did I experience joy this week?",
-"List all my small victories and successes."
+"List all my small victories and successes.",
 "What's bothering me? Why?",
 "What are my priorities at the moment?",
 "What do I love about myself?",
