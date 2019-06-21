@@ -85,6 +85,7 @@ class UploadViewerController extends Component {
           date={this.props.date}
           submit={this.handleAdd}
           clear={this.clearForm}
+          showDateModBtns={true}
         />
         <br />
         <br />

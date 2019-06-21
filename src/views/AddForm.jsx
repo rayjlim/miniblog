@@ -1,4 +1,10 @@
 import React from "react";
+String.prototype.lpad = function(padString, length) {
+  var str = this;
+  while (str.length < length)
+      str = padString + str;
+  return str;
+}
 
 class AddForm extends React.Component {
   constructor(props) {
@@ -6,18 +12,36 @@ class AddForm extends React.Component {
     // create a ref to store the textInput DOM element
     this.handleTemplate = this.handleTemplate.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.minusYear = this.minusYear.bind(this);
   }
   render() {
-    var templateStyle = {
-      float: 'right'
+    let templateStyle = {
+      float: "right"
     };
+    let formBtns = "";
+    if (this.props.showDateModBtns != null) {
+      formBtns = (
+        <button onClick={this.minusYear} className="btn">
+          Minus a year
+        </button>
+      );
+    }
     return (
       <div className="well">
-        <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
+        <button
+          onClick={this.handleTemplate}
+          className="btn btn-primary"
+          style={templateStyle}
+        >
           Template
         </button>
         <strong>Add Entry</strong>
-        <p>link: [link text](URL) <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">Cheatsheet</a></p>
+        <p>
+          link: [link text](URL){" "}
+          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">
+            Cheatsheet
+          </a>
+        </p>
 
         <div className="form-group">
           <textarea
@@ -35,6 +59,8 @@ class AddForm extends React.Component {
             placeholder="Add date..."
             defaultValue={this.props.date}
           />
+
+          {formBtns}
         </div>
         <button onClick={this.handleAdd} className="btn btn-primary">
           Submit
@@ -55,14 +81,26 @@ class AddForm extends React.Component {
       date: this.refs.date.value.trim()
     };
     this.props.submit(entry);
-  };
+  }
+
+  minusYear(e) {
+    let currDate = new Date(this.refs.date.value);
+    let year = currDate.getFullYear();
+    let month = new String(currDate.getMonth() + 1).lpad("0", 2);
+    let day = new String(currDate.getDate() + 1).lpad("0", 2);
+
+    this.refs.date.value = `${year - 1}-${month}-${day}`;
+  }
+
   handleTemplate(e) {
     this.refs.content.value += `
 ### Tomorrow
 
 ### Obstacles
     `;
-  };
+  }
 }
+
+
 
 export default AddForm;
