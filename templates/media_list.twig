@@ -12,7 +12,8 @@
     <h3>File Contents - {{currentDir}}</h3>
     <pre>
     {% for file in dirContent %}
-        <li><a href="{{baseurl}}uploadViewer/?fileName={{file}}&filePath={{currentDir}}/">{{file}}</a>
+        <li>
+        <a href="{{baseurl}}main#/uploadViewer/?fileName={{file}}&filePath={{currentDir}}/">{{file}}</a>
         - <a href="{{baseurl}}media/?debug=on&fileName={{file}}&filePath={{currentDir}}/" class="delete">X</a>
         - <a href="{{baseurl}}media/?fileName={{file}}&filePath={{currentDir}}/" class="addPost">Use in New Entry</a>
         <img src="../../uploads/{{currentDir}}/{{file}}" />
