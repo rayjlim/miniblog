@@ -6,6 +6,7 @@ This log lists the architectural decisions for [project name].
 
 - [ADR-0000](0000-use-markdown-architectural-decision-records.md) - Use Markdown Architectural Decision Records
 - [ADR-0001](0001-templates-1.md) - Templating system
+- [ADR-0002](0002-datasource-for-records.md) - datasource for records
 
 <!-- adrlogstop -->
 
