@@ -7,7 +7,7 @@ HOST=${SFTP_HOST:-default_value}
 USER=${SFTP_USER:-default_value}
 PASSWD=${SFTP_PASSWORD:-default_value}
 
-ftp -n -v $HOST << EOT
+ftp -n -v -p $HOST << EOT
 ascii
 user $USER $PASSWD
 prompt
