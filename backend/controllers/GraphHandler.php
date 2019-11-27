@@ -5,7 +5,7 @@ function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
   $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
   $link = "{$urlPrefix}/index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
-  $pattern = '/(!\[\]\(\.\.\/uploads)(\/[0-9\-\/A-Za-z\.]*)\)/';
+  $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
   $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
   $preparedContent = preg_replace($pattern, $replacement, $item['content']);
   
