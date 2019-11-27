@@ -3,10 +3,10 @@ use \Lpt\DevHelp;
 
 function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
-  $urlPrefix = "http://".DOMAIN."/".ROOT_URL.";
-  $link = $urlPrefix . "/index.php/main#/oneDay?date=" . $entryDay->format('Y-m-d');
+  $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
+  $link = "{$urlPrefix}/index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
   $pattern = '/(!\[\]\(\.\.\/uploads)(\/[0-9\-\/A-Za-z\.]*)\)/';
-  $replacement = '<img src="'.$urlPrefix.'/uploads${2}">';
+  $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
   $preparedContent = preg_replace($pattern, $replacement, $item['content']);
   
   $message =  "<li><strong><a href=\"".$link."\">". $entryDay->format('Y-D') . '</a>:</strong> ' . $preparedContent . "</li>";
