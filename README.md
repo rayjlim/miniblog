@@ -2,18 +2,20 @@
 
 miniblog relies on phpcurl; if FB login is not working look if the module is enabled in the xampp php config
 
+## Dependency
+
+Using Slim ver 2.4 because it works with php5.4 (which is available on godaddy shared hosting). I would like to upgrade to Slim 3 or 4 but ran into issues with `.htaccess` not working when I set the php version to 5.6.
+
 ## Setup
 
-    see basic setup in link below
+see basic setup in link below
 
-
-    php.ini
-        uncomment
-            extension=php_curl.dll
-            extension=php_mbstring.dll
-        composer needs openssl extension
-            extension=php_openssl.dll
-
+    * php.ini
+        * uncomment
+            * extension=php_curl.dll
+            * extension=php_mbstring.dll
+        * composer needs openssl extension
+            * extension=php_openssl.dll
 
         set timezone date.timezone = "America/Los_Angeles"
 
@@ -31,7 +33,7 @@ miniblog relies on phpcurl; if FB login is not working look if the module is ena
     Grunt can watch for js or tests changes
     php testing: Codeception setup & running
 
-Unit Tests
+Unit Tests for JS tesingg
 
     just run grunt
 
