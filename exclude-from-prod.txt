@@ -1,0 +1,8 @@
+uploads/
+src/
+node_modules/
+package.json
+package.lock
+composer.json
+composer.lock
+*.txt

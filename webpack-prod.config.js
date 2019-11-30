@@ -1,29 +1,26 @@
-var webpack = require("webpack");
-var CompressionPlugin = require("compression-webpack-plugin");
-var path = require("path");
-
-var lib_dir = __dirname + "/_rsc/vendors",
-  node_dir = __dirname + "/node_modules";
+var webpack = require('webpack');
+var CompressionPlugin = require('compression-webpack-plugin');
+var path = require('path');
 
 module.exports = {
   entry: {
-    app: ["./src/app.jsx"]
+    app: ['./src/app.jsx']
   },
   output: {
-    path: path.join(__dirname, "_rsc/js_build"),
-    filename: "./[name].bundle.js"
+    path: path.join(__dirname, '_rsc/js_build'),
+    filename: './[name].bundle.js'
   },
 
   module: {
     rules: [
-       {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-          options: {presets: ['react', "env"]}
-          }
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: { presets: ['react', 'env'] }
         }
+      }
     ]
   },
   plugins: [
@@ -38,23 +35,25 @@ module.exports = {
     //   },
     // }),
     new webpack.optimize.UglifyJsPlugin({
-    minimize: true,
-    inline: false,
-    uglifyOptions: { ecma: 8,
-      compress: {
-           dead_code: true,
-           global_defs: {
-                    'process.env.NODE_ENV': JSON.stringify('production')
-            }
-       } }
-  }),
+      minimize: true,
+      inline: false,
+      uglifyOptions: {
+        ecma: 8,
+        compress: {
+          dead_code: true,
+          global_defs: {
+            'process.env.NODE_ENV': JSON.stringify('production')
+          }
+        }
+      }
+    }),
 
-  new webpack.LoaderOptionsPlugin({
-    minimize: true
-  }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
     new CompressionPlugin({
-      asset: "[path].gz[query]",
-      algorithm: "gzip",
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
       test: /\.js$|\.css$|\.html$/,
       threshold: 10240,
       minRatio: 0.8

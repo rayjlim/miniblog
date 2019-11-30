@@ -1,31 +1,25 @@
-var webpack = require("webpack");
-var path = require("path");
-
-var lib_dir = __dirname + "/_rsc/vendors",
-  node_dir = __dirname + "/node_modules";
+const path = require("path");
 
 module.exports = {
   entry: {
     app: ["./src/app.jsx"]
   },
   output: {
-    path: path.join(__dirname, "_rsc/js"),
+    path: path.join(__dirname, "_rsc/js_build"),
     filename: "./[name].bundle.js"
   },
-
   module: {
-
     rules: [
-       {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-        options: {
-          presets: ['react']
-        }
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['react']
           }
         }
+      }
     ]
   },
   plugins: [],
@@ -33,5 +27,5 @@ module.exports = {
 };
 
 /**
- for production version, use ./node_modules/.bin/webpack -p 
+ for production version, use ./node_modules/.bin/webpack -p
 */
