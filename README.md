@@ -61,3 +61,7 @@ php directory: /opt/lampp/bin
  
  running composer
  /opt/lampp/bin/php /usr/local/bin/composer install
+
+
+ sql setup required:
+ SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));

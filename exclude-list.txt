@@ -1,0 +1,10 @@
+_config/
+vendor/
+.git/
+*.sh
+*.txt
+*.md
+*.code-workspace
+composer.lock
+.gitignore
+SERVER_CONFIG.php

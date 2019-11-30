@@ -1,5 +1,5 @@
 <?php
-require 'backend/core/common_header.php';
+require 'common_header.php';
 require 'backend/3rdparty/JWT.php';
 use \Lpt\DevHelp;
 

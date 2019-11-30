@@ -1,5 +1,5 @@
 <?php
-require 'backend/core/common_header.php';
+require 'common_header.php';
 require_once 'backend/3rdparty/Facebook/autoload.php';
 
 $fb = DAOFactory::FacebookApi();

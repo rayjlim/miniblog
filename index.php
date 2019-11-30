@@ -1,6 +1,5 @@
 <?php
-
-require 'backend/core/common_header.php';
+require 'common_header.php';
 
 use Slim\Views\Twig as Twig;
 use Slim\Slim;
