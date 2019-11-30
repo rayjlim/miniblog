@@ -8,3 +8,4 @@
 *.code-workspace
 my-dev-notes.txt
 backend/SERVER_CONFIG.php
+upload.sh
