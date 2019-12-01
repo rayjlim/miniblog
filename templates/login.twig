@@ -5,7 +5,7 @@
 {% include '_banner.twig' %}
 <div class="container">
     <h2>User Login.</h2>
-    <form action="index.php/" method="post">
+    <form action="." method="post">
         <input type="hidden" name="cmd" value="blog_list" />
 
          {% if target != "" %}
@@ -116,7 +116,7 @@
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!'+
-        `<a href="/smsblog/index.php/posts/">posts</a>`;
+        `<a href="/smsblog/posts/">posts</a>`;
     });
   }
 

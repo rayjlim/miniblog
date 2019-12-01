@@ -53,7 +53,7 @@ using node ver. 7.2.1
 sudo /opt/lampp/lampp start
 (in linux terminal)
 php directory: /opt/lampp/bin
-    [http://localhost/projects/miniblog3/index.php/](http://localhost/projects/miniblog3/index.php/)
+    [http://localhost/projects/miniblog3/](http://localhost/projects/miniblog3/)
 
  node_modules/.bin/webpack -w (for development)
  npm run build

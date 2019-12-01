@@ -4,7 +4,7 @@ use \Lpt\DevHelp;
 function printEntrys($carry, $item){
   $entryDay = new DateTime($item['date']);
   $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
-  $link = "{$urlPrefix}/index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
+  $link = "{$urlPrefix}index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
   $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
   $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
   $preparedContent = preg_replace($pattern, $replacement, $item['content']);
@@ -95,7 +95,7 @@ class GraphHandler extends AbstractController
     $qLength = sizeof($this->QUESTIONOTDAY);
     $modulo = $dayNumber%$qLength;
     $text = $this->QUESTIONOTDAY[$modulo];
-    $link = "http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay?pretext=#qod";
+    $link = "http://".DOMAIN."/".ROOT_URL."index.php/main#/oneDay?pretext=#qod";
     $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
       .$text."<br><br>";
 
