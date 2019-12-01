@@ -1,13 +1,15 @@
 {
+  "version": "1.0.0",
   "require": {
     "yeriomin/redbean-single-file": "4.*",
     "slim/slim": "2.*",
     "slim/views": "0.*",
     "slim/extras": "2.0.3",
-    "twig/twig": "1.*",
+    "twig/twig": "1.35.3"
+  },
+  "require-dev": {
     "squizlabs/php_codesniffer": "*"
   },
-  "require-dev": {},
   "autoload": {
     "classmap": [
       "backend/controllers",
@@ -20,8 +22,8 @@
       "backend/core/Logger.php",
       "backend/core/DevHelp.php",
       "backend/core/_app-constants.php",
-      "backend/core/_mdb-config.php",
-      "backend/core/common_functions.php"
+      "backend/core/common_functions.php",
+      "backend/SERVER_CONFIG.php"
     ]
   }
 }

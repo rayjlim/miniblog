@@ -107,10 +107,10 @@ class SecurityAgent
       DevHelp::debugMsg('session key' . session(SESSION_GH_ACCESS_TOKEN));
 
       $apiURLBase = 'https://api.github.com/';
-      $user = apiRequest($apiURLBase . 'user', false, array(
+      $user = $this->apiRequest($apiURLBase . 'user', false, array(
            'User-Agent: smsblog'));
-
-      if($user->id == MY_GITHUB_ID){
+           $this->logLogin( 'GH attempt: '.isset($user->id) );
+      if(isset($user->id) && $user->id == MY_GITHUB_ID){
         $smsUser->id = 1;
         $smsUser->isAuthenticated = true;
         $smsUser->fullname = $user->name;
@@ -119,7 +119,7 @@ class SecurityAgent
           DevHelp::debugMsg('Not logged in through GH - redirect');
 
           $this->iResource->setSession('page_message', 'Invalid Github User');
-          $this->logLogin( 'GH failed: ' . $user->id);
+          $this->logLogin( 'GH failed: ' );
           $smsUser = null;
       }
     }
@@ -263,10 +263,9 @@ class SecurityAgent
     // echo "decrypted: ".$plaintext_utf8_dec;
     return $ciphertext_base64;
   }
-}
 
-// utilities
-function apiRequest($url, $post=FALSE, $headers=array()) {
+  // utilities
+ private function apiRequest($url, $post=FALSE, $headers=array()) {
   $ch = curl_init($url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
   $headers[] = 'User-Agent: smsblogger';
@@ -277,9 +276,12 @@ function apiRequest($url, $post=FALSE, $headers=array()) {
     $headers[] = 'Authorization: Bearer ' . session(SESSION_GH_ACCESS_TOKEN);
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
   $response = curl_exec($ch);
-
+  $this->logLogin( 'GH:response'.$response);
   return json_decode($response);
 }
+
+}
+
 function session($key, $default=NULL) {
   return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : $default;
 }

@@ -13,7 +13,7 @@ class AuthMiddleware extends \Slim\Middleware
 
     if ($app->smsUser == null) {
         if(strpos ($app->request->getPath(), '/api/')){
-            $redirectUrl = '/smsblog/api.php/unauth';
+            $redirectUrl = '/api.php/unauth';
             DevHelp::redirectHelper($redirectUrl);
         }else{
 

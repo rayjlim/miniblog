@@ -1,5 +1,5 @@
 <?php
-require 'backend/core/common_header.php';
+require 'common_header.php';
 require 'backend/3rdparty/JWT.php';
 use \Lpt\DevHelp;
 
@@ -23,7 +23,7 @@ if(get('code')) {
   //echo "<pre>" . var_dump($token) . "</pre>";
   $decodedToken = JWT::decode($token->id_token, null, false);
   $_SESSION[SESSION_GOOGLE_TOKEN] = $decodedToken->email;
-  $url='http://www.lilplaytime.com/smsblog/index.php/posts/';
+  $url='http://www.lilplaytime.com/smsblog/posts/';
 
   header("Location: $url");
   echo "<head><meta http-equiv=\"refresh\" content=\"5; url=$url\"></head>";

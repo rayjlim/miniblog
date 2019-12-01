@@ -1,5 +1,5 @@
 <?php
-require 'backend/core/common_header.php';
+require 'common_header.php';
 use \Lpt\DevHelp;
 
 $tokenURL = 'https://github.com/login/oauth/access_token';

@@ -1,6 +1,5 @@
 <?php
-
-require 'backend/core/common_header.php';
+require 'common_header.php';
 
 use Slim\Views\Twig as Twig;
 use Slim\Slim;
@@ -27,7 +26,7 @@ require 'backend/core/page_message.php';
 
  if(!strpos($app->request()->getRootUri(), 'index.php')){
 	$app->get('/', function () use ($app) {
-     $app->redirect('index.php/posts/');
+     $app->redirect('index/posts/');
     });
  } else{
 	$app->get('/', function () use ($app) {

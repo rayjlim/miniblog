@@ -2,18 +2,20 @@
 
 miniblog relies on phpcurl; if FB login is not working look if the module is enabled in the xampp php config
 
+## Dependency
+
+Using Slim ver 2.4 because it works with php5.4 (which is available on godaddy shared hosting). I would like to upgrade to Slim 3 or 4 but ran into issues with `.htaccess` not working when I set the php version to 5.6.
+
 ## Setup
 
-    see basic setup in link below
+see basic setup in link below
 
-
-    php.ini
-        uncomment
-            extension=php_curl.dll
-            extension=php_mbstring.dll
-        composer needs openssl extension
-            extension=php_openssl.dll
-
+    * php.ini
+        * uncomment
+            * extension=php_curl.dll
+            * extension=php_mbstring.dll
+        * composer needs openssl extension
+            * extension=php_openssl.dll
 
         set timezone date.timezone = "America/Los_Angeles"
 
@@ -31,7 +33,7 @@ miniblog relies on phpcurl; if FB login is not working look if the module is ena
     Grunt can watch for js or tests changes
     php testing: Codeception setup & running
 
-Unit Tests
+Unit Tests for JS tesingg
 
     just run grunt
 
@@ -51,7 +53,7 @@ using node ver. 7.2.1
 sudo /opt/lampp/lampp start
 (in linux terminal)
 php directory: /opt/lampp/bin
-    [http://localhost/projects/miniblog3/index.php/](http://localhost/projects/miniblog3/index.php/)
+    [http://localhost/projects/miniblog3/](http://localhost/projects/miniblog3/)
 
  node_modules/.bin/webpack -w (for development)
  npm run build
@@ -59,3 +61,7 @@ php directory: /opt/lampp/bin
  
  running composer
  /opt/lampp/bin/php /usr/local/bin/composer install
+
+
+ sql setup required:
+ SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));

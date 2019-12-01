@@ -2,11 +2,12 @@
 /_config/*
 /_rsc/js/app.bundle*
 /_rsc/js_build
-/backend/core/_mdb-config.php
 /node_modules
 /vendor
 /uploads/
-/side/node_modules
 *.code-workspace
-backend/core/prod/*
 my-dev-notes.txt
+backend/SERVER_CONFIG.php
+upload.sh
+cron_script.php
+env_vars.sh
