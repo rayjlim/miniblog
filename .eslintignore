@@ -1,9 +1,4 @@
 *.DS_Store
-/config
+/_config
 /node_modules
-/.build
-/npm-debug.log
-/*.log
-/report
-/tasks
-/public/js/npm.js
+

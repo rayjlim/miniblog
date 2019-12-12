@@ -26,7 +26,7 @@ require 'backend/core/page_message.php';
 
  if(!strpos($app->request()->getRootUri(), 'index.php')){
 	$app->get('/', function () use ($app) {
-     $app->redirect('index/posts/');
+     $app->redirect('index.php/posts/');
     });
  } else{
 	$app->get('/', function () use ($app) {
