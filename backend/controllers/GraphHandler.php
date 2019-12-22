@@ -1,129 +1,138 @@
 <?php
 use \Lpt\DevHelp;
 
-function printEntrys($carry, $item){
-  $entryDay = new DateTime($item['date']);
-  $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
-  $link = "{$urlPrefix}index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
-  $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
-  $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
-  $preparedContent = preg_replace($pattern, $replacement, $item['content']);
+function printEntrys($carry, $item)
+{
+    $entryDay = new DateTime($item['date']);
+    $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
+    $link = "{$urlPrefix}/index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
+    $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
+    $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
+    $preparedContent = preg_replace($pattern, $replacement, $item['content']);
   
-  $message =  "<li><strong><a href=\"".$link."\">". $entryDay->format('Y-D') . '</a>:</strong> ' . $preparedContent . "</li>";
-  return $carry.=$message;
+    $message =  "<li><strong><a href=\"".$link."\">". $entryDay->format('Y-D') . '</a>:</strong> ' . $preparedContent . "</li>";
+    return $carry.=$message;
 }
 
 class GraphHandler extends AbstractController
 {
-  var $dao = null;
-  var $graphHelper = null;
-  var $resource = null;
+    public $dao = null;
+    public $graphHelper = null;
+    public $resource = null;
 
-  function __construct($app, $_smsEntriesDAO, $resource, $graphHelper) {
-    $this->dao = $_smsEntriesDAO;
-    $this->graphHelper = $graphHelper;
-    $this->resource = $resource;
+    public function __construct($app, $_smsEntriesDAO, $resource, $graphHelper)
+    {
+        $this->dao = $_smsEntriesDAO;
+        $this->graphHelper = $graphHelper;
+        $this->resource = $resource;
 
-    parent::__construct($app);
-  }
+        parent::__construct($app);
+    }
 
-  function handleCore($req){
-          DevHelp::debugMsg(__FILE__);
-      $params = new GraphParams();
-      $params = $params->loadParams($req->params(), $this->resource->getDateTime());
+    public function handleCore($req)
+    {
+        DevHelp::debugMsg(__FILE__);
+        $params = new GraphParams();
+        $params = $params->loadParams($req->params(), $this->resource->getDateTime());
 
-      $sqlParam = '';
-      if ($params->startDate != '') {
-          $sqlParam.= ' and date > \'' . $params->startDate . '\'';
-      }
-      if ($params->endDate != '') {
-          $sqlParam.= ' and date <= \'' . $params->endDate . '\'';
-      }
+        $sqlParam = '';
+        if ($params->startDate != '') {
+            $sqlParam.= ' and date > \'' . $params->startDate . '\'';
+        }
+        if ($params->endDate != '') {
+            $sqlParam.= ' and date <= \'' . $params->endDate . '\'';
+        }
 
-      $entries = $this->dao->queryGraphData($this->resource->getSession(SESSION_USER_ID), $params);
-      return $this->graphHelper->calculateFields($params, $entries);
-  }
+        $entries = $this->dao->queryGraphData($this->resource->getSession(SESSION_USER_ID), $params);
+        return $this->graphHelper->calculateFields($params, $entries);
+    }
 
-  public function handle() {
-    return function () {
-      $data = $this->handleCore($this->app->request());
-      $this->app->view()->appendData(["data" => $data]);
-      $this->app->render('tag_track.twig');
-    };
-  }
+    public function handle()
+    {
+        return function () {
+            $data = $this->handleCore($this->app->request());
+            $this->app->view()->appendData(["data" => $data]);
+            $this->app->render('tag_track.twig');
+        };
+    }
 
-  public function handleApi() {
-    return function () {
-      $data = $this->handleCore($this->app->request());
-      $this->app->response()->header('Content-Type', 'application/json');
+    public function handleApi()
+    {
+        return function () {
+            $data = $this->handleCore($this->app->request());
+            $this->app->response()->header('Content-Type', 'application/json');
 
-      $entryString = json_encode(array_values($data['entries']));
-      $data['entries'] = null;
-      $this->resource->echoOut('{"metrics": ' . json_encode($data) .
+            $entryString = json_encode(array_values($data['entries']));
+            $data['entries'] = null;
+            $this->resource->echoOut('{"metrics": ' . json_encode($data) .
         ', "entrys": ' . $entryString .
         '}');
-    };
-  }
+        };
+    }
 
-  public function logCronCall($message) {
-    return function () use ($message) {
-    $date = $this->resource->getDateTime();
-    $filename = LOGS_DIR . DIR_SEP . LOG_PREFIX . "_logins-" . $date->format("Y-m") . ".txt";
-    $fileData = $date->format("Y-m-d G:i:s") . "\t" . getenv("REMOTE_ADDR") . "\t";
-    $fileData.= $message . "\n";
-    $this->resource->writeFile($filename, $fileData);
+    public function logCronCall($message)
+    {
+        return function () use ($message) {
+            $date = $this->resource->getDateTime();
+            $filename = LOGS_DIR . DIR_SEP . LOG_PREFIX . "_logins-" . $date->format("Y-m") . ".txt";
+            $fileData = $date->format("Y-m-d G:i:s") . "\t" . getenv("REMOTE_ADDR") . "\t";
+            $fileData.= $message . "\n";
+            $this->resource->writeFile($filename, $fileData);
 
-    $userId = $this->resource->getSession(SESSION_USER_ID);
-    $targetDay = $date;
+            $userId = $this->resource->getSession(SESSION_USER_ID);
+            $targetDay = $date;
 
-    $entries = $this->dao->getSameDayEntries($userId, $targetDay);
+            $entries = $this->dao->getSameDayEntries($userId, $targetDay);
 
-    $printedNonWeight = array_reduce($entries, "printEntrys");
+            $printedNonWeight = array_reduce($entries, "printEntrys");
 
-    $weekNumber =  idate('W', time());
-    $virtueLength = sizeof($this->VIRTUES);
-    $modulo = $weekNumber%$virtueLength;
-    $text = $this->VIRTUES[$modulo];
-    $additions = '<strong>Virtue:</strong> '.$text."<br><br>";
+            $weekNumber =  idate('W', time());
+            $virtueLength = sizeof($this->VIRTUES);
+            $modulo = $weekNumber%$virtueLength;
+            $text = $this->VIRTUES[$modulo];
+            $additions = '<strong>Virtue:</strong> '.$text."<br><br>";
 
-    $dayNumber =  idate('z', time());
-    $mantraLength = sizeof($this->MANTRAS);
-    $modulo = $dayNumber%$mantraLength;
-    $text = $this->MANTRAS[$modulo];
-    $additions .= '<strong>Mantra of the Day:</strong> '.$text."<br><br>";
+            $dayNumber =  idate('z', time());
+            $mantraLength = sizeof($this->MANTRAS);
+            $modulo = $dayNumber%$mantraLength;
+            $text = $this->MANTRAS[$modulo];
+            $additions .= '<strong>Mantra of the Day:</strong> '.$text."<br><br>";
 
-    $qLength = sizeof($this->QUESTIONOTDAY);
-    $modulo = $dayNumber%$qLength;
-    $text = $this->QUESTIONOTDAY[$modulo];
-    $link = "http://".DOMAIN."/".ROOT_URL."index.php/main#/oneDay?pretext=#qod";
-    $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
+            $qLength = sizeof($this->QUESTIONOTDAY);
+            $modulo = $dayNumber%$qLength;
+            $text = $this->QUESTIONOTDAY[$modulo];
+            $link = "http://".DOMAIN."/".ROOT_URL."index.php/main#/oneDay?pretext=#qod";
+            $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
       .$text."<br><br>";
 
-    $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul>" .
+            $message = "<HTML><BODY><ul>" . $printedNonWeight . "</ul>" .
       $additions . "</BODY></HTML>";
 
-    $subject = "On this day ". $targetDay->format('M d');
-    $to = MY_EMAIL;
+            $subject = "On this day ". $targetDay->format('M d');
+            $to = MY_EMAIL;
 
-    $headers = "From: smsblog@lilplaytime.com\r\n";
-    $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion();
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-    echo $message;
-      mail($to, $subject, $message, $headers);
-      echo "{ \"cron\":\"email\"}";
-    };
-  }
+            $headers = "From: smsblog@lilplaytime.com\r\n";
+            $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
+            $headers .= "X-Mailer: PHP/" . phpversion();
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+            echo $message;
+            mail($to, $subject, $message, $headers);
+            echo "{ \"cron\":\"email\"}";
+        };
+    }
 
-  function groupByYearMonth($carry, $item){
-    $year = substr($item['date'], 0,4);
-    $month = substr($item['date'], 5, 2);
-    if(!isset($carry[$year.'-'.$month])){$carry[$year.'-'.$month] = [];}
-    array_push($carry[$year.'-'.$month], $item['weight']);
-    return $carry;
-  }
-  var $VIRTUES =  array(
+    public function groupByYearMonth($carry, $item)
+    {
+        $year = substr($item['date'], 0, 4);
+        $month = substr($item['date'], 5, 2);
+        if (!isset($carry[$year.'-'.$month])) {
+            $carry[$year.'-'.$month] = [];
+        }
+        array_push($carry[$year.'-'.$month], $item['weight']);
+        return $carry;
+    }
+    public $VIRTUES =  array(
     '1. Temperance: Eat not to dullness; drink not to elevation. ',
     '2. Silence: Speak not but what may benefit others or yourself; avoid trifling conversation. ',
     '3. Order: Let all your things have their places; let each part of your business have its time. ',
@@ -139,7 +148,7 @@ class GraphHandler extends AbstractController
     '13. Humility: Imitate Jesus and Socrates. '
 );
 
-  var $MANTRAS =  array(
+    public $MANTRAS =  array(
     'Determination - “In the heart of the strong shines a relentless ray of resolve... It cannot be stopped, it cannot be controlled, and it will not fail.”',
     'Don\'t be afraid of your dreams',
     'Be more optimistic for more productivity',
@@ -179,7 +188,7 @@ class GraphHandler extends AbstractController
     "one day at a time, no regrets and move on"
 );
 
-var $QUESTIONOTDAY =  array(
+    public $QUESTIONOTDAY =  array(
     "What is in your heart? What is your passion?",
 
     "What do you wish you had more time to do?",
@@ -236,6 +245,4 @@ var $QUESTIONOTDAY =  array(
     "When have I done something that I thought I couldn't do?",
     "At the end of my life, what do I want my legacy to be?"
 );
-
-
 }

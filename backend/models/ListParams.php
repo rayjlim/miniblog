@@ -7,19 +7,19 @@
  */
 class ListParams extends BaseModel
 {
-    var $userId = null;
-    var $searchParam = '';
-    var $tags = Array();
-    var $startDate = '';
-    var $endDate = '';
-    var $filterType = FILTER_ALL;
-    var $resultsLimit = BLOG_LIMIT_DEFAULT;
-    var $monthsBackToShow = 3;
+    public $userId = null;
+    public $searchParam = '';
+    public $tags = array();
+    public $startDate = '';
+    public $endDate = '';
+    public $filterType = FILTER_ALL;
+    public $resultsLimit = BLOG_LIMIT_DEFAULT;
+    public $monthsBackToShow = 3;
     
-    var $gotoYearMonth;
+    public $gotoYearMonth;
     
-    function loadParams($request) {
-        
+    public function loadParams($request)
+    {
         $oListParams = new ListParams();
         $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType'];
         foreach ($lookingFor as $target) {

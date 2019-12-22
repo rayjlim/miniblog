@@ -2,8 +2,8 @@
  // R::debug(TRUE);
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
-    
-    function load($id) {
+    public function load($id)
+    {
         $post = R::load(POSTS, $id);
         return $post->export();
     }
@@ -14,7 +14,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * @param smsEntrie primary key
      * @LPT_V2
      */
-    function delete($id) {
+    public function delete($id)
+    {
         $postBean = R::load(POSTS, $id);
         R::trash($postBean);
         return 1;
@@ -26,7 +27,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * @param SmsEntriesMySql smsEntrie
      * @LPT_V2
      */
-    function insert($smsEntrie) {
+    public function insert($smsEntrie)
+    {
         $postBean = R::xdispense(POSTS);
         
         $postBean->content = $smsEntrie->content;
@@ -42,7 +44,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * @param SmsEntriesMySql smsEntrie
      * @LPT_V2
      */
-    function update($smsEntrie) {
+    public function update($smsEntrie)
+    {
         $postBean = R::load(POSTS, $smsEntrie['id']);
         $postBean->content = $smsEntrie['content'];
         $postBean->date = $smsEntrie['date'];
@@ -52,7 +55,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     /**
      * @LPT_V2
      */
-    function queryGraphData($userId, $graphParams) {
+    public function queryGraphData($userId, $graphParams)
+    {
         $sqlParam = '';
         if ($graphParams->startDate != '') {
             $sqlParam.= ' and date > \'' . $graphParams->startDate . '\'';
@@ -73,8 +77,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     /**
      * @LPT_V2
      */
-    function queryBlogList($userId, $listParams) {
-        
+    public function queryBlogList($userId, $listParams)
+    {
         $sqlParam = $this->listParamsToSqlParam($listParams);
         
         $posts = R::findAll(POSTS, ' user_id = ?  ' . $sqlParam . ' order by date desc limit ?', [$userId, $listParams->resultsLimit]);
@@ -83,11 +87,12 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $sequencedArray;
     }
 
-    function getSameDayEntries($userId, $date) {
+    public function getSameDayEntries($userId, $date)
+    {
         
         // $sqlParam = $this->listParamsToSqlParam($listParams);
         //select * from sms_entries
-        $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m') . ' and Day(date) = ' . $date->format('d') 
+        $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m') . ' and Day(date) = ' . $date->format('d')
             . ' and content not like "#s%"'
             . ' and content not like "#x%"'
             . ' and content not like "@w%"'
@@ -99,17 +104,18 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $sequencedArray;
     }
 
-    function getYearMonths($userId) {
-        
+    public function getYearMonths($userId)
+    {
         $whereClause = ' where user_id = ? GROUP BY Year(date), Month(date)';
         $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         
         $b = array_map("pickDate", $sequencedArray);
         return $b;
-    }    
+    }
 
-    function listParamsToSqlParam($listParams) {
+    public function listParamsToSqlParam($listParams)
+    {
         $sqlParam = '';
         if ($listParams->searchParam != '') {
             $sqlParam.= ' and content LIKE \'%' . $listParams->searchParam . '%\'';
@@ -139,17 +145,16 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $sqlParam;
     }
 
-    function queryLastTagEntry($userId, $label) {
+    public function queryLastTagEntry($userId, $label)
+    {
         $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label . '%\' order by date desc limit 1', [$userId]);
         
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         return $sequencedArray[0];
     }
-
 }
 
 function pickDate($n)
 {
     return(substr($n['date'], 0, 7));
 }
-

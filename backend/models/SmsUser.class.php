@@ -3,22 +3,29 @@
  * Object represents table 'sms_entries'
  *
      * @author: http://phpdao.com
-     * @date: 2011-02-25 14:02   
+     * @date: 2011-02-25 14:02
  */
-class SmsUser{
-    
-    var $id;
-    var $facebookId;
-    var $email;
-    var $lastLogin;
-    var $prefDaysForReminder;
-    var $fullname = '';
-    var $isAuthenticated = false;
-    var $password = null;
+class SmsUser
+{
+    public $id;
+    public $facebookId;
+    public $email;
+    public $lastLogin;
+    public $prefDaysForReminder;
+    public $fullname = '';
+    public $isAuthenticated = false;
+    public $password = null;
 
-    function __construct($_id='', $_facebookId='', $_email='', $_lastLogin='', 
-        $_prefDaysForReminder='', $_fullname='', $_isAuthenticated=false, $_password='')
-    {
+    public function __construct(
+        $_id='',
+        $_facebookId='',
+        $_email='',
+        $_lastLogin='',
+        $_prefDaysForReminder='',
+        $_fullname='',
+        $_isAuthenticated=false,
+        $_password=''
+    ) {
         $this->id                  = $_id;
         $this->facebookId          = $_facebookId;
         $this->email               = $_email;

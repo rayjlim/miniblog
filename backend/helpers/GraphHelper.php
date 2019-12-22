@@ -15,8 +15,7 @@ use \Lpt\DevHelp;
  */
 class GraphHelper
 {
-    
-    var $currentDate = null;
+    public $currentDate = null;
     
     /**
      * Constructor
@@ -27,7 +26,8 @@ class GraphHelper
      *
      * @return
      */
-    function __construct($currentDate) {
+    public function __construct($currentDate)
+    {
         $this->currentDate = $currentDate;
     }
     
@@ -42,7 +42,8 @@ class GraphHelper
      *
      * @return array distributed values
      */
-    public function createWeightedArray($sampleSize, $weightFactor, $precision = 2) {
+    public function createWeightedArray($sampleSize, $weightFactor, $precision = 2)
+    {
         $baseSize = $sampleSize - 1;
         $factorIntervalSize = number_format((1 - $weightFactor) / $sampleSize, $precision);
         
@@ -63,21 +64,20 @@ class GraphHelper
      *
      * @return array page labels
      */
-    public function generatePageLabels($graphParams) {
+    public function generatePageLabels($graphParams)
+    {
         $pageLabels = array();
         if ($graphParams->label == '#weight') {
             $pageLabels['title'] = 'Weight Graph';
             $pageLabels['highest'] = 'Heaviest';
             $pageLabels['lowest'] = 'Lightest';
             $pageLabels['tag'] = "weight";
-        } 
-        else if ($graphParams->label == '#sleep') {
+        } elseif ($graphParams->label == '#sleep') {
             $pageLabels['title'] = 'Sleep Time Graph';
             $pageLabels['highest'] = 'Latest';
             $pageLabels['lowest'] = 'Earliest';
             $pageLabels['tag'] = "sleep";
-        } 
-        else {
+        } else {
             $pageLabels['title'] = 'Amount of Sleep Graph';
             $pageLabels['highest'] = 'Most';
             $pageLabels['lowest'] = 'Least';
@@ -95,15 +95,14 @@ class GraphHelper
      *
      * @return integer value of the Goal
      */
-    public function defineGoal($graphParams) {
+    public function defineGoal($graphParams)
+    {
         $goal = 0;
         if ($graphParams->label == '#weight') {
             $goal = 140;
-        } 
-        else if ($graphParams->label == '#sleep') {
+        } elseif ($graphParams->label == '#sleep') {
             $goal = 0;
-        } 
-        else {
+        } else {
             $goal = 7;
         }
         return $goal;
@@ -119,8 +118,8 @@ class GraphHelper
      *
      * @return array associative
      */
-    public function calculateFields($graphParams, $entries) {
-        
+    public function calculateFields($graphParams, $entries)
+    {
         DevHelp::debugMsg('calculateFields: ' . count($entries));
         $currentDateTime = $this->currentDate;
         $data = array();
@@ -183,11 +182,9 @@ class GraphHelper
             $entryDate = new DateTime($entry['date']);
             if ($entryDate > $dateThisWeek) {
                 array_push($thisWeekArray, $entry['main']);
-            } 
-            elseif ($entryDate > $dateLastWeek) {
+            } elseif ($entryDate > $dateLastWeek) {
                 array_push($lastWeekArray, $entry['main']);
-            } 
-            elseif ($entryDate > $datePrevious2Weeks) {
+            } elseif ($entryDate > $datePrevious2Weeks) {
                 array_push($prev2WeeksArray, $entry['main']);
             }
             
@@ -210,7 +207,6 @@ class GraphHelper
             $lastEntryValue = $entry['main'];
             $sumOfEntries+= $entry['main'];
             $entriesModified[] = $entry;
-            
         }
         
         // end For loop on entries
@@ -254,7 +250,8 @@ class GraphHelper
     
     // end of calculateFields Function
     
-    public function prepareEntry($entry, $label) {
+    public function prepareEntry($entry, $label)
+    {
         
         //remove the tag
         
@@ -297,7 +294,7 @@ class GraphHelper
                 
                 break;
 
-            default:   
+            default:
                 //wake
                 $findme = ',';
                 $pos = strpos($entry['content'], $findme);
@@ -319,7 +316,8 @@ class GraphHelper
      *
      * @return float Average
      */
-    public function calculateMovingAverage($tempArray, $aWeightFactor) {
+    public function calculateMovingAverage($tempArray, $aWeightFactor)
+    {
         if (count($tempArray) != count($aWeightFactor)) {
             DevHelp::debugMsg(count($tempArray) . "::" . count($aWeightFactor));
             throw new Exception("moving average arrays mismatch");
@@ -330,13 +328,16 @@ class GraphHelper
     }
 }
 
-function sum($current, $n) {
+function sum($current, $n)
+{
     return $current + $n;
 }
-function multiply($n, $m) {
+function multiply($n, $m)
+{
     return $n * $m;
 }
 
-function createFunctionalWeightArray($n, $factor) {
+function createFunctionalWeightArray($n, $factor)
+{
     return 1 - ($factor * ($n));
 }

@@ -1,16 +1,17 @@
 <?php
-interface ContentHelperInterface {
-    function __construct($_iDao, $_iResource);
+interface ContentHelperInterface
+{
+    public function __construct($_iDao, $_iResource);
     
-    function processEntry(SmsEntrie $smsEntry);
+    public function processEntry(SmsEntrie $smsEntry);
 
-    function checkSleepTag(SmsEntrie $smsEntry);
+    public function checkSleepTag(SmsEntrie $smsEntry);
    
-     function calculateWakeValue($sleepContent, $wakeContent,$currentTime);
+    public function calculateWakeValue($sleepContent, $wakeContent, $currentTime);
     
-    function checkDateShortForms(SmsEntrie $smsEntry);
+    public function checkDateShortForms(SmsEntrie $smsEntry);
     
-    function expandShortCodes($smsEntry);
+    public function expandShortCodes($smsEntry);
     
-    function number_pad($number, $n);
+    public function number_pad($number, $n);
 }

@@ -5,13 +5,14 @@
  * @author: http://phpdao.com
  * @date: 2011-02-25 14:02
  */
-interface SmsEntriesDAO{
+interface SmsEntriesDAO
+{
 
     /**
      * Get Domain object by primry key
      *
      * @param String $id primary key
-     * @Return SmsEntries 
+     * @Return SmsEntries
      */
     public function load($id);
     
@@ -33,10 +34,9 @@ interface SmsEntriesDAO{
      *
      * @param SmsEntries smsEntrie
      */
-    public function update($smsEntrie); 
+    public function update($smsEntrie);
 
     public function queryGraphData($userId, $graphParams);
     public function queryBlogList($userId, $listParams);
     public function queryLastTagEntry($userId, $label);
-
 }

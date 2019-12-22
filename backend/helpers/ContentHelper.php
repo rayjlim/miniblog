@@ -6,6 +6,7 @@
  * @package  Smsblog
  */
 use \Lpt\DevHelp;
+
 /**
  * EntryHelper Class Doc Comment
  *
@@ -14,8 +15,8 @@ use \Lpt\DevHelp;
  */
 class ContentHelper implements ContentHelperInterface
 {
-    var $iDao = null;
-    var $iResource = null;
+    public $iDao = null;
+    public $iResource = null;
     
     /**
      * Constructor
@@ -27,12 +28,14 @@ class ContentHelper implements ContentHelperInterface
      *
      * @return array of page params
      */
-    function __construct($_iDao, $_iResource) {
+    public function __construct($_iDao, $_iResource)
+    {
         $this->iDao = $_iDao;
         $this->iResource = $_iResource;
     }
     
-    function processEntry(SmsEntrie $smsEntry) {
+    public function processEntry(SmsEntrie $smsEntry)
+    {
         $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
         $smsEntry = $this->checkDateShortForms($smsEntry);
         $smsEntry = $this->expandShortCodes($smsEntry);
@@ -41,7 +44,8 @@ class ContentHelper implements ContentHelperInterface
         return $smsEntry;
     }
     
-    function checkDateShortForms(SmsEntrie $smsEntry) {
+    public function checkDateShortForms(SmsEntrie $smsEntry)
+    {
         $fullDatePattern = '/^[\d]{8}\s/';
         
         // 20130401 is April 1, 2013
@@ -64,15 +68,13 @@ class ContentHelper implements ContentHelperInterface
             
             $smsEntry->date = $entryDate->format("Y-m-d G:i:s");
             $smsEntry->content = substr($smsEntry->content, 9);
-        } 
-        else if (preg_match($yesterdayTagPattern, $smsEntry->content) != 0) {
+        } elseif (preg_match($yesterdayTagPattern, $smsEntry->content) != 0) {
             DevHelp::debugMsg("yesterday tag pattern");
             $entryDate = new DateTime($smsEntry->date);
             $entryDate->sub(new DateInterval('P1D'));
             $smsEntry->date = $entryDate->format("Y-m-d G:i:s");
             $smsEntry->content = preg_replace($yesterdayTagPattern, '', $smsEntry->content);
-        } 
-        else if (preg_match($shortDatePattern, $smsEntry->content) != 0) {
+        } elseif (preg_match($shortDatePattern, $smsEntry->content) != 0) {
             DevHelp::debugMsg("shortDatePattern");
             $entryDate = new DateTime(substr($smsEntry->date, 0, 4) . '-' . substr($smsEntry->content, 0, 2) . '-' . substr($smsEntry->content, 2, 2));
             $smsEntry->date = $entryDate->format("Y-m-d G:i:s");
@@ -86,8 +88,8 @@ class ContentHelper implements ContentHelperInterface
     }
     
     /**/
-    function checkSleepTag(SmsEntrie $smsEntry) {
-        
+    public function checkSleepTag(SmsEntrie $smsEntry)
+    {
         if (stripos($smsEntry->content, '#sleep') > - 1) {
             $dateTime = $this->iResource->getDateTime();
             
@@ -107,7 +109,8 @@ class ContentHelper implements ContentHelperInterface
         }
         return $smsEntry;
     }
-    function checkAwakeTag(SmsEntrie $smsEntry) {
+    public function checkAwakeTag(SmsEntrie $smsEntry)
+    {
         if (stripos($smsEntry->content, '#awake') > - 1) {
             //get yesterdays sleep time
             $entryFound = $this->iDao->queryLastTagEntry($smsEntry->userId, '#sleep');
@@ -115,7 +118,8 @@ class ContentHelper implements ContentHelperInterface
         }
         return $smsEntry;
     }
-    function calculateWakeValue($sleepContent, $wakeContent,$currentTime) {
+    public function calculateWakeValue($sleepContent, $wakeContent, $currentTime)
+    {
         $sleepContent = trim(str_ireplace('#sleep', '', $sleepContent));
         $sleepWholeValue = $this->convertStringToWholeValue($sleepContent);
         
@@ -131,8 +135,7 @@ class ContentHelper implements ContentHelperInterface
             $wakeHour = $matches[1];
             $wakeMinute = $matches[2];
             $content = substr($wakeContent, 13);
-        } 
-        elseif (preg_match($wakeDiffPattern, $wakeContent, $matches) != 0) {
+        } elseif (preg_match($wakeDiffPattern, $wakeContent, $matches) != 0) {
             $wakeHour = $currentTime->format("H");
             $wakeMinute = $currentTime->format("i") - $matches[1];
             if ($wakeMinute < 0) {
@@ -140,8 +143,7 @@ class ContentHelper implements ContentHelperInterface
                 $wakeHour--;
             }
             $content = substr($wakeContent, 9);
-        } 
-        else {
+        } else {
             $wakeHour = $currentTime->format("H");
             $wakeMinute = $currentTime->format("i");
             $content = ($wakeContent != '#awake') ? substr($wakeContent, 6) : '';
@@ -158,13 +160,15 @@ class ContentHelper implements ContentHelperInterface
         return '#awake ' . $this->number_pad($wakeHour, 2) . ':' . $this->number_pad($wakeMinute, 2) . ',' . number_format($sleepTotal, 2) . $content;
     }
     
-    function convertStringToWholeValue($stringContent){
+    public function convertStringToWholeValue($stringContent)
+    {
         $tokens = explode(":", $stringContent);
         $hourVal = intval($tokens[0]);
         $minuteVal = $tokens[1] / MINUTES_PER_HOUR;
         return floatval($hourVal) + floatval($minuteVal);
     }
-    function expandShortCodes($smsEntry) {
+    public function expandShortCodes($smsEntry)
+    {
         $shortCodes = $this->iResource->shortCodes();
         if ($shortCodes != null) {
             
@@ -175,8 +179,7 @@ class ContentHelper implements ContentHelperInterface
             foreach ($tokens as $token) {
                 if (property_exists($shortCodes, $token)) {
                     $newTokens[] = $shortCodes->$token;
-                } 
-                else {
+                } else {
                     $newTokens[] = $token;
                 }
             }
@@ -186,7 +189,8 @@ class ContentHelper implements ContentHelperInterface
         return $smsEntry;
     }
     
-    function number_pad($number, $n) {
+    public function number_pad($number, $n)
+    {
         return str_pad((int)$number, $n, "0", STR_PAD_LEFT);
     }
 }

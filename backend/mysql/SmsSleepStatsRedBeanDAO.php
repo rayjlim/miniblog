@@ -2,25 +2,28 @@
 
 class SmsSleepstatsRedbeanDAO implements SmsSleepStatsDAO
 {
-    
-    public function load($id) {
+    public function load($id)
+    {
         $stat = R::sleepstat(SLEEPSTATS, $id);
         return $stat->export();
     }
     
-    public function queryAll() {
+    public function queryAll()
+    {
         $stats = R::findAll(SLEEPSTATS);
         $sequencedArray = array_values(array_map("getExportValues", $stats));
         return $sequencedArray;
     }
     
-    public function delete($id) {
+    public function delete($id)
+    {
         $statBean = R::load(SLEEPSTATS, $id);
         R::trash($SLEEPSTATS);
         return 1;
     }
     
-    public function insert($smsSleepStat) {
+    public function insert($smsSleepStat)
+    {
         $statBean = R::xdispense(SLEEPSTATS);
         $statBean->urlString = $smsSleepStat->urlString;
         $statBean->totalSleepCount= $smsSleepStat->totalSleepCount;
@@ -33,8 +36,8 @@ class SmsSleepstatsRedbeanDAO implements SmsSleepStatsDAO
         $statBean->dateCreated  = $now->format('Y-m-d');
 
         
-         $statBean->sleepStart= $smsSleepStat->sleepStart;
-         $statBean->startOffset= $smsSleepStat->startOffset;
+        $statBean->sleepStart= $smsSleepStat->sleepStart;
+        $statBean->startOffset= $smsSleepStat->startOffset;
         $id = R::store($statBean);
         return $id;
     }

@@ -7,19 +7,19 @@
  * @date: 2011-02-25 14:02
  */
 use \Lpt\DevHelp;
+
 class SmsSleepStat
 {
-    var $id;
+    public $id;
 
-    var $urlString = '';
-    var $totalSleepCount;
-    var $restlessSleepCount;
-    var $deepSleepCount;
-    var $lightSleepCount;
-    var $ignoreSleepCount;
+    public $urlString = '';
+    public $totalSleepCount;
+    public $restlessSleepCount;
+    public $deepSleepCount;
+    public $lightSleepCount;
+    public $ignoreSleepCount;
     
-    var $sleepStart;
-    var $startOffset=0;
+    public $sleepStart;
+    public $startOffset=0;
 }
  //close of Class
-

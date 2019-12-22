@@ -7,7 +7,7 @@
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-* 
+*
 */
 /**
 * Intreface IResourceDAO
@@ -15,29 +15,29 @@
 * @date     2007-11-28
 * @category Personal
 * @package  Lpt
-*/  
+*/
 interface IResourceDAO
 {
-    function setSession($key, $value);
-    function getSession($key);
-    function issetSession($key);
-    function destroySession();
-    function setCookie($key, $value, $expiration);
-    function writeFile($filename, $fileData);
-    function readdir($logDirectory);
-    function readfile($logfile);
-    function removefile($logfile);
-    function getDateTime();
+    public function setSession($key, $value);
+    public function getSession($key);
+    public function issetSession($key);
+    public function destroySession();
+    public function setCookie($key, $value, $expiration);
+    public function writeFile($filename, $fileData);
+    public function readdir($logDirectory);
+    public function readfile($logfile);
+    public function removefile($logfile);
+    public function getDateTime();
     /**
      * Content from URL
      *
      * @param string $url site url
      *
-     * @return site content 
+     * @return site content
      */
-    function load($url);
-    function sendEmail($email, $subject, $message);
-    function shortCodes();
+    public function load($url);
+    public function sendEmail($email, $subject, $message);
+    public function shortCodes();
 
-    function echoOut ($output);
+    public function echoOut($output);
 }

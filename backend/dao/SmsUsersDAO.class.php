@@ -7,7 +7,6 @@
  */
 interface SmsUsersDAO
 {
-
     public function load($id);
 
     public function lookupByFacebook($facebookId);

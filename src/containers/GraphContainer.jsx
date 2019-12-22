@@ -39,7 +39,7 @@ class GraphContainer extends Component {
     var _this = this;
     console.log("dataFetch");
     getWeights(param)
-      .then(function(response) {
+      .then(function (response) {
         console.table(response.data);
         var metrics = response.data.metrics;
 
@@ -60,7 +60,7 @@ class GraphContainer extends Component {
           entrys: response.data.entrys
         });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.error(err);
         alert(err);
       });

@@ -2,25 +2,28 @@
 
 class BookmarksRedbeanDAO implements SmsSleepStatsDAO
 {
-
-    public function load($id) {
+    public function load($id)
+    {
         $bookmarks = R::load(BOOKMARKS, $id);
         return $bookmarks->export();
     }
 
-    public function queryAll() {
+    public function queryAll()
+    {
         $bookmarks = R::findAll(BOOKMARKS);
         $sequencedArray = array_values(array_map("getExportValues", $bookmarks));
         return $sequencedArray;
     }
 
-    function getPaths() {
+    public function getPaths()
+    {
         $sqlParam = 'select distinct path from '.BOOKMARKS.' order by path';
         $rows = R::getAll($sqlParam);
         return $rows;
     }
 
-    function queryGraphData( $graphParams) {
+    public function queryGraphData($graphParams)
+    {
         $sqlParam = '';
         if ($graphParams->path && $graphParams->path != '') {
             $sqlParam .= 'path = \'' . $graphParams->path . '\' ';
@@ -37,7 +40,7 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
             $sqlParam .= ' WHERE createdOn > DATE_SUB(NOW(), INTERVAL '. $graphParams->daterange .' MONTH) ';
             $sqlParam .= '  group by createdOn ';
             $rows = R::getAll($sqlParam);
-            $posts = R::convertToBeans('bookmark',$rows);
+            $posts = R::convertToBeans('bookmark', $rows);
             $curry1 = array_map("getExportValues", $posts);
             $curry2 = array_map("minusBigNumberFromAge", $curry1);
             $sequencedArray = array_values($curry2);
@@ -46,11 +49,13 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
         }
     }
 
-    public function delete($id) {
-      return null;
+    public function delete($id)
+    {
+        return null;
     }
 
-    function insert($bookmark) {
+    public function insert($bookmark)
+    {
         return null;
     }
 }
@@ -58,7 +63,8 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
 /**
 * this function is just make the numbers more manageable for display
 */
-function minusBigNumberFromAge($item) {
+function minusBigNumberFromAge($item)
+{
     $item['averageAge'] = $item['averageAge'] - 266411210028800000; //65411110001100000
     $item['count'] = $item['count'] / 5;
     return $item;

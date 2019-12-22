@@ -1,9 +1,10 @@
 <?php
 abstract class AbstractController
 {
-    var $app = null;
+    public $app = null;
     
-    function __construct($app) {
+    public function __construct($app)
+    {
         $this->app = $app;
     }
 }

@@ -6,17 +6,17 @@ const DEEP_THRESHOLD = 120;
 const SECONDS_PER_MIN = 60;
 class MorpheuzParser
 {
-    var $urlString;
-    var $graph;
-    var $graphStr;
-    var $totalSleepCount;
-    var $restlessSleepCount;
-    var $deepSleepCount;
-    var $lightSleepCount;
-    var $ignoreSleepCount;
+    public $urlString;
+    public $graph;
+    public $graphStr;
+    public $totalSleepCount;
+    public $restlessSleepCount;
+    public $deepSleepCount;
+    public $lightSleepCount;
+    public $ignoreSleepCount;
     
-    var $sleepStart;
-    var $startOffset=0;
+    public $sleepStart;
+    public $startOffset=0;
 
     /**
     * Constructor
@@ -25,13 +25,14 @@ class MorpheuzParser
     *
     * @param string $_urlString The data from Morpheuz
     */
-    function __construct($_urlString)
+    public function __construct($_urlString)
     {
         $this->urlString = $_urlString;
         $this->parse();
     }
 
-    function parse(){
+    public function parse()
+    {
         $this->_getGraphData();
         $this->totalSleepCount = $this->_calculateTotalSleep($this->graph);
         $this->restlessSleepCount = $this->_calculateRestless($this->graph);
@@ -41,30 +42,30 @@ class MorpheuzParser
         $this->sleepStart = $this->_convertSleep($this->urlString);
     }
 
-/**
-//first entries that are Restless are not counted, because assumed not yet asleep
-//last entry is not counted because assumed I'm awake to press the button
-*/
+    /**
+    //first entries that are Restless are not counted, because assumed not yet asleep
+    //last entry is not counted because assumed I'm awake to press the button
+    */
     public function _getGraphData()
     {
         $url = $this->urlString;
         parse_str($url, $output);
 
         // $pattern = '/graphx=([abcdef0-9])*/';
-         // preg_match($pattern, $url, $matches, PREG_OFFSET_CAPTURE);
+        // preg_match($pattern, $url, $matches, PREG_OFFSET_CAPTURE);
 
-         // $this->graphStr = substr($matches[0][0],7);
-         $this->graphStr = $output['graphx'];
-         // $this->vers = $output['vers'];
+        // $this->graphStr = substr($matches[0][0],7);
+        $this->graphStr = $output['graphx'];
+        // $this->vers = $output['vers'];
 
-         $output = str_split($this->graphStr, 3);
-         $list = array_map("hexToDec", $output);
+        $output = str_split($this->graphStr, 3);
+        $list = array_map("hexToDec", $output);
 
         foreach ($list as $key => $value) {
             if ($value < RESTLESS_THRESHOLD) {
                 // echo $key;
                 break;
-            }else{
+            } else {
                 array_shift($list);
                 $this->startOffset++;
             }
@@ -75,15 +76,18 @@ class MorpheuzParser
         return ;
     }
 
-    public function getFormattedStartTime(){
+    public function getFormattedStartTime()
+    {
         return date('Y-m-d H:i', $this->sleepStart + $this->_calculateOffset());
     }
-    public function getFormattedEndTime(){
+    public function getFormattedEndTime()
+    {
         $sleepAndIgnoredTimeTotal = ($this->totalSleepCount) * SECONDS_PER_MIN * 10 ;
-        return date('Y-m-d H:i', $this->sleepStart + $this->_calculateOffset() + 
+        return date('Y-m-d H:i', $this->sleepStart + $this->_calculateOffset() +
             $sleepAndIgnoredTimeTotal);
     }
-    public function exportSmsSleepStat(){
+    public function exportSmsSleepStat()
+    {
         $obj = new SmsSleepStat();
         $obj->urlString = $this->urlString;
         $obj->totalSleepCount= $this->totalSleepCount;
@@ -105,7 +109,7 @@ class MorpheuzParser
     {
         $pattern = '/base=([\d]*)/';
         preg_match($pattern, $url, $matches, PREG_OFFSET_CAPTURE);
-        $timestamp = substr($matches[0][0],5);
+        $timestamp = substr($matches[0][0], 5);
 
         return $timestamp/1000;
     }
@@ -115,24 +119,23 @@ class MorpheuzParser
     {
         return count(array_filter($data, "nonMax"));
     }
-     public function _calculateRestless($data)
+    public function _calculateRestless($data)
     {
         return count(array_filter($data, "isRestless"));
     }
-     public function _calculateDeep($data)
+    public function _calculateDeep($data)
     {
         return count(array_filter($data, "isDeep"));
     }
-     public function _calculateLight($data)
+    public function _calculateLight($data)
     {
         return count(array_filter($data, "isLight"));
     }
-     public function _calculateIgnored($data)
+    public function _calculateIgnored($data)
     {
         return count(array_filter($data, "isIgnored"));
     }
- 
-}  
+}
 
 function nonMax($var)
 {
@@ -158,6 +161,7 @@ function isIgnored($var)
     return($var == -2);
 }
 
-function hexToDec($var){
+function hexToDec($var)
+{
     return hexdec($var);
 }

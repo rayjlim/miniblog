@@ -24,15 +24,15 @@ require 'backend/core/page_message.php';
 //     return $log;
 // });
 
- if(!strpos($app->request()->getRootUri(), 'index.php')){
-	$app->get('/', function () use ($app) {
-     $app->redirect('index.php/posts/');
-    });
- } else{
-	$app->get('/', function () use ($app) {
-     $app->redirect('posts/');
-	});
-}
+ if (!strpos($app->request()->getRootUri(), 'index.php')) {
+     $app->get('/', function () use ($app) {
+         $app->redirect('index.php/posts/');
+     });
+ } else {
+     $app->get('/', function () use ($app) {
+         $app->redirect('posts/');
+     });
+ }
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
 });
@@ -60,7 +60,7 @@ $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
 $logHandler = DAOFactory::LogHandler($app);
 $app->get('/logs/:logfileName', $logHandler->getUrlHandlerWithParam());
 $app->get('/logs/', $logHandler->getUrlHandler($app));
-$app->delete('/logs/:logfileName', $logHandler->delete($app ));
+$app->delete('/logs/:logfileName', $logHandler->delete($app));
 
 $bookmarkHandler = DAOFactory::BookmarkHandler($app);
 $app->get('/bookmark/', $bookmarkHandler->render());

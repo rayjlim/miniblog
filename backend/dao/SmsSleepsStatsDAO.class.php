@@ -7,7 +7,6 @@
  */
 interface SmsSleepStatsDAO
 {
-
     public function load($id);
     
     public function queryAll();
@@ -15,5 +14,4 @@ interface SmsSleepStatsDAO
     public function delete($id);
     
     public function insert($smsUser);
-    
 }

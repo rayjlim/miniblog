@@ -1,8 +1,8 @@
 <?php
 use \Lpt\DevHelp;
 
-define ("UPLOAD_SIZE_LIMIT", 5 * 1000000); // 5 meg
-define ("UPLOAD_DIR", ABSPATH . "uploads/");
+define("UPLOAD_SIZE_LIMIT", 5 * 1000000); // 5 meg
+define("UPLOAD_DIR", ABSPATH . "uploads/");
 
 /**
  *   This class will handle the Create, Update, Delete Functionality
@@ -10,38 +10,42 @@ define ("UPLOAD_DIR", ABSPATH . "uploads/");
  */
 class UploadHandler extends AbstractController
 {
-    var $resource = null;
+    public $resource = null;
 
-    function __construct($app, $resource) {
+    public function __construct($app, $resource)
+    {
         $this->resource = $resource;
         parent::__construct($app);
     }
     
-    function form() {
-        return function (){
-        $this->app->view()->appendData(["page_title" => 'Upload Picture']);
+    public function form()
+    {
+        return function () {
+            $this->app->view()->appendData(["page_title" => 'Upload Picture']);
         
-        $this->app->render('upload_form.twig');
+            $this->app->render('upload_form.twig');
         };
     }
-    function view() {
-        return function (){
-                
-        $this->app->view()->appendData(["fileName" => $_GET["fileName"]]);
-        $this->app->view()->appendData(["filePath" => $_GET["filePath"]]);
-        $this->app->view()->appendData(["page_title" => 'View Upload']);
+    public function view()
+    {
+        return function () {
+            $this->app->view()->appendData(["fileName" => $_GET["fileName"]]);
+            $this->app->view()->appendData(["filePath" => $_GET["filePath"]]);
+            $this->app->view()->appendData(["page_title" => 'View Upload']);
         
-        $this->app->render('upload_viewer.twig');
+            $this->app->render('upload_viewer.twig');
         };
     }
 
-    function redirector($url){
+    public function redirector($url)
+    {
         header("Location: $url");
         echo "<head><meta http-equiv=\"refresh\" content=\"0; url=$url\"></head>";
         echo "<a href=\"$url\">media page</a>";
     }
 
-    function upload() {
+    public function upload()
+    {
         return function () {
             DevHelp::debugMsg('upload' . __FILE__);
 
@@ -54,9 +58,9 @@ class UploadHandler extends AbstractController
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
             // Check if image file is a actual image or fake image
-            if(isset($_POST["submit"])) {
+            if (isset($_POST["submit"])) {
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                if($check !== false) {
+                if ($check !== false) {
                     //echo "File is an image - " . $check["mime"] . ".";
                     $uploadOk = 1;
                 } else {
@@ -86,14 +90,14 @@ class UploadHandler extends AbstractController
                 $uploadOk = 0;
             }
             // Allow certain file formats
-            if (! in_array($imageFileType, $validFileExt))  {
+            if (! in_array($imageFileType, $validFileExt)) {
                 echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
                 $uploadOk = 0;
             }
             // Check if $uploadOk is set to 0 by an error
             if ($uploadOk == 0) {
                 echo "<br>Sorry, your file was not uploaded.";
-                // if everything is ok, try to upload file
+            // if everything is ok, try to upload file
             } else {
                 if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
                     // echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
@@ -107,7 +111,8 @@ class UploadHandler extends AbstractController
         };
     }
     
-    function resize() {
+    public function resize()
+    {
         return function () {
             DevHelp::debugMsg('resizeImage' . __FILE__);
             $new_width = 0;
@@ -126,18 +131,18 @@ class UploadHandler extends AbstractController
             
             $urlFileName = $fileName;
             
-            if(isset($_GET["api"])) {
+            if (isset($_GET["api"])) {
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
                 echo json_encode($data);
-            }else{
-            $this->redirector('../main#/uploadViewer?fileName='.$urlFileName.'&filePath='.$filePath);
+            } else {
+                $this->redirector('../main#/uploadViewer?fileName='.$urlFileName.'&filePath='.$filePath);
             }
         };
     }
 
-    function resizer($newWidth, $targetFile, $originalFile) {
-
+    public function resizer($newWidth, $targetFile, $originalFile)
+    {
         $info = getimagesize($originalFile);
         $mime = $info['mime'];
 
@@ -160,7 +165,7 @@ class UploadHandler extends AbstractController
                         $new_image_ext = 'gif';
                         break;
 
-                default: 
+                default:
                         throw new Exception('Unknown image type.');
         }
 
@@ -172,12 +177,13 @@ class UploadHandler extends AbstractController
         imagecopyresampled($tmp, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
         if (file_exists($targetFile)) {
-                unlink($targetFile);
+            unlink($targetFile);
         }
         $image_save_func($tmp, "$targetFile");
     }
     
-    function rotate() {
+    public function rotate()
+    {
         return function () {
             DevHelp::debugMsg('rotateImage' . __FILE__);
 
@@ -209,7 +215,7 @@ class UploadHandler extends AbstractController
                             $new_image_ext = 'gif';
                             break;
 
-                    default: 
+                    default:
                             throw new Exception('Unknown image type.');
             }
             $fileExtension = '.' . $new_image_ext;
@@ -222,7 +228,7 @@ class UploadHandler extends AbstractController
             if (file_exists($targetFile)) {
                 unlink($targetFile);
             }
-            $image_save_func($rotated, "$targetFile");            
+            $image_save_func($rotated, "$targetFile");
 
             //$permissionChanged = chmod($newFileFullName, 0777);
 
@@ -230,17 +236,18 @@ class UploadHandler extends AbstractController
             imagedestroy($img);
             imagedestroy($rotated);
              
-            if(isset($_GET["api"])) {
+            if (isset($_GET["api"])) {
                 $data['fileName'] = $fileName;
                 $data['filePath'] = $filePath;
                 echo json_encode($data);
-            }else{
+            } else {
                 $this->redirector('../main#/uploadViewer?fileName='.$fileName.'&filePath='.$filePath);
             }
         };
     }
 
-    function rename() {
+    public function rename()
+    {
         return function () {
             DevHelp::debugMsg('rename' . __FILE__);
 
@@ -252,17 +259,17 @@ class UploadHandler extends AbstractController
             $newFileName = $entry->newFileName;
 
             $targetDir = ABSPATH . "uploads/".$filePath;
-            rename($targetDir.$fileName,  $targetDir.$newFileName);
+            rename($targetDir.$fileName, $targetDir.$newFileName);
             $urlFileName = $newFileName;
             
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
             echo json_encode($data);
-            
         };
     }
 
-    public function listMedia() {
+    public function listMedia()
+    {
         return function ($currentDir='') {
             \Lpt\DevHelp::debugMsg('start listMedia');
             $currentDir = $currentDir != '' ? $currentDir : '';
@@ -273,24 +280,25 @@ class UploadHandler extends AbstractController
                 $currentDir = end($filelist);
             }
             
-                    // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
-        $dirContent = '';
+            // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
+            $dirContent = '';
         
-        \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
-        $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
+            \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
+            $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
 
-        // usort($dirContent, function($a, $b){
-        //     return filemtime($a) > filemtime($b);
-        // });
+            // usort($dirContent, function($a, $b){
+            //     return filemtime($a) > filemtime($b);
+            // });
         
-        $this->app->view()->appendData(["uploadDirs" => $filelist]);
-        $this->app->view()->appendData(["currentDir" => $currentDir]);
-        $this->app->view()->appendData(["dirContent" => $dirContent]);
-        $this->app->render('media_list.twig');
+            $this->app->view()->appendData(["uploadDirs" => $filelist]);
+            $this->app->view()->appendData(["currentDir" => $currentDir]);
+            $this->app->view()->appendData(["dirContent" => $dirContent]);
+            $this->app->render('media_list.twig');
         };
     }
     
-    public function deleteMedia() {
+    public function deleteMedia()
+    {
         return function () {
             DevHelp::debugMsg('delete media');
             $fileName = $_GET["fileName"];
@@ -299,9 +307,9 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('$filePath' . $filePath);
             
 
-             $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
+            $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
             
-             $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
+            $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
             
             
             //forward to xhr_action
@@ -309,12 +317,9 @@ class UploadHandler extends AbstractController
             
             if ($this->app->request()->isAjax()) {
                 echo json_encode($data);
-            } 
-            else {
+            } else {
                 DevHelp::redirectHelper($baseurl . 'media/');
             }
         };
     }
-  
 }
-

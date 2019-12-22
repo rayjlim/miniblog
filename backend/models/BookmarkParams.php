@@ -2,9 +2,10 @@
 
 class BookmarkParams extends BaseModel
 {
-    var $path;
+    public $path;
 
-    public function loadParams($request) {
+    public function loadParams($request)
+    {
         $oBookmarkParams = new BookmarkParams();
 
         if (getValue($request, 'path')) {
@@ -12,10 +13,10 @@ class BookmarkParams extends BaseModel
         }
         if (getValue($request, 'daterange')) {
             $oBookmarkParams->daterange = $request['daterange'];
-        }else{
+        } else {
             $oBookmarkParams->daterange = 6;
         }
-		if (getValue($request, 'showpaths')) {
+        if (getValue($request, 'showpaths')) {
             $oBookmarkParams->showpaths = $request['showpaths'];
         }
 

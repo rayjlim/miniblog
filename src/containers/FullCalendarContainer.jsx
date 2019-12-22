@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FullCalendar from "../views/FullCalendar.jsx";
 
-class FullCalendarContainer extends Component{
+class FullCalendarContainer extends Component {
 	render() {
 		console.log("FCC: render");
 		return (
