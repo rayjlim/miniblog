@@ -7,18 +7,19 @@ use \Lpt\DevHelp;
  */
 class CUDHandler extends AbstractController
 {
-    
-    var $dao = null;
-    var $resource = null;
-    var $contentHelper = null;
-    function __construct($app, $smsEntriesDAO, $resource, $contentHelper) {
+    public $dao = null;
+    public $resource = null;
+    public $contentHelper = null;
+    public function __construct($app, $smsEntriesDAO, $resource, $contentHelper)
+    {
         $this->resource = $resource;
         $this->dao = $smsEntriesDAO;
         $this->contentHelper = $contentHelper;
         parent::__construct($app);
     }
     
-    function addEntry() {
+    public function addEntry()
+    {
         return function () {
             DevHelp::debugMsg('start add' . __FILE__);
             $request = $this->app->request();
@@ -28,8 +29,7 @@ class CUDHandler extends AbstractController
                 if (strpos($body, '23s')) {
                     $entry =  new stdClass();
                     $entry->content = '#s';
-                } 
-                else {
+                } else {
                     throw new Exception('Invalid json' . $request->getBody());
                 }
             }
@@ -45,7 +45,8 @@ class CUDHandler extends AbstractController
         };
     }
     
-    function updateEntry() {
+    public function updateEntry()
+    {
         return function ($id) {
             DevHelp::debugMsg('start update' . __FILE__);
             
@@ -68,7 +69,8 @@ class CUDHandler extends AbstractController
         };
     }
     
-    function deleteEntry() {
+    public function deleteEntry()
+    {
         return function ($id) {
             DevHelp::debugMsg('start delete' . __FILE__);
             $smsEntry = $this->dao->load($id);
@@ -81,4 +83,3 @@ class CUDHandler extends AbstractController
         };
     }
 }
-
