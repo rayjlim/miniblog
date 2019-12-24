@@ -12,7 +12,6 @@ import * as types from "../actions/action-types";
 import EntryApi from "../api/EntryApi";
 
 class OneDayBox extends Component {
-
   componentDidMount() {
     console.log("ODB: componentDidMount");
 
@@ -23,10 +22,10 @@ class OneDayBox extends Component {
     let urlParams = new URLSearchParams(param);
 
     console.log('urlParams.has: ' + urlParams.has('date'));
-    let date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-    console.log('passed date: ' + date);
+    this.date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
+    console.log('passed date: ' + this.date);
 
-    this.loadDay(date);
+    this.loadDay(this.date);
     this.handleButtonDirection = this.handleButtonDirection.bind(this);
     this.handleDatePicker = this.handleDatePicker.bind(this);
   }
@@ -87,7 +86,7 @@ class OneDayBox extends Component {
   }
 
   render() {
-    console.log("ODB: render.3");
+    console.log("ODB: render" + this.date);
     let entryForm = (
       <div className="text-center">
         <button onClick={e => EntryApi.showForm()} className="btn btn-default">
@@ -104,7 +103,6 @@ class OneDayBox extends Component {
         />
       );
       if (this.props.currentEntry != null) {
-
         entryForm = (
           <EditForm
             entry={this.props.currentEntry}
@@ -118,7 +116,7 @@ class OneDayBox extends Component {
     return (
       <div>
         <OneDayView
-          date={this.props.date}
+          date={this.date}
           handleButtonDirection={this.handleButtonDirection}
           handleDatePicker={this.handleDatePicker}
         />
