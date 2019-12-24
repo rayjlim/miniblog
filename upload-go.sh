@@ -1,5 +1,9 @@
 #!/bin/bash
 . ./env_vars.sh
+if ![ -n "$FTP_HOST" ]; then
+    echo "Missing env_vars"
+    exit 2
+fi
 PREP_DIR='../smsblog_prod'
 
 echo "Usage: " $0 " [option reset key]"

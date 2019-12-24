@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./env_vars.sh
+
 PREP_DIR='../smsblog_prod'
 mkdir $PREP_DIR
 
@@ -18,5 +18,5 @@ cd $PREP_DIR
 npm install --production
 ./node_modules/.bin/webpack --config webpack-prod.config.js -p
 
-echo "start upload"
+echo "build ready"
 popd
