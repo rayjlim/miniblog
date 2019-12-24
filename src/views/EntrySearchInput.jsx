@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 
 const EntrySearchInput = props => {
+	let containerStyle = {
+		margin: "0 0 0 10px"
+	  };
 	return (
-		<div>
-			<label htmlFor="searchValue" className="col-xs-3 col-form-label">
+		<div style={containerStyle}>
+			<label htmlFor="searchValue" className="col-xs-9 btn btn-success">
 				Search
 			</label>
 			<div className="col-xs-9">

@@ -27,9 +27,9 @@ $(document).ready(function(){
    
 });
 
- var LogObject = function(){
+ const LogObject = function(){
     
-    var deleteLog = function() {
+    const deleteLog = function() {
         console.log('start delete log');
          console.log(this.href);
          $elementTarget = this;
@@ -41,7 +41,7 @@ $(document).ready(function(){
                 alert ("Error on Submit:"+msg);
             },
            success: function(msg){
-            var jsonObj = jQuery.parseJSON(msg);
+            const jsonObj = jQuery.parseJSON(msg);
             
              if(jsonObj == null){
                 alert( "Data not Saved due to Sql Error: "+ jsonObj );

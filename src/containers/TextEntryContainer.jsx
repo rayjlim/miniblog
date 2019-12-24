@@ -11,7 +11,7 @@ class TextEntryContainer extends Component {
   constructor(props) {
     console.log('TextEntryContainer');
     super(props);
-    var current = moment();
+    const current = moment();
 
     this.state = {
       searchText: "",
@@ -66,7 +66,7 @@ class TextEntryContainer extends Component {
     console.log("TEC: search" + text);
     this.setState({ searchText: text });
     // debounce the search
-    var timer;
+    let timer;
     if (timer) {
       clearTimeout(timer);
     }

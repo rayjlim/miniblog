@@ -25,47 +25,45 @@
 
 {% include '_footer.twig' %}
 <script>
-const BASE_URL = '{{baseurl}}';
+    const BASE_URL = '{{baseurl}}';
 
-$(document).ready(function(){
-    $('.delete').click(MediaObject.deleteMedia);
-    $('.addPost').click(MediaObject.addPost);
-   
-});
+    $(document).ready(function(){
+        $('.delete').click(MediaObject.deleteMedia);
+        $('.addPost').click(MediaObject.addPost);
+    
+    });
 
- var MediaObject = function(){
+ let MediaObject = function(){
     return {
-        deleteMedia: function() {
+        deleteMedia: () => {
         console.log('start delete media');
-         console.log(this.href);
+        console.log(this.href);
         // console.log(getUrlParams(this.href));
-         $elementTarget = this;
-         $.ajax({
+        $elementTarget = this;
+        $.ajax({
            type: "DELETE",
            url: $elementTarget.href, 
            data: "",
-           error: function(msg){ 
+           error: msg => { 
                 alert ("Error on Submit:"+msg);
             },
-           success: function(msg){
-            var jsonObj = jQuery.parseJSON(msg);
+            success: msg => {
+                var jsonObj = jQuery.parseJSON(msg);
             
-             if(jsonObj == null){
-                alert( "Data not Saved due to Sql Error: "+ jsonObj );
-             }else{
-                alert(jsonObj.pageMessage);
-
-                console.log($($elementTarget).parents('li:first'));
-                $($elementTarget).parents('li:first').remove();
-               
+                if(jsonObj == null){
+                    alert( "Data not Saved due to Sql Error: "+ jsonObj );
+                }else{
+                    alert(jsonObj.pageMessage);
+                    console.log($($elementTarget).parents('li:first'));
+                    $($elementTarget).parents('li:first').remove();       
              }
-                 return false;
-             }
+            return ;
+            }
            }); 
          
-         return false;          
+        return ;          
     },
-        addPost: function(){
+        addPost: ()=>{
             console.log('start add post');
             console.log(this.href);
             let params = getUrlParams(this.href);
@@ -76,41 +74,40 @@ $(document).ready(function(){
             content
             });
             console.log("BASE_URL " + BASE_URL);
-            $.ajax(
-            {
-           type: "POST",
-           url: BASE_URL + "/api/posts/", 
-           data: prepContent,
-           error: function(msg){ 
-                alert ("Error on Submit:" + msg);
-            },
-           success: function(msg){
-            var jsonObj = jQuery.parseJSON(msg);
-            
-             if(jsonObj == null){
-                alert( "Data not Saved due to Sql Error: "+ jsonObj );
-             }else{
-                alert("Saved");
-             }
-                 return false;
-             }
-           });
+            $.ajax({
+                type: "POST",
+                url: `${BASE_URL}/api/posts/`, 
+                data: prepContent,
+                error: msg => { 
+                    alert ("Error on Submit:" + msg);
+                },
+                success: msg => {
+                    const jsonObj = ;
 
-            return false; 
+                    if(jsonObj == jQuery.parseJSON(msg)){
+                        alert("Data not Saved due to Sql Error: " + jsonObj );
+                    } else {
+                        alert("Saved");
+                    }
+                    return;
+                }
+            });
+
+            return; 
         }
     }
 }();
 
 
 function getUrlParams( url ) {
-    var params = {};
-    var search = decodeURIComponent( url.slice(url.indexOf( '?' ) + 1 ) );
-    var definitions = search.split( '&' );
+    let params = {};
+    const search = decodeURIComponent( url.slice(url.indexOf( '?' ) + 1 ) );
+    const definitions = search.split( '&' );
 
-    definitions.forEach( function( val, key ) {
-        var parts = val.split( '=', 2 );
+    definitions.forEach(( val, key ) => {
+        const parts = val.split( '=', 2 );
         params[ parts[ 0 ] ] = parts[ 1 ];
-    } );
+    });
 
     return  params;
 }

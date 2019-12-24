@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 
 const SameDayInput = props => {
+  let containerStyle = {
+    margin: "0 0 0 10px"
+  };
+  let btnStyle = {
+    margin: "0 0 9px 0"
+  };
   return (
-    <div>
-      <div className="col-xs-3">
-        <button
-          onClick={props.handleSameDay}
-          className="btn btn-success btn-lrg"
-        >
-          Same Day
-        </button>
-      </div>
+    <div style={containerStyle}>
+      <button 
+        onClick={props.handleSameDay}
+        className="btn btn-success btn-lrg col-xs-9"
+        style={btnStyle}
+      >Same Day</button>
       <div className="col-xs-9">
         <input
           type="text"

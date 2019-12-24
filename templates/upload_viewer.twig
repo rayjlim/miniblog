@@ -43,45 +43,44 @@
 </html>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <script>
+  const currentTime = moment();
+  console.log(currentTime.format('Y-MM'));
+  $('#postDateField').val(currentTime.format('Y-MM-DD'));
 
-var currentTime = moment();
-console.log(currentTime.format('Y-MM'));
-$('#postDateField').val(currentTime.format('Y-MM-DD'));
+  const url = '{{baseurl}}api/posts/';
+  const fileReference = '{{filePath}}{{fileName}}';
 
-let url = '{{baseurl}}api/posts/';
-let fileReference = '{{filePath}}{{fileName}}';
-
-$('#saveNewEntryLink').click((event)=> {
-  let imgStr =  `![](../uploads/${fileReference})`;
-  $.ajax({
-    type: "POST",
-    contentType: "application/json",
-    dataType: "json",
-    url,
-    data: (()=> {
-        return JSON.stringify({
-            "content": imgStr + $("#postContent").val(),
-            "date": $("#postDateField").val()
-        });
-    })(),
-    success: ()=>{
-      alert('saved');
-    },
-    error: (e)=>console.log(e)
+  $('#saveNewEntryLink').click((event)=> {
+    const imgStr =  `![](../uploads/${fileReference})`;
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      url,
+      data: (()=> {
+          return JSON.stringify({
+              "content": imgStr + $("#postContent").val(),
+              "date": $("#postDateField").val()
+          });
+      })(),
+      success: ()=>{
+        alert('saved');
+      },
+      error: (e)=>console.log(e)
+    });
   });
-});
 
-$('#fixNameLink').click((event)=> {
-  event.preventDefault();
-  let oldName = $('#filenameChange').val();
-  console.log( oldName );
-  let splitVal = oldName.split('.');
+  $('#fixNameLink').click((event)=> {
+    event.preventDefault();
+    const oldName = $('#filenameChange').val();
+    console.log( oldName );
+    const splitVal = oldName.split('.');
 
-  let newVal = splitVal[0] + '.jpg';
-  $('#filenameChange').val(newVal);
-});
+    const newVal = splitVal[0] + '.jpg';
+    $('#filenameChange').val(newVal);
+  });
 </script>

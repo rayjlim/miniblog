@@ -1,59 +1,45 @@
 </head>
 <body>
 {% if loginpage is not defined %}
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed navbar-collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="{{baseurl}}posts/">Miniblog</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{{baseurl}}posts/">Miniblog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+{% if  authenticated is defined %}
+  <ul class="nav navbar-nav mr-auto">
+    <li class="nav-item"><a href="{{baseurl}}main#/text" id="reactlinkText"  class="nav-link">Text</a></li>
+    <li class="nav-item"><a href="{{baseurl}}main#/oneDay" id="reactlinkOneDay"  class="nav-link" >OneDay</a></li>
+    <li class="nav-item"><a href="{{baseurl}}uploadForm/" id="uploadFormlink" class="nav-link">Upload</a></li>
+    <li role="separator" class="divider"></li>
+    <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Misc
+    </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{{baseurl}}media/">Media</a>
+        <a class="dropdown-item" href="{{baseurl}}sleepstats/">Sleep</a>
+        <a class="dropdown-item" href="{{baseurl}}logs">Log Files</a>
+      </div>
+    </li>
+    {% if yearmonth is defined %}
+    <li class="nav-item  dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Months</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      {% for entry in yearmonth %}
+        <a class="dropdown-item" href="{{baseurl}}main#/text?month={{entry}}" id="reactlink"
+          data-toggle="collapse" data-target=".navbar-collapse"
+        >{{entry}}</a>
+      {% endfor %}
+      </div>
+    </li>
+    {% endif %}
+    <li class="nav-item"><a class="nav-link" href="{{baseurl}}?password=unauth" id="logoutlink">Logout</a></li>
+  </ul>
+    {% endif %} 
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    {% if  authenticated is defined %}
-      <ul class="nav navbar-nav">
-        <li><a href="{{baseurl}}main#/text" id="reactlink" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">Text</a></li>
-        <li><a href="{{baseurl}}main#/oneDay" id="reactlink" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">OneDay</a></li>
-        <li><a href="{{baseurl}}uploadForm/" id="uploadFormlink" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">Upload</a></li>
-        <li role="separator" class="divider"></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="{{baseurl}}media/">Media</a></li>
-            <li><a href="{{baseurl}}sleepstats/">Sleep</a></li>
-            <li><a href="{{baseurl}}logs">Log Files</a></li>
-          </ul>
-        </li>
-        {% if yearmonth is  defined %}
-        
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Months<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-          {% for entry in yearmonth %}
-            <li><a href="{{baseurl}}main#/text?month={{entry}}" id="reactlink"
-              data-toggle="collapse" data-target=".navbar-collapse"
-            >{{entry}}</a></li>
-            
-          {% endfor %}
-
-          </ul>
-        </li>
-        {% endif %}
-
-
-      </ul>
-      
-      <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{baseurl}}?password=unauth" id="logoutlink">Logout</a></li>
-      </ul>
-        {% endif %}
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
 </nav>
 
 {% endif %}
