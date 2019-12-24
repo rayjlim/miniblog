@@ -1,9 +1,69 @@
 {% include '_header.twig' %}
+<link href="//cdn.jsdelivr.net/npm/@fullcalendar/core@4.3.1/main.min.css" rel="stylesheet" type="text/css">
+<link href="//unpkg.com/@fullcalendar/daygrid/main.min.css" rel="stylesheet" type="text/css">
+
 <link href="{{rooturl}}_rsc/css/blog.css" rel="stylesheet" type="text/css">
-<link href="{{rooturl}}_rsc/vendor/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css">
 
-<link href="{{rooturl}}_rsc/vendor/jquery-ui-1.11.0.custom/jquery-ui.min.css" rel="stylesheet" type="text/css">
+<script src="//cdn.jsdelivr.net/npm/@fullcalendar/core@4.3.1/main.min.js"></script>
+<script src="//unpkg.com/@fullcalendar/daygrid/main.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const calendarEl = document.getElementById('calendar');
 
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'addEventButton'
+        },
+        plugins: ['dayGrid'],
+        defaultDate: '{{showDate|date("Y-m")}}-01',
+        events: async (info, successCallback, failureCallback) => {
+            try {
+                const month = info.start.getDate() === 1 ? info.start.getMonth() : info.start.getMonth() + 1;
+                console.log(month)
+                console.log(info.start.getYear())
+                let yearValue = info.start.getYear() + 1900;
+                const year = month !== 12 || info.start.getDate() === 1 ? yearValue : yearValue + 1;
+                console.log(year)
+
+                const url = "{{rooturl}}index.php/api/posts/?month=" + year + "-"+ (month % 12 + 1);
+                console.log(url);
+                const res = await axios.get(url);
+                   
+                console.log('server response: ', res);
+                const newEvents = res.data.entries.map(eventEl => {
+                    return {
+                        id: eventEl.id,
+                        title: eventEl.content,
+                        description: eventEl.content,
+                        start: eventEl.date
+                    }
+                });
+                console.log(newEvents);
+                successCallback(newEvents)
+            
+            } catch (err) {
+                failureCallback(err);
+            }
+            calendar.render();
+        },
+         eventRender: function (eventObj, $el) {
+           /* $el.popover({
+                title: eventObj.title,
+                content: eventObj.description,
+                trigger: 'hover',
+                placement: 'top',
+                container: 'body'
+            });
+            */
+        }
+
+
+        });
+});
+</script>
 {% include '_banner.twig' %}
 
 <h1 class="command_title">Entries for {{user_fullname}}</h1>
@@ -38,26 +98,5 @@
 {% include '_footer.twig' %}
 {% include '_entry_dialog.twig' %}
 
-<script src="{{rooturl}}_rsc/vendor/jquery-ui-1.11.0.custom/jquery-ui.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
-
 <script src="{{rooturl}}_rsc/js/CalendarHelper.js"></script>
-<script>
-  var baseurl = '{{baseurl}}';
 
-  $(document).ready(function docReady() {
-    var showDateStr = $('#showDate').html().trim();
-    var showDate = moment(showDateStr);
-    var viewYearMonth = showDate.format('YYYY-MM');
-    $('#dialog_submit').bind('click', LptCal.saveEvent);
-    $('#dialog_cancel').bind('click', LptCal.cancelEvent);
-    $('#edit_delete_link').bind('click', LptCal.deleteEvent);
-    $('#edit_date_field_yesterday_link').bind('click', LptCal.yesterdayClick);
-    $('#calendar').fullCalendar(LptCal);
-
-    console.log('viewYearMonth: ' + viewYearMonth);
-    $('#calendar').fullCalendar('gotoDate', $.fullCalendar.moment(viewYearMonth + '-01',
-      'YYYY-MM-DD'));
-  });
-</script>

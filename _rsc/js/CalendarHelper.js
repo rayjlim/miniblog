@@ -1,5 +1,5 @@
 /* global $:false, console:false quotmark:true */
-var LptCal = (function() {
+var LptCal = (function () {
     "use strict";
 
     var calendarsFetched = [];
@@ -7,7 +7,7 @@ var LptCal = (function() {
     var addSuccessCallback, updateSuccessCallback, deleteSuccessCallback;
 
     // ADD ZERO PADDING
-    var pad = function(num, size) {
+    var pad = function (num, size) {
         var s = num + "";
         while (s.length < size) {
             s = "0" + s;
@@ -15,7 +15,7 @@ var LptCal = (function() {
         return s;
     };
 
-    var calendarDayClick = function(date, jsEvent, view) {
+    var calendarDayClick = function (date, jsEvent, view) {
         console.log("show adding form");
         //console.log($('#edit_content_field').html());
         window.eventTarget = null;
@@ -33,7 +33,7 @@ var LptCal = (function() {
         populateDetails(blankEntry, "Add Blog Entry", false);
     };
 
-    var calendarEventClick = function(calEvent, jsEvent, view) {
+    var calendarEventClick = function (calEvent, jsEvent, view) {
         console.log("show edit event");
 
         var url = window.baseurl + "api/posts/" + calEvent.id;
@@ -48,12 +48,12 @@ var LptCal = (function() {
         window.eventTarget = calEvent;
     };
 
-    var calendarViewRender = function(view, element) {
+    var calendarViewRender = function (view, element) {
         console.log(
             "view render: " +
-                view.intervalStart / 1000 +
-                ":" +
-                view.intervalEnd / 1000
+            view.intervalStart / 1000 +
+            ":" +
+            view.intervalEnd / 1000
         );
 
         //check if fetched already
@@ -82,7 +82,7 @@ var LptCal = (function() {
         });
     };
 
-    var populateCalendarEntries = function(result) {
+    var populateCalendarEntries = function (result) {
         console.log(result);
         var taggedEvents = [];
         var goalEvents = [];
@@ -90,7 +90,7 @@ var LptCal = (function() {
         //on success; populate values
         //var arr = [{"id":"4607","content":"asfdafds","date":"2014-06-30","userId":"0"}];
 
-        $.each(result.entries, function(index, obj) {
+        $.each(result.entries, function (index, obj) {
             console.log("obj" + index + ":" + obj["id"]);
             var calId = obj["id"];
             var calTitle = obj["content"];
@@ -136,7 +136,7 @@ var LptCal = (function() {
 
     // BUG - WHEN I DON'T PAD THE DAY & MONTH
     // THEN THE PREVIOUS DAY ENDS UP BEING OFF
-    var yesterdayClick = function() {
+    var yesterdayClick = function () {
         console.log(
             "yesterdayClick function called" + $("#edit_date_field").val()
         );
@@ -154,7 +154,7 @@ var LptCal = (function() {
         return false;
     };
 
-    var saveEvent = function() {
+    var saveEvent = function () {
         $("#dialog_submit").attr("disabled", "disabled");
         // var form = $("#edit_form");
         var url = window.baseurl + "api/posts/";
@@ -167,7 +167,7 @@ var LptCal = (function() {
                 contentType: "application/json",
                 dataType: "json",
                 url: url,
-                data: (function() {
+                data: (function () {
                     return JSON.stringify({
                         content: $("#edit_content_field").val(),
                         date: $("#edit_date_field").val()
@@ -183,7 +183,7 @@ var LptCal = (function() {
                 contentType: "application/json",
                 dataType: "json",
                 url: url + $("#edit_id_field").val(),
-                data: (function() {
+                data: (function () {
                     return JSON.stringify({
                         content: $("#edit_content_field").val(),
                         date: $("#edit_date_field").val()
@@ -195,7 +195,7 @@ var LptCal = (function() {
         }
     };
 
-    var deleteEvent = function() {
+    var deleteEvent = function () {
         console.log("delete called");
         var target_id = $("#edit_id_field").val();
         var url = window.baseurl + "api/posts/" + target_id;
@@ -205,7 +205,7 @@ var LptCal = (function() {
             dataType: "json",
             url: url,
 
-            success: function(results) {
+            success: function (results) {
                 console.log("delete done");
                 console.log(results);
                 // this should be based on screen resolution
@@ -226,7 +226,7 @@ var LptCal = (function() {
         return false;
     };
 
-    var populateDetails = function(result, _dialogTitle, showDelete) {
+    var populateDetails = function (result, _dialogTitle, showDelete) {
         console.log("show populateDetails");
         var entry = result.entry;
 
@@ -256,13 +256,13 @@ var LptCal = (function() {
 
         $("#dialog_submit").removeAttr("disabled");
 
-        setTimeout(function() {
+        setTimeout(function () {
             console.log("delay focus");
             $("#edit_content_field").focus();
         }, 1000);
     };
 
-    var savedDetails = function(results) {
+    var savedDetails = function (results) {
         console.log("edit done");
         $("#dialog").dialog({
             modal: true,
@@ -285,7 +285,7 @@ var LptCal = (function() {
         $("#edit_content_field").val("");
     };
 
-    var cancelEvent = function() {
+    var cancelEvent = function () {
         console.log("edit done");
         $("#dialog").dialog({
             modal: true,
@@ -296,7 +296,7 @@ var LptCal = (function() {
         $("#edit_content_field").val("");
     };
 
-    var ajaxErrorHandler = function(jqXHR, error, errorThrown) {
+    var ajaxErrorHandler = function (jqXHR, error, errorThrown) {
         if (jqXHR.status && jqXHR.status == 400) {
             window.alert(jqXHR.responseText);
         } else {
