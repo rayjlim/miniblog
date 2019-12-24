@@ -16,7 +16,9 @@ cd $PREP_DIR
 /usr/local/bin/composer install  --no-dev
 
 npm install --production
-./node_modules/.bin/webpack --config webpack-prod.config.js -p
+if [ $# -ne 1 ]; then
+    ./node_modules/.bin/webpack --config webpack-prod.config.js -p
+fi 
 
 echo "build ready"
 popd
