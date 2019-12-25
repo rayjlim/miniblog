@@ -4,7 +4,7 @@ mkdir $PREP_DIR
 
 rsync -ravz --exclude-from 'exclude-from-prep.txt' --delete . $PREP_DIR
 rsync -avz  _rsc/vendor $PREP_DIR/_rsc
-rsync -avz  _config/prod/SERVER_CONFIG.php $PREP_DIR/backend/
+rsync -avz  _config/SERVER_CONFIG.php.prod $PREP_DIR/backend/
 rsync -avz  _config/.htaccess $PREP_DIR/
 rsync -avz  _config/cron_script.php $PREP_DIR/
 rsync -avz  exclude-from-prod.txt $PREP_DIR/

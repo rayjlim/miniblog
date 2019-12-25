@@ -9,9 +9,7 @@ const EntryList = props => {
         <ul className="col-sm-12 list-group ">
             {props.entrys.map(entry => {
                 let newText = entry.content.replace(/<br \/>/g, "\n");
-                const dateFormated = moment(entry.date).format(
-                    "ddd MMM, DD YYYY"
-                );
+                const dateFormated = moment(entry.date).format("ddd MMM, DD YYYY");
                 const calLinkDate = `posts/?gotoYearMonth=` + moment(entry.date).format("YYYY-MM");
                 const oneDayLink = 'main#/oneDay?date='+moment(entry.date).format("YYYY-MM-DD");
                 let showEntryDate = (<a href={oneDayLink}>{dateFormated}</a>);    

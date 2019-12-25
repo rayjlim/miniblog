@@ -89,7 +89,6 @@ class UploadViewerController extends Component {
         />
         <br />
         <br />
-
         <nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
         <Link to="/text" className="btn navbar-btn">
               Blog Page

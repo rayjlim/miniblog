@@ -11,12 +11,12 @@ class EditForm extends React.Component {
     this.addToDate = this.addToDate.bind(this);
   }
   render() {
-    let escapedContent = this.props.entry.content.replace(/<br\s*\/>/g, `
-  `);;
-
+    let escapedContent = this.props.entry.content.replace(/<br\s*\/>/g, 
+`
+`);
     return (
       <div className="well">
-        <h3>Edit Entry</h3>
+        <h3>Edit a Entry</h3>
         <div className="form-group">
           <textarea
             ref="content"
@@ -47,9 +47,7 @@ class EditForm extends React.Component {
           Save
         </button>
 
-        <button
-          onClick={this.props.clear}
-          className="btn btn-warning pull-right"
+        <button onClick={this.props.clear} className="btn btn-warning pull-right"
         >
           Cancel
         </button>
