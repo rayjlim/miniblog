@@ -3,6 +3,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+  mode: 'production',
   entry: {
     app: ['./src/app.jsx']
   },
@@ -28,26 +29,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   sourceMap: true,
-    //   output: {
-    //     comments: false,
-    //   },
-    // }),
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      inline: false,
-      uglifyOptions: {
-        ecma: 8,
-        compress: {
-          dead_code: true,
-          global_defs: {
-            'process.env.NODE_ENV': JSON.stringify('production')
-          }
-        }
-      }
-    }),
-
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
@@ -58,7 +39,10 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.8
     })
-  ]
+  ],
+  optimization: {
+    minimize: false
+  }
 };
 
 /**
