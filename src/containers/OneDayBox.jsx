@@ -22,12 +22,16 @@ class OneDayBox extends Component {
     let urlParams = new URLSearchParams(param);
 
     console.log('urlParams.has: ' + urlParams.has('date'));
-    this.date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-    console.log('passed date: ' + this.date);
+    const date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
+    console.log('passed date: ' + date);
 
-    this.loadDay(this.date);
+    this.loadDay(date);
     this.handleButtonDirection = this.handleButtonDirection.bind(this);
     this.handleDatePicker = this.handleDatePicker.bind(this);
+    store.dispatch({
+      type: types.CHANGE_DATE,
+      date: date
+    });
   }
 
   loadDay(targetDate = this.props.date) {
@@ -86,7 +90,7 @@ class OneDayBox extends Component {
   }
 
   render() {
-    console.log("ODB: render" + this.date);
+    console.log("ODB: render props" + this.props.date);
     let entryForm = (
       <div className="text-center">
         <button onClick={e => EntryApi.showForm()} className="btn btn-default">
@@ -116,7 +120,7 @@ class OneDayBox extends Component {
     return (
       <div>
         <OneDayView
-          date={this.date}
+          date={this.props.date}
           handleButtonDirection={this.handleButtonDirection}
           handleDatePicker={this.handleDatePicker}
         />
