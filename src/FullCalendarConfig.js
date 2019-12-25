@@ -1,7 +1,7 @@
 // FullCalendarConfig
 
-const FullCalendarConfig = function() {
-  console.log("createCalendarHelper");
+const FullCalendarConfig = () => {
+  // console.log("createCalendarHelper");
   var calendarsFetched = [];
 
   // ADD ZERO PADDING
@@ -44,13 +44,8 @@ const FullCalendarConfig = function() {
     window.eventTarget = calEvent;
   };
 
-  var calendarViewRender = function(view, element) {
-    console.log(
-      "view render: " +
-        view.intervalStart / 1000 +
-        ":" +
-        view.intervalEnd / 1000
-    );
+  var calendarViewRender = (view, element) =>{
+    console.log(`view render: ${view.intervalStart / 1000} : ${view.intervalEnd / 1000}`);
 
     //check if fetched already
     var alreadyFetched =
@@ -164,7 +159,7 @@ const FullCalendarConfig = function() {
   };
 
   var ajaxErrorHandler = function(jqXHR, error, errorThrown) {
-    if (jqXHR.status && jqXHR.status == 400) {
+    if (jqXHR.status && jqXHR.status === 400) {
       window.alert(jqXHR.responseText);
     } else {
       window.alert(errorThrown);

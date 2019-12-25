@@ -2,10 +2,9 @@ import axios from "axios";
 import store from "../reducers/store";
 import * as types from "../actions/action-types";
 
-function getEntrys(queryField, queryParam) {
-  queryParam = queryParam || "";
-  console.log("getEntrys" + queryParam);
-  const url = `${BASE_URL}api/posts/?${queryField}=` + encodeURIComponent(queryParam)
+function getEntrys(queryField, queryParam = '') {
+  console.log(`getEntrys: ${queryParam}`);
+  const url = `${BASE_URL}api/posts/?${queryField}=${encodeURIComponent(queryParam)}`
   console.log("url: " + url);
   return axios.get(url)
     .then(response => {
@@ -52,11 +51,13 @@ function createEntry(content, dateParam = null) {
       };
   prepContent = JSON.stringify(prepContent);
   console.log("BASE_URL " + BASE_URL);
-  axios
-    .post(BASE_URL + "/api/posts/", prepContent)
+  axios.post(BASE_URL + "/api/posts/", prepContent)
     .then(response => {
       console.log(response);
-      alert("Saved");
+      $('.toast').toast("dispose");
+      $('.toast-body').html("Saved");
+      $('.toast').toast({ delay: 4000 });
+      $('.toast').toast("show");
       store.dispatch({
         type: types.ADD_SUCCESS,
         post: response.data
@@ -72,11 +73,13 @@ function updateEntry(entry) {
   let prepContent = JSON.stringify(entry);
   console.log("updateEntry " + entry);
 
-  axios
-    .put(`${BASE_URL}/api/posts/${entry.id}`, prepContent)
+  axios.put(`${BASE_URL}/api/posts/${entry.id}`, prepContent)
     .then(response => {
       console.log(response);
-      alert("Updated");
+      $('.toast').toast("dispose");
+      $('.toast-body').html("Updated The Entry");
+      $('.toast').toast({ delay: 4000 });
+      $('.toast').toast("show");
       store.dispatch({
         type: types.UPDATE_SUCCESS,
         entry
@@ -90,11 +93,13 @@ function updateEntry(entry) {
 
 function deleteEntry(id) {
   console.log("deleteEntry " + id);
-  axios
-    .delete(`${BASE_URL}/api/posts/${id}`)
+  axios.delete(`${BASE_URL}/api/posts/${id}`)
     .then(response => {
       console.log(response);
-      alert("removed");
+      $('.toast').toast("dispose");
+      $('.toast-body').html("Removed Entry");
+      $('.toast').toast({ delay: 4000 });
+      $('.toast').toast("show");
       store.dispatch({
         type: types.DELETE_SUCCESS,
         id
@@ -165,8 +170,7 @@ function renameImg(originalName, filePath, newFileName) {
     api: true
   });
 
-  axios
-    .post(`${BASE_URL}/uploadRename/`, prepContent)
+  axios.post(`${BASE_URL}/uploadRename/`, prepContent)
     .then(response => {
       console.log(response);
 

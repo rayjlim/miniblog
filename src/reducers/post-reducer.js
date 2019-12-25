@@ -12,7 +12,7 @@ const initialState = {
   random: null
 };
 
-const postReducer = function(state = initialState, action) {
+const postReducer = (state = initialState, action) => {
   console.log("post reducer" + action.type);
   switch (action.type) {
     case types.GET_POSTS_SUCCESS:

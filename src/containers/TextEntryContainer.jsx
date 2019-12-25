@@ -42,7 +42,7 @@ class TextEntryContainer extends Component {
     }
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     console.log("TEC: componentWillUpdate");
     let loc = window.location + ``;
 

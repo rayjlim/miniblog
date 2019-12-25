@@ -24,7 +24,8 @@ class EditForm extends React.Component {
             className="form-control"
             placeholder="Add ..."
             rows="8"
-          >{escapedContent}</textarea>
+            defaultValue={escapedContent}
+          ></textarea>
         </div>
         <div className="form-group">
           <input

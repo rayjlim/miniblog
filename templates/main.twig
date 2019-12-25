@@ -34,12 +34,36 @@ body {
 }
 </style>
 {% include '_banner.twig' %}
+<div class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <!--img src="..." class="rounded mr-2" alt="..."-->
+    <strong class="mr-auto">Entry</strong>
+    <small></small>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body">
+    Hello, world! This is a toast message.
+  </div>
+</div>
 
 <div id="app"></div>
 
 {% include '_footer.twig' %}
 <script>
     const BASE_URL = '{{baseurl}}';
+
+    $(document).ready(function(){
+            $('.toast').toast("dispose");
+            console.log("toast displosed")
+     /* 
+        $('.toast-body').html("some other text");
+
+  $('.toast').toast({delay: 3000});
+  $('.toast').toast("show");
+  */
+});
 </script>
 
 {% if DEVELOPMENT %}
