@@ -13,6 +13,7 @@ class AddForm extends React.Component {
     this.handleTemplate = this.handleTemplate.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
     this.minusYear = this.minusYear.bind(this);
+    this.minusDay = this.minusDay.bind(this);
   }
   render() {
     let templateStyle = {
@@ -21,9 +22,14 @@ class AddForm extends React.Component {
     let formBtns = "";
     if (this.props.showDateModBtns != null) {
       formBtns = (
+        <div>
         <button onClick={this.minusYear} className="btn">
           Minus a year
         </button>
+        <button onClick={this.minusDay} className="btn">
+        Minus a day
+      </button>
+      </div>
       );
     }
     return (
@@ -65,12 +71,8 @@ class AddForm extends React.Component {
         <button onClick={this.handleAdd} className="btn btn-primary">
           Submit
         </button>
-        <button
-          onClick={this.props.clear}
-          className="btn btn-warning pull-right"
-        >
-          Cancel
-        </button>
+        <button onClick={this.props.clear} className="btn btn-warning pull-right"
+        >Cancel</button>
       </div>
     );
   }
@@ -90,6 +92,15 @@ class AddForm extends React.Component {
     let day = new String(currDate.getDate() + 1).lpad("0", 2);
 
     this.refs.date.value = `${year - 1}-${month}-${day}`;
+  }
+
+  minusDay(e) {
+    let currDate = new Date(this.refs.date.value);
+    let year = currDate.getFullYear();
+    let month = new String(currDate.getMonth() + 1).lpad("0", 2);
+    let day = new String(currDate.getDate() + 1).lpad("0", 2);
+
+    this.refs.date.value = `${year}-${month}-${day-1}`;
   }
 
   handleTemplate(e) {
