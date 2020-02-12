@@ -26,6 +26,7 @@
   "gitHead": "dac462c6852696878ddc80b9514e0517b8d0af2d",
   "readmeFilename": "readme.md",
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
     "eslint": "^4",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.18.2",

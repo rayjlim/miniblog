@@ -112,7 +112,7 @@ class GraphHandler extends AbstractController
             $to = MY_EMAIL;
 
             $headers = "From: smsblog@lilplaytime.com\r\n";
-            $headers .= "Reply-To: ". MY_EMAIL . "\r\n";
+            $headers .= "Reply-To: " . MY_EMAIL . "\r\n";
             $headers .= "X-Mailer: PHP/" . phpversion();
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";

@@ -106,7 +106,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
     public function getYearMonths($userId)
     {
-        $whereClause = ' where user_id = ? GROUP BY Year(date), Month(date)';
+        $whereClause = ' where user_id = ? GROUP BY Year(sms_entries.date), Month(sms_entries.date), id';
         $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         
