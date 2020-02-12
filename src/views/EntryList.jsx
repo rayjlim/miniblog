@@ -28,7 +28,8 @@ const EntryList = props => {
                     <li key={entry.id} className="blogEntry">
                         {showEntryDate}|
                         <a href={calLinkDate}>Cal</a>|
-                        <ReactMarkdown source={newText} />
+                        <ReactMarkdown source={newText} 
+                        escapeHtml={false}/>
                         <TagLister source={newText} />
                     </li>
                 );
