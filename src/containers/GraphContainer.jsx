@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import Immutable from "immutable";
+import React, { Component } from 'react';
+import Immutable from 'immutable';
 
-import TagSearchBar from "../views/TagSearchBar.jsx";
+import TagSearchBar from '../views/TagSearchBar.jsx';
 
-import WeightGraph from "../views/WeightGraph.jsx";
-import TagStats from "../views/TagStats.jsx";
-import TagDayStats from "../views/TagDayStats.jsx";
-import GraphEntryList from "../views/GraphEntryList.jsx";
-import getWeights from "../api/EntryApi";
+import WeightGraph from '../views/WeightGraph.jsx';
+import TagStats from '../views/TagStats.jsx';
+import TagDayStats from '../views/TagDayStats.jsx';
+import GraphEntryList from '../views/GraphEntryList.jsx';
+import getWeights from '../api/EntryApi';
 
 class GraphContainer extends Component {
   constructor(props) {
@@ -26,18 +26,18 @@ class GraphContainer extends Component {
   }
 
   componentDidMount() {
-    console.log("GC: componentDidMount");
+    console.log('GC: componentDidMount');
     this.dataFetch();
   }
 
   search(count) {
-    console.log("GC: search");
-    this.dataFetch("&count=" + count);
+    console.log('GC: search');
+    this.dataFetch('&count=' + count);
   }
 
-  dataFetch(param = "") {
+  dataFetch(param = '') {
     var _this = this;
-    console.log("dataFetch");
+    console.log('dataFetch');
     getWeights(param)
       .then(function (response) {
         console.table(response.data);
@@ -67,7 +67,7 @@ class GraphContainer extends Component {
   }
 
   render() {
-    console.log("GC: render");
+    console.log('GC: render');
     return (
       <div>
         <h1>

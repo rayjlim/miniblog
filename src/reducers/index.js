@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
 // Reducers
-import postReducer from "./post-reducer";
-import quickAddReducer from "./quickAddReducer";
+import postReducer from './post-reducer';
+import quickAddReducer from './quickAddReducer';
 
 // Combine Reducers
 var reducers = combineReducers({

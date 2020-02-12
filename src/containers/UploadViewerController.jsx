@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import UploadActionsForm from "../views/UploadActionsForm.jsx";
-import AddForm from "../views/AddForm.jsx";
+import UploadActionsForm from '../views/UploadActionsForm.jsx';
+import AddForm from '../views/AddForm.jsx';
 
-import store from "../reducers/store";
-import * as types from "../actions/action-types";
-import EntryApi from "../api/EntryApi";
+import store from '../reducers/store';
+import * as types from '../actions/action-types';
+import EntryApi from '../api/EntryApi';
 
 class UploadViewerController extends Component {
   componentDidMount() {
@@ -49,20 +49,20 @@ class UploadViewerController extends Component {
     EntryApi.resizeImg(this.props.fileName, this.props.filePath);
   }
   rename  (newName ) {
-    console.log("rename");
+    console.log('rename');
     console.log(newName);
 
     let oldName = this.props.fileName;
     console.log(oldName);
-    let splitVal = oldName.split(".");
+    let splitVal = oldName.split('.');
 
-    newName = splitVal[0] + ".jpg";
+    newName = splitVal[0] + '.jpg';
     console.log(newName);
     EntryApi.renameImg(this.props.fileName, this.props.filePath, newName);
   }
 
   render() {
-    console.log("UVC: render.4"+this.props.fileName);
+    console.log('UVC: render.4'+this.props.fileName);
 
     let imgUrl =
       `../uploads/${this.props.filePath}${this.props.fileName}?` +
