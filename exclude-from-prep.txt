@@ -20,3 +20,4 @@ SERVER_CONFIG.php
 .eslintrc
 .travis.yml
 .vscode
+feature_ideas/

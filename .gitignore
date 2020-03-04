@@ -10,3 +10,4 @@ backend/SERVER_CONFIG.php
 upload.sh
 cron_script.php
 env_vars.sh
+feature_ideas/*

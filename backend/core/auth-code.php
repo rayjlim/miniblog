@@ -13,7 +13,7 @@ if ($smsUser == null) {
     if (isset($_REQUEST['cmd'])) {
         $redirectUrl.= "?target=" . $_REQUEST['cmd'];
     }
-    
+
     DevHelp::redirectHelper($redirectUrl);
 }
 $userId = $smsUser->id;

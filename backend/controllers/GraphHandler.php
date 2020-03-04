@@ -9,7 +9,12 @@ function printEntrys($carry, $item)
     $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
     $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
     $preparedContent = preg_replace($pattern, $replacement, $item['content']);
-  
+
+    //replace the icons as well
+    $pattern = '/<i class="fa[sb] fa-([\w\-]*)(-alt)?"><\/i>/';
+    $replacement = '&lt;${1}&gt; :';
+    $preparedContent = preg_replace($pattern, $replacement,$preparedContent);
+
     $message =  "<li><strong><a href=\"".$link."\">". $entryDay->format('Y-D') . '</a>:</strong> ' . $preparedContent . "</li>";
     return $carry.=$message;
 }
