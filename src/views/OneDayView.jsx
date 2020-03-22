@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Component } from 'react';
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import moment from 'moment';
 
 class OneDayView extends Component {

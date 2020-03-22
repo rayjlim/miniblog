@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-line no-unused-vars
 String.prototype.lpad = function(padString, length) {
     var str = this;
     while (str.length < length) str = padString + str;
@@ -13,6 +13,7 @@ class AddForm extends React.Component {
         this.handleAdd = this.handleAdd.bind(this);
         this.minusYear = this.minusYear.bind(this);
         this.minusDay = this.minusDay.bind(this);
+        this.addFAtag = this.addFAtag.bind(this);
     }
     render() {
         let templateStyle = {
@@ -35,6 +36,9 @@ class AddForm extends React.Component {
             <div className="well">
                 <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
                     Template
+                </button>
+                <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
+                    fa-template
                 </button>
                 <strong>Add Entry</strong>
                 <p>
@@ -98,6 +102,11 @@ class AddForm extends React.Component {
 
 ### Obstacles
     `;
+    }
+
+    addFAtag(e) {
+        this.refs.content.value += ` 
+<i class="fas fa-" /> `;
     }
 }
 

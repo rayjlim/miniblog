@@ -5,24 +5,26 @@ import store from '../reducers/store';
 import * as types from '../actions/action-types';
 const BASEURL = BASE_URL; // eslint-disable-line no-undef
 
-async function getEntrys(queryField, queryParam = '') { // eslint-disable-line 
-    try {
+function getEntrys(queryField, queryParam = '') {
+    // eslint-disable-line
+
     console.log(`getEntrys: ${queryParam}`);
     const url = `${BASEURL}api/posts/?${queryField}=${encodeURIComponent(queryParam)}`;
     console.log('url: ' + url);
 
-    const response = await axios.get(url);
-
-    store.dispatch({
-        type: types.GET_POSTS_SUCCESS,
-        posts: response.data.entries
-    });
-    return response;
-    } catch (err) {
-        console.error(err);
-        alert(err);
-    }
-
+    return axios
+        .get(url)
+        .then((response) => {
+            store.dispatch({
+                type: types.GET_POSTS_SUCCESS,
+                posts: response.data.entries
+            });
+            return response;
+        })
+        .catch((err) => {
+            console.error(err);
+            alert(err);
+        });
 }
 
 function sameDayEntrys(searchParam = '') {

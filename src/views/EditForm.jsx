@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-line no-unused-vars
 import moment from 'moment';
 
 class EditForm extends React.Component {
@@ -9,25 +9,38 @@ class EditForm extends React.Component {
         this.save = this.save.bind(this);
         this.subToDate = this.subToDate.bind(this);
         this.addToDate = this.addToDate.bind(this);
+        this.addFAtag = this.addFAtag.bind(this);
     }
+
     render() {
+        let templateStyle = {
+            float: 'right'
+        };
         let escapedContent = this.props.entry.content.replace(
             /<br\s*\/>/g,
             `
 `
         );
+
         return (
             <div className="well">
-                <h3>Edit a Entry</h3>
+                <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
+                    fa-template
+                </button>
+                <strong>Edit Entry</strong>
+                <p>
+                    link: [link text](URL){' '}
+                    <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">Cheatsheet</a>
+                </p>
                 <div className="form-group">
                     <textarea
-                        ref="content"
-                        onChange={(event) => event.preventDefault()}
+                        ref='content'
+                        onChange={event => event.preventDefault()}
                         className="form-control"
                         placeholder="Add ..."
                         rows="8"
                         defaultValue={escapedContent}
-                    />
+/>
                 </div>
                 <div className="form-group">
                     <input
@@ -39,6 +52,7 @@ class EditForm extends React.Component {
                         value={this.props.entry.date}
                     />
                 </div>
+
                 <button onClick={this.subToDate} className="btn btn-info">
                     subToDate
                 </button>
@@ -75,6 +89,11 @@ class EditForm extends React.Component {
 
     addToDate(e) {
         this.refs.date.value = moment(this.refs.date.value.trim()).add(1, 'days').format('YYYY-MM-DD');
+    }
+
+    addFAtag(e) {
+        this.refs.content.value += ` 
+<i class="fas fa-" /> `;
     }
 }
 

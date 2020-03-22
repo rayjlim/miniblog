@@ -2,9 +2,11 @@
 PREP_DIR='../smsblog_prod'
 mkdir $PREP_DIR
 
+echo "use upload-prep.sh -w to not build webpacknpm "
+
 rsync -ravz --exclude-from 'exclude-from-prep.txt' --delete . $PREP_DIR
 rsync -avz  _rsc/vendor $PREP_DIR/_rsc
-rsync -avz  _config/SERVER_CONFIG.php.prod $PREP_DIR/backend/
+rsync -avz  _config/SERVER_CONFIG.php.prod $PREP_DIR/backend/_config/SERVER_CONFIG.php
 rsync -avz  _config/.htaccess $PREP_DIR/
 rsync -avz  _config/cron_script.php $PREP_DIR/
 rsync -avz  exclude-from-prod.txt $PREP_DIR/
@@ -15,6 +17,7 @@ cd $PREP_DIR
 
 npm install --production
 if [ $# -ne 1 ]; then
+    echo "webpack prod"
     ./node_modules/.bin/webpack --config webpack-prod.config.js -p
 fi 
 

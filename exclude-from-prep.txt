@@ -14,6 +14,7 @@ _rsc/js_build/app.bundle.js.map
 composer.lock
 .gitignore
 SERVER_CONFIG.php
+webpack.config.js
 
 .editorconfig
 .eslintignore

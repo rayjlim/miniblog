@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
-import { Component } from 'react';
+
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import { connect } from 'react-redux';
 import moment from 'moment';
+
 /* eslint-disable */
 import OneDayView from '../views/OneDayView.jsx'; //eslint-disable no-unused-vars
 import EntryList from '../views/EntryList.jsx'; //eslint-disable no-unused-vars
