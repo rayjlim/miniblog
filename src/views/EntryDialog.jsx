@@ -1,7 +1,6 @@
-import React from "react";
-
-const EntryDialog = props => {
-    console.log("ED: render");
+import React from 'react'; // eslint-disable-line no-unused-vars
+const EntryDialog = (props) => {
+    console.log('ED: render');
     return (
         <div id="dialog" title="Edit Blog Entry">
             <form id="edit_form">
@@ -13,12 +12,7 @@ const EntryDialog = props => {
                     </div>
 
                     <div className="modal-body">
-                        <textarea
-                            name="content"
-                            cols="70"
-                            rows="5"
-                            id="edit_content_field"
-                        />
+                        <textarea name="content" cols="70" rows="5" id="edit_content_field" />
                         <input
                             type="text"
                             name="date"
@@ -28,24 +22,15 @@ const EntryDialog = props => {
                             maxLength="20"
                         />
                         <span>
-                            What I'm eating / drinking / playing; I'm thinking /
-                            loving /feeling; I'm listening /watching /reading
+                            What I'm eating / drinking / playing; I'm thinking / loving /feeling; I'm listening
+                            /watching /reading
                         </span>
                     </div>
-                    <a
-                        href="#"
-                        id="edit_date_field_yesterday_link"
-                        className="previous_day_link"
-                    >
+                    <a href="#" id="edit_date_field_yesterday_link" className="previous_day_link">
                         Previous Day
                     </a>
                     <div className="modal-footer">
-                        <input
-                            type="submit"
-                            name=""
-                            value="Submit Post!"
-                            id="dialog_submit"
-                        />
+                        <input type="submit" name="" value="Submit Post!" id="dialog_submit" />
                         <button type="button" id="dialog_cancel">
                             Cancel
                         </button>
