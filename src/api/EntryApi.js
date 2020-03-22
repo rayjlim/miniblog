@@ -1,8 +1,10 @@
+/* eslint-disable no-alert, no-console */
 /* eslint indent: 0 */
 import axios from 'axios';
 import store from '../reducers/store';
 import * as types from '../actions/action-types';
-const BASEURL = BASE_URL;
+const BASEURL = BASE_URL; // eslint-disable-line no-undef
+
 function getEntrys(queryField, queryParam = '') {
   console.log(`getEntrys: ${queryParam}`);
   const url = `${BASEURL}api/posts/?${queryField}=${encodeURIComponent(queryParam)}`;
@@ -62,7 +64,7 @@ function createEntry(content, dateParam = null) {
         post: response.data
       });
     })
-    .catch(function (error) {
+    .catch(error=> {
       console.log(error);
       alert(error);
     });
@@ -84,7 +86,7 @@ function updateEntry(entry) {
         entry
       });
     })
-    .catch(function (error) {
+    .catch(error=> {
       console.log(error);
       alert(error);
     });
@@ -104,7 +106,7 @@ function deleteEntry(id) {
         id
       });
     })
-    .catch(function (error) {
+    .catch((error) =>{
       console.log(error);
       alert(error);
     });
@@ -121,7 +123,7 @@ function rotate(URL) {
         filePath: response.data.filePath
       });
     })
-    .catch(function (error) {
+    .catch(error=> {
       console.log(error);
       alert(error);
     });
@@ -149,7 +151,7 @@ function resizeImg(fileName, filePath) {
         filePath: response.data.filePath
       });
     })
-    .catch(function (error) {
+    .catch(error=> {
       console.log(error);
       alert(error);
     });
@@ -174,7 +176,7 @@ function renameImg(originalName, filePath, newFileName) {
         filePath: response.data.filePath
       });
     })
-    .catch(function (error) {
+    .catch(error=> {
       console.log(error);
       alert(error);
     });

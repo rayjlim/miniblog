@@ -1,8 +1,10 @@
 #!/bin/bash
 . ./env_vars.sh
-if ![ -n "$FTP_HOST" ]; then
+
+if [ -z ${FTP_HOST+x} ]; then 
     echo "Missing env_vars"
     exit 2
+ else echo "var is set to '$FTP_HOST'";
 fi
 PREP_DIR='../smsblog_prod'
 

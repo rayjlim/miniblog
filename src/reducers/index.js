@@ -6,8 +6,8 @@ import quickAddReducer from './quickAddReducer';
 
 // Combine Reducers
 var reducers = combineReducers({
-	postState: postReducer,
-	quickAddState: quickAddReducer
+    postState: postReducer,
+    quickAddState: quickAddReducer
 });
 
 export default reducers;
