@@ -12,10 +12,10 @@ class FullCalendar extends Component {
     const { calendar } = this.refs;
     $(calendar).fullCalendar(FullCalendarConfig());
   }
-  componentWillUnmount() {
-    console.log("fc: destroy");
-    $("#calendar").fullCalendar("destroy");
-  }
+  // componentWillUnmount() {
+  //   console.log("fc: destroy");
+  //   $("#calendar").fullCalendar("destroy");
+  // }
 
   render() {
     console.log("FC: render");

@@ -2,7 +2,7 @@
 import * as types from '../actions/action-types';
 import moment from 'moment';
 
-var current = moment();
+let current = moment();
 const initialState = {
     date: current.format('YYYY-MM-DD'),
     posts: [],
@@ -14,53 +14,56 @@ const initialState = {
 };
 
 const postReducer = (state = initialState, action) => {
-    console.log('post reducer' + action.type);
+    console.log('post reducer: ' + action.type);
+    let newstate = state;
     switch (action.type) {
-    case types.GET_POSTS_SUCCESS:
-        Object.assign({}, state, { posts: action.posts });
+    case types.GET_POSTS_SUCCESS: {
+        console.log('action.posts :', action.posts);
+        newstate = Object.assign({}, state, { posts: action.posts });
         break;
+    }
     case types.GET_EDIT_POST:
         console.log('reduce-GET_EDIT_POST');
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             currentEntry: action.entry,
             showAddEditForm: true
         });
         break;
     case types.ADD_SUCCESS:
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             posts: state.posts.concat(action.post),
             showAddEditForm: false
         });
         break;
     case types.CLEAR_ADDEDIT:
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             currentEntry: null,
             showAddEditForm: false
         });
         break;
     case types.SHOW_FORM:
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             showAddEditForm: true
         });
         break;
     case types.CHANGE_DATE:
-        Object.assign({}, state, { date: action.date });
+        newstate = Object.assign({}, state, { date: action.date });
         break;
     case types.TOGGLE_ADDEDIT_FORM:
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             showAddEditForm: !state.showAddEditForm
         });
         break;
     case types.DELETE_SUCCESS:
         console.log('reduce-DELETE_ENTRY');
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             posts: state.posts.filter(x => x.id !== action.id),
             showAddEditForm: false
         });
         break;
     case types.UPDATE_SUCCESS: {
         let withoutEntry = state.posts.filter(x => x.id !== action.entry.id);
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             posts: withoutEntry.concat(action.entry),
             showAddEditForm: false
         });
@@ -77,7 +80,8 @@ const postReducer = (state = initialState, action) => {
         break;
     default:
     }
-    return state;
+    console.log('newstate :', newstate);
+    return newstate;
 };
 
 export default postReducer;
