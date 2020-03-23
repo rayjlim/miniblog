@@ -1,5 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-String.prototype.lpad = function(padString, length) {
+String.prototype.lpad = function lpad(padString, length) {
     var str = this;
     while (str.length < length) str = padString + str;
     return str;
@@ -81,19 +81,20 @@ class AddForm extends React.Component {
     minusYear(e) {
         let currDate = new Date(this.refs.date.value);
         let year = currDate.getFullYear();
-        let month = new String(currDate.getMonth() + 1).lpad('0', 2);
-        let day = new String(currDate.getDate() + 1).lpad('0', 2);
+        let month = `${currDate.getMonth() + 1}`.lpad('0', 2);
+        let day = `${currDate.getDate() + 1}`.lpad('0', 2);
 
         this.refs.date.value = `${year - 1}-${month}-${day}`;
     }
 
     minusDay(e) {
+        console.log('this.refs.date.value :', this.refs.date.value);
         let currDate = new Date(this.refs.date.value);
         let year = currDate.getFullYear();
-        let month = new String(currDate.getMonth() + 1).lpad('0', 2);
-        let day = new String(currDate.getDate() + 1).lpad('0', 2);
+        let month = `${currDate.getMonth() + 1}`.lpad('0', 2);
+        let day = `${currDate.getDate() }`.lpad('0', 2);
 
-        this.refs.date.value = `${year}-${month}-${day - 1}`;
+        this.refs.date.value = `${year}-${month}-${day}`;
     }
 
     handleTemplate(e) {

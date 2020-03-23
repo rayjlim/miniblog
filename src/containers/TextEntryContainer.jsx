@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, no-console */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -27,10 +28,10 @@ class TextEntryContainer extends Component {
         let loc = window.location + ``;
 
         let param = loc.substring(loc.indexOf('?'));
-        console.log(param);
+        console.log('param text :', param);
         let urlParams = new URLSearchParams(param);
 
-        console.log('urlParams.has: ' + urlParams.has('month'));
+        console.log('urlParams.has month: ' + urlParams.has('month'));
         let month = urlParams.get('month');
         console.log('passed month: ' + month);
 
@@ -45,8 +46,8 @@ class TextEntryContainer extends Component {
         console.log('TEC: componentDidUpdate');
         let loc = window.location + '';
 
-        let param = loc.substring(loc.indexOf('?'));
-        console.log(param);
+        let param = loc.substring(loc.indexOf('?')+1);
+       console.log('param up text:', param);
         let urlParams = new URLSearchParams(param);
 
         console.log('62.urlParams.has: ' + urlParams.has('month'));

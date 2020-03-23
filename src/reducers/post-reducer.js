@@ -71,7 +71,7 @@ const postReducer = (state = initialState, action) => {
     }
     case types.UPDATE_FILEVIEW:
         console.log('update fileview');
-        Object.assign({}, state, {
+        newstate = Object.assign({}, state, {
             fileName: action.fileName,
             filePath: action.filePath,
             random: new Date().getTime()

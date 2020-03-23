@@ -10,8 +10,8 @@ const EntryList = (props) => {
             {props.entrys.map((entry) => {
                 let newText = entry.content.replace(/<br \/>/g, '\n');
                 const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-                const calLinkDate = `posts/?gotoYearMonth=` + moment(entry.date).format('YYYY-MM');
-                const oneDayLink = 'main#/oneDay?date=' + moment(entry.date).format('YYYY-MM-DD');
+                const calLinkDate = `posts/?gotoYearMonth=${moment(entry.date).format('YYYY-MM')}`;
+                const oneDayLink = `main#/oneDay?date=${moment(entry.date).format('YYYY-MM-DD')}`;
                 let showEntryDate = <a href={oneDayLink}>{dateFormated}</a>;
                 // <a onclick={e=> {location.href=`main#/oneDay?date=${dateFormated}`}}>{dateFormated}</a>);
                 if (props.editLink) {

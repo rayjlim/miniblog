@@ -22,10 +22,10 @@ class OneDayBox extends Component {
         let loc = window.location + '';
 
         let param = loc.substring(loc.indexOf('?'));
-        console.log(param);
+        console.log('param :', param);
         let urlParams = new URLSearchParams(param);
 
-        console.log('urlParams.has: ' + urlParams.has('date'));
+        console.log('urlParams.has date : ' + urlParams.has('date'));
         const date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
         console.log('passed date: ' + date);
 
