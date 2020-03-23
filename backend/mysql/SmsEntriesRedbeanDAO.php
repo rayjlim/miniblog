@@ -110,8 +110,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         
-        $b = array_map("pickDate", $sequencedArray);
-        return $b;
+        $onlyDate = array_map("pickDate", $sequencedArray);
+        $filtered = array_unique($onlyDate);
+        return $filtered;
     }
 
     public function listParamsToSqlParam($listParams)

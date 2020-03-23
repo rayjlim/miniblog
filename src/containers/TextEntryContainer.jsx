@@ -46,13 +46,18 @@ class TextEntryContainer extends Component {
         console.log('TEC: componentDidUpdate');
         let loc = window.location + '';
 
-        let param = loc.substring(loc.indexOf('?')+1);
+        let param = loc.substring(loc.indexOf('?'));
        console.log('param up text:', param);
         let urlParams = new URLSearchParams(param);
 
-        console.log('62.urlParams.has: ' + urlParams.has('month'));
+        console.log(`TEC.urlParams.has: `, urlParams.has('month'));
         let month = urlParams.get('month');
-        console.log('62.passed month: ' + month);
+        console.log('TEC.passed month: ', month);
+
+        if(this.state.month !== month){
+            this.state.month = month;
+            this.monthCall(month);
+        }
     }
 
     search(event) {

@@ -17,7 +17,7 @@
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Misc
     </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <div class="dropdown-menu">
         <a class="dropdown-item" href="{{baseurl}}media/">Media</a>
         <a class="dropdown-item" href="{{baseurl}}sleepstats/">Sleep</a>
         <a class="dropdown-item" href="{{baseurl}}logs">Log Files</a>
@@ -25,13 +25,12 @@
     </li>
     {% if yearmonth is defined %}
     <li class="nav-item  dropdown">
-      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-toggle="dropdown">
       Months</a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <div class="dropdown-menu">
       {% for entry in yearmonth %}
-        <a class="dropdown-item" href="{{baseurl}}main#/text?month={{entry}}" id="reactlink"
-          data-toggle="collapse" data-target=".navbar-collapse"
-        >{{entry}}</a>
+        <a class="dropdown-item" href="{{baseurl}}main#/text?month={{entry}}"
+         data-target=".navbar-collapse">{{entry}}</a>
       {% endfor %}
       </div>
     </li>
