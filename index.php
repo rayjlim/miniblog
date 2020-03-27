@@ -8,7 +8,9 @@ $app = new Slim(array(
     'view' => new Twig
 ));
 
-$app->add(new AuthMiddleware());
+// $app->add(new AuthMiddleware());
+
+$_SESSION[SESSION_USER_ID] = 1;
 
 $app->view()->appendData(["rooturl" => '/'.ROOT_URL.'/']);
 $app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
@@ -36,6 +38,9 @@ require 'backend/core/page_message.php';
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
 });
+
+//Access-Control-Allow-Origin header with wildcard.
+header('Access-Control-Allow-Origin: *');
 
 $entryHandler = DAOFactory::EntryHandler($app);
 $app->get('/main/', $entryHandler->showMain());
