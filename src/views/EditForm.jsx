@@ -1,7 +1,7 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import moment from 'moment';
 
-class EditForm extends React.Component {
+class EditForm extends Component {
     constructor(props) {
         super(props);
         // create a ref to store the textInput DOM element

@@ -12,7 +12,8 @@ const OneDay = () => {
 	const [ data, setData ] = useState({ entries: [] });
 
 	useEffect(() => {
-		console.log('useEffect');
+    console.log('useEffect');
+    
 		(async () => {
 			// You can await here
 			const result = await axios(`${constants.REST_ENDPOINT}api/posts/?date=2019-03-26`);

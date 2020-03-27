@@ -31,10 +31,7 @@ class Resource implements IResourceDAO
     public function setSession($key, $value) {
         if (session_id() == '') {
             session_start();
-            
-            // session isn't started
-            
-            
+            // session isn't started 
         }
         $_SESSION[$key] = $value;
     }

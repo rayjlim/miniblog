@@ -1,11 +1,11 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 String.prototype.lpad = function lpad(padString, length) {
     var str = this;
     while (str.length < length) str = padString + str;
     return str;
 };
 
-class AddForm extends React.Component {
+class AddForm extends Component {
     constructor(props) {
         super(props);
         // create a ref to store the textInput DOM element
