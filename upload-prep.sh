@@ -11,6 +11,12 @@ rsync -avz  _config/.htaccess $PREP_DIR/
 rsync -avz  _config/cron_script.php $PREP_DIR/
 rsync -avz  exclude-from-prod.txt $PREP_DIR/
 
+
+cd ui-react
+npm run build
+cd ..
+rsync -avz  ui-react/build/ $PREP_DIR/react
+
 pushd .
 cd $PREP_DIR
 /usr/local/bin/composer install  --no-dev
