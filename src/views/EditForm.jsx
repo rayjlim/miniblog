@@ -1,4 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
+import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 import moment from 'moment';
 
 class EditForm extends React.Component {
@@ -10,6 +11,14 @@ class EditForm extends React.Component {
         this.subToDate = this.subToDate.bind(this);
         this.addToDate = this.addToDate.bind(this);
         this.addFAtag = this.addFAtag.bind(this);
+        this.state = {
+            textarea: this.props.entry.date
+        }
+    }
+
+    textChange(event){
+        event.preventDefault()
+        console.log(this.state);
     }
 
     render() {
@@ -35,7 +44,10 @@ class EditForm extends React.Component {
                 <div className="form-group">
                     <textarea
                         ref='content'
-                        onChange={event => event.preventDefault()}
+                        onChange={e => {
+                            this.setState({ textarea: e.target.value })
+                            this.textChange(event)
+                        }}
                         className="form-control"
                         placeholder="Add ..."
                         rows="8"
@@ -70,6 +82,8 @@ class EditForm extends React.Component {
                 <button onClick={this.props.delete} className="btn btn-danger pull-right" id={this.props.entry.id}>
                     Delete
                 </button>
+
+                <ReactMarkdown source={this.state.textarea} escapeHtml={false} />
             </div>
         );
     }
