@@ -11,3 +11,5 @@ upload.sh
 cron_script.php
 env_vars.sh
 feature_ideas/*
+ui-react/build/*
+ui-react/node_modules/*

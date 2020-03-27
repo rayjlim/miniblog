@@ -22,3 +22,5 @@ webpack.config.js
 .travis.yml
 .vscode
 feature_ideas/
+ui-react/
+stats.json
