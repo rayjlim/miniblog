@@ -11,7 +11,7 @@ function printEntrys($carry, $item)
     $preparedContent = preg_replace($pattern, $replacement, $item['content']);
 
     //replace the icons as well
-    $pattern = '/<i class="fa[sb] fa-([\w\-]*)(-alt)?"><\/i>/';
+    $pattern = '/<i class="fa[sb] fa-([\w\-]*)"(><\/i>|\s?\/>)/';
     $replacement = '&lt;${1}&gt; :';
     $preparedContent = preg_replace($pattern, $replacement,$preparedContent);
 

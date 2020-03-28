@@ -18,6 +18,7 @@
     "**/.git/subtree-cache/**": true,
 			"**/vendor": true,
 			"**/node_modules/*/**": true
-		}
+		},
+		"git.ignoreLimitWarning": true
 	}
 }

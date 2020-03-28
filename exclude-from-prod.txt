@@ -2,7 +2,7 @@ uploads/
 src/
 node_modules/
 package.json
-package.lock
+package-lock.json
 composer.json
 composer.lock
 *.txt

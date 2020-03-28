@@ -4,11 +4,14 @@ import constants from '../constants';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 import moment from 'moment';
+import AddForm from './AddForm.jsx'; //eslint-disable no-unused-vars
+import EditForm from './EditForm.jsx'; //eslint-disable no-unused-vars
 
 const OneDay = () => {
 	// class ContactForm extends React.Component {
-	const [ data, setData ] = useState({ entries: [], date: '' });
+	const [ data, setData ] = useState({ entries: [] });
 	const [ oDate, setDate ] = useState('');
+	const [ entryForm, setEntryForm ] = useState('a');
 
 	useEffect(() => {
 		console.log('useEffect');
@@ -21,10 +24,15 @@ const OneDay = () => {
 		let urlParams = new URLSearchParams(param);
 
 		console.log('urlParams.has date : ' + urlParams.has('date'));
-		const date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-		console.log('passed date: ' + date);
-		setDate(date);
-		loadDay(date);
+		const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
+		console.log('passed date: ' + _date);
+		setDate(_date);
+		loadDay(_date);
+
+		setEntryForm(<button onClick={e =>showAddForm(e, _date)} className="btn btn-default">
+		Show Add Form
+	</button>)
+		showAddForm();
 	}, []);
 
 	function loadDay(_date) {
@@ -48,6 +56,17 @@ const OneDay = () => {
 		loadDay(updateDate);
 	}
 
+
+	function showAddForm(e, date){
+		setEntryForm(<AddForm date={date} submit={e=>e.preventDefault()}  />)
+	}
+	function showEditForm(e){
+		setEntryForm( <EditForm
+		/>)
+	}
+
+
+
 	return (
 		<Fragment>
 			<h1>OneDay</h1>
@@ -63,10 +82,11 @@ const OneDay = () => {
                     Next-&gt;&gt;
                 </button>
 			{oDate}
+			entryform{entryForm}--
 			<ul>
 				{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
-					newText = newText.replace(/..\/uploads/g, '.\/uploads');
+					newText = newText.replace(/..\/uploads/g, `${constants.UPLOAD_PREFIX}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
 					const calLinkDate = `posts/?gotoYearMonth=${moment(entry.date).format('YYYY-MM')}`;
 					const oneDayLink = `main#/oneDay?date=${moment(entry.date).format('YYYY-MM-DD')}`;
