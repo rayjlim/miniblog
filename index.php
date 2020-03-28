@@ -8,10 +8,12 @@ $app = new Slim(array(
     'view' => new Twig
 ));
 
-// $app->add(new AuthMiddleware());
-
-$_SESSION[SESSION_USER_ID] = 1;
-
+if(DEVELOPMENT !== null && DEVELOPMENT)
+    // $app->add(new AuthMiddleware());
+    $_SESSION[SESSION_USER_ID] = 1;
+else{
+    $app->add(new AuthMiddleware()); 
+}
 $app->view()->appendData(["rooturl" => '/'.ROOT_URL.'/']);
 $app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
 $app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
