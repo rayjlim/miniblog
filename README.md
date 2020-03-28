@@ -65,3 +65,8 @@ php directory: /opt/lampp/bin
 
  sql setup required:
  SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+service mysql restart
+
+ ps aux|grep -v grep| grep react-scripts \
+ | awk '{print $2}' | xargs kill -9

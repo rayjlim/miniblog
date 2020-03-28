@@ -16,6 +16,7 @@ function App() {
 					<Switch>
 						<Route path="/textentry" exact component={TextEntry} />
 						<Route path="/oneday" component={OneDay} />
+						<Route path="/" component={OneDay} />
 					</Switch>
 					<RouterNavLink to="/textentry">textentry</RouterNavLink>
 					<RouterNavLink to="/oneday">oneday</RouterNavLink>
