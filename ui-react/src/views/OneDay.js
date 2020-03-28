@@ -8,107 +8,119 @@ import AddForm from './AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from './EditForm.jsx'; //eslint-disable no-unused-vars
 
 const OneDay = () => {
-	// class ContactForm extends React.Component {
 	const [ data, setData ] = useState({ entries: [] });
-	const [ oDate, setDate ] = useState('');
-	const [ entryForm, setEntryForm ] = useState('a');
+	const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
+	const [ formMode, setFormMode ] = useState(0);
+	const [ entry, setEntry ] = useState({});
+	console.log('oDate :', oDate);
+
+	const btnShowAddForm = (
+		<button onClick={(e) => showAddForm(e)} className="btn btn-default">
+			Show Add Form{oDate}
+		</button>
+	);
+
+	async function loadDay(date) {
+		console.log('loadDay2 oDate :', date);
+		const result = await axios(`${constants.REST_ENDPOINT}api/posts/?date=${date}`);
+		console.log('result :', result);
+		setData(result.data);
+	}
+
+	function handleButtonDirection(e) {
+		let _date = moment(oDate, 'YYYY-MM-DD');
+		let updateDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
+		setDate(updateDate);
+		console.log('oneday:hbd.' + e.target.value, oDate, updateDate);
+
+		loadDay(updateDate);
+		setFormMode(0);
+	}
+
+	function resetEntryForm() {
+		console.log('close form', oDate);
+		setFormMode(0);
+		loadDay(oDate);
+	}
+
+	function showAddForm(e) {
+		console.log('showAddForm#oDate :', oDate);
+		setFormMode(1);
+	}
+
+	function showEditForm(e, entry) {
+		e.preventDefault();
+		console.log('id :', entry.id);
+		setFormMode(2);
+		setEntry(entry);
+	}
+
+	function updateDate(e) {
+		console.log('e :', e.target.value);
+		let myval = e.target.value;
+		setDate(myval);
+		loadDay(myval);
+	}
 
 	useEffect(() => {
-		console.log('useEffect');
-		console.log('ODB: componentDidMount');
-
+		console.log('OndeDay: useEffect');
 		let loc = window.location + '';
-
 		let param = loc.substring(loc.indexOf('?'));
 		console.log('param :', param);
 		let urlParams = new URLSearchParams(param);
 
-		console.log('urlParams.has date : ' + urlParams.has('date'));
 		const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-		console.log('passed date: ' + _date);
 		setDate(_date);
 		loadDay(_date);
-
-		setEntryForm(<button onClick={e =>showAddForm(e, _date)} className="btn btn-default">
-		Show Add Form
-	</button>)
-		showAddForm();
 	}, []);
 
-	function loadDay(_date) {
-		(async () => {
-			// You can await here
-			const result = await axios(`${constants.REST_ENDPOINT}api/posts/?date=${_date}`);
-			console.log('result :', result);
-			setData(result.data);
-			// ...
-		})();
+	function showAddEditForm(mode) {
+		console.log('mode :', mode);
+		if (!mode || mode === 0) {
+			return btnShowAddForm;
+		} else if (mode === 1) {
+			return <AddForm date={oDate} onSuccess={() => resetEntryForm()} />;
+		} else if (mode === 2) {
+			return <EditForm entry={entry} onSuccess={() => resetEntryForm()} />;
+		}
 	}
-
-	function handleButtonDirection(e) {
-		console.log('event' + e.target);
-
-		console.log('hbd.' + e.target.value);
-
-		let date = moment(oDate, 'YYYY-MM-DD');
-		let updateDate = date.add(e.target.value, 'days').format('YYYY-MM-DD');
-		setDate(updateDate);
-		loadDay(updateDate);
-	}
-
-
-	function showAddForm(e, date){
-		setEntryForm(<AddForm date={date} submit={e=>e.preventDefault()}  />)
-	}
-	function showEditForm(e){
-		setEntryForm( <EditForm
-		/>)
-	}
-
-
 
 	return (
 		<Fragment>
 			<h1>OneDay</h1>
-			<RouterNavLink to="/epcal2/react/">Home</RouterNavLink>
+			<RouterNavLink to="/">Home</RouterNavLink>
 
-			<button onClick={
-				(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-                    &lt;&lt;-Prev
-                </button>
-				<input type="text" className="form-control" id="formDpInput" defaultValue={oDate} 
-					onChange={e=>setDate(e.target.value)}/>
-                <button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-                    Next-&gt;&gt;
-                </button>
+			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
+				&lt;&lt;-Prev
+			</button>
+			<input
+				type="text"
+				className="form-control"
+				id="formDpInput"
+				value={oDate}
+				// defaultValue={oDate}
+				onChange={(e) => updateDate(e)}
+			/>
 			{oDate}
-			entryform{entryForm}--
+			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
+				Next-&gt;&gt;
+			</button>
+
+			{showAddEditForm(formMode)}
 			<ul>
 				{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
 					newText = newText.replace(/..\/uploads/g, `${constants.UPLOAD_PREFIX}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-					const calLinkDate = `posts/?gotoYearMonth=${moment(entry.date).format('YYYY-MM')}`;
-					const oneDayLink = `main#/oneDay?date=${moment(entry.date).format('YYYY-MM-DD')}`;
-					let showEntryDate = <a href={oneDayLink}>{dateFormated}</a>;
-					// <a onclick={e=> {location.href=`main#/oneDay?date=${dateFormated}`}}>{dateFormated}</a>);
-					// if (props.editLink) {
-					//     showEntryDate = (
-					//         <a
-					//             onClick={(e) => {
-					//                 e.preventDefault();
-					//                 props.editLink(entry);
-					//             }}
-					//         >
-					//             {moment(entry.date).format('ddd MMM, DD YYYY')}
-					//         </a>
-					//     );
-					//  <TagLister source={newText} /> }
+					let showEntryDate = (
+						<a onClick={(e) => showEditForm(e, entry)} href="#?">
+							{dateFormated}
+						</a>
+					);
 
 					return (
 						<li key={entry.id} className="blogEntry">
-							{showEntryDate}|
-							<a href={calLinkDate}>Cal</a>|
+							{showEntryDate} |
 							<ReactMarkdown source={newText} escapeHtml={false} />
 						</li>
 					);

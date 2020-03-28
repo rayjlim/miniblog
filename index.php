@@ -8,9 +8,16 @@ $app = new Slim(array(
     'view' => new Twig
 ));
 
-if(DEVELOPMENT !== null && DEVELOPMENT)
+if (DEVELOPMENT !== null && DEVELOPMENT) {
     // $app->add(new AuthMiddleware());
     $_SESSION[SESSION_USER_ID] = 1;
+    //Access-Control-Allow-Origin header with wildcard.
+    header('Access-Control-Allow-Origin: *');
+    header("Access-Control-Expose-Headers: Access-Control-*");
+    header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept");
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+    header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+}
 else{
     $app->add(new AuthMiddleware()); 
 }
@@ -40,9 +47,6 @@ require 'backend/core/page_message.php';
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
 });
-
-//Access-Control-Allow-Origin header with wildcard.
-header('Access-Control-Allow-Origin: *');
 
 $entryHandler = DAOFactory::EntryHandler($app);
 $app->get('/main/', $entryHandler->showMain());
