@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-var
 const AddForm = (props) => {
 	// console.log('props :', props);
 	const [ content, setContent ] = useState('');
-	const [ date, setDate ] = useState('');
+	const [ date, setDate ] = useState(props.date);
 
 	useEffect(() => {
 		console.log('AddForm: useEffect');
@@ -93,15 +93,7 @@ const AddForm = (props) => {
 		</div>
 	);
 };
-//     constructor(props) {
-//         super(props);
-//         // create a ref to store the textInput DOM element
-//         this.handleTemplate = this.handleTemplate.bind(this);
-//        
-//         this.minusYear = this.minusYear.bind(this);
-//         this.minusDay = this.minusDay.bind(this);
-//         this.addFAtag = this.addFAtag.bind(this);
-//     }
+
 //     render() {
 //         let templateStyle = {
 //             float: 'right'
