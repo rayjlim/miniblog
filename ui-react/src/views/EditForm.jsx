@@ -4,21 +4,15 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 
 const EditForm = (props) => {
-	// class EditForm extends Component {
-	//     constructor(props) {
-	//         super(props);
-	//         // create a ref to store the textInput DOM element
-
-	//         this.save = this.save.bind(this);
-	//         this.subToDate = this.subToDate.bind(this);
-	//         this.addToDate = this.addToDate.bind(this);
-	//         this.addFAtag = this.addFAtag.bind(this);
-	//     }
 	let escapedContent = props.entry.content.replace(
 		/<br\s*\/>/g,
 		`
 `
-	);
+    );
+    let textareaInput = null;
+    function setTextInputRef(element){
+        textareaInput = element
+    }
 	const [ date, setDate ] = useState(props.entry.date);
 	const [ content, setContent ] = useState(escapedContent);
 
@@ -28,12 +22,11 @@ const EditForm = (props) => {
 			date // TODO: check date format
 		};
 		console.log('axios entry :', entry);
-        const options = {
-            method: 'PUT',
-           };
-        axios.put(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
-        entry
-        ,options)
+		const options = {
+			method: 'PUT'
+		};
+		axios
+			.put(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`, entry, options)
 			.then((response) => {
 				console.log(response);
 				// $('.toast').toast('dispose');
@@ -74,12 +67,20 @@ const EditForm = (props) => {
 			});
 	}
 
+	function addFAtag(e) {
+		textareaInput.value += `
+<i class="fas fa-" /> `;
+	}
+
 	return (
 		<div className="well">
 			{/* <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
                     fa-template
                 </button> */}
 			<strong>Edit Entry</strong>
+			<button onClick={(e) => addFAtag(e)} className="btn btn-info" style={templateStyle}>
+				fa-template
+			</button>
 			<p>
 				link: [link text](URL){' '}
 				<a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">Cheatsheet</a>
@@ -87,6 +88,7 @@ const EditForm = (props) => {
 			{props.entry.id}
 			<div className="form-group">
 				<textarea
+					ref={setTextInputRef}
 					onChange={(event) => setContent(event.target.value)}
 					className="form-control"
 					placeholder="Add ..."
@@ -121,34 +123,9 @@ const EditForm = (props) => {
 			<button onClick={handleDelete} className="btn btn-danger pull-right">
 				Delete
 			</button>
-            <ReactMarkdown source={content} escapeHtml={false} />
-
-           
+			<ReactMarkdown source={content} escapeHtml={false} />
 		</div>
 	);
 };
-
-//     save(e) {
-//         const entry = {
-//             id: props.entry.id,
-//             content: this.refs.content.value.trim(),
-//             date: this.refs.date.value.trim()
-//         };
-//         props.submit(entry);
-//     }
-
-//     subToDate(e) {
-//         this.refs.date.value = moment(this.refs.date.value.trim()).subtract(1, 'days').format('YYYY-MM-DD');
-//     }
-
-//     addToDate(e) {
-//         this.refs.date.value = moment(this.refs.date.value.trim()).add(1, 'days').format('YYYY-MM-DD');
-//     }
-
-//     addFAtag(e) {
-//         this.refs.content.value += `
-// <i class="fas fa-" /> `;
-//     }
-// }
 
 export default EditForm;
