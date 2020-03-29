@@ -88,9 +88,11 @@ const OneDay = () => {
 	return (
 		<Fragment>
 			<h1>OneDay</h1>
-			<RouterNavLink to="/">Home</RouterNavLink>
-			<RouterNavLink to="/textentry">textentry</RouterNavLink>
-			<RouterNavLink to="/sameday">sameday</RouterNavLink>
+			<RouterNavLink to="/textentry">Search</RouterNavLink>
+			<RouterNavLink to="/sameday">Same Day</RouterNavLink>
+			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+
+
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				&lt;&lt;-Prev
 			</button>
