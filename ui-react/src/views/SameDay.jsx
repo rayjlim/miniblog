@@ -4,7 +4,7 @@ import constants from '../constants';
 import axios from 'axios';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
-
+const DEBOUNCE_TIME = 300;
 const SameDay = () => {
 	// class ContactForm extends React.Component {
 	const [ data, setData ] = useState({ entries: [] });
@@ -32,14 +32,18 @@ const SameDay = () => {
 			// You can await here
 			const result = await axios(`${constants.REST_ENDPOINT}api/sameDayEntries/?day=${_date}`);
 			console.log('result :', result);
-			setData(result.data);
+			console.log('typeof result.data :', typeof result.data);
+			if(typeof result.data === 'string')
+			console.log('invalid json');
+
+			else{
+				setData(result.data);
+			}
 			// ...
 		})();
 	}
 
 	function handleButtonDirection(e) {
-		console.log('event' + e.target);
-
 		console.log('hbd.' + e.target.value);
 
 		let date = moment(oDate, 'YYYY-MM-DD');
@@ -48,10 +52,18 @@ const SameDay = () => {
 		loadDay(updateDate);
 	}
 
+	let debouncedTextEdit = debounce(handleDateTextEdit, DEBOUNCE_TIME);
+
+	function handleDateTextEdit(text){
+		setDate(text)
+		loadDay(text);
+	}
+
 	return (
 		<Fragment>
-			<h1>OneDay</h1>
-			<RouterNavLink to="/epcal2/react/">Home</RouterNavLink>
+			<h1>Same Day</h1>
+			<RouterNavLink to="/">Home</RouterNavLink>
+			<RouterNavLink to="/textentry">textentry</RouterNavLink>
 
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				&lt;&lt;-Prev
@@ -61,7 +73,7 @@ const SameDay = () => {
 				className="form-control"
 				id="formDpInput"
 				defaultValue={oDate}
-				onChange={(e) => setDate(e.target.value)}
+				onChange={(e) => debouncedTextEdit(e.target.value)}
 			/>
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
 				Next-&gt;&gt;
@@ -72,27 +84,12 @@ const SameDay = () => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
 					newText = newText.replace(/..\/uploads/g, `${constants.UPLOAD_PREFIX}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-					const calLinkDate = `posts/?gotoYearMonth=${moment(entry.date).format('YYYY-MM')}`;
-					const oneDayLink = `main#/oneDay?date=${moment(entry.date).format('YYYY-MM-DD')}`;
+					const oneDayLink = `/?date=${entry.date}`;
 					let showEntryDate = <a href={oneDayLink}>{dateFormated}</a>;
-					// <a onclick={e=> {location.href=`main#/oneDay?date=${dateFormated}`}}>{dateFormated}</a>);
-					// if (props.editLink) {
-					//     showEntryDate = (
-					//         <a
-					//             onClick={(e) => {
-					//                 e.preventDefault();
-					//                 props.editLink(entry);
-					//             }}
-					//         >
-					//             {moment(entry.date).format('ddd MMM, DD YYYY')}
-					//         </a>
-					//     );
-					//  <TagLister source={newText} /> }
 
 					return (
 						<li key={entry.id} className="blogEntry">
 							{showEntryDate}|
-							<a href={calLinkDate}>Cal</a>|
 							<ReactMarkdown source={newText} escapeHtml={false} />
 						</li>
 					);
@@ -100,6 +97,21 @@ const SameDay = () => {
 			</ul>
 		</Fragment>
 	);
+};
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
 };
 
 export default SameDay;

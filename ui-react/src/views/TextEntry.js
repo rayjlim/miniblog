@@ -75,10 +75,7 @@ const TextEntry = () => {
 		<Fragment>
 			<h1>Text Search</h1>
 			<RouterNavLink to="/">Home</RouterNavLink>
-			<RouterNavLink to="/textentry">textentry</RouterNavLink>
 			<RouterNavLink to="/sameday">sameday</RouterNavLink>
-
-
 			<input
 				type="text"
 				className="form-control"
