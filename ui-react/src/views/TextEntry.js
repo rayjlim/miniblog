@@ -88,7 +88,7 @@ const TextEntry = () => {
 			<ul>
 			{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
-					newText = newText.replace(/..\/uploads/g, `${constants.UPLOAD_PREFIX}uploads`);
+					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
 					let showEntryDate = (
 						<a onClick={(e) => showEditForm(e, entry)} href="#?">

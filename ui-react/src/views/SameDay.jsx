@@ -82,7 +82,7 @@ const SameDay = () => {
 			<ul>
 				{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
-					newText = newText.replace(/..\/uploads/g, `${constants.UPLOAD_PREFIX}uploads`);
+					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
 					const oneDayLink = `/?date=${entry.date}`;
 					let showEntryDate = <a href={oneDayLink}>{dateFormated}</a>;
