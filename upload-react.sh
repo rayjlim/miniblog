@@ -32,6 +32,10 @@ fi
 cd build
 # --dry-run
 rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss'  . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER 
- 
+
+pwd
 cd static
-rsync -rave 'ssh -oHostKeyAlgorithms=+ssh-dss' --delete  . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDERstatic/
+STATIC_DIR=$FTP_TARGETFOLDER"static/"
+echo $STATIC_DIR
+
+rsync -rave 'ssh -oHostKeyAlgorithms=+ssh-dss' --delete  . $FTP_USER@$FTP_HOST:$STATIC_DIR
