@@ -18,6 +18,7 @@ export default class Calendar extends React.Component {
 
 		this.handleDateClick = this.handleDateClick.bind(this);
 		this.getCalendarData = this.getCalendarData.bind(this);
+		this.gotoDate = this.gotoDate.bind(this);
 	}
 	calendarRef = React.createRef();
 
@@ -64,7 +65,12 @@ export default class Calendar extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
-	}
+  }
+  
+  gotoDate(date){
+    const day=moment(date);
+    window.location = `/?date=${day.format('YYYY-MM-DD')}`;
+  }
 
 	handleDateClick = (arg) => {
 		alert(arg.dateStr);
@@ -84,7 +90,9 @@ export default class Calendar extends React.Component {
 
 					events={(fetchInfo, successCallback, failureCallback) =>
 						this.getCalendarData(fetchInfo, successCallback, failureCallback)}
-					dateClick={this.handleDateclick}
+          dateClick={this.handleDateclick}
+          
+          eventClick={e=>this.gotoDate( e.event.start)}
 				/>
 			</Fragment>
 		);
