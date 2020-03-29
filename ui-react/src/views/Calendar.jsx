@@ -6,8 +6,11 @@ import moment from 'moment';
 import constants from '../constants';
 import axios from 'axios';
 import './main.scss'; // webpack must be configured to do this
+import { useHistory } from 'react-router-dom';
 
-export default class Calendar extends React.Component {
+import { withRouter } from 'react-router-dom';
+
+class Calendar extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -40,16 +43,13 @@ export default class Calendar extends React.Component {
 
 	async getCalendarData(fetchInfo, successCallback) {
 		try {
-
-      let minFirstDay = moment();
-      console.log('fetchInfo :', fetchInfo);
+			let minFirstDay = moment();
+			console.log('fetchInfo :', fetchInfo);
 			if (fetchInfo) {
-      
-        const targetDay = moment(fetchInfo.start)
-         minFirstDay = targetDay.add(7, 'days');
-        
-      }
-      console.log('minFirstDay :', minFirstDay);
+				const targetDay = moment(fetchInfo.start);
+				minFirstDay = targetDay.add(7, 'days');
+			}
+			console.log('minFirstDay :', minFirstDay);
 
 			const response = await axios(`${constants.REST_ENDPOINT}api/posts/?month=${minFirstDay.format('YYYY-MM')}`);
 
@@ -65,12 +65,12 @@ export default class Calendar extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
-  }
-  
-  gotoDate(date){
-    const day=moment(date);
-    window.location = `/?date=${day.format('YYYY-MM-DD')}`;
-  }
+	}
+
+	gotoDate(date) {
+		const day = moment(date);
+		this.props.history.push(`/?date=${day.format('YYYY-MM-DD')}`);
+	}
 
 	handleDateClick = (arg) => {
 		alert(arg.dateStr);
@@ -90,11 +90,12 @@ export default class Calendar extends React.Component {
 
 					events={(fetchInfo, successCallback, failureCallback) =>
 						this.getCalendarData(fetchInfo, successCallback, failureCallback)}
-          dateClick={this.handleDateclick}
-          
-          eventClick={e=>this.gotoDate( e.event.start)}
+					dateClick={this.handleDateclick}
+					eventClick={(e) => this.gotoDate(e.event.start)}
 				/>
 			</Fragment>
 		);
 	}
 }
+
+export default withRouter(Calendar);
