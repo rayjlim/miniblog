@@ -62,6 +62,8 @@ $cudHandler = DAOFactory::CUDHandler($app);
 $app->post('/api/posts/', $cudHandler->addEntry());
 $app->put('/api/posts/:id', $cudHandler->updateEntry());
 $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
+$app->options('/api/posts/:id', $cudHandler->none());
+
 
 $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/graph/', $graphHandler->handle());
