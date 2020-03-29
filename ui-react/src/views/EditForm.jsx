@@ -22,11 +22,9 @@ const EditForm = (props) => {
 			date // TODO: check date format
 		};
 		console.log('axios entry :', entry);
-		const options = {
-			method: 'PUT'
-		};
+	
 		axios
-			.put(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`, entry, options)
+			.put(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`, entry)
 			.then((response) => {
 				console.log(response);
 				// $('.toast').toast('dispose');
@@ -62,8 +60,8 @@ const EditForm = (props) => {
 			})
 			.catch((error) => {
 				console.log(error);
-				// alert(error);
-				props.onSuccess();
+				alert(error);
+				
 			});
 	}
 

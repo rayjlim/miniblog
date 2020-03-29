@@ -16,7 +16,7 @@ const OneDay = () => {
 
 	const btnShowAddForm = (
 		<button onClick={(e) => showAddForm(e)} className="btn btn-default">
-			Show Add Form{oDate}
+			Show Add Form
 		</button>
 	);
 
@@ -89,7 +89,8 @@ const OneDay = () => {
 		<Fragment>
 			<h1>OneDay</h1>
 			<RouterNavLink to="/">Home</RouterNavLink>
-
+			<RouterNavLink to="/textentry">textentry</RouterNavLink>
+			<RouterNavLink to="/sameday">sameday</RouterNavLink>
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				&lt;&lt;-Prev
 			</button>
