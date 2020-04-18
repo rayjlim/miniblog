@@ -14,3 +14,4 @@ feature_ideas/*
 __node_modules/*
 ui-react/build/*
 ui-react/node_modules/*
+ui-react/docs/*

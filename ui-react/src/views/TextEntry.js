@@ -4,8 +4,8 @@ import constants from '../constants';
 import axios from 'axios';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
-import AddForm from './AddForm.jsx'; //eslint-disable no-unused-vars
-import EditForm from './EditForm.jsx'; //eslint-disable no-unused-vars
+import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
+import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 
 const DEBOUNCE_TIME = 300;
 
