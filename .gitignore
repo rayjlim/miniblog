@@ -15,3 +15,4 @@ __node_modules/*
 ui-react/build/*
 ui-react/node_modules/*
 ui-react/docs/*
+ui-react/styleguide/*

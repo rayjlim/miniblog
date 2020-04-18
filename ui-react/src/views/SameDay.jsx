@@ -4,12 +4,16 @@ import constants from '../constants';
 import axios from 'axios';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
+import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
+import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 const DEBOUNCE_TIME = 300;
 
 const SameDay = () => {
 	// class ContactForm extends React.Component {
 	const [ data, setData ] = useState({ entries: [] });
 	const [ oDate, setDate ] = useState('');
+	const [ formMode, setFormMode ] = useState(0);
+	const [ entry, setEntry ] = useState({});
 
 	useEffect(() => {
 		console.log('useEffect');
@@ -59,13 +63,66 @@ const SameDay = () => {
 		setDate(text)
 		loadDay(text);
 	}
+	function showAddForm(e) {
+		setFormMode(1);
+	}
+	function showEditForm(e, entry) {
+		e.preventDefault();
+		console.log('id :', entry.id);
+		setFormMode(2);
+		setEntry(entry);
+	}
+	function resetEntryForm() {
+		setFormMode(0);
+		loadDay(oDate);
+	}
+	function showAddEditForm(mode) {
+		console.log('mode :', mode);
+		if (!mode || mode === 0) {
+			return (
+				<button onClick={(e) => showAddForm(e)} className="btn btn-default">
+					Show Add Form
+				</button>
+			);
+		} else if (mode === 1) {
+			return <AddForm date={''} onSuccess={() => resetEntryForm()} />;
+		} else if (mode === 2) {
+			return <EditForm entry={entry} onSuccess={() => resetEntryForm()} />;
+		}
+	}
+
+function showEntries(){
+
+	return (formMode !== 1 && formMode !==2)?(<Fragment>
+		<h2>{oDate}</h2>
+	<ul>
+		{data.entries.map((entry) => {
+			let newText = entry.content.replace(/<br \/>/g, '\n');
+			newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
+			const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
+			
+			let showEntryDate = (
+				<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
+					{dateFormated}
+				</button>
+			);
+			return (
+				<li key={entry.id} className="blogEntry">
+					{showEntryDate}|
+					<ReactMarkdown source={newText} escapeHtml={false} />
+				</li>
+			);
+		})}
+	</ul>
+	</Fragment>) : '';
+}
 
 	return (
 		<Fragment>
 			<h1>Same Day</h1>
 			<RouterNavLink to="/">Home</RouterNavLink>
 			<RouterNavLink to="/textentry">textentry</RouterNavLink>
-
+			{showAddEditForm(formMode)}
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				&lt;&lt;-Prev
 			</button>
@@ -79,23 +136,7 @@ const SameDay = () => {
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
 				Next-&gt;&gt;
 			</button>
-			{oDate}
-			<ul>
-				{data.entries.map((entry) => {
-					let newText = entry.content.replace(/<br \/>/g, '\n');
-					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
-					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-					const oneDayLink = `/?date=${entry.date}`;
-					let showEntryDate = <a href={oneDayLink}>{dateFormated}</a>;
-
-					return (
-						<li key={entry.id} className="blogEntry">
-							{showEntryDate}|
-							<ReactMarkdown source={newText} escapeHtml={false} />
-						</li>
-					);
-				})}
-			</ul>
+			{showEntries()}
 		</Fragment>
 	);
 };
@@ -116,4 +157,15 @@ function debounce(func, wait, immediate) {
 };
 
 export default SameDay;
+
+
+
+
+
+
+
+
+
+
+
 
