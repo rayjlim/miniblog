@@ -4,9 +4,16 @@ import constants from '../constants';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 import moment from 'moment';
-import AddForm from './AddForm.jsx'; //eslint-disable no-unused-vars
-import EditForm from './EditForm.jsx'; //eslint-disable no-unused-vars
+import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
+import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 
+/**
+ * Component to Display of One Day style
+ * 
+ * @component
+ * @example
+ * <Route path="/oneday" component={OneDay} />
+ */
 const OneDay = () => {
 	const [ data, setData ] = useState({ entries: [] });
 	const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
@@ -20,6 +27,11 @@ const OneDay = () => {
 		</button>
 	);
 
+	/**
+	 * Get posts for date
+	 * @function
+	 * @param  {string} date  date of posts
+	 */
 	async function loadDay(date) {
 		console.log('loadDay2 oDate :', date);
 		const result = await axios(`${constants.REST_ENDPOINT}api/posts/?date=${date}`);
@@ -27,6 +39,11 @@ const OneDay = () => {
 		setData(result.data);
 	}
 
+	/**
+	 * Handle change in day Previous | Next
+	 * @function
+	 * @param  {Object} e Event of Button click
+	 */
 	function handleButtonDirection(e) {
 		let _date = moment(oDate, 'YYYY-MM-DD');
 		let updateDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
@@ -91,7 +108,6 @@ const OneDay = () => {
 			<RouterNavLink to="/textentry">Search</RouterNavLink>
 			<RouterNavLink to="/sameday">Same Day</RouterNavLink>
 			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
-
 
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				&lt;&lt;-Prev

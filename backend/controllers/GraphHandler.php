@@ -11,7 +11,7 @@ function printEntrys($carry, $item)
     $preparedContent = preg_replace($pattern, $replacement, $item['content']);
 
     //replace the icons as well
-    $pattern = '/<i class="fa[sb] fa-([\w\-]*)"(><\/i>|\s?\/>)/';
+    $pattern = '/<i class="fa[sb]? fa-([\w\-]*)"(><\/i>|\s?\/>)/';
     $replacement = '&lt;${1}&gt; :';
     $preparedContent = preg_replace($pattern, $replacement,$preparedContent);
 
@@ -106,7 +106,7 @@ class GraphHandler extends AbstractController
             $qLength = sizeof($this->QUESTIONOTDAY);
             $modulo = $dayNumber%$qLength;
             $text = $this->QUESTIONOTDAY[$modulo];
-            $link = "http://".DOMAIN."/".ROOT_URL."index.php/main#/oneDay?pretext=#qod";
+            $link = "http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay?pretext=#qod";
             $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
       .$text."<br><br>";
 

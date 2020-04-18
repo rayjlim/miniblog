@@ -67,7 +67,7 @@ const EditForm = (props) => {
 
 	function addFAtag(e) {
 		textareaInput.value += `
-<i class="fas fa-" /> `;
+<i class="fa fa-" /> `;
 	}
 
 	return (
@@ -127,3 +127,4 @@ const EditForm = (props) => {
 };
 
 export default EditForm;
+

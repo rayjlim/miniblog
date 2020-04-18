@@ -21,6 +21,10 @@ const TextEntry = () => {
 		getEntries('')
 	}, []);
 
+	/** 
+	 * Get blog entries for text search
+	 * @param  {string} text text to search for
+	 */
 	function getEntries(text) {
 		console.log('getEntries#text:', text);
 		(async () => {
@@ -31,7 +35,6 @@ const TextEntry = () => {
 			setText(text)
 			// ...
 		})();
-
 	}
 
 	let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
@@ -60,6 +63,7 @@ const TextEntry = () => {
 		setFormMode(0);
 		getEntries(searchText)
 	}
+	
 	function showAddEditForm(mode) {
 		console.log('mode :', mode);
 		if (!mode || mode === 0) {

@@ -1,6 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
-import TagLister from './TagLister.jsx'; // eslint-disable-line no-unused-vars
+
 import moment from 'moment';
 
 const EntryList = (props) => {
@@ -16,14 +16,14 @@ const EntryList = (props) => {
                 // <a onclick={e=> {location.href=`main#/oneDay?date=${dateFormated}`}}>{dateFormated}</a>);
                 if (props.editLink) {
                     showEntryDate = (
-                        <a
+                        <button
                             onClick={(e) => {
                                 e.preventDefault();
                                 props.editLink(entry);
                             }}
                         >
                             {moment(entry.date).format('ddd MMM, DD YYYY')}
-                        </a>
+                        </button>
                     );
                 }
 
@@ -32,7 +32,7 @@ const EntryList = (props) => {
                         {showEntryDate}|
                         <a href={calLinkDate}>Cal</a>|
                         <ReactMarkdown source={newText} escapeHtml={false} />
-                        <TagLister source={newText} />
+                    
                     </li>
                 );
             })}
@@ -41,3 +41,6 @@ const EntryList = (props) => {
 };
 
 export default EntryList;
+
+
+

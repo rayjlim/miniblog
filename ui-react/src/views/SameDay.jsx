@@ -5,6 +5,7 @@ import axios from 'axios';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 const DEBOUNCE_TIME = 300;
+
 const SameDay = () => {
 	// class ContactForm extends React.Component {
 	const [ data, setData ] = useState({ entries: [] });
@@ -115,3 +116,4 @@ function debounce(func, wait, immediate) {
 };
 
 export default SameDay;
+
