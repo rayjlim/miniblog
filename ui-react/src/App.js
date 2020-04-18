@@ -4,6 +4,7 @@ import SameDay from './views/SameDay';
 import TextEntry from './views/TextEntry';
 import OneDay from './views/OneDay';
 import Calendar from './views/Calendar';
+import Media from './views/Media';
 
 import './App.css';
 
@@ -14,6 +15,8 @@ function App() {
 		<div id="app" className="App d-flex flex-column h-100">
 			<Router history={history}>
 				<Switch>
+
+					<Route path="/media" component={Media} />
 					<Route path="/calendar" component={Calendar} />
 					<Route path="/sameday" exact component={SameDay} />
 					<Route path="/textentry" exact component={TextEntry} />

@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-var
 
 const AddForm = (props) => {
 	// console.log('props :', props);
-	const [ content, setContent ] = useState('');
+	const [ content, setContent ] = useState(props.content||'');
 	const [ date, setDate ] = useState(props.date);
 
 	useEffect(() => {
@@ -66,7 +66,11 @@ const AddForm = (props) => {
 			</p>
 
 			<div className="form-group">
-				<textarea className="form-control" placeholder="Add ..." rows="6" onChange={(e) => contentChange(e)} />
+				<textarea className="form-control" 
+					placeholder="Add ..." 
+					rows="6" 
+					onChange={(e) => contentChange(e)}
+					defaultValue={props.content} />
 			</div>
 
 			<div className="form-group">
@@ -148,6 +152,8 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
+
+
 
 
 
