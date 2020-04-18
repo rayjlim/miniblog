@@ -77,9 +77,16 @@ const TextEntry = () => {
 
 	return (
 		<Fragment>
-			<h1>Text Search</h1>
+			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
 			<RouterNavLink to="/">Home</RouterNavLink>
-			<RouterNavLink to="/sameday">sameday</RouterNavLink>
+			<RouterNavLink to="/sameday">Same Day</RouterNavLink>
+			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+            </nav>
+			<br /><br />
+
+			<h1>Text Search</h1>
+			
+			
 			<input
 				type="text"
 				className="form-control"
@@ -89,15 +96,15 @@ const TextEntry = () => {
 			/>
 			{searchText}
 			{showAddEditForm(formMode)}
-			<ul>
+			<ul className="entriesList">
 			{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
 					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
 					let showEntryDate = (
-						<a onClick={(e) => showEditForm(e, entry)} href="#?">
+						<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
 							{dateFormated}
-						</a>
+						</button>
 					);
 
 					return (
@@ -108,11 +115,18 @@ const TextEntry = () => {
 					);
 				})}
 			</ul>
+
+			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+                    <RouterNavLink to="/" className="btn navbar-btn">
+                        Blog Page
+                    </RouterNavLink>
+                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+                        Upload Pix
+                    </a>
+                </nav>
 		</Fragment>
 	);
 };
-
-
 
 function debounce(func, wait, immediate) {
 	var timeout;

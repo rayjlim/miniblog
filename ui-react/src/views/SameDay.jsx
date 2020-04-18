@@ -38,10 +38,8 @@ const SameDay = () => {
 			const result = await axios(`${constants.REST_ENDPOINT}api/sameDayEntries/?day=${_date}`);
 			console.log('result :', result);
 			console.log('typeof result.data :', typeof result.data);
-			if(typeof result.data === 'string')
-			console.log('invalid json');
-
-			else{
+			if (typeof result.data === 'string') console.log('invalid json');
+			else {
 				setData(result.data);
 			}
 			// ...
@@ -59,8 +57,8 @@ const SameDay = () => {
 
 	let debouncedTextEdit = debounce(handleDateTextEdit, DEBOUNCE_TIME);
 
-	function handleDateTextEdit(text){
-		setDate(text)
+	function handleDateTextEdit(text) {
+		setDate(text);
 		loadDay(text);
 	}
 	function showAddForm(e) {
@@ -91,37 +89,44 @@ const SameDay = () => {
 		}
 	}
 
-function showEntries(){
+	function showEntries() {
+		return formMode !== 1 && formMode !== 2 ? (
+			<Fragment>
+				<h2>{oDate}</h2>
+				<ul className="entriesList">
+					{data.entries.map((entry) => {
+						let newText = entry.content.replace(/<br \/>/g, '\n');
+						newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
+						const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
 
-	return (formMode !== 1 && formMode !==2)?(<Fragment>
-		<h2>{oDate}</h2>
-	<ul>
-		{data.entries.map((entry) => {
-			let newText = entry.content.replace(/<br \/>/g, '\n');
-			newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
-			const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-			
-			let showEntryDate = (
-				<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
-					{dateFormated}
-				</button>
-			);
-			return (
-				<li key={entry.id} className="blogEntry">
-					{showEntryDate}|
-					<ReactMarkdown source={newText} escapeHtml={false} />
-				</li>
-			);
-		})}
-	</ul>
-	</Fragment>) : '';
-}
+						let showEntryDate = (
+							<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
+								{dateFormated}
+							</button>
+						);
+						return (
+							<li key={entry.id} className="blogEntry">
+								{showEntryDate}|
+								<ReactMarkdown source={newText} escapeHtml={false} />
+							</li>
+						);
+					})}
+				</ul>
+			</Fragment>
+		) : (
+			''
+		);
+	}
 
 	return (
 		<Fragment>
+			
+			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+			<RouterNavLink to="/textentry">Search</RouterNavLink>
+			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+            </nav>
+			<br /><br />
 			<h1>Same Day</h1>
-			<RouterNavLink to="/">Home</RouterNavLink>
-			<RouterNavLink to="/textentry">textentry</RouterNavLink>
 			{showAddEditForm(formMode)}
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				&lt;&lt;-Prev
@@ -137,6 +142,15 @@ function showEntries(){
 				Next-&gt;&gt;
 			</button>
 			{showEntries()}
+			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+                    <RouterNavLink to="/" className="btn navbar-btn">
+                        Blog Page
+                    </RouterNavLink>
+                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+                        Upload Pix
+                    </a>
+                </nav>
+
 		</Fragment>
 	);
 };
@@ -144,7 +158,8 @@ function showEntries(){
 function debounce(func, wait, immediate) {
 	var timeout;
 	return function() {
-		var context = this, args = arguments;
+		var context = this,
+			args = arguments;
 		var later = function() {
 			timeout = null;
 			if (!immediate) func.apply(context, args);
@@ -154,13 +169,9 @@ function debounce(func, wait, immediate) {
 		timeout = setTimeout(later, wait);
 		if (callNow) func.apply(context, args);
 	};
-};
+}
 
 export default SameDay;
-
-
-
-
 
 
 

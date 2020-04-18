@@ -80,8 +80,11 @@ class Calendar extends React.Component {
 		console.log('this.state.entries :', this.state.entries);
 		return (
 			<Fragment>
-				<RouterNavLink to="/textentry">textentry</RouterNavLink>
-				<RouterNavLink to="/sameday">sameday</RouterNavLink>
+				<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+					<RouterNavLink to="/textentry">Search</RouterNavLink>
+					<RouterNavLink to="/sameday">Same Day</RouterNavLink>
+                </nav>
+				
 				<FullCalendar
 					ref={this.calendarRef}
 					defaultView="dayGridMonth"
@@ -93,9 +96,20 @@ class Calendar extends React.Component {
 					dateClick={this.handleDateclick}
 					eventClick={(e) => this.gotoDate(e.event.start)}
 				/>
+				<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+                    <RouterNavLink to="/" className="btn navbar-btn">
+                        Blog Page
+                    </RouterNavLink>
+                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+                        Upload Pix
+                    </a>
+                </nav>
 			</Fragment>
 		);
 	}
 }
 
 export default withRouter(Calendar);
+
+
+
