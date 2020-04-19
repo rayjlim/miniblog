@@ -21,6 +21,7 @@ if (DEVELOPMENT !== null && DEVELOPMENT) {
 else{
     $app->add(new AuthMiddleware()); 
 }
+
 $app->view()->appendData(["rooturl" => '/'.ROOT_URL.'/']);
 $app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
 $app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
@@ -82,15 +83,6 @@ $app->get('/api/bookmark/', $bookmarkHandler->apiPath());
 $app->get('/ping', function () {
     echo "{	\"ping\":\"true\"}";
 });
-
-$utilityHandler = DAOFactory::UtilityHandler($app);
-$app->post('/api/morpheuz', $utilityHandler->handleMorpheuz());
-
-$app->get('/sleepstats', function () use ($app) {
-    $app->redirect('sleepstats/');
-});
-$app->get('/sleepstats/', $utilityHandler->showSleepStats());
-$app->get('/api/sleepstats/', $utilityHandler->getSleepStats());
 
 $uploadHandler = DAOFactory::UploadHandler($app);
 $app->get('/uploadForm/', $uploadHandler->form());
