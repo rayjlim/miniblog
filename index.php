@@ -1,4 +1,5 @@
 <?php
+
 require 'common_header.php';
 
 use Slim\Views\Twig as Twig;
@@ -8,13 +9,13 @@ $app = new Slim(array(
     'view' => new Twig
 ));
 
-if (DEVELOPMENT !== null && DEVELOPMENT) {
+if (defined('DEVELOPMENT') && DEVELOPMENT) {
     // $app->add(new AuthMiddleware());
     $_SESSION[SESSION_USER_ID] = 1;
     //Access-Control-Allow-Origin header with wildcard.
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Expose-Headers: Access-Control-*");
-    header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept");
+    header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization");
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
     header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 }
@@ -45,6 +46,14 @@ require 'backend/core/page_message.php';
          $app->redirect('posts/');
      });
  }
+
+$app->get('/security', function () {
+    echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
+});
+$app->options('/security', function () {
+    echo "options-check";
+});
+
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
 });
@@ -63,12 +72,13 @@ $cudHandler = DAOFactory::CUDHandler($app);
 $app->post('/api/posts/', $cudHandler->addEntry());
 $app->put('/api/posts/:id', $cudHandler->updateEntry());
 $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
-$app->options('/api/posts/:id', $cudHandler->none());
-
+$app->options('/api/posts/:id', function () {
+    echo "options-check";
+});
 
 $graphHandler = DAOFactory::GraphHandler($app);
-$app->get('/graph/', $graphHandler->handle());
-$app->get('/api/graph/', $graphHandler->handleApi());
+// $app->get('/graph/', $graphHandler->handle());
+// $app->get('/api/graph/', $graphHandler->handleApi());
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
 
 $logHandler = DAOFactory::LogHandler($app);
@@ -76,9 +86,9 @@ $app->get('/logs/:logfileName', $logHandler->getUrlHandlerWithParam());
 $app->get('/logs/', $logHandler->getUrlHandler($app));
 $app->delete('/logs/:logfileName', $logHandler->delete($app));
 
-$bookmarkHandler = DAOFactory::BookmarkHandler($app);
-$app->get('/bookmark/', $bookmarkHandler->render());
-$app->get('/api/bookmark/', $bookmarkHandler->apiPath());
+// $bookmarkHandler = DAOFactory::BookmarkHandler($app);
+// $app->get('/bookmark/', $bookmarkHandler->render());
+// $app->get('/api/bookmark/', $bookmarkHandler->apiPath());
 
 $app->get('/ping', function () {
     echo "{	\"ping\":\"true\"}";
@@ -92,7 +102,6 @@ $app->get('/uploadRotate/', $uploadHandler->rotate());
 $app->get('/uploadResize/', $uploadHandler->resize());
 $app->post('/uploadRename/', $uploadHandler->rename());
 
-// $mediaHandler = DAOFactory::MediaHandler($app);
 $app->get('/media/', $uploadHandler->listMedia());
 $app->get('/media/:currentDir', $uploadHandler->listMedia());
 $app->delete('/media/', $uploadHandler->deleteMedia());

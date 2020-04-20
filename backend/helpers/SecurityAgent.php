@@ -3,7 +3,7 @@ use \Lpt\DevHelp;
 
 class SecurityAgent
 {
-    public $wowo_cookieLogin = true;
+    public $wowo_cookieLogin = false;
 
     public $iDao = null;
     public $iResource = null;
@@ -191,7 +191,7 @@ class SecurityAgent
         $smsUser = new SmsUser();
         $cookieExpiration = time() + SECONDS_PER_DAY * 30;  // 30 DAYS
         DevHelp::debugMsg('$this->iResource->issetSession(SESSION_USER_ID): ' .
-      $this->iResource->issetSession(SESSION_USER_ID));
+        $this->iResource->issetSession(SESSION_USER_ID));
         if (! $this->iResource->issetSession(SESSION_USER_ID)) {
             DevHelp::debugMsg('not logged in, then check url param, $isLoginPage: ' . $isLoginPage);
             if (! $isLoginPage) {
@@ -220,9 +220,9 @@ class SecurityAgent
                 $this->iResource->setSession(SESSION_USER_FULLNAME, $smsUser->fullname);
             }
         } else {
-            DevHelp::debugMsg(' ELSE user is in session');
+            DevHelp::debugMsg('ELSE user is in session');
             DevHelp::debugMsg('$this->iResource->getSession(SESSION_USER_ID)' .
-        $this->iResource->getSession(SESSION_USER_ID));
+            $this->iResource->getSession(SESSION_USER_ID));
             $loggingOut = $this->checkLoggingOut($req);
             if ($loggingOut) {
                 $this->logoutUser();

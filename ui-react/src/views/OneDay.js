@@ -105,11 +105,12 @@ const OneDay = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-			<RouterNavLink to="/textentry">Search</RouterNavLink>
-			<RouterNavLink to="/sameday">Same Day</RouterNavLink>
-			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
-                </nav>
-				<br /><br />
+				<RouterNavLink to="/textentry">Search</RouterNavLink>
+				<RouterNavLink to="/sameday">Same Day</RouterNavLink>
+				<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+			</nav>
+			<br />
+			<br />
 			<h1>OneDay</h1>
 
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
@@ -129,7 +130,7 @@ const OneDay = () => {
 			</button>
 
 			{showAddEditForm(formMode)}
-			<ul>
+			<ul className="entriesList">
 				{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
 					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
@@ -149,13 +150,13 @@ const OneDay = () => {
 				})}
 			</ul>
 			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-                    <RouterNavLink to="/" className="btn navbar-btn">
-                        Blog Page
-                    </RouterNavLink>
-                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-                        Upload Pix
-                    </a>
-                </nav>
+				<RouterNavLink to="/" className="btn navbar-btn">
+					Blog Page
+				</RouterNavLink>
+				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+					Upload Pix
+				</a>
+			</nav>
 		</Fragment>
 	);
 };

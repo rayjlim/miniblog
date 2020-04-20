@@ -83,11 +83,4 @@ class CUDHandler extends AbstractController
         };
     }
 
-    public function none()
-    {
-        return function ($id) {
-
-        };
-    }
-
 }
