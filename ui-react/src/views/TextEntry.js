@@ -31,8 +31,17 @@ const TextEntry = () => {
 			// You can await here
 			const result = await axios(`${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`);
 			console.log('result :', result);
-			setData(result.data);
-			setText(text)
+			if (result.status !== 200) {
+				console.log('result.status :', result.status);
+				alert(`loading error : ${result.status}`);
+				return;
+			} else if (typeof result.data === 'string') {
+				console.log('invalid json');
+			} else {
+				setData(result.data);
+				setText(text)
+			}
+		
 			// ...
 		})();
 	}
@@ -115,7 +124,7 @@ const TextEntry = () => {
 					);
 				})}
 			</ul>
-
+			<br></br><br></br><br></br>
 			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
                     <RouterNavLink to="/" className="btn navbar-btn">
                         Blog Page

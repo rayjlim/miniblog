@@ -38,8 +38,13 @@ const SameDay = () => {
 			const result = await axios(`${constants.REST_ENDPOINT}api/sameDayEntries/?day=${_date}`);
 			console.log('result :', result);
 			console.log('typeof result.data :', typeof result.data);
-			if (typeof result.data === 'string') console.log('invalid json');
-			else {
+			if (result.status !== 200) {
+				console.log('result.status :', result.status);
+				alert(`loading error : ${result.status}`);
+				return;
+			} else if (typeof result.data === 'string') {
+				console.log('invalid json');
+			} else {
 				setData(result.data);
 			}
 			// ...
@@ -112,6 +117,7 @@ const SameDay = () => {
 						);
 					})}
 				</ul>
+				<br></br><br></br><br></br>
 			</Fragment>
 		) : (
 			''
@@ -120,12 +126,12 @@ const SameDay = () => {
 
 	return (
 		<Fragment>
-			
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-			<RouterNavLink to="/textentry">Search</RouterNavLink>
-			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
-            </nav>
-			<br /><br />
+				<RouterNavLink to="/textentry">Search</RouterNavLink>
+				<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+			</nav>
+			<br />
+			<br />
 			<h1>Same Day</h1>
 			{showAddEditForm(formMode)}
 			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
@@ -143,14 +149,13 @@ const SameDay = () => {
 			</button>
 			{showEntries()}
 			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-                    <RouterNavLink to="/" className="btn navbar-btn">
-                        Blog Page
-                    </RouterNavLink>
-                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-                        Upload Pix
-                    </a>
-                </nav>
-
+				<RouterNavLink to="/" className="btn navbar-btn">
+					Blog Page
+				</RouterNavLink>
+				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+					Upload Pix
+				</a>
+			</nav>
 		</Fragment>
 	);
 };
@@ -172,11 +177,5 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
-
-
-
-
-
-
 
 

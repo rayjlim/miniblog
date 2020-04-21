@@ -23,7 +23,7 @@ else{
     $app->add(new AuthMiddleware()); 
 }
 
-$app->view()->appendData(["rooturl" => '/'.ROOT_URL.'/']);
+$app->view()->appendData(["rooturl" => '/'.ROOT_URL]);
 $app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
 $app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
 
