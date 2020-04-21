@@ -25,7 +25,8 @@
     "eject": "react-scripts eject",
     "doc": "npx jsdoc -c conf.json",
     "styleguidist":"npx styleguidist server",
-    "stop": "ps aux | grep styleguidist | grep -v grep | awk '{print $2}' | xargs kill -9"
+    "stop": "ps aux | grep styleguidist | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "kill": "ps aux | grep react-scripts | grep -v grep | awk '{print $2}' | xargs kill -9"
   },
   "eslintConfig": {
     "extends": "react-app"
