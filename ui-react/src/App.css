@@ -40,7 +40,9 @@
 .entriesList {
   text-align:left;
 }
-
+.markdownDisplay{
+  text-align:left;
+}
 .grid-3mw {
   display:grid;
   grid-template-columns: 1fr 2fr 1fr;

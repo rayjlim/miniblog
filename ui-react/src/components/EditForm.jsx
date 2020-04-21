@@ -121,10 +121,13 @@ const EditForm = (props) => {
 			<button onClick={handleDelete} className="btn btn-danger pull-right">
 				Delete
 			</button>
-			<ReactMarkdown source={content} escapeHtml={false} />
+			<div className="markdownDisplay">
+				<ReactMarkdown source={content} escapeHtml={false} />
+			</div>
 		</div>
 	);
 };
 
 export default EditForm;
+
 

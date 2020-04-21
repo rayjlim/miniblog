@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-var
 
 const AddForm = (props) => {
 	// console.log('props :', props);
-	const [ content, setContent ] = useState(props.content||'');
+	const [ content, setContent ] = useState(props.content || '');
 	const [ date, setDate ] = useState(props.date);
 
 	useEffect(() => {
@@ -23,33 +23,33 @@ const AddForm = (props) => {
 		setDate(e.target.value);
 	}
 
-    function handleAdd(e) {
-        console.log('this :', this);
-        const entry = {
-            content: content.trim(),
-            date: date.trim()  // TODO: check date format
-        };
-        axios
-        .post( `${constants.REST_ENDPOINT}api/posts/`, JSON.stringify(entry))
-        .then((response) => {
-            console.log(response);
-            // $('.toast').toast('dispose');
-            // $('.toast-body').html('Saved');
-            // $('.toast').toast({ delay: 4000 });
-            // $('.toast').toast('show');
-            // TODO: clear the fields
-            props.onSuccess();
-        })
-        .catch((error) => {
-            console.log(error);
-            alert(error);
-        });
-    }
+	function handleAdd(e) {
+		console.log('this :', this);
+		const entry = {
+			content: content.trim(),
+			date: date.trim() // TODO: check date format
+		};
+		axios
+			.post(`${constants.REST_ENDPOINT}api/posts/`, JSON.stringify(entry))
+			.then((response) => {
+				console.log(response);
+				// $('.toast').toast('dispose');
+				// $('.toast-body').html('Saved');
+				// $('.toast').toast({ delay: 4000 });
+				// $('.toast').toast('show');
+				// TODO: clear the fields
+				props.onSuccess();
+			})
+			.catch((error) => {
+				console.log(error);
+				alert(error);
+			});
+	}
 
-    function clear(){
-        console.log('clear form');
-        props.onSuccess();
-    }
+	function clear() {
+		console.log('clear form');
+		props.onSuccess();
+	}
 
 	return (
 		<div className="well">
@@ -66,11 +66,13 @@ const AddForm = (props) => {
 			</p>
 
 			<div className="form-group">
-				<textarea className="form-control" 
-					placeholder="Add ..." 
-					rows="6" 
+				<textarea
+					className="form-control"
+					placeholder="Add ..."
+					rows="6"
 					onChange={(e) => contentChange(e)}
-					defaultValue={props.content} />
+					defaultValue={props.content}
+				/>
 			</div>
 
 			<div className="form-group">
@@ -82,16 +84,17 @@ const AddForm = (props) => {
 					defaultValue={props.date}
 				/>
 			</div>
-		
 
-            <ReactMarkdown source={content} escapeHtml={false} />
-                    {/* {formBtns} */}
-			 <button onClick={handleAdd} className="btn btn-primary">
-                    Submit
-                </button>
-                <button onClick={clear} className="btn btn-warning pull-right">
-                    Cancel
-                </button>
+			{/* {formBtns} */}
+			<button onClick={handleAdd} className="btn btn-primary">
+				Submit
+			</button>
+			<button onClick={clear} className="btn btn-warning pull-right">
+				Cancel
+			</button>
+			<div className="markdownDisplay">
+				<ReactMarkdown source={content} escapeHtml={false} />
+			</div>
 		</div>
 	);
 };
@@ -115,8 +118,6 @@ const AddForm = (props) => {
 //         }
 //
 //     }
-
-
 
 //     minusYear(e) {
 //         let currDate = new Date(this.refs.date.value);
@@ -152,9 +153,6 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
-
-
-
 
 
 
