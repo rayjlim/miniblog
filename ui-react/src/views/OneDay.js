@@ -108,26 +108,27 @@ const OneDay = () => {
 				<RouterNavLink to="/textentry">Search</RouterNavLink>
 				<RouterNavLink to="/sameday">Same Day</RouterNavLink>
 				<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+				<a href="https://lilplaytime.com/miniblog/login.php">Login</a>
 			</nav>
 			<br />
 			<br />
 			<h1>OneDay</h1>
-
-			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-				&lt;&lt;-Prev
-			</button>
-			<input
-				type="text"
-				className="form-control"
-				id="formDpInput"
-				value={oDate}
-				// defaultValue={oDate}
-				onChange={(e) => updateDate(e)}
-			/>
-			{oDate}
-			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-				Next-&gt;&gt;
-			</button>
+			<div className="grid-3mw">
+				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
+					&lt;&lt;-Prev
+				</button>
+				<input
+					type="text"
+					className="form-control"
+					id="formDpInput"
+					value={oDate}
+					// defaultValue={oDate}
+					onChange={(e) => updateDate(e)}
+				/>
+				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
+					Next-&gt;&gt;
+				</button>
+			</div>
 
 			{showAddEditForm(formMode)}
 			<ul className="entriesList">

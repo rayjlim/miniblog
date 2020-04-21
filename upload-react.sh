@@ -45,4 +45,4 @@ cd build
 # --dry-run
 rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss'  . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER 
 
-
+ssh  $FTP_USER@$FTP_HOST "chmod 755 $FTP_TARGETFOLDER"

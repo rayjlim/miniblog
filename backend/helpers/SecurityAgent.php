@@ -3,7 +3,7 @@ use \Lpt\DevHelp;
 
 class SecurityAgent
 {
-    public $wowo_cookieLogin = false;
+    public $wowo_cookieLogin = true;
 
     public $iDao = null;
     public $iResource = null;

@@ -14,7 +14,6 @@ rsync -avz  exclude-from-prod.txt $PREP_DIR/
 cd ui-react
 npm run build
 
-
 cd ..
 
 rsync -ravz  ui-react/build/ $PREP_DIR/
@@ -22,7 +21,6 @@ rsync -ravz  ui-react/build/ $PREP_DIR/
 pushd .
 cd $PREP_DIR
 /usr/local/bin/composer install  --no-dev
-
+chmod 755 *.php
 
 echo "build ready"
-popd
