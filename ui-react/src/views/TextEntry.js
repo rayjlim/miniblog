@@ -87,15 +87,15 @@ const TextEntry = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-			<RouterNavLink to="/">Home</RouterNavLink>
-			<RouterNavLink to="/sameday">Same Day</RouterNavLink>
-			<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+			<RouterNavLink to="/"><i class="fa fa-home" /> Home</RouterNavLink>
+			<RouterNavLink to="/sameday"><i class="fa fa-calendar-check" /> Same Day</RouterNavLink>
+			<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> Calendar</RouterNavLink>
             </nav>
 			<br /><br />
 
 			<h1>Text Search</h1>
 			
-			
+			<section className="container">
 			<input
 				type="text"
 				className="form-control"
@@ -103,8 +103,13 @@ const TextEntry = () => {
 				placeholder="Search term"
 				onChange={(e) => search(e.target.value)}
 			/>
-			{searchText}
+		
+			</section>
+
+			<section className="container">
 			{showAddEditForm(formMode)}
+			</section>
+			
 			<ul className="entriesList">
 			{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
@@ -126,11 +131,9 @@ const TextEntry = () => {
 			</ul>
 			<br></br><br></br><br></br>
 			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-                    <RouterNavLink to="/" className="btn navbar-btn">
-                        Blog Page
-                    </RouterNavLink>
+                    
                     <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-                        Upload Pix
+					<i class="fa fa-file-upload" />  Upload Pix
                     </a>
                 </nav>
 		</Fragment>

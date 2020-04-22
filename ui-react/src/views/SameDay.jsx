@@ -127,33 +127,42 @@ const SameDay = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry">Search</RouterNavLink>
-				<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+				<RouterNavLink to="/textentry"><i class="fa fa-search" /> Search</RouterNavLink>
+				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> Calendar</RouterNavLink>
 			</nav>
 			<br />
 			<br />
 			<h1>Same Day</h1>
+			<section className="container">
 			{showAddEditForm(formMode)}
-			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-				&lt;&lt;-Prev
-			</button>
-			<input
+			</section>
+
+			<div className="grid-3mw">
+				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
+				<i class="fa fa-chevron-left" /> Prev
+				</button>
+				<input
 				type="text"
 				className="form-control"
 				id="formDpInput"
 				defaultValue={oDate}
 				onChange={(e) => debouncedTextEdit(e.target.value)}
 			/>
-			<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-				Next-&gt;&gt;
-			</button>
+				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
+					Next <i class="fa fa-chevron-right" />
+				</button>
+			</div>
+
+	
+			<section className="container">
 			{showEntries()}
+			</section>
 			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<RouterNavLink to="/" className="btn navbar-btn">
 					Blog Page
 				</RouterNavLink>
 				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-					Upload Pix
+				<i class="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>
@@ -177,5 +186,11 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
+
+
+
+
+
 
 

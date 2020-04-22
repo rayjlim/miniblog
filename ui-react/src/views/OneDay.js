@@ -95,6 +95,9 @@ const OneDay = () => {
 		let urlParams = new URLSearchParams(param);
 
 		const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
+		console.log('urlParams.has(view) :', urlParams.has('view'));
+		console.log('urlParams.has(view) :', urlParams.has('fileName'));
+		console.log('urlParams.has(view) :', urlParams.has('filePath'));
 		setDate(_date);
 		loadDay(_date);
 	}, []);
@@ -113,9 +116,9 @@ const OneDay = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry">Search</RouterNavLink>
-				<RouterNavLink to="/sameday">Same Day</RouterNavLink>
-				<RouterNavLink to="/calendar">Calendar</RouterNavLink>
+				<RouterNavLink to="/textentry"><i class="fa fa-search" /> Search</RouterNavLink>
+				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> Same Day</RouterNavLink>
+				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> Calendar</RouterNavLink>
 				<a href="https://miniblog.lilplaytime.com/login.php">Login</a>
 			</nav>
 			<br />
@@ -123,7 +126,7 @@ const OneDay = () => {
 			<h1>OneDay</h1>
 			<div className="grid-3mw">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-					&lt;&lt;-Prev
+				<i class="fa fa-chevron-left" /> Prev
 				</button>
 				<input
 					type="text"
@@ -134,20 +137,23 @@ const OneDay = () => {
 					onChange={(e) => updateDate(e)}
 				/>
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-					Next-&gt;&gt;
+					Next <i class="fa fa-chevron-right" />
 				</button>
 			</div>
-
+			<section className="container">
 			{showAddEditForm(formMode)}
+			</section>
+			
+			<section className="container">
 			<ul className="entriesList">
 				{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
 					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
 					let showEntryDate = (
-						<a onClick={(e) => showEditForm(e, entry)} href="#?">
-							{dateFormated}
-						</a>
+						<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
+								{dateFormated}
+						</button>
 					);
 
 					return (
@@ -158,13 +164,14 @@ const OneDay = () => {
 					);
 				})}
 			</ul>
+			</section>
 			<br></br><br></br><br></br>
 			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<RouterNavLink to="/" className="btn navbar-btn">
 					Blog Page
 				</RouterNavLink>
 				<a href={`${constants.REST_ENDPOINT}uploadForm/`} className="btn navbar-btn">
-					Upload Pix
+				<i class="fa fa-file-upload" /> Upload Pix
 				</a>
 				<RouterNavLink to="/media?fileName=113D8AC7-4D67-41B7-903D-47E1D91ADB7E.jpeg&filePath=2020-04/" className="btn navbar-btn">
 					Media

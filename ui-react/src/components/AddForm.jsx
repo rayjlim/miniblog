@@ -87,10 +87,10 @@ const AddForm = (props) => {
 
 			{/* {formBtns} */}
 			<button onClick={handleAdd} className="btn btn-primary">
-				Submit
+			<i class="fa fa-save" /> Submit
 			</button>
 			<button onClick={clear} className="btn btn-warning pull-right">
-				Cancel
+				<i class="fa fa-ban" /> Cancel
 			</button>
 			<div className="markdownDisplay">
 				<ReactMarkdown source={content} escapeHtml={false} />
@@ -153,6 +153,8 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
+
+
 
 
 

@@ -84,7 +84,8 @@ class Calendar extends React.Component {
 					<RouterNavLink to="/textentry">Search</RouterNavLink>
 					<RouterNavLink to="/sameday">Same Day</RouterNavLink>
                 </nav>
-				
+				<br />
+			<br />
 				<FullCalendar
 					ref={this.calendarRef}
 					defaultView="dayGridMonth"
@@ -96,6 +97,8 @@ class Calendar extends React.Component {
 					dateClick={this.handleDateclick}
 					eventClick={(e) => this.gotoDate(e.event.start)}
 				/>
+						<br />
+			<br />
 				<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
                     <RouterNavLink to="/" className="btn navbar-btn">
                         Blog Page
@@ -110,6 +113,7 @@ class Calendar extends React.Component {
 }
 
 export default withRouter(Calendar);
+
 
 
 

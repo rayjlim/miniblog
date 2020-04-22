@@ -77,13 +77,13 @@ const EditForm = (props) => {
                 </button> */}
 			<strong>Edit Entry</strong>
 			<button onClick={(e) => addFAtag(e)} className="btn btn-info" style={templateStyle}>
-				fa-template
+			<i class="fa fa-font-awesome" />fa-template
 			</button>
 			<p>
 				link: [link text](URL){' '}
 				<a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">Cheatsheet</a>
 			</p>
-			{props.entry.id}
+			
 			<div className="form-group">
 				<textarea
 					ref={setTextInputRef}
@@ -112,14 +112,14 @@ const EditForm = (props) => {
                 </button> */}
 
 			<button onClick={handleSave} className="btn btn-primary">
-				Save
+			<i class="fa fa-save" /> Save
 			</button>
 
 			<button onClick={handleClear} className="btn btn-warning pull-right">
-				Cancel
+			<i class="fa fa-ban" /> Cancel
 			</button>
 			<button onClick={handleDelete} className="btn btn-danger pull-right">
-				Delete
+			<i class="fa fa-trash" /> Delete
 			</button>
 			<div className="markdownDisplay">
 				<ReactMarkdown source={content} escapeHtml={false} />
@@ -129,5 +129,8 @@ const EditForm = (props) => {
 };
 
 export default EditForm;
+
+
+
 
 

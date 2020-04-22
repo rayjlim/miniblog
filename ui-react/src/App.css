@@ -40,10 +40,33 @@
 .entriesList {
   text-align:left;
 }
+.entriesList li {
+  list-style-type: none;
+}
+
+.plainLink {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .markdownDisplay{
   text-align:left;
 }
+
 .grid-3mw {
   display:grid;
   grid-template-columns: 1fr 2fr 1fr;
+  grid-gap: 1rem;
+  padding: 0 .5rem;
+}
+
+.container {
+  margin: 0 .5rem;
 }

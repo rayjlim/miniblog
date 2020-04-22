@@ -106,7 +106,7 @@ class UploadHandler extends AbstractController
                 }
 
                 $urlFileName = basename($_FILES["fileToUpload"]["name"]);
-                $this->redirector('../uploadResize/?fileName='.$urlFileName.'&filePath='.$filePath);
+                $this->redirector('../index.html?view=media&fileName='.$urlFileName.'&filePath='.$filePath);
             }
         };
     }
