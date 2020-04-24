@@ -1,5 +1,7 @@
 <?php
-
+ini_set('display_errors', 'On');
+//ob_start("ob_gzhandler");
+error_reporting(E_ALL);
 require 'common_header.php';
 
 use Slim\Views\Twig as Twig;

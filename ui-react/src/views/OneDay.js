@@ -19,6 +19,8 @@ const OneDay = () => {
 	const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
 	const [ formMode, setFormMode ] = useState(0);
 	const [ entry, setEntry ] = useState({});
+	const [ media, setMedia ] = useState({fileName:'', filePath:''});
+	
 	console.log('oDate :', oDate);
 
 	const btnShowAddForm = (
@@ -96,8 +98,11 @@ const OneDay = () => {
 
 		const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
 		console.log('urlParams.has(view) :', urlParams.has('view'));
-		console.log('urlParams.has(view) :', urlParams.has('fileName'));
-		console.log('urlParams.has(view) :', urlParams.has('filePath'));
+		console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
+		console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
+		if(urlParams.has('fileName')){
+			setMedia({fileName:urlParams.get('fileName'), filePath:urlParams.get('filePath')})
+		}
 		setDate(_date);
 		loadDay(_date);
 	}, []);
@@ -139,6 +144,13 @@ const OneDay = () => {
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
 					Next <i class="fa fa-chevron-right" />
 				</button>
+			</div>
+			<div>
+			![](../uploads/{media.filePath}{media.fileName})
+			<RouterNavLink to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`} className="btn navbar-btn">
+					Media
+			</RouterNavLink>
+
 			</div>
 			<section className="container">
 			{showAddEditForm(formMode)}
