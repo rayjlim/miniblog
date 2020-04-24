@@ -81,9 +81,11 @@ class Calendar extends React.Component {
 		return (
 			<Fragment>
 				<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-					<RouterNavLink to="/textentry">Search</RouterNavLink>
-					<RouterNavLink to="/sameday">Same Day</RouterNavLink>
-                </nav>
+				<RouterNavLink to="/"         ><i class="fa fa-home" /> Home</RouterNavLink>
+				<RouterNavLink to="/textentry"><i class="fa fa-search" /> Search</RouterNavLink>
+				<RouterNavLink to="/sameday"><i class="fa fa-calendar-check" /> Same Day</RouterNavLink>
+			</nav>
+			
 				<br />
 			<br />
 				<FullCalendar
@@ -99,20 +101,20 @@ class Calendar extends React.Component {
 				/>
 						<br />
 			<br />
-				<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-                    <RouterNavLink to="/" className="btn navbar-btn">
-                        Blog Page
-                    </RouterNavLink>
-                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-                        Upload Pix
-                    </a>
-                </nav>
+			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+				<i class="fa fa-file-upload" /> Upload Pix
+				</a>
+			</nav>
 			</Fragment>
 		);
 	}
 }
 
 export default withRouter(Calendar);
+
+
+
 
 
 

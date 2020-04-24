@@ -127,8 +127,9 @@ const SameDay = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry"><i class="fa fa-search" /> Search</RouterNavLink>
-				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> Calendar</RouterNavLink>
+			<RouterNavLink to="/"><i class="fa fa-home" /> <span>Home</span></RouterNavLink>
+				<RouterNavLink to="/textentry"><i class="fa fa-search" /> <span>Search</span></RouterNavLink>
+				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
 			</nav>
 			<br />
 			<br />
@@ -155,10 +156,7 @@ const SameDay = () => {
 			<section className="container">
 			{showEntries()}
 			</section>
-			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-				<RouterNavLink to="/" className="btn navbar-btn">
-					Blog Page
-				</RouterNavLink>
+			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
 				<i class="fa fa-file-upload" /> Upload Pix
 				</a>
@@ -184,6 +182,19 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

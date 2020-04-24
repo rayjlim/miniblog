@@ -121,10 +121,10 @@ const OneDay = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry"><i class="fa fa-search" /> Search</RouterNavLink>
-				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> Same Day</RouterNavLink>
-				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> Calendar</RouterNavLink>
-				<a href="https://miniblog.lilplaytime.com/login.php">Login</a>
+				<RouterNavLink to="/textentry"><i class="fa fa-search" /> <span>Search</span></RouterNavLink>
+				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
+				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
+				<a href="https://miniblog.lilplaytime.com/login.php"><i class="fa fa-sign-in" /> <span>Login</span></a>
 			</nav>
 			<br />
 			<br />
@@ -132,7 +132,7 @@ const OneDay = () => {
 			<div className="grid-3mw">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				<i class="fa fa-chevron-left" /> Prev
-				</button>
+				</button> 
 				<input
 					type="text"
 					className="form-control"
@@ -178,17 +178,10 @@ const OneDay = () => {
 			</ul>
 			</section>
 			<br></br><br></br><br></br>
-			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-				<RouterNavLink to="/" className="btn navbar-btn">
-					Blog Page
-				</RouterNavLink>
-				<a href={`${constants.REST_ENDPOINT}uploadForm/`} className="btn navbar-btn">
+			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
 				<i class="fa fa-file-upload" /> Upload Pix
 				</a>
-				<RouterNavLink to="/media?fileName=113D8AC7-4D67-41B7-903D-47E1D91ADB7E.jpeg&filePath=2020-04/" className="btn navbar-btn">
-					Media
-				</RouterNavLink>
-				
 			</nav>
 		</Fragment>
 	);

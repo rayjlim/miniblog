@@ -76,10 +76,8 @@ const Media = () => {
 
 	// handleAdd(entry) {
 	//     let fileReference = ``;
-	//
 	//     EntryApi.createEntry(prepend + entry.content, entry.date);
 	// }
-
 	// rename(newName) {
 	//     console.log('rename');
 	//     console.log(newName);
@@ -96,17 +94,11 @@ const Media = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry">
-					<i class="fa fa-search" /> Search
-				</RouterNavLink>
-				<RouterNavLink to="/sameday">
-					{' '}
-					<i class="fa fa-calendar-check" /> Same Day
-				</RouterNavLink>
-				<RouterNavLink to="/calendar">
-					<i class="fa fa-calendar" /> Calendar
-				</RouterNavLink>
-				<a href="https://miniblog.lilplaytime.com/login.php">Login</a>
+				<RouterNavLink to="/"><i class="fa fa-home" /> <span>Home</span></RouterNavLink>
+				<RouterNavLink to="/textentry"><i class="fa fa-search" /> <span>Search</span></RouterNavLink>
+				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
+				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
+				<a href="https://miniblog.lilplaytime.com/login.php"><i class="fa fa-sign-in" /> <span>Login</span></a>
 			</nav>
 			<p className="lead">Prepare the image for use</p>
 			<div className="grid-3mw">
@@ -128,11 +120,8 @@ const Media = () => {
 			<br /> <br />
 			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-				<RouterNavLink to="/" className="btn navbar-btn">
-					Blog Page
-				</RouterNavLink>
 				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-					Upload Pix
+				<i class="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>
@@ -140,6 +129,17 @@ const Media = () => {
 };
 
 export default Media;
+
+
+
+
+
+
+
+
+
+
+
 
 
 

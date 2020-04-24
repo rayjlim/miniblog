@@ -87,9 +87,9 @@ const TextEntry = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-			<RouterNavLink to="/"><i class="fa fa-home" /> Home</RouterNavLink>
-			<RouterNavLink to="/sameday"><i class="fa fa-calendar-check" /> Same Day</RouterNavLink>
-			<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> Calendar</RouterNavLink>
+			<RouterNavLink to="/"><i class="fa fa-home" /> <span>Home</span></RouterNavLink>
+				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
+				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
             </nav>
 			<br /><br />
 
@@ -130,12 +130,11 @@ const TextEntry = () => {
 				})}
 			</ul>
 			<br></br><br></br><br></br>
-			<nav class="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-                    
-                    <a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-					<i class="fa fa-file-upload" />  Upload Pix
-                    </a>
-                </nav>
+			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+				<i class="fa fa-file-upload" /> Upload Pix
+				</a>
+			</nav>
 		</Fragment>
 	);
 };
