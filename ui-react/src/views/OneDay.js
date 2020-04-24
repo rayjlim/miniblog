@@ -19,8 +19,8 @@ const OneDay = () => {
 	const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
 	const [ formMode, setFormMode ] = useState(0);
 	const [ entry, setEntry ] = useState({});
-	const [ media, setMedia ] = useState({fileName:'', filePath:''});
-	
+	const [ media, setMedia ] = useState({ fileName: '', filePath: '' });
+
 	console.log('oDate :', oDate);
 
 	const btnShowAddForm = (
@@ -100,8 +100,8 @@ const OneDay = () => {
 		console.log('urlParams.has(view) :', urlParams.has('view'));
 		console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
 		console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-		if(urlParams.has('fileName')){
-			setMedia({fileName:urlParams.get('fileName'), filePath:urlParams.get('filePath')})
+		if (urlParams.has('fileName')) {
+			setMedia({ fileName: urlParams.get('fileName'), filePath: urlParams.get('filePath') });
 		}
 		setDate(_date);
 		loadDay(_date);
@@ -121,18 +121,27 @@ const OneDay = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry"><i class="fa fa-search" /> <span>Search</span></RouterNavLink>
-				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
-				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
-				<a href="https://miniblog.lilplaytime.com/login.php"><i class="fa fa-sign-in" /> <span>Login</span></a>
+				<RouterNavLink to="/textentry">
+					<i class="fa fa-search" /> <span>Search</span>
+				</RouterNavLink>
+				<RouterNavLink to="/sameday">
+					{' '}
+					<i class="fa fa-calendar-check" /> <span>Same Day</span>
+				</RouterNavLink>
+				<RouterNavLink to="/calendar">
+					<i class="fa fa-calendar" /> <span>Calendar</span>
+				</RouterNavLink>
+				<a href="https://miniblog.lilplaytime.com/login.php">
+					<i class="fa fa-sign-in" /> <span>Login</span>
+				</a>
 			</nav>
 			<br />
 			<br />
 			<h1>OneDay</h1>
 			<div className="grid-3mw">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-				<i class="fa fa-chevron-left" /> Prev
-				</button> 
+					<i class="fa fa-chevron-left" /> Prev
+				</button>
 				<input
 					type="text"
 					className="form-control"
@@ -146,41 +155,44 @@ const OneDay = () => {
 				</button>
 			</div>
 			<div>
-			![](../uploads/{media.filePath}{media.fileName})
-			<RouterNavLink to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`} className="btn navbar-btn">
+				![](../uploads/{media.filePath}
+				{media.fileName})
+				<RouterNavLink
+					to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`}
+					className="btn navbar-btn"
+				>
 					Media
-			</RouterNavLink>
-
+				</RouterNavLink>
 			</div>
-			<section className="container">
-			{showAddEditForm(formMode)}
-			</section>
-			
-			<section className="container">
-			<ul className="entriesList">
-				{data.entries.map((entry) => {
-					let newText = entry.content.replace(/<br \/>/g, '\n');
-					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
-					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-					let showEntryDate = (
-						<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
-								{dateFormated}
-						</button>
-					);
+			<section className="container">{showAddEditForm(formMode)}</section>
 
-					return (
-						<li key={entry.id} className="blogEntry">
-							{showEntryDate} |
-							<ReactMarkdown source={newText} escapeHtml={false} />
-						</li>
-					);
-				})}
-			</ul>
+			<section className="container">
+				<ul className="entriesList">
+					{data.entries.map((entry) => {
+						let newText = entry.content.replace(/<br \/>/g, '\n');
+						newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
+						const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
+						let showEntryDate = (
+							<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
+								{dateFormated}
+							</button>
+						);
+
+						return (
+							<li key={entry.id} className="blogEntry">
+								{showEntryDate} |
+								<ReactMarkdown source={newText} escapeHtml={false} />
+							</li>
+						);
+					})}
+				</ul>
 			</section>
-			<br></br><br></br><br></br>
+			<br />
+			<br />
+			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-				<i class="fa fa-file-upload" /> Upload Pix
+				<a href="/uploadForm/" className="btn navbar-btn">
+					<i class="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>

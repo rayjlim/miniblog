@@ -120,7 +120,7 @@ const Media = () => {
 			<br /> <br />
 			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
+				<a href="/uploadForm/" className="btn navbar-btn">
 				<i class="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
@@ -129,6 +129,7 @@ const Media = () => {
 };
 
 export default Media;
+
 
 
 

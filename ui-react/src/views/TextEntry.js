@@ -18,7 +18,7 @@ const TextEntry = () => {
 
 	useEffect(() => {
 		console.log('useEffect');
-		getEntries('')
+		getEntries('');
 	}, []);
 
 	/** 
@@ -39,19 +39,19 @@ const TextEntry = () => {
 				console.log('invalid json');
 			} else {
 				setData(result.data);
-				setText(text)
+				setText(text);
 			}
-		
+
 			// ...
 		})();
 	}
 
 	let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
-    function search(text) {
-        console.log('TEC: search' + text);        
+	function search(text) {
+		console.log('TEC: search' + text);
 		debouncedSearch(text);
 	}
-	
+
 	const btnShowAddForm = (
 		<button onClick={(e) => showAddForm(e)} className="btn btn-default">
 			Show Add Form
@@ -70,9 +70,9 @@ const TextEntry = () => {
 
 	function resetEntryForm() {
 		setFormMode(0);
-		getEntries(searchText)
+		getEntries(searchText);
 	}
-	
+
 	function showAddEditForm(mode) {
 		console.log('mode :', mode);
 		if (!mode || mode === 0) {
@@ -87,31 +87,36 @@ const TextEntry = () => {
 	return (
 		<Fragment>
 			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-			<RouterNavLink to="/"><i class="fa fa-home" /> <span>Home</span></RouterNavLink>
-				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
-				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
-            </nav>
-			<br /><br />
+				<RouterNavLink to="/">
+					<i class="fa fa-home" /> <span>Home</span>
+				</RouterNavLink>
+				<RouterNavLink to="/sameday">
+					{' '}
+					<i class="fa fa-calendar-check" /> <span>Same Day</span>
+				</RouterNavLink>
+				<RouterNavLink to="/calendar">
+					<i class="fa fa-calendar" /> <span>Calendar</span>
+				</RouterNavLink>
+			</nav>
+			<br />
+			<br />
 
 			<h1>Text Search</h1>
-			
-			<section className="container">
-			<input
-				type="text"
-				className="form-control"
-				defaultValue=''
-				placeholder="Search term"
-				onChange={(e) => search(e.target.value)}
-			/>
-		
-			</section>
 
 			<section className="container">
-			{showAddEditForm(formMode)}
+				<input
+					type="text"
+					className="form-control"
+					defaultValue=""
+					placeholder="Search term"
+					onChange={(e) => search(e.target.value)}
+				/>
 			</section>
-			
+
+			<section className="container">{showAddEditForm(formMode)}</section>
+
 			<ul className="entriesList">
-			{data.entries.map((entry) => {
+				{data.entries.map((entry) => {
 					let newText = entry.content.replace(/<br \/>/g, '\n');
 					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
 					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
@@ -129,10 +134,12 @@ const TextEntry = () => {
 					);
 				})}
 			</ul>
-			<br></br><br></br><br></br>
+			<br />
+			<br />
+			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
-				<a href="http://www.lilplaytime.com/smsblog/index.php/uploadForm/" className="btn navbar-btn">
-				<i class="fa fa-file-upload" /> Upload Pix
+				<a href="/uploadForm/" className="btn navbar-btn">
+					<i class="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>
@@ -142,7 +149,8 @@ const TextEntry = () => {
 function debounce(func, wait, immediate) {
 	var timeout;
 	return function() {
-		var context = this, args = arguments;
+		var context = this,
+			args = arguments;
 		var later = function() {
 			timeout = null;
 			if (!immediate) func.apply(context, args);
@@ -152,5 +160,5 @@ function debounce(func, wait, immediate) {
 		timeout = setTimeout(later, wait);
 		if (callNow) func.apply(context, args);
 	};
-};
+}
 export default TextEntry;
