@@ -133,10 +133,6 @@ const SameDay = () => {
 			<br />
 			<br />
 			<h1>Same Day</h1>
-			<section className="container">
-			{showAddEditForm(formMode)}
-			</section>
-
 			<div className="grid-3mw">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 				<i class="fa fa-chevron-left" /> Prev
@@ -152,7 +148,9 @@ const SameDay = () => {
 					Next <i class="fa fa-chevron-right" />
 				</button>
 			</div>
-
+			<section className="container">
+			{showAddEditForm(formMode)}
+			</section>
 	
 			<section className="container">
 			{showEntries()}
@@ -186,6 +184,7 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
 
 
 
