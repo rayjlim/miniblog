@@ -4,13 +4,17 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 
 const AddForm = (props) => {
-	// console.log('props :', props);
-	const [ content, setContent ] = useState(props.content || '');
+	console.log('props :', props.content);
+	const [ content, setContent ] = useState(props.content);
 	const [ date, setDate ] = useState(props.date);
 
-	useEffect(() => {
-		console.log('AddForm: useEffect');
-	}, []);
+	useEffect(
+		() => {
+			console.log('AddForm: useEffect');
+			setContent(props.content || '');
+		},
+		[ props ]
+	);
 
 	function contentChange(e) {
 		e.preventDefault();
@@ -24,33 +28,34 @@ const AddForm = (props) => {
 	}
 
 	function handleAdd(e) {
-		console.log('this :', this);
-		const entry = {
-			content: content.trim(),
-			date: date.trim() // TODO: check date format
-		};
-		axios
-			.post(`${constants.REST_ENDPOINT}api/posts/`, JSON.stringify(entry))
-			.then((response) => {
-				console.log(response);
+		(async () => {
+			console.log('this :', this);
+			const entry = {
+				content: content.trim(),
+				date: date.trim() // TODO: check date format
+			};
+			try {
+				const result = await axios.post(`${constants.REST_ENDPOINT}api/posts/`, JSON.stringify(entry));
+
 				// $('.toast').toast('dispose');
 				// $('.toast-body').html('Saved');
 				// $('.toast').toast({ delay: 4000 });
 				// $('.toast').toast('show');
 				// TODO: clear the fields
-				props.onSuccess();
-			})
-			.catch((error) => {
+				console.log('new id :>> ', result.data.id);
+				props.onSuccess(e);
+			} catch (error) {
 				console.log(error);
 				alert(error);
-			});
+			}
+		})();
 	}
 
 	function clear() {
 		console.log('clear form');
 		props.onSuccess();
 	}
-
+	console.log('content :>> ', content);
 	return (
 		<div className="well">
 			{/* <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
@@ -67,10 +72,10 @@ const AddForm = (props) => {
 
 			<div className="form-group">
 				<textarea
-					className="form-control"
-					placeholder="Add ..."
 					rows="6"
 					onChange={(e) => contentChange(e)}
+					className="form-control"
+					placeholder="Add ..."
 					defaultValue={props.content}
 				/>
 			</div>
@@ -87,10 +92,10 @@ const AddForm = (props) => {
 
 			{/* {formBtns} */}
 			<button onClick={handleAdd} className="btn btn-primary">
-			<i class="fa fa-save" /> Submit
+				<i className="fa fa-save" /> Submit
 			</button>
 			<button onClick={clear} className="btn btn-warning pull-right">
-				<i class="fa fa-ban" /> Cancel
+				<i className="fa fa-ban" /> Cancel
 			</button>
 			<div className="markdownDisplay">
 				<ReactMarkdown source={content} escapeHtml={false} />
@@ -148,7 +153,7 @@ const AddForm = (props) => {
 
 //     addFAtag(e) {
 //         this.refs.content.value += `
-// <i class="fas fa-" /> `;
+// <i className="fas fa-" /> `;
 //     }
 // }
 
