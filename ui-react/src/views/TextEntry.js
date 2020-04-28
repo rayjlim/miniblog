@@ -86,16 +86,16 @@ const TextEntry = () => {
 
 	return (
 		<Fragment>
-			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
 				<RouterNavLink to="/">
-					<i class="fa fa-home" /> <span>Home</span>
+					<i className="fa fa-home" /> <span>Home</span>
 				</RouterNavLink>
 				<RouterNavLink to="/sameday">
 					{' '}
-					<i class="fa fa-calendar-check" /> <span>Same Day</span>
+					<i className="fa fa-calendar-check" /> <span>Same Day</span>
 				</RouterNavLink>
 				<RouterNavLink to="/calendar">
-					<i class="fa fa-calendar" /> <span>Calendar</span>
+					<i className="fa fa-calendar" /> <span>Calendar</span>
 				</RouterNavLink>
 			</nav>
 			<br />
@@ -139,7 +139,7 @@ const TextEntry = () => {
 			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<a href="/uploadForm/" className="btn navbar-btn">
-					<i class="fa fa-file-upload" /> Upload Pix
+					<i className="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>

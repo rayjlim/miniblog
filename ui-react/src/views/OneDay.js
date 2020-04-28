@@ -120,19 +120,18 @@ const OneDay = () => {
 
 	return (
 		<Fragment>
-			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
 				<RouterNavLink to="/textentry">
-					<i class="fa fa-search" /> <span>Search</span>
+					<i className="fa fa-search" /> <span>Search</span>
 				</RouterNavLink>
 				<RouterNavLink to="/sameday">
-					{' '}
-					<i class="fa fa-calendar-check" /> <span>Same Day</span>
+					<i className="fa fa-calendar-check" /> <span>Same Day</span>
 				</RouterNavLink>
 				<RouterNavLink to="/calendar">
-					<i class="fa fa-calendar" /> <span>Calendar</span>
+					<i className="fa fa-calendar" /> <span>Calendar</span>
 				</RouterNavLink>
 				<a href="https://miniblog.lilplaytime.com/login.php">
-					<i class="fa fa-sign-in" /> <span>Login</span>
+					<i className="fa fa-sign-in" /> <span>Login</span>
 				</a>
 			</nav>
 			<br />
@@ -140,8 +139,10 @@ const OneDay = () => {
 			<h1>OneDay</h1>
 			<div className="grid-3mw">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-					<i class="fa fa-chevron-left" /> Prev
+					<i className="fa fa-chevron-left" /> Prev
 				</button>
+				<div>
+					<span>{moment(oDate).format('dd')}</span>
 				<input
 					type="text"
 					className="form-control"
@@ -150,19 +151,19 @@ const OneDay = () => {
 					// defaultValue={oDate}
 					onChange={(e) => updateDate(e)}
 				/>
+				</div>
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-					Next <i class="fa fa-chevron-right" />
+					Next <i className="fa fa-chevron-right" />
 				</button>
 			</div>
 			<div>
+				
 				![](../uploads/{media.filePath}
 				{media.fileName})
 				<RouterNavLink
 					to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`}
 					className="btn navbar-btn"
-				>
-					Media
-				</RouterNavLink>
+				>Media</RouterNavLink>
 			</div>
 			<section className="container">{showAddEditForm(formMode)}</section>
 
@@ -192,7 +193,7 @@ const OneDay = () => {
 			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<a href="/uploadForm/" className="btn navbar-btn">
-					<i class="fa fa-file-upload" /> Upload Pix
+					<i className="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>

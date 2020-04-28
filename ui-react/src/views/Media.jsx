@@ -2,12 +2,13 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 import constants from '../constants';
 import AddForm from '../components/AddForm.jsx';
 
 const Media = () => {
 	const [ post, setPost ] = useState({
-		date: '',
+		date: moment().format('YYYY-MM-DD'),
 		fileName: '',
 		filePath: '',
 		prepend: '',
@@ -93,12 +94,12 @@ const Media = () => {
 
 	return (
 		<Fragment>
-			<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/"><i class="fa fa-home" /> <span>Home</span></RouterNavLink>
-				<RouterNavLink to="/textentry"><i class="fa fa-search" /> <span>Search</span></RouterNavLink>
-				<RouterNavLink to="/sameday"> <i class="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
-				<RouterNavLink to="/calendar"><i class="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
-				<a href="https://miniblog.lilplaytime.com/login.php"><i class="fa fa-sign-in" /> <span>Login</span></a>
+			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+				<RouterNavLink to="/"><i className="fa fa-home" /> <span>Home</span></RouterNavLink>
+				<RouterNavLink to="/textentry"><i className="fa fa-search" /> <span>Search</span></RouterNavLink>
+				<RouterNavLink to="/sameday"> <i className="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
+				<RouterNavLink to="/calendar"><i className="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
+				<a href="https://miniblog.lilplaytime.com/login.php"><i className="fa fa-sign-in" /> <span>Login</span></a>
 			</nav>
 			<p className="lead">Prepare the image for use</p>
 			<div className="grid-3mw">
@@ -114,14 +115,14 @@ const Media = () => {
 			</section>
 			<hr />
 			<h5>Image is automatically prepended on submit</h5>
-			<AddForm date={''} content={post.prepend} onSuccess={(e) => console.log(e)} />
+			<AddForm date={post.date} content={post.prepend} onSuccess={(e) => console.log(e)} />
 			<br />
 			<br /> <br />
 			<br /> <br />
 			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<a href="/uploadForm/" className="btn navbar-btn">
-				<i class="fa fa-file-upload" /> Upload Pix
+				<i className="fa fa-file-upload" /> Upload Pix
 				</a>
 			</nav>
 		</Fragment>
@@ -129,6 +130,11 @@ const Media = () => {
 };
 
 export default Media;
+
+
+
+
+
 
 
 

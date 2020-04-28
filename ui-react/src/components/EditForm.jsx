@@ -67,7 +67,7 @@ const EditForm = (props) => {
 
 	function addFAtag(e) {
 		textareaInput.value += `
-<i class="fa fa-" /> `;
+<i className="fa fa-" /> `;
 	}
 
 	return (
@@ -77,7 +77,7 @@ const EditForm = (props) => {
                 </button> */}
 			<strong>Edit Entry</strong>
 			<button onClick={(e) => addFAtag(e)} className="btn btn-info" style={templateStyle}>
-			<i class="fa fa-font-awesome" />fa-template
+			<i className="fa fa-font-awesome" />fa-template
 			</button>
 			<p>
 				link: [link text](URL){' '}
@@ -112,14 +112,14 @@ const EditForm = (props) => {
                 </button> */}
 
 			<button onClick={handleSave} className="btn btn-primary">
-			<i class="fa fa-save" /> Save
+			<i className="fa fa-save" /> Save
 			</button>
 
 			<button onClick={handleClear} className="btn btn-warning pull-right">
-			<i class="fa fa-ban" /> Cancel
+			<i className="fa fa-ban" /> Cancel
 			</button>
 			<button onClick={handleDelete} className="btn btn-danger pull-right">
-			<i class="fa fa-trash" /> Delete
+			<i className="fa fa-trash" /> Delete
 			</button>
 			<div className="markdownDisplay">
 				<ReactMarkdown source={content} escapeHtml={false} />
@@ -129,6 +129,7 @@ const EditForm = (props) => {
 };
 
 export default EditForm;
+
 
 
 

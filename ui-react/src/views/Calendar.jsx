@@ -80,15 +80,15 @@ class Calendar extends React.Component {
 		console.log('this.state.entries :', this.state.entries);
 		return (
 			<Fragment>
-				<nav class="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+				<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
 					<RouterNavLink to="/">
-						<i class="fa fa-home" /> Home
+						<i className="fa fa-home" /> Home
 					</RouterNavLink>
 					<RouterNavLink to="/textentry">
-						<i class="fa fa-search" /> Search
+						<i className="fa fa-search" /> Search
 					</RouterNavLink>
 					<RouterNavLink to="/sameday">
-						<i class="fa fa-calendar-check" /> Same Day
+						<i className="fa fa-calendar-check" /> Same Day
 					</RouterNavLink>
 				</nav>
 
@@ -109,7 +109,7 @@ class Calendar extends React.Component {
 				<br />
 				<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 					<a href="/uploadForm/" className="btn navbar-btn">
-						<i class="fa fa-file-upload" /> Upload Pix
+						<i className="fa fa-file-upload" /> Upload Pix
 					</a>
 				</nav>
 			</Fragment>
@@ -118,4 +118,5 @@ class Calendar extends React.Component {
 }
 
 export default withRouter(Calendar);
+
 
