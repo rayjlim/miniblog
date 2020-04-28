@@ -117,9 +117,7 @@ const SameDay = () => {
 						);
 					})}
 				</ul>
-				<br />
-				<br />
-				<br />
+
 			</Fragment>
 		) : (
 			''
@@ -142,7 +140,7 @@ const SameDay = () => {
 			<br />
 			<br />
 			<h1>Same Day</h1>
-			<div className="grid-3mw">
+			<div className="grid-3mw container">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 					<i className="fa fa-chevron-left" /> Prev
 				</button>
@@ -150,6 +148,7 @@ const SameDay = () => {
 					type="text"
 					className="form-control"
 					id="formDpInput"
+					value={oDate}
 					defaultValue={oDate}
 					onChange={(e) => debouncedTextEdit(e.target.value)}
 				/>
@@ -186,5 +185,8 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
+
+
 
 

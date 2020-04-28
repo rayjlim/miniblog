@@ -110,25 +110,32 @@ const EditForm = (props) => {
                 <button onClick={this.addToDate} className="btn btn-success">
                     addToDate
                 </button> */}
-
-			<button onClick={handleSave} className="btn btn-primary">
-			<i className="fa fa-save" /> Save
-			</button>
-
-			<button onClick={handleClear} className="btn btn-warning pull-right">
-			<i className="fa fa-ban" /> Cancel
-			</button>
-			<button onClick={handleDelete} className="btn btn-danger pull-right">
-			<i className="fa fa-trash" /> Delete
-			</button>
+			<div className="editBtns">
+				<button onClick={handleSave} className="btn btn-primary">
+				<i className="fa fa-save" /> Save
+				</button>
+				<button onClick={handleClear} className="btn btn-warning pull-right">
+				<i className="fa fa-ban" /> Cancel
+				</button>
+				<button onClick={handleDelete} className="btn btn-danger pull-right">
+				<i className="fa fa-trash" /> Delete
+				</button>
+			</div>
 			<div className="markdownDisplay">
 				<ReactMarkdown source={content} escapeHtml={false} />
 			</div>
+			
 		</div>
 	);
 };
 
 export default EditForm;
+
+
+
+
+
+
 
 
 

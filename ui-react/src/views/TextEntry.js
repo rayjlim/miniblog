@@ -134,9 +134,6 @@ const TextEntry = () => {
 					);
 				})}
 			</ul>
-			<br />
-			<br />
-			<br />
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<a href="/uploadForm/" className="btn navbar-btn">
 					<i className="fa fa-file-upload" /> Upload Pix

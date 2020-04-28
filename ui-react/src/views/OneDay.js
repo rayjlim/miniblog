@@ -137,7 +137,8 @@ const OneDay = () => {
 			<br />
 			<br />
 			<h1>OneDay</h1>
-			<div className="grid-3mw">
+			
+			<div className="grid-3mw container">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 					<i className="fa fa-chevron-left" /> Prev
 				</button>
