@@ -4,10 +4,10 @@ use \Lpt\DevHelp;
 function printEntrys($carry, $item)
 {
     $entryDay = new DateTime($item['date']);
-    $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
-    $link = "{$urlPrefix}/index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
+    $urlPrefix = "https://".DOMAIN."/".ROOT_URL;
+    $link = "{$urlPrefix}/index.html?date={$entryDay->format('Y-m-d')}";
     $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
-    $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
+    $replacement = "<img src=\"{$urlPrefix}uploads".'${2}'."\">";
     $preparedContent = preg_replace($pattern, $replacement, $item['content']);
 
     //replace the icons as well
