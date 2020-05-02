@@ -133,6 +133,9 @@ const OneDay = () => {
 				<a href="https://miniblog.lilplaytime.com/login.php">
 					<i className="fa fa-sign-in" /> <span>Login</span>
 				</a>
+				<RouterNavLink to="/login">
+					<i className="fa fa-calendar" /> <span>Login2</span>
+				</RouterNavLink>
 			</nav>
 			<br />
 			<br />
