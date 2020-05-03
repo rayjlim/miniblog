@@ -130,7 +130,7 @@ const SameDay = () => {
 				<RouterNavLink to="/">
 					<i className="fa fa-home" /> <span>Home</span>
 				</RouterNavLink>
-				<RouterNavLink to="/textentry">
+				<RouterNavLink to="/search">
 					<i className="fa fa-search" /> <span>Search</span>
 				</RouterNavLink>
 				<RouterNavLink to="/calendar">
@@ -185,6 +185,7 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
 
 
 

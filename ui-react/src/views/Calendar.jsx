@@ -84,7 +84,7 @@ class Calendar extends React.Component {
 					<RouterNavLink to="/">
 						<i className="fa fa-home" /> Home
 					</RouterNavLink>
-					<RouterNavLink to="/textentry">
+					<RouterNavLink to="/search">
 						<i className="fa fa-search" /> Search
 					</RouterNavLink>
 					<RouterNavLink to="/sameday">
@@ -118,6 +118,7 @@ class Calendar extends React.Component {
 }
 
 export default withRouter(Calendar);
+
 
 
 

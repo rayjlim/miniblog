@@ -5,6 +5,7 @@ import axios from 'axios';
 import moment from 'moment';
 import constants from '../constants';
 import AddForm from '../components/AddForm.jsx';
+import history from "../utils/history";
 
 const Media = () => {
 	const [ post, setPost ] = useState({
@@ -75,10 +76,13 @@ const Media = () => {
 		});
 	}
 
-	// handleAdd(entry) {
-	//     let fileReference = ``;
-	//     EntryApi.createEntry(prepend + entry.content, entry.date);
-	// }
+	function handleAdd(e) {
+		console.log(e);
+		alert('Entry created');
+		history.push(`/`);
+		
+	}
+
 	// rename(newName) {
 	//     console.log('rename');
 	//     console.log(newName);
@@ -96,7 +100,7 @@ const Media = () => {
 		<Fragment>
 			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
 				<RouterNavLink to="/"><i className="fa fa-home" /> <span>Home</span></RouterNavLink>
-				<RouterNavLink to="/textentry"><i className="fa fa-search" /> <span>Search</span></RouterNavLink>
+				<RouterNavLink to="/search"><i className="fa fa-search" /> <span>Search</span></RouterNavLink>
 				<RouterNavLink to="/sameday"> <i className="fa fa-calendar-check" /> <span>Same Day</span></RouterNavLink>
 				<RouterNavLink to="/calendar"><i className="fa fa-calendar" /> <span>Calendar</span></RouterNavLink>
 				<a href="https://miniblog.lilplaytime.com/login.php"><i className="fa fa-sign-in" /> <span>Login</span></a>
@@ -115,7 +119,7 @@ const Media = () => {
 			</section>
 			<hr />
 			<h5>Image is automatically prepended on submit</h5>
-			<AddForm date={post.date} content={post.prepend} onSuccess={(e) => console.log(e)} />
+			<AddForm date={post.date} content={post.prepend} onSuccess={(e) => handleAdd(e)} />
 			<br />
 			<br /> <br />
 			<br /> <br />
@@ -130,6 +134,12 @@ const Media = () => {
 };
 
 export default Media;
+
+
+
+
+
+
 
 
 

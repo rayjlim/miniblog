@@ -17,6 +17,7 @@ const Home = () => {
 		} else if (typeof result.data === 'string') {
 			console.log('invalid json');
 		} else {
+            alert('logged out')
             logout({
                 returnTo: window.location.origin
               })
@@ -49,6 +50,7 @@ const Home = () => {
     }
 
 export default Home;
+
 
 
 
