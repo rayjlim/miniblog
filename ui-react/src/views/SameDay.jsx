@@ -45,7 +45,15 @@ const SameDay = () => {
 			} else if (typeof result.data === 'string') {
 				console.log('invalid json');
 			} else {
-				setData(result.data);
+				console.log('result.data :>> ', result.data.unauth);
+				if (result.data.unauth) {
+					// setAuth(false);
+					alert('no auth')
+				} else {
+					setData(result.data);
+					
+				}
+				
 			}
 			// ...
 		})();
@@ -185,6 +193,7 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
 
 
 

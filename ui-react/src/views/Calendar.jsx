@@ -51,17 +51,26 @@ class Calendar extends React.Component {
 			}
 			console.log('minFirstDay :', minFirstDay);
 
-			const response = await axios(`${constants.REST_ENDPOINT}api/posts/?month=${minFirstDay.format('YYYY-MM')}`);
+			const result = await axios(`${constants.REST_ENDPOINT}api/posts/?month=${minFirstDay.format('YYYY-MM')}`);
 
-			const formattedData = response.data.entries.map((entry) => {
-				return { date: entry.date, title: entry.content };
-			});
-
-			// this.setState((state, props) => ({
-			// 	entries: formattedData
-			// }));
-
-			successCallback(formattedData);
+			if (result.status !== 200) {
+				console.log('result.status :', result.status);
+				alert(`loading error : ${result.status}`);
+				return;
+			} else if (typeof result.data === 'string') {
+				console.log('invalid json');
+			} else {
+				console.log('result.data :>> ', result.data.unauth);
+				if (result.data.unauth) {
+					// setAuth(false);
+					alert('no auth');
+				} else {
+					const formattedData = result.data.entries.map((entry) => {
+						return { date: entry.date, title: entry.content };
+					});
+					successCallback(formattedData);
+				}
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -118,7 +127,4 @@ class Calendar extends React.Component {
 }
 
 export default withRouter(Calendar);
-
-
-
 
