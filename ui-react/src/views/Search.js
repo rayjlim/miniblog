@@ -19,7 +19,7 @@ const TextEntry = () => {
 	useEffect(() => {
 		console.log('useEffect');
 		getEntries('');
-	}, []);
+	},[]);
 
 	/** 
 	 * Get blog entries for text search
@@ -38,8 +38,29 @@ const TextEntry = () => {
 			} else if (typeof result.data === 'string') {
 				console.log('invalid json');
 			} else {
-				setData(result.data);
-				setText(text);
+				console.log('result.data :>> ', result.data.unauth);
+				if (result.data.unauth) {
+					// setAuth(false);
+					alert('no auth')
+				} else {
+					console.log('result.data :>> ', result.data);
+					const searchVal = document.getElementById('searchText').value;
+					console.log('searchVal :>> ', searchVal);
+					if(searchVal.length){
+					const reg = new RegExp(searchVal, 'gi');
+
+					const highlightedData = result.data.entries.map(entry=>{
+						const highlighted  = entry.content.replace(reg, (str) => {return `<b>${str}</b>`});
+						return {...entry, content:highlighted}
+
+					});
+					console.log('highlightedData :>> ', highlightedData);
+
+					setData({ entries: highlightedData });	
+				}else{
+					setData(result.data)
+				}		
+				}
 			}
 
 			// ...
@@ -49,6 +70,7 @@ const TextEntry = () => {
 	let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
 	function search(text) {
 		console.log('TEC: search' + text);
+		// setText(text);
 		debouncedSearch(text);
 	}
 
@@ -105,8 +127,10 @@ const TextEntry = () => {
 
 			<section className="container">
 				<input
+					id="searchText"
 					type="text"
 					className="form-control"
+					// value={searchText}
 					defaultValue=""
 					placeholder="Search term"
 					onChange={(e) => search(e.target.value)}
