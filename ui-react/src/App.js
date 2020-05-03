@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import SameDay from './views/SameDay';
-import TextEntry from './views/TextEntry';
+import Search from './views/Search';
 import OneDay from './views/OneDay';
 import Calendar from './views/Calendar';
 import Media from './views/Media';
@@ -28,7 +28,7 @@ function App() {
 					<Route path="/media" component={Media} />
 					<Route path="/calendar" component={Calendar} />
 					<Route path="/sameday" exact component={SameDay} />
-					<Route path="/textentry" exact component={TextEntry} />
+					<Route path="/search" exact component={Search} />
 					<Route path="/oneday" component={OneDay} />
 					<Route path="/login" component={Login} />
 					<Route path="/" component={OneDay} />

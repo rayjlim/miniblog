@@ -30,7 +30,7 @@ export const Auth0Provider = ({
         window.location.search.includes("code=") &&
         window.location.search.includes("state=")
       ) {
-        // alert('auth: has code & state >> ')
+        console.log('auth:code,state :>> ', window.location);
         const { appState } = await auth0FromHook.handleRedirectCallback();
         onRedirectCallback(appState);
       }

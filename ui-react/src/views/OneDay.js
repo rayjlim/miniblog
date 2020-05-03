@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-var
 import moment from 'moment';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
-import { useAuth0 } from "../utils/react-auth0-spa";
+import { useAuth0 } from '../utils/react-auth0-spa';
 
 /**
  * Component to Display of One Day style
@@ -16,7 +16,7 @@ import { useAuth0 } from "../utils/react-auth0-spa";
  * <Route path="/oneday" component={OneDay} />
  */
 const OneDay = () => {
-	const { user, isAuthenticated } = useAuth0();
+	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 	const [ data, setData ] = useState({ entries: [] });
 	const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
 	const [ formMode, setFormMode ] = useState(0);
@@ -49,9 +49,9 @@ const OneDay = () => {
 			console.log('invalid json');
 		} else {
 			console.log('result.data :>> ', result.data.unauth);
-			if(result.data.unauth){
+			if (result.data.unauth) {
 				setAuth(false);
-			}else{
+			} else {
 				setData(result.data);
 				setAuth(true);
 			}
@@ -127,7 +127,7 @@ const OneDay = () => {
 		}
 	}
 
-	async function sendBackendAuth(e){
+	async function sendBackendAuth(e) {
 		const result = await axios.post(`${constants.REST_ENDPOINT}security?debug=off`, {
 			email: user.email,
 			sub: user.sub
@@ -144,65 +144,91 @@ const OneDay = () => {
 		}
 	}
 
-	
+	const logoutWithRedirect = async () => {
+		const result = await axios(`${constants.REST_ENDPOINT}security?logout=true&debug=off`);
+		console.log('result :', result);
+		if (result.status !== 200) {
+			console.log('result.status :', result.status);
+			alert(`loading error : ${result.status}`);
+			return;
+		} else if (typeof result.data === 'string') {
+			console.log('invalid json');
+		} else {
+			alert('Logged Out');
+			logout({
+				returnTo: window.location.origin
+			});
+		}
+	};
 
 	return (
 		<Fragment>
 			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
-				<RouterNavLink to="/textentry">
+				<RouterNavLink to="/search">
 					<i className="fa fa-search" /> <span className="nav-text">Search</span>
 				</RouterNavLink>
 				<RouterNavLink to="/sameday">
-					<i className="fa fa-calendar-check" /> <span  className="nav-text">Same Day</span>
+					<i className="fa fa-calendar-check" /> <span className="nav-text">Same Day</span>
 				</RouterNavLink>
 				<RouterNavLink to="/calendar">
-					<i className="fa fa-calendar" /> <span  className="nav-text">Calendar</span>
+					<i className="fa fa-calendar" /> <span className="nav-text">Calendar</span>
 				</RouterNavLink>
-				<RouterNavLink to="/login">
-					
-						{isAuthenticated ? (<>
-						<i className="fa fa-sign-out" /> 
-						<span  className="nav-text">
-						LogOut</span></>) : (<><i className="fa fa-sign-in" /> <span  className="nav-text">
-						LogIn</span></>)}
-				
-				</RouterNavLink>
-				{isAuthenticated && ! auth ? (
-				<button onClick={e=>sendBackendAuth(e)} className="plainLink">
-					<i className="fa fa-shield" /> <span  className="nav-text">Auth</span>
-				</button>) : ''}
+
+				{isAuthenticated ? (
+					<button onClick={(e) => logoutWithRedirect(e)}>
+						<i className="fa fa-sign-out" />
+						<span className="nav-text">LogOut</span>
+					</button>
+				) : (
+					<button
+						id="qsLoginBtn"
+						color="primary"
+						className="btn-margin"
+						onClick={() => loginWithRedirect({})}
+					>
+						<i className="fa fa-sign-in" /> <span className="nav-text">LogIn</span>
+					</button>
+				)}
+				{isAuthenticated && !auth ? (
+					<button onClick={(e) => sendBackendAuth(e)} className="plainLink">
+						<i className="fa fa-shield" /> <span className="nav-text">Auth</span>
+					</button>
+				) : (
+					''
+				)}
 			</nav>
 			<br />
 			<br />
 			<h1>OneDay</h1>
-			
+
 			<div className="grid-3mw container">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
 					<i className="fa fa-chevron-left" /> Prev
 				</button>
 				<div>
 					<span>{moment(oDate).format('dd')}</span>
-				<input
-					type="text"
-					className="form-control"
-					id="formDpInput"
-					value={oDate}
-					// defaultValue={oDate}
-					onChange={(e) => updateDate(e)}
-				/>
+					<input
+						type="text"
+						className="form-control"
+						id="formDpInput"
+						value={oDate}
+						// defaultValue={oDate}
+						onChange={(e) => updateDate(e)}
+					/>
 				</div>
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
 					Next <i className="fa fa-chevron-right" />
 				</button>
 			</div>
 			<div>
-				
 				![](../uploads/{media.filePath}
 				{media.fileName})
 				<RouterNavLink
 					to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`}
 					className="btn navbar-btn"
-				>Media.</RouterNavLink>
+				>
+					Media.
+				</RouterNavLink>
 			</div>
 			<section className="container">{showAddEditForm(formMode)}</section>
 
