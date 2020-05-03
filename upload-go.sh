@@ -36,11 +36,17 @@ if [ -z "$BUILD" ]; then
   rsync -avz  _rsc/vendor $PREP_DIR/_rsc
   rsync -avz  "_config/bluehost/SERVER_CONFIG.php"  $PREP_DIR/backend/SERVER_CONFIG.php
   rsync -avz  _config/.htaccess $PREP_DIR/
-  rsync -avz  _config/cron_script.php $PREP_DIR/
   rsync -avz  exclude-from-prod.txt $PREP_DIR/
 
   cd ui-react
   npm run build
+  buildresult=$?
+
+  if [ $buildresult != 0 ]; then
+    echo "REACT Build Fail"
+    exit 1
+  fi
+
   cd ..
 
   rsync -ravz  ui-react/build/ $PREP_DIR/
