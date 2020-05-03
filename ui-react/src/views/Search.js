@@ -19,7 +19,7 @@ const TextEntry = () => {
 	useEffect(() => {
 		console.log('useEffect');
 		getEntries('');
-	},[]);
+	}, []);
 
 	/** 
 	 * Get blog entries for text search
@@ -41,25 +41,24 @@ const TextEntry = () => {
 				console.log('result.data :>> ', result.data.unauth);
 				if (result.data.unauth) {
 					// setAuth(false);
-					alert('no auth')
+					alert('no auth');
 				} else {
-					console.log('result.data :>> ', result.data);
 					const searchVal = document.getElementById('searchText').value;
-					console.log('searchVal :>> ', searchVal);
-					if(searchVal.length){
-					const reg = new RegExp(searchVal, 'gi');
+					if (searchVal.length) {
+						const reg = new RegExp(searchVal, 'gi');
 
-					const highlightedData = result.data.entries.map(entry=>{
-						const highlighted  = entry.content.replace(reg, (str) => {return `<b>${str}</b>`});
-						return {...entry, content:highlighted}
+						const highlightedData = result.data.entries.map((entry) => {
+							const highlighted = entry.content.replace(reg, (str) => {
+								return `<b>${str}</b>`;
+							});
+							return { ...entry, content: highlighted };
+						});
+						console.log('highlightedData :>> ', highlightedData);
 
-					});
-					console.log('highlightedData :>> ', highlightedData);
-
-					setData({ entries: highlightedData });	
-				}else{
-					setData(result.data)
-				}		
+						setData({ entries: highlightedData });
+					} else {
+						setData(result.data);
+					}
 				}
 			}
 
