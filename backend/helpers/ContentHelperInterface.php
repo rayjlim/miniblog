@@ -11,7 +11,5 @@ interface ContentHelperInterface
     
     public function checkDateShortForms(SmsEntrie $smsEntry);
     
-    public function expandShortCodes($smsEntry);
-    
     public function number_pad($number, $n);
 }

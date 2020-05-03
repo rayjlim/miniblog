@@ -12,6 +12,8 @@ interface SmsUsersDAO
     public function lookupByFacebook($facebookId);
 
     public function lookupByEmail($email);
+
+    public function lookupByEmailGoogleId($email, $googleId);
     
     public function queryAll();
 

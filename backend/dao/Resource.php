@@ -1,37 +1,17 @@
 <?php
-/**
- * Resource.php
- *
- * PHP Version 5.4
- *
- * @date     2007-11-28
- * @category Personal
- * @package  default
- *
- */
-/**
- * Resource
- *
- * get contents from an external
- *
- * @date     2007-11-28
- * @category Personal
- * @package  default
- */
+
 class Resource implements IResourceDAO
 {
-    
     /**
      * setSession
      *
      * @param string $key site url
-     *
-     * @return
+     * @return none
      */
-    public function setSession($key, $value) {
+    public function setSession($key, $value)
+    {
         if (session_id() == '') {
-            session_start();
-            // session isn't started 
+            session_start();            // session isn't started
         }
         $_SESSION[$key] = $value;
     }
@@ -40,47 +20,37 @@ class Resource implements IResourceDAO
      * getSession
      *
      * @param string $key    reference
-     *
      * @return mixed value
      */
-    public function getSession($key) {
-        if (session_id() == '') {
-            session_start();
-            
-            // session isn't started
-            
-            
-        }
-        return $_SESSION[$key];
+    public function getSession($key)
+    {
+        return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : null;
     }
     
-    public function issetSession($key) {
-        if (session_id() == '') {
-            session_start();
-            
-            // session isn't started
-            
-            
-        }
+    public function issetSession($key)
+    {
         return isset($_SESSION[$key]);
     }
 
-    public function setCookie($key, $value, $expiration) {
+    public function setCookie($key, $value, $expiration)
+    {
         setcookie($key, $value, $expiration);
     }
 
-    public function destroySession() {
+    public function destroySession()
+    {
         session_destroy();
     }
     
-    public function writeFile($filename, $content) {
-        
+    public function writeFile($filename, $content)
+    {
         $filehandler = fopen($filename, 'a') or die("can't open file");
         fwrite($filehandler, $content);
         fclose($filehandler);
     }
     
-    public function readdir($logDirectory) {
+    public function readdir($logDirectory)
+    {
         $filelist = array();
         if ($handle = opendir($logDirectory)) {
             while (false !== ($file = readdir($handle))) {
@@ -99,7 +69,8 @@ class Resource implements IResourceDAO
         return $filelist;
     }
     
-    public function readfile($logfile) {
+    public function readfile($logfile)
+    {
         $myFile = $logfile;
         $fh = fopen($myFile, 'r');
         $fileContents = fread($fh, filesize($myFile));
@@ -108,21 +79,24 @@ class Resource implements IResourceDAO
         return $fileContents;
     }
     
-    public function removefile($logfile) {
+    public function removefile($logfile)
+    {
         $myFile = $logfile;
         unlink($myFile);
     }
     
-    public function getDateTime() {
+    public function getDateTime()
+    {
         return new DateTime();
     }
     
-    public function sendEmail($email, $subject, $message) {
+    public function sendEmail($email, $subject, $message)
+    {
         mail($email, $subject, $message);
     }
 
-    public function load($url) {
-        
+    public function load($url)
+    {
         //echo 'url loadings: '.$url;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -131,7 +105,7 @@ class Resource implements IResourceDAO
         
         //curl_setopt($curl, CURLOPT_HTTPHEADER, array("Accept: application/json"));
         $response = curl_exec($curl);
-        if ($response === FALSE) {
+        if ($response === false) {
             die("Curl failed: " . curl_error($curl));
         }
         
@@ -139,33 +113,8 @@ class Resource implements IResourceDAO
         return $response;
     }
     
-    public function shortCodes() {
-        $shortCodes = [];
-        $shortCodes['#a'] = "#awake";
-        
-        $shortCodes['#bp'] = "#bloodpressure";
-        $shortCodes['#f'] = "#fitness";
-        $shortCodes['#hr'] = "#heartrate";
-        $shortCodes['#n'] = "#news";
-        $shortCodes['#p'] = "#pics";
-        $shortCodes['#r'] = "#repeated-names";
-        $shortCodes['#s'] = "#sleep";
-        $shortCodes['#x'] = "#xexy";
-        $shortCodes['#w'] = "#weight";
-        $shortCodes['@b'] = "@bath";
-        $shortCodes['@c'] = "@chores";
-        $shortCodes['@push'] = "@pushups";
-        $shortCodes['@s'] = "@snacks";
-        $shortCodes['@pul'] = "@pullups";
-        $shortCodes['+w'] = "work on";
-        
-        $shortCodesJson = json_encode($shortCodes);
-        $shortCodes_d = json_decode($shortCodesJson);
-        
-        return $shortCodes_d;
-    }
-    
-    function echoOut($output) {
+    public function echoOut($output)
+    {
         echo $output;
     }
 }

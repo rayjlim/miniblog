@@ -10,16 +10,16 @@ use Slim\Slim;
 $app = new Slim(array(
     'view' => new Twig
 ));
-
+ 
 if (defined('DEVELOPMENT') && DEVELOPMENT) {
     // $app->add(new AuthMiddleware());
-    $_SESSION[SESSION_USER_ID] = 1;
     //Access-Control-Allow-Origin header with wildcard.
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Expose-Headers: Access-Control-*");
     header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization");
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
     header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+    $app->add(new AuthMiddleware()); 
 }
 else{
     $app->add(new AuthMiddleware()); 
@@ -39,17 +39,20 @@ require 'backend/core/page_message.php';
 //     return $log;
 // });
 
- if (!strpos($app->request()->getRootUri(), 'index.php')) {
-     $app->get('/', function () use ($app) {
-         $app->redirect('index.php/posts/');
-     });
- } else {
-     $app->get('/', function () use ($app) {
-         $app->redirect('posts/');
-     });
- }
-
+//  if (!strpos($app->request()->getRootUri(), 'index.php')) {
+//      $app->get('/', function () use ($app) {
+//          $app->redirect('index.php/posts/');
+//      });
+//  } else {
+//      $app->get('/', function () use ($app) {
+//          $app->redirect('posts/');
+//      });
+//  }
+// print('check security')
 $app->get('/security', function () {
+    echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
+});
+$app->post('/security', function () {
     echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
 });
 $app->options('/security', function () {
@@ -66,6 +69,7 @@ $app->get('/posts/', $entryHandler->listItems());
 
 $app->get('/api/posts/:id', $entryHandler->itemDetailsApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
+
 $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
 $app->get('/api/pebble', $entryHandler->pebbleInfo());
 $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());

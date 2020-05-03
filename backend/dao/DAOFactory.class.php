@@ -106,22 +106,11 @@ class DAOFactory
         return new UploadHandler($app, DAOFactory::getResourceDAO());
     }
 
-    public static function FacebookApi()
-    {
-        $fb = new Facebook\Facebook([
-          'app_id' => FB_APP_ID, // Replace {app-id} with your app id
-          'app_secret' => FB_APP_SECRET,
-          'default_graph_version' => 'v2.2',
-          ]);
-        return $fb;
-    }
-
     public static function SecurityAgent()
     {
         return new SecurityAgent(
             DAOFactory::getSmsUsersDAO(),
-            DAOFactory::getResourceDAO(),
-            DAOFactory::FacebookApi()
+            DAOFactory::getResourceDAO()
         );
     }
 }

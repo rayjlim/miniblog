@@ -50,7 +50,14 @@ class SmsUsersRedbeanDAO implements SmsUsersDAO
         $sequencedArray = array_values(array_map("getExportValues", $users));
         return count($sequencedArray)? $sequencedArray[0]: null;
     }
-    
+
+    public function lookupByEmailGoogleId($email, $googleId)
+    {
+        $users = R::findAll(USERS, 'email = ? AND googleId = ? ', [$email, $googleId]);
+        $sequencedArray = array_values(array_map("getExportValues", $users));
+        return count($sequencedArray)? $sequencedArray[0]: null;
+    }
+
     public function lookupByEmail($email)
     {
         $users = R::findAll(USERS, 'email = ?', [$email]);

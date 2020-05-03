@@ -38,7 +38,7 @@ class ContentHelper implements ContentHelperInterface
     {
         $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
         $smsEntry = $this->checkDateShortForms($smsEntry);
-        $smsEntry = $this->expandShortCodes($smsEntry);
+        
         $smsEntry = $this->checkSleepTag($smsEntry);
         $smsEntry = $this->checkAwakeTag($smsEntry);
         return $smsEntry;
@@ -166,27 +166,6 @@ class ContentHelper implements ContentHelperInterface
         $hourVal = intval($tokens[0]);
         $minuteVal = $tokens[1] / MINUTES_PER_HOUR;
         return floatval($hourVal) + floatval($minuteVal);
-    }
-    public function expandShortCodes($smsEntry)
-    {
-        $shortCodes = $this->iResource->shortCodes();
-        if ($shortCodes != null) {
-            
-            // DevHelp::debugMsg("..short code checks " . $smsEntry->content);
-            
-            $tokens = explode(" ", $smsEntry->content);
-            $newTokens = [];
-            foreach ($tokens as $token) {
-                if (property_exists($shortCodes, $token)) {
-                    $newTokens[] = $shortCodes->$token;
-                } else {
-                    $newTokens[] = $token;
-                }
-            }
-            
-            $smsEntry->content = implode(" ", $newTokens);
-        }
-        return $smsEntry;
     }
     
     public function number_pad($number, $n)
