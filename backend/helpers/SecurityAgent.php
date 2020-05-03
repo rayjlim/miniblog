@@ -46,27 +46,22 @@ class SecurityAgent
         DevHelp::debugMsg('cookie available, set vars');
         $smsUser = new SmsUser();
        
-
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
 
-        // var_dump($data);
-        // print('sub'.$data->sub);
-        // print('email'.$data->email);
+        if(isset($data) && isset($data->email)){
+            $dbUser = $this->iDao->lookupByEmailGoogleId($data->email, $data->sub);
 
-        // LOOKUP KEY: USERID
-        $dbUser = $this->iDao->lookupByEmailGoogleId($data->email, $data->sub);
-        if (isset($dbUser)) {
             $smsUser->id = $dbUser['id'];
             $smsUser->isAuthenticated = true;
             $smsUser->fullname = $dbUser['email'];
             $this->logLogin('cookie success: ' . $dbUser['email']);
-        } else {
-            $smsUser = null;
-            $this->logLogin('cookie invalid: ' .$cookieId);
-            $this->iResource->setSession('page_message', 'Unregistered Facebook account');
+            return $smsUser;
         }
-        return $smsUser;
+
+        $this->logLogin('cookie passed, request body invalid: ' . $request_body);
+        $this->iResource->setSession('page_message', 'cookie passed, request body invalid');
+        return null;
     }
 
     public function checkLoggingOut($req)

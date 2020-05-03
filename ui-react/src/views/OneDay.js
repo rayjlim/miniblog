@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-var
 import moment from 'moment';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
+import { useAuth0 } from "../utils/react-auth0-spa";
 
 /**
  * Component to Display of One Day style
@@ -15,11 +16,13 @@ import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-va
  * <Route path="/oneday" component={OneDay} />
  */
 const OneDay = () => {
+	const { user, isAuthenticated } = useAuth0();
 	const [ data, setData ] = useState({ entries: [] });
 	const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
 	const [ formMode, setFormMode ] = useState(0);
 	const [ entry, setEntry ] = useState({});
 	const [ media, setMedia ] = useState({ fileName: '', filePath: '' });
+	const [ auth, setAuth ] = useState(false);
 
 	console.log('oDate :', oDate);
 
@@ -45,7 +48,13 @@ const OneDay = () => {
 		} else if (typeof result.data === 'string') {
 			console.log('invalid json');
 		} else {
-			setData(result.data);
+			console.log('result.data :>> ', result.data.unauth);
+			if(result.data.unauth){
+				setAuth(false);
+			}else{
+				setData(result.data);
+				setAuth(true);
+			}
 		}
 	}
 
@@ -118,24 +127,50 @@ const OneDay = () => {
 		}
 	}
 
+	async function sendBackendAuth(e){
+		const result = await axios.post(`${constants.REST_ENDPOINT}security?debug=off`, {
+			email: user.email,
+			sub: user.sub
+		});
+		console.log('result :', result);
+		if (result.status !== 200) {
+			console.log('result.status :', result.status);
+			alert(`loading error : ${result.status}`);
+			return;
+		} else if (typeof result.data === 'string') {
+			console.log('invalid json');
+		} else {
+			loadDay(oDate);
+		}
+	}
+
+	
+
 	return (
 		<Fragment>
 			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
 				<RouterNavLink to="/textentry">
-					<i className="fa fa-search" /> <span>Search</span>
+					<i className="fa fa-search" /> <span className="nav-text">Search</span>
 				</RouterNavLink>
 				<RouterNavLink to="/sameday">
-					<i className="fa fa-calendar-check" /> <span>Same Day</span>
+					<i className="fa fa-calendar-check" /> <span  className="nav-text">Same Day</span>
 				</RouterNavLink>
 				<RouterNavLink to="/calendar">
-					<i className="fa fa-calendar" /> <span>Calendar</span>
+					<i className="fa fa-calendar" /> <span  className="nav-text">Calendar</span>
 				</RouterNavLink>
-				<a href="https://miniblog.lilplaytime.com/login.php">
-					<i className="fa fa-sign-in" /> <span>Login</span>
-				</a>
 				<RouterNavLink to="/login">
-					<i className="fa fa-calendar" /> <span>Login2</span>
+					
+						{isAuthenticated ? (<>
+						<i className="fa fa-sign-out" /> 
+						<span  className="nav-text">
+						LogOut</span></>) : (<><i className="fa fa-sign-in" /> <span  className="nav-text">
+						LogIn</span></>)}
+				
 				</RouterNavLink>
+				{isAuthenticated && ! auth ? (
+				<button onClick={e=>sendBackendAuth(e)} className="plainLink">
+					<i className="fa fa-shield" /> <span  className="nav-text">Auth</span>
+				</button>) : ''}
 			</nav>
 			<br />
 			<br />
@@ -167,7 +202,7 @@ const OneDay = () => {
 				<RouterNavLink
 					to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`}
 					className="btn navbar-btn"
-				>Media</RouterNavLink>
+				>Media.</RouterNavLink>
 			</div>
 			<section className="container">{showAddEditForm(formMode)}</section>
 
@@ -199,6 +234,7 @@ const OneDay = () => {
 				<a href="/uploadForm/" className="btn navbar-btn">
 					<i className="fa fa-file-upload" /> Upload Pix
 				</a>
+				<span>{user && `${user.email}`}</span>
 			</nav>
 		</Fragment>
 	);

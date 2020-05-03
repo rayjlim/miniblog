@@ -4,8 +4,6 @@ import createAuth0Client from "@auth0/auth0-spa-js";
 const DEFAULT_REDIRECT_CALLBACK = () =>
   window.history.replaceState({}, document.title, window.location.pathname);
 
-
-
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 export const Auth0Provider = ({
@@ -20,27 +18,35 @@ export const Auth0Provider = ({
   const [popupOpen, setPopupOpen] = useState(false);
 
   useEffect(() => {
+    // alert('auth: useEffect')
     const initAuth0 = async () => {
+      // alert('auth: createAuth0Client >> ', initOptions)
+      try{
       const auth0FromHook = await createAuth0Client(initOptions);
       setAuth0(auth0FromHook);
+      // alert('auth: auth0FromHook >> ', auth0FromHook)
 
       if (
         window.location.search.includes("code=") &&
         window.location.search.includes("state=")
       ) {
+        // alert('auth: has code & state >> ')
         const { appState } = await auth0FromHook.handleRedirectCallback();
         onRedirectCallback(appState);
       }
 
       const isAuthenticated = await auth0FromHook.isAuthenticated();
-
+      // alert('auth: isAuthenticated >> ' ,isAuthenticated)
       setIsAuthenticated(isAuthenticated);
 
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
+        // alert('auth: user >> ' ,user)
         setUser(user);
       }
-
+    }catch(e){
+      // alert('auth error>> ', e)
+    }
       setLoading(false);
     };
     initAuth0();
