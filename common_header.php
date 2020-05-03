@@ -9,6 +9,3 @@ R::ext('xdispense', function ($type) {
     return R::getRedBean()->dispense($type);
 });
 // R::debug( TRUE );
-
-
-

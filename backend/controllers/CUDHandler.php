@@ -82,4 +82,5 @@ class CUDHandler extends AbstractController
             $this->resource->echoOut('{"rows_affected": ' . $rows_affected . '}');
         };
     }
+
 }

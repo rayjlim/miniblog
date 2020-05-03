@@ -10,12 +10,12 @@ class AuthMiddleware extends \Slim\Middleware
         DevHelp::debugMsg(__FILE__);
 
         $helper = DAOFactory::SecurityAgent();
-        $app->smsUser = $helper->authenticate($_REQUEST, isset($loginPage));
+        $app->smsUser = $helper->authenticate($_REQUEST);
 
         if ($app->smsUser == null) {
             if (strpos($app->request->getPath(), '/api/')) {
                 $redirectUrl = '/api.php/unauth';
-                DevHelp::redirectHelper($redirectUrl);
+                // DevHelp::redirectHelper($redirectUrl);
             } else {
                 DevHelp::debugMsg('$app->smsUser == null');
                 // $path_parts = pathinfo($_SERVER["SCRIPT_NAME"]);
@@ -24,8 +24,11 @@ class AuthMiddleware extends \Slim\Middleware
                     $redirectUrl.= "?target=" . $_REQUEST['cmd'];
                 }
         
-                DevHelp::redirectHelper($redirectUrl);
+                // DevHelp::redirectHelper($redirectUrl);
+               
             }
+            echo '{"unauth": true}';
+            exit(0);
         }
     
 

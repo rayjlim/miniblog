@@ -4,14 +4,14 @@ use \Lpt\DevHelp;
 function printEntrys($carry, $item)
 {
     $entryDay = new DateTime($item['date']);
-    $urlPrefix = "http://".DOMAIN."/".ROOT_URL;
-    $link = "{$urlPrefix}/index.php/main#/oneDay?date={$entryDay->format('Y-m-d')}";
+    $urlPrefix = "https://".DOMAIN."/".ROOT_URL;
+    $link = "{$urlPrefix}/index.html?date={$entryDay->format('Y-m-d')}";
     $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
-    $replacement = "<img src=\"{$urlPrefix}/uploads".'${2}'."\">";
+    $replacement = "<img src=\"{$urlPrefix}uploads".'${2}'."\">";
     $preparedContent = preg_replace($pattern, $replacement, $item['content']);
 
     //replace the icons as well
-    $pattern = '/<i class="fa[sb] fa-([\w\-]*)"(><\/i>|\s?\/>)/';
+    $pattern = '/<i class="fa[sb]? fa-([\w\-]*)"(><\/i>|\s?\/>)/';
     $replacement = '&lt;${1}&gt; :';
     $preparedContent = preg_replace($pattern, $replacement,$preparedContent);
 
@@ -106,7 +106,7 @@ class GraphHandler extends AbstractController
             $qLength = sizeof($this->QUESTIONOTDAY);
             $modulo = $dayNumber%$qLength;
             $text = $this->QUESTIONOTDAY[$modulo];
-            $link = "http://".DOMAIN."/".ROOT_URL."index.php/main#/oneDay?pretext=#qod";
+            $link = "http://".DOMAIN."/".ROOT_URL."/index.php/main#/oneDay?pretext=#qod";
             $additions .= "<strong><a href=\"".$link."\">Question of the Day:</a></strong>"
       .$text."<br><br>";
 
@@ -116,7 +116,7 @@ class GraphHandler extends AbstractController
             $subject = "On this day ". $targetDay->format('M d');
             $to = MY_EMAIL;
 
-            $headers = "From: smsblog@lilplaytime.com\r\n";
+            $headers = "From: miniblog@lilplaytime.com\r\n";
             $headers .= "Reply-To: " . MY_EMAIL . "\r\n";
             $headers .= "X-Mailer: PHP/" . phpversion();
             $headers .= "MIME-Version: 1.0\r\n";

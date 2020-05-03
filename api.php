@@ -1,4 +1,7 @@
 <?php
+// not ready, not tested
+exit(1);
+
 
 // load required files
 require 'vendor/autoload.php';

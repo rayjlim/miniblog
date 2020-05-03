@@ -47,17 +47,13 @@ commented out .fc-content {word-wrap:nowrap}
 so the events display multi line instead of forced to one line
 
 ----
-using node ver. 7.2.1
+using node ver. 13.2.1
 
 ++ start linux dev server
 sudo /opt/lampp/lampp start
 (in linux terminal)
 php directory: /opt/lampp/bin
     [http://localhost/projects/miniblog3/](http://localhost/projects/miniblog3/)
-
- node_modules/.bin/webpack -w (for development)
- npm run build
- npm run build-prod
  
  running composer
  /opt/lampp/bin/php /usr/local/bin/composer install
@@ -65,3 +61,8 @@ php directory: /opt/lampp/bin
 
  sql setup required:
  SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+service mysql restart
+
+ ps aux|grep -v grep| grep react-scripts \
+ | awk '{print $2}' | xargs kill -9

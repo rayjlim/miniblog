@@ -33,6 +33,7 @@ class EntryHandler extends AbstractController
       $userId = $this->resource->getSession(SESSION_USER_ID);
       $entries = $this->dao->queryBlogList($userId, $listParams);
       $this->app->response()->header('Content-Type', 'application/json');
+      
       $this->resource->echoOut('{"entries": ' . json_encode($entries) . '}');
     };
   }
@@ -83,7 +84,7 @@ class EntryHandler extends AbstractController
       
       $entries = $this->dao->getSameDayEntries($userId, $targetDay);
       $this->app->response()->header('Content-Type', 'application/json');
-      $this->resource->echoOut('{"entries": ' . json_encode($entries) . '}');
+      $this->resource->echoOut('{"user": '. $userId .', "entries": ' . json_encode($entries) . '}');
     };
   }
 

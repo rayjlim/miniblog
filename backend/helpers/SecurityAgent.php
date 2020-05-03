@@ -7,12 +7,11 @@ class SecurityAgent
 
     public $iDao = null;
     public $iResource = null;
-    public $facebook = null;
-    public function __construct($iDao, $iResource, $facebook)
+
+    public function __construct($iDao, $iResource)
     {
         $this->iDao = $iDao;
         $this->iResource = $iResource;
-        $this->facebook = $facebook;
     }
 
     public function checkPassword($password)
@@ -42,126 +41,32 @@ class SecurityAgent
         return $smsUser;
     }
 
-    public function loginByCookie($cookieValue)
+    public function loginByCookie($request)
     {
         DevHelp::debugMsg('cookie available, set vars');
         $smsUser = new SmsUser();
-        $cookieId = trim(SecurityAgent::decrypt($cookieValue));
+       
+        $request_body = file_get_contents('php://input');
+        $data = json_decode($request_body);
 
-        // LOOKUP KEY: USERID
-        $dbUser = $this->iDao->load($cookieId);
-        if (isset($dbUser)) {
+        if(isset($data) && isset($data->email)){
+            $dbUser = $this->iDao->lookupByEmailGoogleId($data->email, $data->sub);
+
             $smsUser->id = $dbUser['id'];
             $smsUser->isAuthenticated = true;
             $smsUser->fullname = $dbUser['email'];
             $this->logLogin('cookie success: ' . $dbUser['email']);
-        } else {
-            $smsUser = null;
-            $this->logLogin('cookie invalid: ' .$cookieId);
-            $this->iResource->setSession('page_message', 'Unregistered Facebook account');
-        }
-        return $smsUser;
-    }
-
-    public function facebookLoggedIn()
-    {
-        //instantiate the Facebook library with the APP ID and APP SECRET
-        DevHelp::debugMsg('setup details from FB id');
-        $smsUser = new SmsUser();
-
-        if (!defined("DEVELOPMENT")) {
-            try {
-                // Returns a `Facebook\FacebookResponse` object
-                $response = $this->facebook->get('/me?fields=id,name', $_SESSION['fb_access_token']);
-            } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                echo 'Graph returned an error: ' . $e->getMessage();
-                exit;
-            } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                exit;
-            }
-
-            $user = $response->getGraphUser();
-            $fbUserId = $user['id'];
-
-            DevHelp::debugMsg('-logged in by FB, Set the Auth vars' . $fbUserId);
-
-            $dbUser = $this->iDao->lookupByFacebook($fbUserId); //lookup the id from db
-            DevHelp::debugMsg('-smsuser' . $dbUser['id']);
-
-            if (isset($dbUser)) {
-                $smsUser->id = $dbUser['id'];
-                $smsUser->isAuthenticated = true;
-                $smsUser->fullname = $user['name'];
-                $this->logLogin('fb success: ' .$fbUserId .'-'. $smsUser->id);
-            } else {
-                $smsUser = null;
-                $this->logLogin('fb invalid: ' .$fbUserId);
-                $this->iResource->setSession('page_message', 'Unregistered Facebook account');
-            }
+            return $smsUser;
         }
 
-        return $smsUser;
-    }
-    public function githubLoggedIn()
-    {
-        //instantiate the Facebook library with the APP ID and APP SECRET
-        DevHelp::debugMsg('setup details from GH id');
-        $smsUser = new SmsUser();
-
-        if (!defined("DEVELOPMENT")) {
-            DevHelp::debugMsg('session key' . session(SESSION_GH_ACCESS_TOKEN));
-
-            $apiURLBase = 'https://api.github.com/';
-            $user = $this->apiRequest($apiURLBase . 'user', false, array(
-           'User-Agent: smsblog'));
-            $this->logLogin('GH attempt: '.isset($user->id));
-            if (isset($user->id) && $user->id == MY_GITHUB_ID) {
-                $smsUser->id = 1;
-                $smsUser->isAuthenticated = true;
-                $smsUser->fullname = $user->name;
-                $this->logLogin('GH success: ' . $smsUser->id);
-            } else {
-                DevHelp::debugMsg('Not logged in through GH - redirect');
-
-                $this->iResource->setSession('page_message', 'Invalid Github User');
-                $this->logLogin('GH failed: ');
-                $smsUser = null;
-            }
-        }
-
-        return $smsUser;
-    }
-    public function googleLoggedIn()
-    {
-        //instantiate the Facebook library with the APP ID and APP SECRET
-        DevHelp::debugMsg('setup details from google id');
-        $smsUser = new SmsUser();
-
-        if (!defined("DEVELOPMENT")) {
-            DevHelp::debugMsg('SESSION_GOOGLE_TOKEN' . session(SESSION_GOOGLE_TOKEN));
-
-            $MY_GOOGLE_SUB_ID = GOOGLE_SUB_ID;
-            if (session(SESSION_GOOGLE_TOKEN) == MY_EMAIL) {
-                $smsUser->id = 1;
-                $smsUser->isAuthenticated = true;
-                $smsUser->fullname = session(SESSION_GOOGLE_TOKEN) ;
-                $this->logLogin('google success: ' . $smsUser->id);
-            } else {
-                DevHelp::debugMsg('Not logged in through google - redirect');
-
-                $this->iResource->setSession('page_message', 'Invalid Google User');
-                $this->logLogin('Google failed: ' . session(SESSION_GOOGLE_TOKEN));
-                $smsUser = null;
-            }
-        }
-
-        return $smsUser;
+        $this->logLogin('cookie passed, request body invalid: ' . $request_body);
+        $this->iResource->setSession('page_message', 'cookie passed, request body invalid');
+        return null;
     }
 
     public function checkLoggingOut($req)
     {
-        return isset($req['password']) && strtolower($req['password']) == 'unauth';
+        return isset($req['logout']) && strtolower($req['logout']) == 'true';
     }
 
     public function logoutUser()
@@ -186,43 +91,46 @@ class SecurityAgent
         $smsUser->isAuthenticated = true;
         return $smsUser;
     }
-    public function authenticate($req, $isLoginPage)
+
+    public function authenticate($req)
     {
         $smsUser = new SmsUser();
         $cookieExpiration = time() + SECONDS_PER_DAY * 30;  // 30 DAYS
+
+        DevHelp::debugMsg('get user id'. $this->iResource->getSession(SESSION_USER_ID));
         DevHelp::debugMsg('$this->iResource->issetSession(SESSION_USER_ID): ' .
-      $this->iResource->issetSession(SESSION_USER_ID));
+        $this->iResource->issetSession(SESSION_USER_ID));
         if (! $this->iResource->issetSession(SESSION_USER_ID)) {
-            DevHelp::debugMsg('not logged in, then check url param, $isLoginPage: ' . $isLoginPage);
-            if (! $isLoginPage) {
-                DevHelp::debugMsg('isLoginPage==false');
+            DevHelp::debugMsg('not logged in, then check url param ' );
+
+            // check authenticated credentials
+            // var_dump($_COOKIE);
+            // var_dump($req);
                 if (isset($req['password'])) {
+                    DevHelp::debugMsg('login by password');
                     $smsUser = $this->checkPassword($req['password']);
-                } elseif (isset($_SESSION['fb_access_token'])) {
-                    $smsUser = $this->facebookLoggedIn();
-                } elseif (isset($_SESSION[SESSION_GH_ACCESS_TOKEN])) {
-                    $smsUser = $this->githubLoggedIn();
-                } elseif (isset($_SESSION[SESSION_GOOGLE_TOKEN])) {
-                    $smsUser = $this->googleLoggedIn();
-                } elseif ($this->wowo_cookieLogin && isset($_COOKIE[COOKIE_USER])) {
-                    $smsUser = $this->loginByCookie($_COOKIE[COOKIE_USER]);
+                } elseif ($this->wowo_cookieLogin && isset($_COOKIE['auth0_is_authenticated'])) {
+                    DevHelp::debugMsg('login by cookie');
+                    $smsUser = $this->loginByCookie($req);
                 } else {
+                    DevHelp::debugMsg('no password or cookie');
                     $smsUser = null;
                 }
-            }
+
             if ($smsUser !== null) {
-                $this->iResource->setCookie(
-            COOKIE_USER,
-            SecurityAgent::encrypt($smsUser->id),
-            $cookieExpiration
-        );
+                // $this->iResource->setCookie(
+                //     COOKIE_USER,
+                //     SecurityAgent::encrypt($smsUser->id),
+                //     $cookieExpiration
+                // );
+
                 $this->iResource->setSession(SESSION_USER_ID, $smsUser->id);
                 $this->iResource->setSession(SESSION_USER_FULLNAME, $smsUser->fullname);
             }
         } else {
-            DevHelp::debugMsg(' ELSE user is in session');
+            DevHelp::debugMsg('ELSE user is in session');
             DevHelp::debugMsg('$this->iResource->getSession(SESSION_USER_ID)' .
-        $this->iResource->getSession(SESSION_USER_ID));
+            $this->iResource->getSession(SESSION_USER_ID));
             $loggingOut = $this->checkLoggingOut($req);
             if ($loggingOut) {
                 $this->logoutUser();
@@ -230,6 +138,8 @@ class SecurityAgent
             }
             $smsUser = $this->handleSessionUser($smsUser);
         }
+
+        DevHelp::debugMsg('get user id'. $this->iResource->getSession(SESSION_USER_ID));
 
         return $smsUser;
     }
