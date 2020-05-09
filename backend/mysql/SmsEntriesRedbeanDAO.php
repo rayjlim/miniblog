@@ -30,7 +30,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     public function insert($smsEntrie)
     {
         $postBean = R::xdispense(POSTS);
-        
         $postBean->content = $smsEntrie->content;
         $postBean->date = $smsEntrie->date;
         $postBean->user_id = $smsEntrie->userId;
@@ -80,7 +79,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     public function queryBlogList($userId, $listParams)
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
-        
         $posts = R::findAll(POSTS, ' user_id = ?  ' . $sqlParam . ' order by date desc limit ?', [$userId, $listParams->resultsLimit]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         
@@ -89,9 +87,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
     public function getSameDayEntries($userId, $date)
     {
-        
-        // $sqlParam = $this->listParamsToSqlParam($listParams);
-        //select * from sms_entries
         $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m') . ' and Day(date) = ' . $date->format('d')
             . ' and content not like "#s%"'
             . ' and content not like "#x%"'
@@ -123,7 +118,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         }
         
         if (count($listParams->tags) != 0) {
-            
             //todo: change to support array
             $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
         }

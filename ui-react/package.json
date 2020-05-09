@@ -2,7 +2,7 @@
   "name": "miniblog",
   "version": "0.1.0",
   "private": true,
-  "proxy":"http://localhost/projects/miniblog/",
+  "proxy": "http://localhost/projects/miniblog/",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.0.2",
     "@fullcalendar/core": "^4.4.0",
