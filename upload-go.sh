@@ -18,11 +18,12 @@ usage() {
   echo ""
 }
 
-while getopts rs option
+while getopts rsn option
 do
     case "${option}" in
     r) RESETSSH=true;;
     s) BUILD=true;;
+    n) NOBUILDREACT=true;;
     [?])  usage
         exit 1;;
     esac
@@ -33,25 +34,26 @@ PREP_DIR='../smsblog_prod'
 if [ -z "$BUILD" ]; then
 
   rsync -ravz --exclude-from 'exclude-from-prep.txt' --delete . $PREP_DIR
-  rsync -avz  _rsc/vendor $PREP_DIR/_rsc
+  # rsync -avz  _rsc/vendor $PREP_DIR/_rsc
   rsync -avz  "_config/bluehost/SERVER_CONFIG.php"  $PREP_DIR/backend/SERVER_CONFIG.php
   rsync -avz  _config/.htaccess $PREP_DIR/
   rsync -avz  exclude-from-prod.txt $PREP_DIR/
 
+if [ -z "$NOBUILDREACT" ]; then
+
   cd ui-react
   npm run build
   buildresult=$?
-
   if [ $buildresult != 0 ]; then
     echo "REACT Build Fail"
     exit 1
   fi
 
   cd ..
-
+fi
   rsync -ravz  ui-react/build/ $PREP_DIR/
 
-  pushd .
+
   cd $PREP_DIR
   /usr/local/bin/composer install  --no-dev
   chmod 755 *.php

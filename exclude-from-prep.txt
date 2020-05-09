@@ -3,6 +3,7 @@ doc/
 vendor/
 node_modules/
 uploads/
+_rsc/
 .git/
 _rsc/js_build/app.bundle.js
 _rsc/js_build/app.bundle.js.gz
@@ -14,7 +15,6 @@ _rsc/js_build/app.bundle.js.map
 composer.lock
 .gitignore
 SERVER_CONFIG.php
-webpack.config.js
 
 .editorconfig
 .eslintignore
@@ -23,4 +23,3 @@ webpack.config.js
 .vscode
 feature_ideas/
 ui-react/
-stats.json

@@ -160,10 +160,9 @@ const OneDay = () => {
 			});
 		}
 	};
-
 	return (
 		<Fragment>
-			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+			<nav className="navbar navbar-expand-sm navbar-light bg-light">
 				<RouterNavLink to="/search">
 					<i className="fa fa-search" /> <span className="nav-text">Search</span>
 				</RouterNavLink>

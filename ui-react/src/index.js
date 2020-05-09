@@ -6,6 +6,7 @@ import { Auth0Provider } from "./utils/react-auth0-spa";
 import config from "./auth_config.json";
 import * as serviceWorker from './serviceWorker';
 import history from "./utils/history";
+import GithubCorner from "./components/GithubCorner";
 
 const onRedirectCallback = appState => {
   history.push(
@@ -14,9 +15,10 @@ const onRedirectCallback = appState => {
       : window.location.pathname
   );
 };
-
+const showGHCorner = false;
 ReactDOM.render(
   <React.StrictMode>
+    {showGHCorner && <GithubCorner />}
     <Auth0Provider
     domain={config.domain}
     client_id={config.clientId}
