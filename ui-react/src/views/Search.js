@@ -105,6 +105,35 @@ const TextEntry = () => {
 		}
 	}
 
+	function showEntries() {
+		return formMode !== 1 && formMode !== 2 ? (
+			<Fragment>
+				<ul className="entriesList">
+					{data.entries.map((entry) => {
+						let newText = entry.content.replace(/<br \/>/g, '\n');
+						newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
+						const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
+
+						let showEntryDate = (
+							<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
+								{dateFormated}
+							</button>
+						);
+						return (
+							<li key={entry.id} className="blogEntry">
+								{showEntryDate}|
+								<ReactMarkdown source={newText} escapeHtml={false} />
+							</li>
+						);
+					})}
+				</ul>
+
+			</Fragment>
+		) : (
+			''
+		);
+	}
+
 	return (
 		<Fragment>
 			<nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
@@ -138,25 +167,8 @@ const TextEntry = () => {
 
 			<section className="container">{showAddEditForm(formMode)}</section>
 
-			<ul className="entriesList">
-				{data.entries.map((entry) => {
-					let newText = entry.content.replace(/<br \/>/g, '\n');
-					newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
-					const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-					let showEntryDate = (
-						<button onClick={(e) => showEditForm(e, entry)} className="plainLink">
-							{dateFormated}
-						</button>
-					);
+			<section className="container">{showEntries()}</section>
 
-					return (
-						<li key={entry.id} className="blogEntry">
-							{showEntryDate} |
-							<ReactMarkdown source={newText} escapeHtml={false} />
-						</li>
-					);
-				})}
-			</ul>
 			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
 				<a href="/uploadForm/" className="btn navbar-btn">
 					<i className="fa fa-file-upload" /> Upload Pix

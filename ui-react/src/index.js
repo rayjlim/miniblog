@@ -2,21 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { Auth0Provider } from "./utils/react-auth0-spa";
-import config from "./auth_config.json";
+import { Auth0Provider } from './utils/react-auth0-spa';
+import config from './auth_config.json';
 import * as serviceWorker from './serviceWorker';
-import history from "./utils/history";
-import GithubCorner from "./components/GithubCorner";
 
-const onRedirectCallback = appState => {
-  history.push(
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : window.location.pathname
-  );
+import GithubCorner from "./components/GithubCorner";
+import history from './utils/history';
+
+const onRedirectCallback = (appState) => {
+	history.push(appState && appState.targetUrl ? appState.targetUrl : window.location.pathname);
 };
 const showGHCorner = false;
 ReactDOM.render(
+
   <React.StrictMode>
     {showGHCorner && <GithubCorner />}
     <Auth0Provider
@@ -30,6 +28,7 @@ ReactDOM.render(
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root')
+
 );
 
 // If you want your app to work offline and load faster, you can change
