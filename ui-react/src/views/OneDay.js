@@ -7,7 +7,7 @@ import moment from 'moment';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
-
+import { Button, Snackbar } from 'react-md';
 /**
  * Component to Display of One Day style
  * 
@@ -23,6 +23,7 @@ const OneDay = () => {
 	const [ entry, setEntry ] = useState({});
 	const [ media, setMedia ] = useState({ fileName: '', filePath: '' });
 	const [ auth, setAuth ] = useState(false);
+	const [ mainState, setMainState ] = useState({ toasts: [], autohide: true });
 
 	console.log('oDate :', oDate);
 
@@ -144,7 +145,7 @@ const OneDay = () => {
 		}
 	}
 
-	const logoutWithRedirect = async () => {
+	async function logoutWithRedirect() {
 		const result = await axios(`${constants.REST_ENDPOINT}security?logout=true&debug=off`);
 		console.log('result :', result);
 		if (result.status !== 200) {
@@ -159,7 +160,27 @@ const OneDay = () => {
 				returnTo: window.location.origin
 			});
 		}
-	};
+	}
+
+	function showAlert(e) {
+		const text = 'hello';
+		// const action = {
+		// 	children: 'Retry',
+		// 	onClick: () => {
+		// 	  alert('You tried again for some reason...'); // eslint-disable-line no-alert
+		// 	},
+		//   };
+		// const action = 'Retry';
+		const action = null;
+		const toasts = mainState.toasts.slice();
+		toasts.push({ text, action });
+		setMainState({ ...mainState, toasts });
+	}
+	function dismissToast() {
+		const [ , ..._toasts ] = mainState.toasts;
+		setMainState({ ...mainState, toasts: _toasts });
+	}
+
 	return (
 		<Fragment>
 			<nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -196,9 +217,15 @@ const OneDay = () => {
 					''
 				)}
 			</nav>
-			<br />
-			<br />
+			<Snackbar
+				id="example-snackbar"
+				toasts={mainState.toasts}
+				autohide={mainState.autohide}
+				onDismiss={dismissToast}
+			/>
 			<h1>OneDay</h1>
+
+			<Button onClick={(e) => showAlert(e)}>test snackbar</Button>
 
 			<div className="grid-3mw container">
 				<button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
@@ -255,7 +282,7 @@ const OneDay = () => {
 			<br />
 			<br />
 			<br />
-			<nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+			<nav className="navbar navbar-expand-sm  navbar-light bg-light">
 				<a href="/uploadForm/" className="btn navbar-btn">
 					<i className="fa fa-file-upload" /> Upload Pix
 				</a>
