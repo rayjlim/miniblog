@@ -6,6 +6,7 @@ import moment from 'moment';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
+import { Snackbar } from 'react-md';
 const DEBOUNCE_TIME = 300;
 
 const SameDay = () => {
@@ -14,6 +15,7 @@ const SameDay = () => {
     const [ oDate, setDate ] = useState('');
     const [ formMode, setFormMode ] = useState(0);
     const [ entry, setEntry ] = useState({});
+    const [ mainState, setMainState ] = useState({ toasts: [], autohide: true });
 
     useEffect(() => {
         console.log('useEffect');
@@ -82,6 +84,11 @@ const SameDay = () => {
         setEntry(entry);
     }
     function resetEntryForm() {
+
+        const toasts = mainState.toasts.slice();
+        toasts.push({ text: 'Add/Edit Done' });
+        setMainState({ ...mainState, toasts });
+
         setFormMode(0);
         loadDay(oDate);
     }
@@ -99,6 +106,7 @@ const SameDay = () => {
             return <EditForm entry={entry} onSuccess={() => resetEntryForm()} />;
         }
     }
+
 
     function showEntries() {
         return formMode !== 1 && formMode !== 2 ? (
@@ -128,6 +136,11 @@ const SameDay = () => {
             ''
         );
     }
+    
+    function dismissToast() {
+        const [ , ..._toasts ] = mainState.toasts;
+        setMainState({ ...mainState, toasts: _toasts });
+    }
 
     return (
         <Fragment>
@@ -142,8 +155,12 @@ const SameDay = () => {
                     <i className="fa fa-calendar" /> <span>Calendar</span>
                 </RouterNavLink>
             </nav>
-            <br />
-            <br />
+            <Snackbar
+                id="example-snackbar"
+                toasts={mainState.toasts}
+                autohide={mainState.autohide}
+                onDismiss={dismissToast}
+            />
             <h1>Same Day</h1>
             <div className="grid-3mw container">
                 <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
@@ -190,6 +207,10 @@ function debounce(func, wait, immediate) {
 }
 
 export default SameDay;
+
+
+
+
 
 
 

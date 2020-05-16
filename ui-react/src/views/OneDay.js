@@ -7,7 +7,7 @@ import moment from 'moment';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
-import { Button, Snackbar } from 'react-md';
+import { Snackbar } from 'react-md';
 /**
  * Component to Display of One Day style
  * 
