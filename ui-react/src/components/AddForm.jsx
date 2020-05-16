@@ -37,11 +37,7 @@ const AddForm = (props) => {
 			try {
 				const result = await axios.post(`${constants.REST_ENDPOINT}api/posts/`, JSON.stringify(entry));
 
-				// $('.toast').toast('dispose');
-				// $('.toast-body').html('Saved');
-				// $('.toast').toast({ delay: 4000 });
-				// $('.toast').toast('show');
-				// TODO: clear the fields
+				setContent('');
 				console.log('new id :>> ', result.data.id);
 				props.onSuccess(e);
 			} catch (error) {
@@ -158,6 +154,10 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
+
+
+
+
 
 
 
