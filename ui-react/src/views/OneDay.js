@@ -27,6 +27,24 @@ const OneDay = () => {
 
     console.log('oDate :', oDate);
 
+    useEffect(() => {
+        console.log('OndeDay: useEffect');
+        let loc = window.location + '';
+        let param = loc.substring(loc.indexOf('?'));
+        console.log('param :', param);
+        let urlParams = new URLSearchParams(param);
+
+        const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
+        console.log('urlParams.has(view) :', urlParams.has('view'));
+        console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
+        console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
+        if (urlParams.has('fileName')) {
+            setMedia({ fileName: urlParams.get('fileName'), filePath: urlParams.get('filePath') });
+        }
+        setDate(_date);
+        loadDay(_date);
+    }, []);
+
     const btnShowAddForm = (
         <button onClick={(e) => showAddForm(e)} className="btn btn-default">
             Show Add Form
@@ -76,6 +94,11 @@ const OneDay = () => {
 
     function resetEntryForm() {
         console.log('close form', oDate);
+
+        const toasts = mainState.toasts.slice();
+        toasts.push({ text: 'Add/Edit Done' });
+        setMainState({ ...mainState, toasts });
+
         setFormMode(0);
         loadDay(oDate);
     }
@@ -98,24 +121,6 @@ const OneDay = () => {
         setDate(myval);
         loadDay(myval);
     }
-
-    useEffect(() => {
-        console.log('OndeDay: useEffect');
-        let loc = window.location + '';
-        let param = loc.substring(loc.indexOf('?'));
-        console.log('param :', param);
-        let urlParams = new URLSearchParams(param);
-
-        const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-        console.log('urlParams.has(view) :', urlParams.has('view'));
-        console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
-        console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-        if (urlParams.has('fileName')) {
-            setMedia({ fileName: urlParams.get('fileName'), filePath: urlParams.get('filePath') });
-        }
-        setDate(_date);
-        loadDay(_date);
-    }, []);
 
     function showAddEditForm(mode) {
         console.log('mode :', mode);
@@ -176,6 +181,7 @@ const OneDay = () => {
         toasts.push({ text, action });
         setMainState({ ...mainState, toasts });
     }
+
     function dismissToast() {
         const [ , ..._toasts ] = mainState.toasts;
         setMainState({ ...mainState, toasts: _toasts });
@@ -220,7 +226,7 @@ const OneDay = () => {
             />
             <h1>OneDay</h1>
 
-            <Button onClick={(e) => showAlert(e)}>test snackbar</Button>
+            {/* <Button onClick={(e) => showAlert(e)}>test snackbar</Button> */}
 
             <div className="grid-3mw container">
                 <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
