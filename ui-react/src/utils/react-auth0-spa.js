@@ -1,97 +1,119 @@
-import React, { useState, useEffect, useContext } from "react";
-import createAuth0Client from "@auth0/auth0-spa-js";
+import React, { useState, useEffect, useContext } from 'react';
+import createAuth0Client from '@auth0/auth0-spa-js';
+import constants from '../constants';
+import axios from 'axios';
 
-const DEFAULT_REDIRECT_CALLBACK = () =>
-  window.history.replaceState({}, document.title, window.location.pathname);
+const DEFAULT_REDIRECT_CALLBACK = () => window.history.replaceState({}, document.title, window.location.pathname);
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
-export const Auth0Provider = ({
-  children,
-  onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
-  ...initOptions
-}) => {
-  const [isAuthenticated, setIsAuthenticated] = useState();
-  const [user, setUser] = useState();
-  const [auth0Client, setAuth0] = useState();
-  const [loading, setLoading] = useState(true);
-  const [popupOpen, setPopupOpen] = useState(false);
+export const Auth0Provider = ({ children, onRedirectCallback = DEFAULT_REDIRECT_CALLBACK, ...initOptions }) => {
+    const [ isAuthenticated, setIsAuthenticated ] = useState();
+    const [ user, setUser ] = useState();
+    const [ auth0Client, setAuth0 ] = useState();
+    const [ loading, setLoading ] = useState(true);
+    const [ popupOpen, setPopupOpen ] = useState(false);
 
-  useEffect(() => {
-    // alert('auth: useEffect')
-    const initAuth0 = async () => {
-      // alert('auth: createAuth0Client >> ', initOptions)
-      try{
-      const auth0FromHook = await createAuth0Client(initOptions);
-      setAuth0(auth0FromHook);
-      // alert('auth: auth0FromHook >> ', auth0FromHook)
+    const COOKIE_NAME = 'auth0.is.authenticated';
+    function clearCookie() {
+        console.log('clear cookie : ');
+        document.cookie = `${COOKIE_NAME}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
+        window.location.reload(false);
+    }
 
-      if (
-        window.location.search.includes("code=") &&
-        window.location.search.includes("state=")
-      ) {
-        console.log('auth:code,state :>> ', window.location);
-        const { appState } = await auth0FromHook.handleRedirectCallback();
-        onRedirectCallback(appState);
-      }
+    useEffect(() => {
+        // alert('auth: useEffect')
+        const initAuth0 = async () => {
+            // alert('auth: createAuth0Client >> ', initOptions)
+            try {
+                const myVar = setTimeout(() => {
+                    clearCookie();
+                }, 3000);
+                const auth0FromHook = await createAuth0Client(initOptions);
+                clearTimeout(myVar);
+                setAuth0(auth0FromHook);
+                // alert('auth: auth0FromHook >> ', auth0FromHook)
 
-      const isAuthenticated = await auth0FromHook.isAuthenticated();
-      // alert('auth: isAuthenticated >> ' ,isAuthenticated)
-      setIsAuthenticated(isAuthenticated);
+                if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+                    console.log('auth:code,state :>> ', window.location);
+                    const { appState } = await auth0FromHook.handleRedirectCallback();
+                    onRedirectCallback(appState);
+                }
 
-      if (isAuthenticated) {
-        const user = await auth0FromHook.getUser();
-        // alert('auth: user >> ' ,user)
+                const isAuthenticated = await auth0FromHook.isAuthenticated();
+                // alert('auth: isAuthenticated >> ' ,isAuthenticated)
+                setIsAuthenticated(isAuthenticated);
+
+                if (isAuthenticated) {
+                    const user = await auth0FromHook.getUser();
+                    console.log('auth-spa#user :>> ', user);
+                    setUser(user);
+
+                    const result = await axios.post(`${constants.REST_ENDPOINT}security?debug=off`, {
+                        email: user.email,
+                        sub: user.sub
+                    });
+                    console.log('result :', result);
+                    if (result.status !== 200) {
+                        console.log('result.status :', result.status);
+                        alert(`loading error : ${result.status}`);
+                        return;
+                    } else if (typeof result.data === 'string') {
+                        console.log('invalid json');
+                    } else {
+                        // alert('auth complete');
+                        // TODO: show snackbar
+                    }
+                }
+            } catch (e) {
+                // alert('auth error>> ', e)
+                clearCookie();
+            }
+            setLoading(false);
+        };
+        initAuth0();
+        // eslint-disable-next-line
+    }, []);
+
+    const loginWithPopup = async (params = {}) => {
+        setPopupOpen(true);
+        try {
+            await auth0Client.loginWithPopup(params);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setPopupOpen(false);
+        }
+        const user = await auth0Client.getUser();
         setUser(user);
-      }
-    }catch(e){
-      // alert('auth error>> ', e)
-    }
-      setLoading(false);
+        setIsAuthenticated(true);
     };
-    initAuth0();
-    // eslint-disable-next-line
-  }, []);
 
-  const loginWithPopup = async (params = {}) => {
-    setPopupOpen(true);
-    try {
-      await auth0Client.loginWithPopup(params);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setPopupOpen(false);
-    }
-    const user = await auth0Client.getUser();
-    setUser(user);
-    setIsAuthenticated(true);
-  };
-
-  const handleRedirectCallback = async () => {
-    setLoading(true);
-    await auth0Client.handleRedirectCallback();
-    const user = await auth0Client.getUser();
-    setLoading(false);
-    setIsAuthenticated(true);
-    setUser(user);
-  };
-  return (
-    <Auth0Context.Provider
-      value={{
-        isAuthenticated,
-        user,
-        loading,
-        popupOpen,
-        loginWithPopup,
-        handleRedirectCallback,
-        getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
-        loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
-        getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
-        getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
-        logout: (...p) => auth0Client.logout(...p)
-      }}
-    >
-      {children}
-    </Auth0Context.Provider>
-  );
+    const handleRedirectCallback = async () => {
+        setLoading(true);
+        await auth0Client.handleRedirectCallback();
+        const user = await auth0Client.getUser();
+        setLoading(false);
+        setIsAuthenticated(true);
+        setUser(user);
+    };
+    return (
+        <Auth0Context.Provider
+            value={{
+                isAuthenticated,
+                user,
+                loading,
+                popupOpen,
+                loginWithPopup,
+                handleRedirectCallback,
+                getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
+                loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
+                getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
+                getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
+                logout: (...p) => auth0Client.logout(...p)
+            }}
+        >
+            {children}
+        </Auth0Context.Provider>
+    );
 };

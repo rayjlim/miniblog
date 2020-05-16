@@ -91,6 +91,10 @@ button:nth-of-type(3) {
 	.navbar > a > span {
 		display: none;
 	}
+	.navbar > button > span {
+		display: none;
+	}
+
 }
 
 b {
