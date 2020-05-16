@@ -19,9 +19,9 @@
       "backend/mysql"
     ],
     "files": [
+      "backend/core/_app-constants.php",
       "backend/core/Logger.php",
       "backend/core/DevHelp.php",
-      "backend/core/_app-constants.php",
       "backend/core/common_functions.php",
       "backend/SERVER_CONFIG.php"
     ]
