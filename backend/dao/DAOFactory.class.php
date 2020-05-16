@@ -1,5 +1,5 @@
 <?php
-require_once 'backend/3rdparty/Facebook/autoload.php';
+defined('ABSPATH') OR exit('No direct script access allowed');
 
 class DAOFactory
 {

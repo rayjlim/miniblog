@@ -1,10 +1,6 @@
 <?php
-/**
- * ListParams Class Doc Comment
- *
- * @category Class
- * @package  Smsblog
- */
+defined('ABSPATH') OR exit('No direct script access allowed');
+
 class ListParams extends BaseModel
 {
     public $userId = null;

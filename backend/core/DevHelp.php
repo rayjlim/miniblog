@@ -1,24 +1,8 @@
 <?php
-/**
-* DevHelp Class Doc Comment
-*
-* PHP Version 5.4
-*
-* @date     2007-11-28
-* @category Personal
-* @package  Lpt
-* 
-*/
 namespace Lpt;
-/**
-* DevHelp
-*
-* Debugging helper
-*
-* @date     2007-11-28
-* @category Personal
-* @package  Lpt
-*/ 
+
+defined('ABSPATH') OR exit('No direct script access allowed');
+
 class DevHelp
 {
     /**

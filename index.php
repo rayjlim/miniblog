@@ -12,7 +12,7 @@ $app = new Slim(array(
 ));
  
 if (defined('DEVELOPMENT') && DEVELOPMENT) {
-    // $app->add(new AuthMiddleware());
+
     //Access-Control-Allow-Origin header with wildcard.
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Expose-Headers: Access-Control-*");

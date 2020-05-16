@@ -1,10 +1,5 @@
 <?php
-/**
- * Object represents table 'sms_entries'
- *
-     * @author: http://phpdao.com
-     * @date: 2011-02-25 14:02
- */
+defined('ABSPATH') OR exit('No direct script access allowed');
 class SmsUser
 {
     public $id;

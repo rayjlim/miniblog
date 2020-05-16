@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
 
 const RESTLESS_THRESHOLD = 1000;

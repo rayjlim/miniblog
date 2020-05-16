@@ -1,10 +1,5 @@
 <?php
-/**
- * GraphHelper File
- *
- * @category Class
- * @package  Smsblog
- */
+defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
 
 /**

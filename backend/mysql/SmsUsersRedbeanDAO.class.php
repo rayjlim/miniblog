@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') OR exit('No direct script access allowed');
 
 class SmsUsersRedbeanDAO implements SmsUsersDAO
 {
@@ -42,13 +43,6 @@ class SmsUsersRedbeanDAO implements SmsUsersDAO
         $userBean->email = $smsUser->email;
         $userBean->pref_days_for_reminder = $smsUser->prefDaysForReminder;
         R::store($userBean);
-    }
-    
-    public function lookupByFacebook($facebookId)
-    {
-        $users = R::findAll(USERS, 'facebook_id = ?', [$facebookId]);
-        $sequencedArray = array_values(array_map("getExportValues", $users));
-        return count($sequencedArray)? $sequencedArray[0]: null;
     }
 
     public function lookupByEmailGoogleId($email, $googleId)

@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
 
 define("UPLOAD_SIZE_LIMIT", 5 * 1000000); // 5 meg
@@ -49,64 +50,61 @@ class UploadHandler extends AbstractController
         return function () {
             DevHelp::debugMsg('upload' . __FILE__);
 
-            $filePath = $_POST["filePath"].'/';
+            $filePath = $_POST["filePath"].'/' ?? date("Y-m");
+
             $targetDir = UPLOAD_DIR . $filePath;
 
             $targetFileFullPath = UPLOAD_DIR . $filePath. basename($_FILES["fileToUpload"]["name"]);
 
-            $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
-            // Check if image file is a actual image or fake image
-            if (isset($_POST["submit"])) {
+
+            try {
+                // Check if image file is a actual image or fake image
+                // if (isset($_POST["submit"])) {
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                if ($check !== false) {
-                    //echo "File is an image - " . $check["mime"] . ".";
-                    $uploadOk = 1;
-                } else {
-                    echo "File is not an image.";
-                    $uploadOk = 0;
+                if ($check == false) {
+                    throw new Exception("File is not an image.");
                 }
-            }
+                // }
 
-            // Check if file already exists
-            if (!file_exists($targetDir)) {
-                echo "Creating directory.";
-                mkdir($targetDir, 0711);
-            }
+                // Check if file already exists
+                if (!file_exists($targetDir)) {
+                    echo "Creating directory.";
+                    mkdir($targetDir, 0711);
+                }
 
-            // Check if file already exists
-            if (file_exists($targetFileFullPath)) {
-                echo "Sorry, file already exists. <br>";
-                $urlFileName = basename($_FILES["fileToUpload"]["name"]);
-                echo "![](../uploads/". $filePath.$urlFileName.")";
-                echo "<br><br><a href=\"../main#/oneDay\">One Day</a>";
-                $uploadOk = 0;
-            }
+                // Check if file already exists
+                if (file_exists($targetFileFullPath)) {
+                    $urlFileName = basename($_FILES["fileToUpload"]["name"]);
+                    throw new Exception(" file already exists." ."![](../uploads/". $filePath.$urlFileName.")" . ' of '. UPLOAD_SIZE_LIMIT);
+                }
 
-            // Check file size
-            if ($_FILES["fileToUpload"]["size"] > UPLOAD_SIZE_LIMIT) {
-                echo "Sorry, your file is too large." . $_FILES["fileToUpload"]["size"]. ' of '. UPLOAD_SIZE_LIMIT;
-                $uploadOk = 0;
-            }
-            // Allow certain file formats
-            if (! in_array($imageFileType, $validFileExt)) {
-                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                $uploadOk = 0;
-            }
-            // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "<br>Sorry, your file was not uploaded.";
-            // if everything is ok, try to upload file
-            } else {
-                if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
-                    // echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-                } else {
-                    echo "Sorry, there was an error uploading your file.";
+                // Check file size
+                if ($_FILES["fileToUpload"]["size"] > UPLOAD_SIZE_LIMIT) {
+                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"]. ' of '. UPLOAD_SIZE_LIMIT);
+                }
+                // Allow certain file formats
+                if (! in_array($imageFileType, $validFileExt)) {
+                    throw new Exception("only JPG, JPEG, PNG & GIF files are allowed.");
+                }
+
+                if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
+                    throw new Exception("Sorry, there was an error moving upload file.");
                 }
 
                 $urlFileName = basename($_FILES["fileToUpload"]["name"]);
-                $this->redirector('../index.html?view=media&fileName='.$urlFileName.'&filePath='.$filePath);
+
+                if (isset($_POST['xhr'])) {
+                    $data['fileName'] = $urlFileName;
+                    $data['filePath'] = $filePath;
+                    echo json_encode($data);
+                    return;
+                } else {
+                    $this->redirector('../index.html?view=media&fileName='.$urlFileName.'&filePath='.$filePath);
+                }
+            } catch (Exception $e) {
+                echo 'Caught exception: ', $e->getMessage(), '\n';
             }
         };
     }

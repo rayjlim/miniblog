@@ -1,15 +1,9 @@
 <?php
-/**
- * Intreface DAO
- *
- * @author: http://phpdao.com
- * @date: 2011-02-25 14:02
- */
+defined('ABSPATH') OR exit('No direct script access allowed');
+
 interface SmsUsersDAO
 {
     public function load($id);
-
-    public function lookupByFacebook($facebookId);
 
     public function lookupByEmail($email);
 

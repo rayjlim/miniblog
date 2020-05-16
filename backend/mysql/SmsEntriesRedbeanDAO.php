@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') OR exit('No direct script access allowed');
  // R::debug(TRUE);
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
