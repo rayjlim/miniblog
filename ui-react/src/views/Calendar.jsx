@@ -89,7 +89,7 @@ class Calendar extends React.Component {
         console.log('this.state.entries :', this.state.entries);
         return (
             <Fragment>
-                <nav className="navbar navbar-expand-sm  fixed-top navbar-light bg-light">
+                <nav className="navbar navbar-expand-sm  navbar-light bg-light">
                     <RouterNavLink to="/">
                         <i className="fa fa-home" /> Home
                     </RouterNavLink>
@@ -116,7 +116,7 @@ class Calendar extends React.Component {
                 />
                 <br />
                 <br />
-                <nav className="navbar navbar-expand-sm  fixed-bottom navbar-light bg-light">
+                <nav className="navbar navbar-expand-sm navbar-light bg-light">
                     <RouterNavLink to={`/upload`} className="btn navbar-btn">
                         <i className="fa fa-file-upload" /> Upload Pix
                     </RouterNavLink>
@@ -127,4 +127,5 @@ class Calendar extends React.Component {
 }
 
 export default withRouter(Calendar);
+
 
