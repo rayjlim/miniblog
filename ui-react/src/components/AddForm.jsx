@@ -158,15 +158,3 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
-
-
-
-
-
-
-
-
-
-
-
-
