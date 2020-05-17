@@ -8,6 +8,14 @@ import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
 import { Snackbar } from 'react-md';
+
+const CLOSED = 0;
+const ADD = 1;
+const EDIT = 2;
+
+const ONEDAY = 0;
+const SAMEDAY = 1;
+const SEARCH = 2;
 /**
  * Component to Display of One Day style
  * 
@@ -17,15 +25,22 @@ import { Snackbar } from 'react-md';
  */
 const OneDay = () => {
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-    const [ data, setData ] = useState({ entries: [] });
-    const [ oDate, setDate ] = useState(moment().format('YYYY-MM-DD'));
-    const [ formMode, setFormMode ] = useState(0);
-    const [ entry, setEntry ] = useState({});
-    const [ media, setMedia ] = useState({ fileName: '', filePath: '' });
-    const [ auth, setAuth ] = useState(false);
-    const [ mainState, setMainState ] = useState({ toasts: [], autohide: true });
 
-    console.log('oDate :', oDate);
+    const [ state, setState ] = useState({
+        entries: [],
+        auth: false,
+        pageDate: '',
+        searchParam: '',
+        formEntry: {},
+        toasts: [],
+        autohide: true,
+        pageMode: ONEDAY,
+        formMode: CLOSED
+    });
+
+    let dateInput = null;
+
+    // console.log('state.date :', state.date);
 
     useEffect(() => {
         console.log('OndeDay: useEffect');
@@ -34,47 +49,62 @@ const OneDay = () => {
         console.log('param :', param);
         let urlParams = new URLSearchParams(param);
 
-        const _date = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-        console.log('urlParams.has(view) :', urlParams.has('view'));
-        console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
-        console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-        if (urlParams.has('fileName')) {
-            setMedia({ fileName: urlParams.get('fileName'), filePath: urlParams.get('filePath') });
-        }
-        setDate(_date);
-        loadDay(_date);
+        // const _date = moment().format('YYYY-MM-DD');
+        const pageDate = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
+        const pageMode = urlParams.has('pageMode') ? parseInt(urlParams.get('pageMode')) : ONEDAY;
+        console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
+        // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
+        // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
+        const _date = moment().format('YYYY-MM-DD');
+
+        console.log('setting pageDate :>> ', _date);
+        loadDay({pageDate, pageMode});
     }, []);
 
-    const btnShowAddForm = (
-        <button onClick={(e) => showAddForm(e)} className="btn btn-default">
-            Show Add Form
-        </button>
-    );
+    function loadDay(loadParams) {
+        console.log('loadDay :', loadParams.pageDate, 'pagemode', loadParams.pageMode);
 
-    /**
-	 * Get posts for date
-	 * @function
-	 * @param  {string} date  date of posts
-	 */
-    async function loadDay(date) {
-        console.log('loadDay2 oDate :', date);
-        const result = await axios(`${constants.REST_ENDPOINT}api/posts/?date=${date}`);
-        console.log('result :', result);
-        if (result.status !== 200) {
-            console.log('result.status :', result.status);
-            alert(`loading error : ${result.status}`);
+        if (!loadParams.pageDate) {
             return;
-        } else if (typeof result.data === 'string') {
-            console.log('invalid json');
-        } else {
-            console.log('result.data :>> ', result.data.unauth);
-            if (result.data.unauth) {
-                setAuth(false);
-            } else {
-                setData(result.data);
-                setAuth(true);
+        }
+        let endPointURL = ``;
+        switch (loadParams.pageMode) {
+            case ONEDAY: {
+                endPointURL = `${constants.REST_ENDPOINT}api/posts/?date=${loadParams.pageDate}`;
+                break;
+            }
+            case SAMEDAY: {
+                endPointURL = `${constants.REST_ENDPOINT}api/sameDayEntries/?day=${loadParams.pageDate}`;
+                break;
+            }
+            case SEARCH: {
+                const text = loadParams.searchParam;
+                endPointURL = `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`;
+                break;
             }
         }
+
+        (async () => {
+            const result = await axios(endPointURL);
+
+            console.log('result :', result);
+            if (result.status !== 200) {
+                console.log('result.status :', result.status);
+                alert(`loading error : ${result.status}`);
+                return;
+            } else if (typeof result.data === 'string') {
+                console.log('invalid json');
+            } else {
+                console.log('result.data :>> ', result.data.unauth);
+                if (result.data.unauth) {
+                    setState({ ...state, auth: false });
+                } else {
+                    const entries = result.data.entries;
+                    console.log('state :>> ', state);
+                    setState({ ...state, ...loadParams, entries, auth: true });
+                }
+            }
+        })();
     }
 
     /**
@@ -83,53 +113,58 @@ const OneDay = () => {
 	 * @param  {Object} e Event of Button click
 	 */
     function handleButtonDirection(e) {
-        let _date = moment(oDate, 'YYYY-MM-DD');
-        let updateDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
-        setDate(updateDate);
-        console.log('oneday:hbd.' + e.target.value, oDate, updateDate);
+        console.log('e :>> ', e);
+        const direction = e.target.value;
+        console.log('direction :>> ', direction);
+        let _date = moment(state.pageDate, 'YYYY-MM-DD');
+        let updateDate = _date.add(direction, 'days').format('YYYY-MM-DD');
 
-        loadDay(updateDate);
-        setFormMode(0);
+        console.log('oneday:hbd.' + e.target.value, state.pageDate, updateDate);
+
+        console.log('hbd. :>> ', updateDate);
+        console.log('state :>> ', state.pageDate);
+        loadDay({...state, pageDate: updateDate, formMode: CLOSED});
     }
 
     function resetEntryForm() {
-        console.log('close form', oDate);
-
-        const toasts = mainState.toasts.slice();
+        const toasts = state.toasts.slice();
         toasts.push({ text: 'Add/Edit Done' });
-        setMainState({ ...mainState, toasts });
-
-        setFormMode(0);
-        loadDay(oDate);
+        loadDay({...state, toasts, formMode: CLOSED});
     }
 
     function showAddForm(e) {
-        console.log('showAddForm#oDate :', oDate);
-        setFormMode(1);
+        console.log('showAddForm#state.date :', state.pageDate);
+        setState({ ...state, formMode: ADD });
     }
 
     function showEditForm(e, entry) {
-        e.preventDefault();
         console.log('id :', entry.id);
-        setFormMode(2);
-        setEntry(entry);
+        setState({ ...state, formMode: EDIT, formEntry: entry });
     }
 
     function updateDate(e) {
-        console.log('e :', e.target.value);
+        console.log('UPDATING DATE  :', e.target.value);
         let myval = e.target.value;
-        setDate(myval);
-        loadDay(myval);
+        loadDay({...state, pageDate: myval});
+    }
+
+    function changePageMode(pageMode) {
+        console.log('new pageMode :>> ', pageMode);
+        loadDay({...state, pageMode});
     }
 
     function showAddEditForm(mode) {
-        console.log('mode :', mode);
-        if (!mode || mode === 0) {
-            return btnShowAddForm;
-        } else if (mode === 1) {
-            return <AddForm date={oDate} onSuccess={() => resetEntryForm()} />;
-        } else if (mode === 2) {
-            return <EditForm entry={entry} onSuccess={() => resetEntryForm()} />;
+        // console.log('formmode :', mode);
+        if (!mode || mode === CLOSED) {
+            return (
+                <button onClick={(e) => showAddForm(e)} className="btn btn-default">
+                    Show Add Form
+                </button>
+            );
+        } else if (mode === ADD) {
+            return <AddForm date={state.pageDate} onSuccess={() => resetEntryForm()} />;
+        } else if (mode === EDIT) {
+            return <EditForm entry={state.formEntry} onSuccess={() => resetEntryForm()} />;
         }
     }
 
@@ -146,7 +181,8 @@ const OneDay = () => {
         } else if (typeof result.data === 'string') {
             console.log('invalid json');
         } else {
-            loadDay(oDate);
+            console.log('sendBacendAuth#loadday', state.pageDate);
+            loadDay();
         }
     }
 
@@ -167,24 +203,9 @@ const OneDay = () => {
         }
     }
 
-    function showAlert(e) {
-        const text = 'hello';
-        // const action = {
-        // 	children: 'Retry',
-        // 	onClick: () => {
-        // 	  alert('You tried again for some reason...'); // eslint-disable-line no-alert
-        // 	},
-        //   };
-        // const action = 'Retry';
-        const action = null;
-        const toasts = mainState.toasts.slice();
-        toasts.push({ text, action });
-        setMainState({ ...mainState, toasts });
-    }
-
     function dismissToast() {
-        const [ , ..._toasts ] = mainState.toasts;
-        setMainState({ ...mainState, toasts: _toasts });
+        const [ , ..._toasts ] = state.toasts;
+        setState({ ...state, toasts: _toasts });
     }
 
     return (
@@ -193,9 +214,16 @@ const OneDay = () => {
                 <RouterNavLink to="/search">
                     <i className="fa fa-search" /> <span className="nav-text">Search</span>
                 </RouterNavLink>
-                <RouterNavLink to="/sameday">
-                    <i className="fa fa-calendar-check" /> <span className="nav-text">Same Day</span>
-                </RouterNavLink>
+                {state.pageMode === ONEDAY && (
+                    <button onClick={(e) => changePageMode(SAMEDAY)}>
+                        <i className="fa fa-calendar-check" /> <span className="nav-text">Same Day</span>
+                    </button>
+                )}
+                {state.pageMode === SAMEDAY && (
+                    <button onClick={(e) => changePageMode(ONEDAY)}>
+                        <i className="fa fa-home" /> <span>Home</span>
+                    </button>
+                )}
                 <RouterNavLink to="/calendar">
                     <i className="fa fa-calendar" /> <span className="nav-text">Calendar</span>
                 </RouterNavLink>
@@ -210,7 +238,7 @@ const OneDay = () => {
                         <i className="fa fa-sign-in" /> <span className="nav-text">Log In</span>
                     </button>
                 )}
-                {isAuthenticated && !auth ? (
+                {isAuthenticated && !state.auth ? (
                     <button onClick={(e) => sendBackendAuth(e)} className="plainLink">
                         <i className="fa fa-shield" /> <span className="nav-text">Auth</span>
                     </button>
@@ -218,26 +246,28 @@ const OneDay = () => {
                     ''
                 )}
             </nav>
-            <Snackbar
-                id="example-snackbar"
-                toasts={mainState.toasts}
-                autohide={mainState.autohide}
-                onDismiss={dismissToast}
-            />
-            <h1>OneDay</h1>
+            <Snackbar id="example-snackbar" toasts={state.toasts} autohide={state.autohide} onDismiss={dismissToast} />
+            
+
+            {state.pageMode === ONEDAY && (
+                    <h1>One Day</h1>
+                )}
+                {state.pageMode === SAMEDAY && (
+                   <h1>Same Day</h1>
+                )}
 
             <div className="grid-3mw container">
                 <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
                     <i className="fa fa-chevron-left" /> Prev
                 </button>
                 <div>
-                    <span>{moment(oDate).format('dd')}</span>
+                    <span>{moment(state.date).format('dd')}</span>
                     <input
+                        ref={(elem) => (dateInput = elem)}
                         type="text"
                         className="form-control"
                         id="formDpInput"
-                        value={oDate}
-                        // defaultValue={oDate}
+                        defaultValue={state.pageDate}
                         onChange={(e) => updateDate(e)}
                     />
                 </div>
@@ -245,12 +275,12 @@ const OneDay = () => {
                     Next <i className="fa fa-chevron-right" />
                 </button>
             </div>
-          
-            <section className="container">{showAddEditForm(formMode)}</section>
+
+            <section className="container">{showAddEditForm(state.formMode)}</section>
 
             <section className="container">
                 <ul className="entriesList">
-                    {data.entries.map((entry) => {
+                    {state.entries.map((entry) => {
                         let newText = entry.content.replace(/<br \/>/g, '\n');
                         newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
                         const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
@@ -269,8 +299,6 @@ const OneDay = () => {
                     })}
                 </ul>
             </section>
-            <br />
-            <br />
             <br />
             <nav className="navbar navbar-expand-sm navbar-light bg-light row">
                 <div className="col-md-5 text-left">
