@@ -35,7 +35,10 @@ const OneDay = () => {
         toasts: [],
         autohide: true,
         pageMode: ONEDAY,
-        formMode: CLOSED
+        formMode: CLOSED,
+        scrollToLast: null,
+        refForm: React.createRef(),
+        refs: []
     });
 
     let dateInput = null;
@@ -99,9 +102,21 @@ const OneDay = () => {
                 if (result.data.unauth) {
                     setState({ ...state, auth: false });
                 } else {
+                    const refs = result.data.entries.reduce((acc, value) => {
+                        acc[value.id] = React.createRef();
+                        return acc;
+                    }, {});
+
                     const entries = result.data.entries;
                     console.log('state :>> ', state);
-                    setState({ ...state, ...loadParams, entries, auth: true });
+                    setState({ ...state, ...loadParams, entries, auth: true, refs });
+                    console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
+                    if (loadParams.scrollToLast) {
+                        refs[loadParams.scrollToLast].current.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
             }
         })();
@@ -114,16 +129,12 @@ const OneDay = () => {
 	 */
     function handleButtonDirection(e) {
         console.log('e :>> ', e);
-        const direction = e.target.value;
-        console.log('direction :>> ', direction);
         let _date = moment(state.pageDate, 'YYYY-MM-DD');
-        let updateDate = _date.add(direction, 'days').format('YYYY-MM-DD');
+        let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
+        dateInput.value = newDate;
 
-        console.log('oneday:hbd.' + e.target.value, state.pageDate, updateDate);
-
-        console.log('hbd. :>> ', updateDate);
-        console.log('state :>> ', state.pageDate);
-        loadDay({...state, pageDate: updateDate, formMode: CLOSED});
+        loadDay({...state, pageDate: newDate, formMode: CLOSED});
+        
     }
 
     function resetEntryForm() {
@@ -139,7 +150,12 @@ const OneDay = () => {
 
     function showEditForm(e, entry) {
         console.log('id :', entry.id);
-        setState({ ...state, formMode: EDIT, formEntry: entry });
+
+        setState({ ...state, formMode: EDIT, formEntry: entry, scrollToLast: entry.id });
+        state.refForm.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
     }
 
     function updateDate(e) {
@@ -248,7 +264,6 @@ const OneDay = () => {
             </nav>
             <Snackbar id="example-snackbar" toasts={state.toasts} autohide={state.autohide} onDismiss={dismissToast} />
             
-
             {state.pageMode === ONEDAY && (
                     <h1>One Day</h1>
                 )}
@@ -276,7 +291,9 @@ const OneDay = () => {
                 </button>
             </div>
 
-            <section className="container">{showAddEditForm(state.formMode)}</section>
+            <section className="container" 
+                ref={state.refForm}
+            >{showAddEditForm(state.formMode)}</section>
 
             <section className="container">
                 <ul className="entriesList">
@@ -291,7 +308,9 @@ const OneDay = () => {
                         );
 
                         return (
-                            <li key={entry.id} className="blogEntry">
+                            <li key={entry.id} className="blogEntry"
+                            ref={state.refs[entry.id]}
+                            >
                                 {showEntryDate} |
                                 <ReactMarkdown source={newText} escapeHtml={false} />
                             </li>
