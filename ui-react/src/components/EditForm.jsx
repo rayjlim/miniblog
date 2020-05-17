@@ -16,8 +16,8 @@ const EditForm = (props) => {
     let textareaInput = null;
 	
 	function textChange (text){
-		const pattern = /\@\@([\w\-]*)\@\@/g;
-		const replacement = '<i class="fa fa-\$1" />';
+		const pattern = /@@([\w-]*)@@/g;
+		const replacement = '<i class="fa fa-$1" /> ';
 		console.log('textarea.value :>> ', textareaInput.value);
 		textareaInput.value = textareaInput.value.replace(pattern, replacement);
 
@@ -45,10 +45,6 @@ const EditForm = (props) => {
     function handleClear() {
         props.onSuccess();
     }
-
-    let templateStyle = {
-        float: 'right'
-    };
 
     function handleDelete() {
         console.log('handleDelete ' + props.entry.id);
@@ -121,6 +117,10 @@ const EditForm = (props) => {
 };
 
 export default EditForm;
+
+
+
+
 
 
 

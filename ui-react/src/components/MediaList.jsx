@@ -28,14 +28,14 @@ const MediaList = (props) => {
             } else {
                 const _dirs = [];
                 const _media = [];
-                for (var _dir in result.data.uploadDirs) {
+                for (let _dir in result.data.uploadDirs) {
                     console.log(_dir);
                     _dirs.push(result.data.uploadDirs[_dir]);
                 }
                 setUploadDirs(_dirs);
-                for (var _dir in result.data.dirContent) {
-                    console.log(_dir);
-                    _media.push(result.data.dirContent[_dir]);
+                for (let file in result.data.dirContent) {
+                    console.log(file);
+                    _media.push(result.data.dirContent[file]);
                 }
 
                 setMedia(_media);
@@ -47,8 +47,6 @@ const MediaList = (props) => {
 
     function deleteMedia(filePath, fileName) {
         (async () => {
-              {/* <a href="{{baseurl}}media/?debug=on&fileName={{file}}&filePath={{currentDir}}/" class="delete">X</a>*/}
-
             const result = await axios(`${constants.REST_ENDPOINT}media/?fileName=${fileName}&filePath=${filePath}`, {method: 'DELETE'});
             console.log('result :', result);
             if (result.status !== 200) {
@@ -65,9 +63,9 @@ const MediaList = (props) => {
                     _dirs.push(result.data.uploadDirs[_dir]);
                 }
                 setUploadDirs(_dirs);
-                for (var _dir in result.data.dirContent) {
-                    console.log(_dir);
-                    _media.push(result.data.dirContent[_dir]);
+                for (var file in result.data.dirContent) {
+                    console.log(file);
+                    _media.push(result.data.dirContent[file]);
                 }
 
                 setMedia(_media);
@@ -90,7 +88,7 @@ const MediaList = (props) => {
                     <li>
                         <p>{key}</p>
                         <button onClick={(e) => props.onMediaSelect(currentDir + '/', key)}>Load</button>
-                        <img src={`${constants.PROJECT_ROOT}uploads/${currentDir}/${key}`} />
+                        <img src={`${constants.PROJECT_ROOT}uploads/${currentDir}/${key}`} alt="main_img"/>
                         <button onClick={(e) => deleteMedia(currentDir + '/', key)}>Delete</button>
                         
 
@@ -101,5 +99,9 @@ const MediaList = (props) => {
 };
 
 export default MediaList;
+
+
+
+
 
 
