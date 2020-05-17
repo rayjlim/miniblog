@@ -247,16 +247,6 @@ const OneDay = () => {
                     Next <i className="fa fa-chevron-right" />
                 </button>
             </div>
-            <div>
-                ![](../uploads/{media.filePath}
-                {media.fileName})
-                <RouterNavLink
-                    to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`}
-                    className="btn navbar-btn"
-                >
-                    Media.
-                </RouterNavLink>
-            </div>
             <section className="container">{showAddEditForm(formMode)}</section>
 
             <section className="container">
@@ -284,13 +274,16 @@ const OneDay = () => {
             <br />
             <br />
             <nav className="navbar navbar-expand-sm navbar-light bg-light row">
-                <div class="col-md-5 text-left">
+                <div className="col-md-5 text-left">
                     <RouterNavLink to={`/upload`} className="btn navbar-btn">
                         <i className="fa fa-file-upload" /> Upload Pix
                     </RouterNavLink>
+                    <RouterNavLink to="/media">
+                        <i className="fa fa-portrait" /> <span className="nav-text">Media</span>
+                    </RouterNavLink>
                 </div>
 
-                <div class="col-md-5 text-right">
+                <div className="col-md-5 text-right">
                     <span>{user && `${user.email}`}</span>
                 </div>
             </nav>

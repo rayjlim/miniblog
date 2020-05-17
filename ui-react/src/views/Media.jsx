@@ -5,6 +5,7 @@ import axios from 'axios';
 import moment from 'moment';
 import constants from '../constants';
 import AddForm from '../components/AddForm.jsx';
+import MediaList from '../components/MediaList.jsx';
 import history from '../utils/history';
 
 const Media = () => {
@@ -15,6 +16,8 @@ const Media = () => {
         prepend: '',
         imgUrl: ''
     });
+
+    const [ mediaBaseDir, setMediaBaseDir ] = useState('');
 
     useEffect(() => {
         console.log('Media: useEffect');
@@ -33,6 +36,16 @@ const Media = () => {
             imgUrl: `${constants.PROJECT_ROOT}uploads/${filePath}${fileName}?r=${random}`
         });
     }, []);
+
+    function mediaSelect(filePath, fileName) {
+        let random = Math.random();
+        setPost({
+            fileName,
+            filePath,
+            prepend: `![](../uploads/${filePath}${fileName})`,
+            imgUrl: `${constants.PROJECT_ROOT}uploads/${filePath}${fileName}?r=${random}`
+        });
+    }
 
     // ?fileName=0FE2E672-995F-481C-8E9F-ABA02BED3DAB.jpeg&filePath=2019-04/
     // http://localhost/projects/miniblog3/uploads/2019-10/B5BB1508-0AC2-4E85-A63B-22F843EDA3E9.jpeg
@@ -116,30 +129,34 @@ const Media = () => {
                     <i className="fa fa-sign-in" /> <span>Login</span>
                 </a>
             </nav>
-            <p className="lead">Prepare the image for use</p>
-            <div className="grid-3mw">
-                <button onClick={(e) => rotateLeft(e)}>Left</button>
-                <button onClick={(e) => resize(e)}>Resize</button>
-                <button onClick={(e) => rotateRight(e)}>Right</button>
-            </div>
-            {/* rename={this.rename} */}
-            <hr />
-            <section className="container">
-                {post.imgUrl}
-                <img src={post.imgUrl} alt="edit img" />
-            </section>
-            <hr />
-            <h5>Image is automatically prepended on submit</h5>
-            <AddForm date={post.date} content={post.prepend} onSuccess={(e) => handleAdd(e)} />
-            <br />
-            <br /> <br />
-            <br /> <br />
-            <br />
+
+            {post.fileName !== '' && (
+                <Fragment>
+                    <p className="lead">Prepare the image for use</p>
+                    <div className="grid-3mw">
+                        <button onClick={(e) => rotateLeft(e)}>Left</button>
+                        <button onClick={(e) => resize(e)}>Resize</button>
+                        <button onClick={(e) => rotateRight(e)}>Right</button>
+                    </div>
+                    {/* rename={this.rename} */}
+                    <hr />
+                    <section className="container">
+                        {post.imgUrl}
+                        <img src={post.imgUrl} alt="edit img" />
+                    </section>
+                    <hr />
+                    <h5>Image is automatically prepended on submit</h5>
+                    <AddForm date={post.date} content={post.prepend} onSuccess={(e) => handleAdd(e)} />
+                </Fragment>
+            )}
+
             <nav className="navbar navbar-expand-sm navbar-light bg-light">
                 <RouterNavLink to={`/upload`} className="btn navbar-btn">
                     <i className="fa fa-file-upload" /> Upload Pix
                 </RouterNavLink>
             </nav>
+
+            <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
         </Fragment>
     );
 };

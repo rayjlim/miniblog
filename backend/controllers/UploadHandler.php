@@ -272,8 +272,13 @@ class UploadHandler extends AbstractController
             \Lpt\DevHelp::debugMsg('start listMedia');
             $currentDir = $currentDir != '' ? $currentDir : '';
             $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
+            // \Lpt\DevHelp::debugMsg(print_r($filelist));
 
-            if (count($filelist) > 0 && $currentDir == '') {
+            \Lpt\DevHelp::debugMsg('currentDir '. $currentDir);
+            \Lpt\DevHelp::debugMsg('end($filelist)'.is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
+            
+            //h no media in root folder, get from last 
+            if (count($filelist) > 0 && $currentDir == ''  && is_dir(UPLOAD_DIR . DIR_SEP . end($filelist))) {
                 \Lpt\DevHelp::debugMsg('reading first file');
                 $currentDir = end($filelist);
             }
@@ -287,11 +292,12 @@ class UploadHandler extends AbstractController
             // usort($dirContent, function($a, $b){
             //     return filemtime($a) > filemtime($b);
             // });
-        
-            $this->app->view()->appendData(["uploadDirs" => $filelist]);
-            $this->app->view()->appendData(["currentDir" => $currentDir]);
-            $this->app->view()->appendData(["dirContent" => $dirContent]);
-            $this->app->render('media_list.twig');
+
+            $data['uploadDirs'] = $filelist;
+            $data['currentDir'] = $currentDir;
+            $data['dirContent'] = $dirContent;
+
+            echo json_encode($data);
         };
     }
     
@@ -304,7 +310,6 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('$fileName' . $fileName);
             DevHelp::debugMsg('$filePath' . $filePath);
             
-
             $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
             
             $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
@@ -312,12 +317,8 @@ class UploadHandler extends AbstractController
             
             //forward to xhr_action
             $_SESSION['page_message'] = $data['pageMessage'];
-            
-            if ($this->app->request()->isAjax()) {
-                echo json_encode($data);
-            } else {
-                DevHelp::redirectHelper($baseurl . 'media/');
-            }
+            echo json_encode($data);
+             
         };
     }
 }
