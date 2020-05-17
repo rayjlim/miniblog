@@ -226,8 +226,6 @@ const OneDay = () => {
             />
             <h1>OneDay</h1>
 
-            {/* <Button onClick={(e) => showAlert(e)}>test snackbar</Button> */}
-
             <div className="grid-3mw container">
                 <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
                     <i className="fa fa-chevron-left" /> Prev
@@ -247,16 +245,7 @@ const OneDay = () => {
                     Next <i className="fa fa-chevron-right" />
                 </button>
             </div>
-            <div>
-                ![](../uploads/{media.filePath}
-                {media.fileName})
-                <RouterNavLink
-                    to={`/media?fileName=${media.fileName}&filePath=${media.filePath}`}
-                    className="btn navbar-btn"
-                >
-                    Media.
-                </RouterNavLink>
-            </div>
+          
             <section className="container">{showAddEditForm(formMode)}</section>
 
             <section className="container">
