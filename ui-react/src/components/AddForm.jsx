@@ -7,6 +7,7 @@ const AddForm = (props) => {
 	console.log('props :', props.content);
 	const [ content, setContent ] = useState(props.content);
 	const [ date, setDate ] = useState(props.date);
+    let textareaInput = null;
 
 	useEffect(
 		() => {
@@ -16,11 +17,14 @@ const AddForm = (props) => {
 		[ props ]
 	);
 
-	function contentChange(e) {
-		e.preventDefault();
-		// console.log('e.target.value :', e.target.value);
-		setContent(e.target.value);
+	function textChange (text){
+		const pattern = /\@\@([\w\-]*)\@\@/g;
+		const replacement = '<i class="fa fa-\$1" />';
+		textareaInput.value = textareaInput.value.replace(pattern, replacement);
+
+		setContent(textareaInput.value);
 	}
+
 	function dateChange(e) {
 		e.preventDefault();
 		console.log('e.target.value :', e.target.value);
@@ -68,8 +72,9 @@ const AddForm = (props) => {
 
 			<div className="form-group">
 				<textarea
+					ref={elem=> textareaInput = elem}
 					rows="6"
-					onChange={(e) => contentChange(e)}
+					onChange={(event) => textChange(event.target.value)}
 					className="form-control"
 					placeholder="Add ..."
 					defaultValue={props.content}
@@ -86,7 +91,6 @@ const AddForm = (props) => {
 				/>
 			</div>
 
-			{/* {formBtns} */}
 			<button onClick={handleAdd} className="btn btn-primary">
 				<i className="fa fa-save" /> Submit
 			</button>
@@ -154,12 +158,3 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
-
-
-
-
-
-
-
-
-
