@@ -18,8 +18,8 @@ const AddForm = (props) => {
 	);
 
 	function textChange (text){
-		const pattern = /\@\@([\w\-]*)\@\@/g;
-		const replacement = '<i class="fa fa-\$1" />';
+		const pattern = /@@([\w-]*)@@/g;
+		const replacement = '<i class="fa fa-$1" /> ';
 		textareaInput.value = textareaInput.value.replace(pattern, replacement);
 
 		setContent(textareaInput.value);
@@ -158,3 +158,7 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
+
+
+
+

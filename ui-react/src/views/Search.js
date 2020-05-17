@@ -139,7 +139,7 @@ const TextEntry = () => {
                 <RouterNavLink to="/">
                     <i className="fa fa-home" /> <span>Home</span>
                 </RouterNavLink>
-                <RouterNavLink to="/sameday">
+                <RouterNavLink to="/?pageMode=1">
                     {' '}
                     <i className="fa fa-calendar-check" /> <span>Same Day</span>
                 </RouterNavLink>
