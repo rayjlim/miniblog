@@ -61,7 +61,7 @@ const OneDay = () => {
         const _date = moment().format('YYYY-MM-DD');
 
         console.log('setting pageDate :>> ', _date);
-        loadDay({pageDate, pageMode});
+        loadDay({ pageDate, pageMode });
     }, []);
 
     function loadDay(loadParams) {
@@ -133,14 +133,13 @@ const OneDay = () => {
         let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
         dateInput.value = newDate;
 
-        loadDay({...state, pageDate: newDate, formMode: CLOSED});
-        
+        loadDay({ ...state, pageDate: newDate, formMode: CLOSED });
     }
 
     function resetEntryForm() {
         const toasts = state.toasts.slice();
         toasts.push({ text: 'Add/Edit Done' });
-        loadDay({...state, toasts, formMode: CLOSED});
+        loadDay({ ...state, toasts, formMode: CLOSED });
     }
 
     function showAddForm(e) {
@@ -155,18 +154,18 @@ const OneDay = () => {
         state.refForm.current.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
-        })
+        });
     }
 
     function updateDate(e) {
         console.log('UPDATING DATE  :', e.target.value);
         let myval = e.target.value;
-        loadDay({...state, pageDate: myval});
+        loadDay({ ...state, pageDate: myval });
     }
 
     function changePageMode(pageMode) {
         console.log('new pageMode :>> ', pageMode);
-        loadDay({...state, pageMode});
+        loadDay({ ...state, pageMode });
     }
 
     function showAddEditForm(mode) {
@@ -223,6 +222,7 @@ const OneDay = () => {
         const [ , ..._toasts ] = state.toasts;
         setState({ ...state, toasts: _toasts });
     }
+    const login = { color: 'red' };
 
     return (
         <Fragment>
@@ -251,7 +251,10 @@ const OneDay = () => {
                     </button>
                 ) : (
                     <button id="qsLoginBtn" className="btn-margin plainLink" onClick={() => loginWithRedirect({})}>
-                        <i className="fa fa-sign-in" /> <span className="nav-text">Log In</span>
+                        <i className="fa fa-sign-in" style={login} />{' '}
+                        <span className="nav-text" style={login}>
+                            Log In
+                        </span>
                     </button>
                 )}
                 {isAuthenticated && !state.auth ? (
@@ -263,62 +266,58 @@ const OneDay = () => {
                 )}
             </nav>
             <Snackbar id="example-snackbar" toasts={state.toasts} autohide={state.autohide} onDismiss={dismissToast} />
-            
-            {state.pageMode === ONEDAY && (
-                    <h1>One Day</h1>
-                )}
-                {state.pageMode === SAMEDAY && (
-                   <h1>Same Day</h1>
-                )}
 
-            <div className="grid-3mw container">
-                <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-                    <i className="fa fa-chevron-left" /> Prev
-                </button>
-                <div>
-                    <span>{moment(state.date).format('dd')}</span>
-                    <input
-                        ref={(elem) => (dateInput = elem)}
-                        type="text"
-                        className="form-control"
-                        id="formDpInput"
-                        defaultValue={state.pageDate}
-                        onChange={(e) => updateDate(e)}
-                    />
-                </div>
-                <button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-                    Next <i className="fa fa-chevron-right" />
-                </button>
-            </div>
+            {state.pageMode === ONEDAY && <h1>One Day</h1>}
+            {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
+            {isAuthenticated && (
+                <Fragment>
+                    <div className="grid-3mw container">
+                        <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
+                            <i className="fa fa-chevron-left" /> Prev
+                        </button>
+                        <div>
+                            <span>{moment(state.date).format('dd')}</span>
+                            <input
+                                ref={(elem) => (dateInput = elem)}
+                                type="text"
+                                className="form-control"
+                                id="formDpInput"
+                                defaultValue={state.pageDate}
+                                onChange={(e) => updateDate(e)}
+                            />
+                        </div>
+                        <button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
+                            Next <i className="fa fa-chevron-right" />
+                        </button>
+                    </div>
 
-            <section className="container" 
-                ref={state.refForm}
-            >{showAddEditForm(state.formMode)}</section>
+                    <section className="container" ref={state.refForm}>
+                        {showAddEditForm(state.formMode)}
+                    </section>
 
-            <section className="container">
-                <ul className="entriesList">
-                    {state.entries.map((entry) => {
-                        let newText = entry.content.replace(/<br \/>/g, '\n');
-                        newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
-                        const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-                        let showEntryDate = (
-                            <button onClick={(e) => showEditForm(e, entry)} className="plainLink">
-                                {dateFormated}
-                            </button>
-                        );
+                    <section className="container">
+                        <ul className="entriesList">
+                            {state.entries.map((entry) => {
+                                let newText = entry.content.replace(/<br \/>/g, '\n');
+                                newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
+                                const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
+                                let showEntryDate = (
+                                    <button onClick={(e) => showEditForm(e, entry)} className="plainLink">
+                                        {dateFormated}
+                                    </button>
+                                );
 
-                        return (
-                            <li key={entry.id} className="blogEntry"
-                            ref={state.refs[entry.id]}
-                            >
-                                {showEntryDate} |
-                                <ReactMarkdown source={newText} escapeHtml={false} />
-                            </li>
-                        );
-                    })}
-                </ul>
-            </section>
-            <br />
+                                return (
+                                    <li key={entry.id} className="blogEntry" ref={state.refs[entry.id]}>
+                                        {showEntryDate} |
+                                        <ReactMarkdown source={newText} escapeHtml={false} />
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </section>
+                </Fragment>
+            )}
             <nav className="navbar navbar-expand-sm navbar-light bg-light row">
                 <div className="col-md-5 text-left">
                     <RouterNavLink to={`/upload`} className="btn navbar-btn">
