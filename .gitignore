@@ -1,12 +1,9 @@
 
 /_config/*
 
-/_rsc/js/app.bundle*
-/_rsc/js_build
-
 /node_modules
 /vendor
-/uploads/
+/uploads
 
 backend/SERVER_CONFIG.php
 cron_script.php
@@ -16,5 +13,3 @@ ui-react/build/*
 ui-react/node_modules/*
 ui-react/docs/*
 ui-react/styleguide/*
-
-feature_ideas/*
