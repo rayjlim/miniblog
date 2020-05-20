@@ -25,5 +25,8 @@
       "backend/core/common_functions.php",
       "backend/SERVER_CONFIG.php"
     ]
+  },
+  "scripts": {
+    "up": "./upload-go.sh"
   }
 }
