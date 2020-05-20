@@ -1,6 +1,7 @@
 <?php
 defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
+use \Lpt\Logger;
 
 class SecurityAgent
 {
@@ -74,7 +75,6 @@ class SecurityAgent
     {
         DevHelp::debugMsg('logging out');
         $this->logLogin('logout');
-
         $this->iResource->setCookie(COOKIE_USER, "", time() - 3600);
         $smsUser = null;
         $this->iResource->setSession(SESSION_USER_ID, null);
@@ -86,7 +86,6 @@ class SecurityAgent
     public function handleSessionUser($smsUser)
     {
         DevHelp::debugMsg('authenticated USER');
-
         $smsUser->id = $this->iResource->getSession(SESSION_USER_ID);
         $smsUser->fullname = $this->iResource->getSession(SESSION_USER_FULLNAME);
         $smsUser->isAuthenticated = true;
@@ -119,12 +118,6 @@ class SecurityAgent
                 }
 
             if ($smsUser !== null) {
-                // $this->iResource->setCookie(
-                //     COOKIE_USER,
-                //     SecurityAgent::encrypt($smsUser->id),
-                //     $cookieExpiration
-                // );
-
                 $this->iResource->setSession(SESSION_USER_ID, $smsUser->id);
                 $this->iResource->setSession(SESSION_USER_FULLNAME, $smsUser->fullname);
             }
@@ -147,67 +140,7 @@ class SecurityAgent
 
     public function logLogin($message)
     {
-        $date = $this->iResource->getDateTime();
-        $filename = LOGS_DIR . DIR_SEP . LOG_PREFIX . "_logins-" . $date->format("Y-m") . ".txt";
-        $fileData = $date->format("Y-m-d G:i:s") . "\t" . getenv("REMOTE_ADDR") . "\t";
-        $fileData.= $message . "\n";
-        $this->iResource->writeFile($filename, $fileData);
-    }
-
-    private static function encrypt($plaintext)
-    {
-        // create a random IV to use with CBC encoding
-
-        // $iv = mcrypt_create_iv(IV_SIZE, MCRYPT_RAND);
-
-        // // $plaintext = "This string was AES-256 / CBC / ZeroBytePadding encrypted.";
-        // $plaintext_utf8 = utf8_encode($plaintext);
-        // $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, KEY, $plaintext_utf8, MCRYPT_MODE_CBC, $iv);
-
-        // $ciphertext = $iv . $ciphertext;
-        // // encode the resulting cipher text so it can be represented by a string
-        // $ciphertext_base64 = base64_encode($ciphertext);
-        // return $ciphertext_base64;
-        return $plaintext;
-    }
-
-    private static function decrypt($ciphertext_base64)
-    {
-        // echo $ciphertext_base64;
-        // === WARNING ===
-        // Resulting cipher text has no integrity or authenticity added
-        // and is not protected against padding oracle attacks.
-        // --- DECRYPTION ---
-
-        // $ciphertext_dec = base64_decode($ciphertext_base64);
-        // // retrieves the IV, IV_SIZE should be created using mcrypt_get_IV_SIZE()
-        // $iv_dec = substr($ciphertext_dec, 0, IV_SIZE);
-        // // retrieves the cipher text (everything except the $IV_SIZE in the front)
-        // $ciphertext_dec = substr($ciphertext_dec, IV_SIZE);
-        // // may remove 00h valued characters from end of plain text
-        // $plaintext_utf8_dec = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, KEY, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
-
-        // echo "decrypted: ".$plaintext_utf8_dec;
-        return $ciphertext_base64;
-    }
-
-    // utilities
-    private function apiRequest($url, $post=false, $headers=array())
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $headers[] = 'User-Agent: smsblogger';
-        if ($post) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-        }
-        $headers[] = 'Accept: application/json';
-        if (session(SESSION_GH_ACCESS_TOKEN)) {
-            $headers[] = 'Authorization: Bearer ' . session(SESSION_GH_ACCESS_TOKEN);
-        }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        $response = curl_exec($ch);
-        $this->logLogin('GH:response'.$response);
-        return json_decode($response);
+        Logger::log("\t" . getenv("REMOTE_ADDR") . "\t" . $message);
     }
 }
 
