@@ -1,6 +1,7 @@
 <?php
 defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
+use \Lpt\Logger;
 
 class UtilityHandler extends AbstractController
 {
@@ -14,19 +15,19 @@ class UtilityHandler extends AbstractController
 
     public function handleMorpheuz() {
         return function () {
-            \Lpt\Logger::log("handleMorpheuz called");
+            Logger::log("handleMorpheuz called");
             DevHelp::debugMsg(__FILE__);
             $data = $this->app->request->getBody();
-            \Lpt\Logger::log("data". $data);
+            Logger::log("data". $data);
             $jsonObj = json_decode($data);
             if($jsonObj){
                 $object = new MorpheuzParser($jsonObj->data);
                 $smsSleepStat = $object->exportSmsSleepStat();
                 $id = $this->dao->insert($smsSleepStat);
                 // $id = 'Morpheuz Parser broken for v45';
-                \Lpt\Logger::log("Parsed data: ".$id);
+                Logger::log("Parsed data: ".$id);
             }else{
-                \Lpt\Logger::log("INVALID data:");
+                Logger::log("INVALID data:");
 
             }
         };

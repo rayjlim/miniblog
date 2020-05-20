@@ -3,6 +3,8 @@
 defined('ABSPATH') OR exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
+use \Lpt\Logger;
+
 
 class AuthMiddleware extends \Slim\Middleware
 {
@@ -26,10 +28,9 @@ class AuthMiddleware extends \Slim\Middleware
                 if (isset($_REQUEST['cmd'])) {
                     $redirectUrl.= "?target=" . $_REQUEST['cmd'];
                 }
-        
                 // DevHelp::redirectHelper($redirectUrl);
-               
             }
+            Logger::log('AuthMiddleware#unauth called');
             echo '{"unauth": true}';
             exit(0);
         }
@@ -48,7 +49,7 @@ class AuthMiddleware extends \Slim\Middleware
     {
         $app->view()->appendData(["user_fullname" => $app->smsUser->fullname]);
         $app->view()->appendData(["authenticated"=> $app->smsUser->isAuthenticated]);
-        $app->view()->appendData(["admin" => (isset($app->userId) && $app->userId == 0) ? true : false]);
+        $app->view()->appendData(["admin" => isset($app->userId) && $app->userId == 0]);
         $app->view()->appendData(["userId"=> isset($app->userId) ? $app->userId : -1]);
     }
 }

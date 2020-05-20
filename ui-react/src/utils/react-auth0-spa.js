@@ -22,9 +22,7 @@ export const Auth0Provider = ({ children, onRedirectCallback = DEFAULT_REDIRECT_
     }
 
     useEffect(() => {
-        // alert('auth: useEffect')
         const initAuth0 = async () => {
-            // alert('auth: createAuth0Client >> ', initOptions)
             try {
                 const myVar = setTimeout(() => {
                     clearCookie();
@@ -32,7 +30,6 @@ export const Auth0Provider = ({ children, onRedirectCallback = DEFAULT_REDIRECT_
                 const auth0FromHook = await createAuth0Client(initOptions);
                 clearTimeout(myVar);
                 setAuth0(auth0FromHook);
-                // alert('auth: auth0FromHook >> ', auth0FromHook)
 
                 if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
                     console.log('auth:code,state :>> ', window.location);
@@ -41,7 +38,6 @@ export const Auth0Provider = ({ children, onRedirectCallback = DEFAULT_REDIRECT_
                 }
 
                 const isAuthenticated = await auth0FromHook.isAuthenticated();
-                // alert('auth: isAuthenticated >> ' ,isAuthenticated)
                 setIsAuthenticated(isAuthenticated);
 
                 if (isAuthenticated) {
@@ -49,7 +45,7 @@ export const Auth0Provider = ({ children, onRedirectCallback = DEFAULT_REDIRECT_
                     console.log('auth-spa#user :>> ', user);
                     setUser(user);
 
-                    const result = await axios.post(`${constants.REST_ENDPOINT}security?debug=off`, {
+                    const result = await axios.post(`${constants.REST_ENDPOINT}security`, {
                         email: user.email,
                         sub: user.sub
                     });
@@ -61,7 +57,6 @@ export const Auth0Provider = ({ children, onRedirectCallback = DEFAULT_REDIRECT_
                     } else if (typeof result.data === 'string') {
                         console.log('invalid json');
                     } else {
-                        // alert('auth complete');
                         // TODO: show snackbar
                     }
                 }
