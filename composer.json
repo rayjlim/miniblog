@@ -8,8 +8,13 @@
     "twig/twig": "1.35.3"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "*"
-  },
+    "codeception/codeception": "^4.1",
+    "codeception/module-phpbrowser": "^1.0.0",
+    "codeception/module-asserts": "^1.0.0",
+    "codeception/module-rest": "^1.2",
+    "squizlabs/php_codesniffer": "3.*",
+    "phpmd/phpmd": "@stable"
+    },
   "autoload": {
     "classmap": [
       "backend/controllers",
@@ -28,6 +33,12 @@
   },
   "scripts": {
     "up": "./upload-go.sh",
-    "release": "npx standard-version"
+    "release": "npx standard-version",
+    "test:steps": "vendor/bin/codecept run --steps",
+    "test:acceptance": "vendor/bin/codecept run acceptance",
+    "test:api": "vendor/bin/codecept run api",
+    "cs": "vendor/bin/phpcs -d standard=PSR2 backend/",
+    "cbf": "vendor/bin/phpcbf -d standard=PSR2 backend/",
+    "md": "vendor/bin/phpmd backend/ text codesize"
   }
 }

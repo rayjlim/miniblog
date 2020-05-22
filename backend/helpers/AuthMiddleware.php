@@ -30,7 +30,9 @@ class AuthMiddleware extends \Slim\Middleware
                 }
                 // DevHelp::redirectHelper($redirectUrl);
             }
-            Logger::log('AuthMiddleware#unauth called');
+            $message =  $_REQUEST['value'] ?? '';
+            
+            Logger::log('AuthMiddleware#unauth called: '. $message);
             echo '{"unauth": true}';
             exit(0);
         }

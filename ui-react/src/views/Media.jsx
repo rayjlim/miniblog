@@ -18,6 +18,7 @@ const Media = () => {
     });
 
     const [ mediaBaseDir, setMediaBaseDir ] = useState('');
+    const [ showMedia, setShowMedia ] = useState(false);
 
     useEffect(() => {
         console.log('Media: useEffect');
@@ -45,6 +46,7 @@ const Media = () => {
             prepend: `![](../uploads/${filePath}${fileName})`,
             imgUrl: `${constants.PROJECT_ROOT}uploads/${filePath}${fileName}?r=${random}`
         });
+        setShowMedia(false);
     }
 
     // ?fileName=0FE2E672-995F-481C-8E9F-ABA02BED3DAB.jpeg&filePath=2019-04/
@@ -152,13 +154,11 @@ const Media = () => {
                     <i className="fa fa-file-upload" /> Upload Pix
                 </RouterNavLink>
             </nav>
-
-            <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
+            <button onClick={(e) => setShowMedia(!showMedia)}>Toggle Show Media</button>
+            {showMedia && <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />}
         </Fragment>
     );
 };
 
 export default Media;
-
-
 

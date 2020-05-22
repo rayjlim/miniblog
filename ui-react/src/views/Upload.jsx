@@ -34,12 +34,9 @@ const Upload = () => {
                     <UploadForm />
                 </Fragment>
             )}
-            )
         </Fragment>
     );
 };
 
 export default Upload;
-
-
 
