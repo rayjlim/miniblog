@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.24.2/swagger-ui.css" >
+  <style>
+    html
+    {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *,
+    *:before,
+    *:after
+    {
+      box-sizing: inherit;
+    }
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.24.2/swagger-ui-bundle.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.24.2/swagger-ui-standalone-preset.js"> </script>
+<script>
+window.onload = function() {
+  var spec = {"openapi": "3.0.0", "info": {"title": "Miniblog Api", "contact": {"email": "rayjlim1@gmail.com"}, "version": "0.1"}, "paths": {"/api/posts/{id}": {"put": {"description": "Update Entry", "operationId": "CUDHandler::updateEntry", "parameters": [{"name": "passengers", "in": "query", "description": "passenger information", "required": true, "schema": {"type": "array", "items": {"properties": {"firstName": {"description": "The product name"}, "lastName": {}, "middleName": {}}, "type": "object"}}}], "responses": {"200": {"description": "Success", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SearchResults"}}}}}}, "post": {"description": "Create New Entry", "operationId": "CUDHandler::addEntry", "responses": {"200": {"description": "Success", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SearchResults"}}}}}}, "delete": {"description": "Remove Entry", "operationId": "CUDHandler::deleteEntry", "responses": {"200": {"description": "Success", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SearchResults"}}}}}}}, "/api/posts/": {"get": {"operationId": "EntryHandler::listItemsApi", "responses": {"200": {"description": "Retrieve entries limit 50", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SmsEntrie"}}}}}}}, "/api/sameDayEntries": {"get": {"description": "Retrieve entries on same day of year", "operationId": "EntryHandler::sameDayEntries", "responses": {"200": {"description": "success", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SearchResults"}}}}, "404": {"description": "Could Not Find Resource"}}}}, "/api/yearMonth": {"get": {"description": "Retrieve entries limit 50", "operationId": "EntryHandler::yearMonthsApi", "requestBody": {"description": "Client side search object", "required": true, "content": {"application/json": {}}}, "responses": {"200": {"description": "success", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SearchResults"}}}}, "404": {"description": "Could Not Find Resource"}}}}}, "components": {"schemas": {"SearchResults": {"type": "array", "items": {"$ref": "#/components/schemas/SmsEntrie"}}, "SmsEntrie": {"properties": {"id": {"description": "The entry id", "type": "integer"}, "content": {"description": "The entry content", "type": "string"}, "date": {"description": "The entry date", "type": "string", "format": "date"}, "userId": {"description": "The entry creator id", "type": "integer"}}, "type": "object"}}}};
+  // Build a system
+  const ui = SwaggerUIBundle({
+    spec: spec,
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  })
+  window.ui = ui
+}
+</script>
+</body>
+</html>

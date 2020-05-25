@@ -1,12 +1,37 @@
 <?php
 defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
-
+/**
+ * @OA\Schema(
+ *   schema="SmsEntrie",
+ *   type="object",
+ * )
+ */
 class SmsEntrie
 {
+     /**
+     * The entry id
+     * @var integer
+     * @OA\Property()
+     */
     public $id;
+         /**
+     * The entry content
+     * @var string
+     * @OA\Property()
+     */
     public $content;
+         /**
+     * The entry date
+     * @var date
+     * @OA\Property()
+     */
     public $date;
+         /**
+     * The entry creator id
+     * @var integer
+     * @OA\Property()
+     */
     public $userId;
     
     public function __construct($date = '', $content = '')

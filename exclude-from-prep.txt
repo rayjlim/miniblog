@@ -2,7 +2,7 @@
 .git/
 
 _config/
-doc/
+doc/adr/
 vendor/
 node_modules/
 uploads/

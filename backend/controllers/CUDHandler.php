@@ -2,6 +2,7 @@
 defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
 
+
 /**
  *   This class will handle the Create, Update, Delete Functionality
  *   for the Entrys
@@ -18,7 +19,20 @@ class CUDHandler extends AbstractController
         $this->contentHelper = $contentHelper;
         parent::__construct($app);
     }
-    
+    /**
+ * @OA\Post(
+ *     description="Create New Entry",
+ *     path="/api/posts/{id}",
+ *     @OA\Response(
+ *       response="200", 
+ *       description="Success",
+*         @OA\MediaType(
+*           mediaType="application/json",
+*           @OA\Schema(ref="#/components/schemas/SearchResults"),
+*         )
+ *     )
+ * )
+ */
     public function addEntry()
     {
         return function () {
@@ -45,7 +59,46 @@ class CUDHandler extends AbstractController
             $this->resource->echoOut(json_encode($smsEntry));
         };
     }
-    
+        /**
+ * @OA\Put(
+ *     description="Update Entry",
+ *     path="/api/posts/{id}",
+ *     @OA\Parameter(
+ *          in="query",
+ *          name="passengers", 
+ *          required=true, 
+ *          description="passenger information", in="query",
+ *          @OA\Schema(
+ *              type="array",
+ *              @OA\Items(
+ *                  type="object",
+ *                  @OA\Property(
+ *                      property="firstName",
+ *                      description="The product name",
+ *                      @OA\Schema(type="string")
+ *                  ),
+ *                  @OA\Property(
+ *                      property="lastName",
+ *                      @OA\Schema(type="string")
+ *                  ),
+ *                  @OA\Property(
+ *                      property="middleName",
+ *                      @OA\Schema(type="string")
+ *                  )
+ *              )
+ *          )
+ *     ),
+ * 
+ *     @OA\Response(
+ *       response="200", 
+ *       description="Success",
+*         @OA\MediaType(
+*           mediaType="application/json",
+*           @OA\Schema(ref="#/components/schemas/SearchResults"),
+*         )
+ *     )
+ * )
+ */
     public function updateEntry()
     {
         return function ($id) {
@@ -69,7 +122,20 @@ class CUDHandler extends AbstractController
             $this->resource->echoOut(json_encode($smsEntry));
         };
     }
-    
+/**
+ * @OA\Delete(
+ *     description="Remove Entry",
+ *     path="/api/posts/{id}",
+ *     @OA\Response(
+ *       response="200", 
+ *       description="Success",
+*         @OA\MediaType(
+*           mediaType="application/json",
+*           @OA\Schema(ref="#/components/schemas/SearchResults"),
+*         )
+ *     )
+ * )
+ */
     public function deleteEntry()
     {
         return function ($id) {
