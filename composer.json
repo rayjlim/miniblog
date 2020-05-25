@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "require": {
     "yeriomin/redbean-single-file": "4.*",
     "slim/slim": "2.*",
@@ -41,8 +41,8 @@
     "cs": "vendor/bin/phpcs -d standard=PSR2 backend/",
     "cbf": "vendor/bin/phpcbf -d standard=PSR2 backend/",
     "md": "vendor/bin/phpmd backend/ text codesize",
-    "doc":"composer run doc:yaml && composer run doc:html",
-    "doc:yaml":"./vendor/bin/openapi --output doc/openapi.yaml backend/",
-    "doc:html":"python yaml2html.py < doc/openapi.yaml > doc/doc.html"
+    "doc": "composer run doc:yaml && composer run doc:html",
+    "doc:yaml": "./vendor/bin/openapi --output doc/openapi.yaml backend/",
+    "doc:html": "python yaml2html.py < doc/openapi.yaml > doc/doc.html"
   }
 }
