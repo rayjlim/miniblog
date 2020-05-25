@@ -11,19 +11,17 @@ paths:
       operationId: 'CUDHandler::updateEntry'
       parameters:
         -
-          name: passengers
-          in: query
-          description: 'passenger information'
+          name: id
+          in: path
+          description: 'Entry Id'
           required: true
-          schema:
-            type: array
-            items:
-              properties:
-                firstName:
-                  description: 'The product name'
-                lastName: {  }
-                middleName: {  }
-              type: object
+      requestBody:
+        description: 'Entry content'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsEntrie'
       responses:
         '200':
           description: Success
