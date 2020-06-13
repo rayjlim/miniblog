@@ -3,105 +3,107 @@ import constants from '../constants';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 
-const AddForm = (props) => {
-	console.log('props :', props.content);
-	const [ content, setContent ] = useState(props.content);
-	const [ date, setDate ] = useState(props.date);
-    let textareaInput = null;
+const AddForm = props => {
+  console.log('props :', props.content);
+  const [content, setContent] = useState(props.content);
+  const [date, setDate] = useState(props.date);
+  let textareaInput = null;
 
-	useEffect(
-		() => {
-			console.log('AddForm: useEffect');
-			setContent(props.content || '');
-		},
-		[ props ]
-	);
+  useEffect(() => {
+    console.log('AddForm: useEffect');
+    setContent(props.content || '');
+  }, [props]);
 
-	function textChange (text){
-		const pattern = /@@([\w-]*)@@/g;
-		const replacement = '<i class="fa fa-$1" /> ';
-		textareaInput.value = textareaInput.value.replace(pattern, replacement);
+  function textChange(text) {
+    const pattern = /@@([\w-]*)@@/g;
+    const replacement = '<i class="fa fa-$1" /> ';
+    textareaInput.value = textareaInput.value.replace(pattern, replacement);
 
-		setContent(textareaInput.value);
-	}
+    setContent(textareaInput.value);
+  }
 
-	function dateChange(e) {
-		e.preventDefault();
-		console.log('e.target.value :', e.target.value);
-		setDate(e.target.value);
-	}
+  function dateChange(e) {
+    e.preventDefault();
+    console.log('e.target.value :', e.target.value);
+    setDate(e.target.value);
+  }
 
-	function handleAdd(e) {
-		(async () => {
-			console.log('this :', this);
-			const entry = {
-				content: content.trim(),
-				date: date.trim() // TODO: check date format
-			};
-			try {
-				const result = await axios.post(`${constants.REST_ENDPOINT}api/posts/`, JSON.stringify(entry));
+  function handleAdd(e) {
+    (async () => {
+      console.log('this :', this);
+      const entry = {
+        content: content.trim(),
+        date: date.trim(), // TODO: check date format
+      };
+      try {
+        const result = await axios.post(
+          `${constants.REST_ENDPOINT}api/posts/`,
+          JSON.stringify(entry)
+        );
 
-				setContent('');
-				console.log('new id :>> ', result.data.id);
-				props.onSuccess(e);
-			} catch (error) {
-				console.log(error);
-				alert(error);
-			}
-		})();
-	}
+        setContent('');
+        console.log('new id :>> ', result.data.id);
+        props.onSuccess(e);
+      } catch (error) {
+        console.log(error);
+        alert(error);
+      }
+    })();
+  }
 
-	function clear() {
-		console.log('clear form');
-		props.onSuccess();
-	}
-	console.log('content :>> ', content);
-	return (
-		<div className="well">
-			{/* <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
+  function clear() {
+    console.log('clear form');
+    props.onSuccess();
+  }
+  console.log('content :>> ', content);
+  return (
+    <div className="well">
+      {/* <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
                     Template
                 </button>
                 <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
                     fa-template
                 </button> */}
-			<strong>Add Entry</strong>
-			<p>
-				link: [link text](URL){' '}
-				<a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">Cheatsheet</a>
-			</p>
+      <strong>Add Entry</strong>
+      <p>
+        link: [link text](URL){' '}
+        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">
+          Cheatsheet
+        </a>
+      </p>
 
-			<div className="form-group">
-				<textarea
-					ref={elem=> textareaInput = elem}
-					rows="6"
-					onChange={(event) => textChange(event.target.value)}
-					className="form-control"
-					placeholder="Add ..."
-					defaultValue={props.content}
-				/>
-			</div>
+      <div className="form-group">
+        <textarea
+          ref={elem => (textareaInput = elem)}
+          rows="6"
+          onChange={event => textChange(event.target.value)}
+          className="form-control"
+          placeholder="Add ..."
+          defaultValue={props.content}
+        />
+      </div>
 
-			<div className="form-group">
-				<input
-					type="text"
-					onChange={(e) => dateChange(e)}
-					className="form-control"
-					placeholder="Add date..."
-					defaultValue={props.date}
-				/>
-			</div>
+      <div className="form-group">
+        <input
+          type="text"
+          onChange={e => dateChange(e)}
+          className="form-control"
+          placeholder="Add date..."
+          defaultValue={props.date}
+        />
+      </div>
 
-			<button onClick={handleAdd} className="btn btn-primary">
-				<i className="fa fa-save" /> Submit
-			</button>
-			<button onClick={clear} className="btn btn-warning pull-right">
-				<i className="fa fa-ban" /> Cancel
-			</button>
-			<div className="markdownDisplay">
-				<ReactMarkdown source={content} escapeHtml={false} />
-			</div>
-		</div>
-	);
+      <button onClick={handleAdd} className="btn btn-primary">
+        <i className="fa fa-save" /> Submit
+      </button>
+      <button onClick={clear} className="btn btn-warning pull-right">
+        <i className="fa fa-ban" /> Cancel
+      </button>
+      <div className="markdownDisplay">
+        <ReactMarkdown source={content} escapeHtml={false} />
+      </div>
+    </div>
+  );
 };
 
 //     render() {
@@ -158,7 +160,3 @@ const AddForm = (props) => {
 // }
 
 export default AddForm;
-
-
-
-

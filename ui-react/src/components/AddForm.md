@@ -1,7 +1,7 @@
 ### Import
-  
-  `import AddForm from '../components.AddForm.jsx';`
-  
+
+`import AddForm from '../components.AddForm.jsx';`
+
 ### AddForm
 
 ```js

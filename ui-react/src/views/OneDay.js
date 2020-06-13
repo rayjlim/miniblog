@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import axios from 'axios';
@@ -18,335 +18,397 @@ const SAMEDAY = 1;
 const SEARCH = 2;
 /**
  * Component to Display of One Day style
- * 
+ *
  * @component
  * @example
  * <Route path="/oneday" component={OneDay} />
  */
 const OneDay = () => {
-    const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
-    const [ state, setState ] = useState({
-        entries: [],
-        auth: false,
-        pageDate: '',
-        searchParam: '',
-        formEntry: {},
-        toasts: [],
-        autohide: true,
-        pageMode: ONEDAY,
-        formMode: CLOSED,
-        scrollToLast: null,
-        refForm: React.createRef(),
-        refs: []
+  const [state, setState] = useState({
+    entries: [],
+    auth: false,
+    pageDate: '',
+    searchParam: '',
+    formEntry: {},
+    toasts: [],
+    autohide: true,
+    pageMode: ONEDAY,
+    formMode: CLOSED,
+    scrollToLast: null,
+    refForm: React.createRef(),
+    refs: [],
+  });
+
+  let dateInput = null;
+
+  // console.log('state.date :', state.date);
+
+  const loadDay = useCallback(
+    function (loadParams) {
+      console.log(
+        'loadDay :',
+        loadParams.pageDate,
+        'pagemode',
+        loadParams.pageMode
+      );
+
+      if (!loadParams.pageDate) {
+        return;
+      }
+      let endPointURL = '';
+      switch (loadParams.pageMode) {
+        case SAMEDAY: {
+          endPointURL = `${constants.REST_ENDPOINT}api/sameDayEntries/?day=${loadParams.pageDate}`;
+          break;
+        }
+        case SEARCH: {
+          const text = loadParams.searchParam;
+          endPointURL = `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`;
+          break;
+        }
+        default: {
+          endPointURL = `${constants.REST_ENDPOINT}api/posts/?date=${loadParams.pageDate}`;
+          break;
+        }
+      }
+
+      (async () => {
+        try {
+          const result = await axios(endPointURL);
+
+          console.log('result :', result);
+          if (result.status !== 200) {
+            console.log('result.status :', result.status);
+            alert(`loading error : ${result.status}`);
+            return;
+          } else if (typeof result.data === 'string') {
+            console.log('invalid json');
+          } else {
+            console.log('result.data.unauth :>> ', result.data.unauth);
+            if (result.data.unauth) {
+              setState({ ...state, auth: false });
+            } else {
+              const refs = result.data.entries.reduce((acc, value) => {
+                acc[value.id] = React.createRef();
+                return acc;
+              }, {});
+
+              const entries = result.data.entries;
+              console.log('state :>> ', state);
+
+              console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
+              if (
+                loadParams.scrollToLast &&
+                refs[loadParams.scrollToLast].current
+              ) {
+                refs[loadParams.scrollToLast].current.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start',
+                });
+              } else if (loadParams.scrollToLast) {
+                console.log('reset scroll to :>> ');
+                loadParams.scrollToLast = null;
+              }
+              setState({ ...state, ...loadParams, entries, auth: true, refs });
+            }
+          }
+        } catch (e) {
+          console.log('LoadDay Error', e);
+        }
+      })();
+    },
+    [state]
+  );
+
+  /**
+   * Handle change in day Previous | Next
+   * @function
+   * @param  {Object} e Event of Button click
+   */
+  function handleButtonDirection(e) {
+    let _date = moment(state.pageDate, 'YYYY-MM-DD');
+    let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
+    dateInput.value = newDate;
+
+    loadDay({ ...state, pageDate: newDate, formMode: CLOSED });
+  }
+
+  function resetEntryForm() {
+    const toasts = state.toasts.slice();
+    toasts.push({ text: 'Add/Edit Done' });
+    loadDay({ ...state, toasts, formMode: CLOSED });
+  }
+
+  function showAddForm(e) {
+    console.log('showAddForm#state.date :', state.pageDate);
+    setState({ ...state, formMode: ADD });
+  }
+
+  function showEditForm(e, entry) {
+    console.log('id :', entry.id);
+
+    setState({
+      ...state,
+      formMode: EDIT,
+      formEntry: entry,
+      scrollToLast: entry.id,
     });
+    state.refForm.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
 
-    let dateInput = null;
+  function updateDate(e) {
+    console.log('UPDATING DATE  :', e.target.value);
+    let myval = e.target.value;
+    loadDay({ ...state, pageDate: myval });
+  }
 
-    // console.log('state.date :', state.date);
+  function changePageMode(pageMode) {
+    console.log('new pageMode :>> ', pageMode);
+    loadDay({ ...state, pageMode });
+  }
 
-    useEffect(() => {
-        console.log('OndeDay: useEffect');
-        let loc = window.location + '';
-        let param = loc.substring(loc.indexOf('?'));
-        console.log('param :', param);
-        let urlParams = new URLSearchParams(param);
-
-        // const _date = moment().format('YYYY-MM-DD');
-        const pageDate = urlParams.has('date') ? urlParams.get('date') : moment().format('YYYY-MM-DD');
-        const pageMode = urlParams.has('pageMode') ? parseInt(urlParams.get('pageMode')) : ONEDAY;
-        console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
-        // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
-        // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-        const _date = moment().format('YYYY-MM-DD');
-
-        console.log('setting pageDate :>> ', _date);
-        loadDay({ pageDate, pageMode });
-    }, []);
-
-    function loadDay(loadParams) {
-        console.log('loadDay :', loadParams.pageDate, 'pagemode', loadParams.pageMode);
-
-        if (!loadParams.pageDate) {
-            return;
-        }
-        let endPointURL = ``;
-        switch (loadParams.pageMode) {
-            case ONEDAY: {
-                endPointURL = `${constants.REST_ENDPOINT}api/posts/?date=${loadParams.pageDate}`;
-                break;
-            }
-            case SAMEDAY: {
-                endPointURL = `${constants.REST_ENDPOINT}api/sameDayEntries/?day=${loadParams.pageDate}`;
-                break;
-            }
-            case SEARCH: {
-                const text = loadParams.searchParam;
-                endPointURL = `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`;
-                break;
-            }
-        }
-
-        (async () => {
-            try {
-                const result = await axios(endPointURL);
-
-                console.log('result :', result);
-                if (result.status !== 200) {
-                    console.log('result.status :', result.status);
-                    alert(`loading error : ${result.status}`);
-                    return;
-                } else if (typeof result.data === 'string') {
-                    console.log('invalid json');
-                } else {
-                    console.log('result.data.unauth :>> ', result.data.unauth);
-                    if (result.data.unauth) {
-                        setState({ ...state, auth: false });
-                    } else {
-                        const refs = result.data.entries.reduce((acc, value) => {
-                            acc[value.id] = React.createRef();
-                            return acc;
-                        }, {});
-
-                        const entries = result.data.entries;
-                        console.log('state :>> ', state);
-
-                        console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-                        if (loadParams.scrollToLast && refs[loadParams.scrollToLast].current) {
-                            refs[loadParams.scrollToLast].current.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        } else if (loadParams.scrollToLast) {
-                            console.log('reset scroll to :>> ');
-                            loadParams.scrollToLast = null;
-                        }
-                        setState({ ...state, ...loadParams, entries, auth: true, refs });
-                    }
-                }
-            } catch (e) {
-                console.log('LoadDay Error', e);
-            }
-        })();
+  function showAddEditForm(mode) {
+    // console.log('formmode :', mode);
+    if (!mode || mode === CLOSED) {
+      return (
+        <button onClick={e => showAddForm(e)} className="btn btn-default">
+          Show Add Form
+        </button>
+      );
+    } else if (mode === ADD) {
+      return (
+        <AddForm date={state.pageDate} onSuccess={() => resetEntryForm()} />
+      );
+    } else if (mode === EDIT) {
+      return (
+        <EditForm entry={state.formEntry} onSuccess={() => resetEntryForm()} />
+      );
     }
+  }
 
-    /**
-	 * Handle change in day Previous | Next
-	 * @function
-	 * @param  {Object} e Event of Button click
-	 */
-    function handleButtonDirection(e) {
-        let _date = moment(state.pageDate, 'YYYY-MM-DD');
-        let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
-        dateInput.value = newDate;
-
-        loadDay({ ...state, pageDate: newDate, formMode: CLOSED });
+  async function sendBackendAuth(e) {
+    const result = await axios.post(`${constants.REST_ENDPOINT}security`, {
+      email: user.email,
+      sub: user.sub,
+    });
+    console.log('result :', result);
+    if (result.status !== 200) {
+      console.log('result.status :', result.status);
+      alert(`loading error : ${result.status}`);
+      return;
+    } else if (typeof result.data === 'string') {
+      console.log('invalid json');
+    } else {
+      console.log('sendBacendAuth#loadday', state.pageDate);
+      loadDay();
     }
+  }
 
-    function resetEntryForm() {
-        const toasts = state.toasts.slice();
-        toasts.push({ text: 'Add/Edit Done' });
-        loadDay({ ...state, toasts, formMode: CLOSED });
-    }
-
-    function showAddForm(e) {
-        console.log('showAddForm#state.date :', state.pageDate);
-        setState({ ...state, formMode: ADD });
-    }
-
-    function showEditForm(e, entry) {
-        console.log('id :', entry.id);
-
-        setState({ ...state, formMode: EDIT, formEntry: entry, scrollToLast: entry.id });
-        state.refForm.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-
-    function updateDate(e) {
-        console.log('UPDATING DATE  :', e.target.value);
-        let myval = e.target.value;
-        loadDay({ ...state, pageDate: myval });
-    }
-
-    function changePageMode(pageMode) {
-        console.log('new pageMode :>> ', pageMode);
-        loadDay({ ...state, pageMode });
-    }
-
-    function showAddEditForm(mode) {
-        // console.log('formmode :', mode);
-        if (!mode || mode === CLOSED) {
-            return (
-                <button onClick={(e) => showAddForm(e)} className="btn btn-default">
-                    Show Add Form
-                </button>
-            );
-        } else if (mode === ADD) {
-            return <AddForm date={state.pageDate} onSuccess={() => resetEntryForm()} />;
-        } else if (mode === EDIT) {
-            return <EditForm entry={state.formEntry} onSuccess={() => resetEntryForm()} />;
-        }
-    }
-
-    async function sendBackendAuth(e) {
-        const result = await axios.post(`${constants.REST_ENDPOINT}security`, {
-            email: user.email,
-            sub: user.sub
-        });
-        console.log('result :', result);
-        if (result.status !== 200) {
-            console.log('result.status :', result.status);
-            alert(`loading error : ${result.status}`);
-            return;
-        } else if (typeof result.data === 'string') {
-            console.log('invalid json');
-        } else {
-            console.log('sendBacendAuth#loadday', state.pageDate);
-            loadDay();
-        }
-    }
-
-    async function logoutWithRedirect() {
-        const result = await axios(`${constants.REST_ENDPOINT}security?logout=true`);
-        console.log('result :', result);
-        if (result.status !== 200) {
-            console.log('result.status :', result.status);
-            alert(`loading error : ${result.status}`);
-            return;
-        } else if (typeof result.data === 'string') {
-            console.log('invalid json');
-        } else {
-            const toasts = state.toasts.slice();
-            toasts.push({ text: 'Logged Out' });
-            setState({ ...state, toasts });
-            setTimeout(
-                () =>
-                    logout({
-                        returnTo: window.location.origin
-                    }),
-                3000
-            );
-        }
-    }
-
-    function dismissToast() {
-        const [ , ..._toasts ] = state.toasts;
-        setState({ ...state, toasts: _toasts });
-    }
-    const login = { color: 'red' };
-
-    return (
-        <Fragment>
-            <nav className="navbar navbar-expand-sm navbar-light bg-light">
-                <RouterNavLink to="/search">
-                    <i className="fa fa-search" /> <span className="nav-text">Search</span>
-                </RouterNavLink>
-                {state.pageMode === ONEDAY && (
-                    <button onClick={(e) => changePageMode(SAMEDAY)}>
-                        <i className="fa fa-calendar-check" /> <span className="nav-text">Same Day</span>
-                    </button>
-                )}
-                {state.pageMode === SAMEDAY && (
-                    <button onClick={(e) => changePageMode(ONEDAY)}>
-                        <i className="fa fa-home" /> <span>Home</span>
-                    </button>
-                )}
-                <RouterNavLink to="/calendar">
-                    <i className="fa fa-calendar" /> <span className="nav-text">Calendar</span>
-                </RouterNavLink>
-
-                {isAuthenticated ? (
-                    <button onClick={(e) => logoutWithRedirect(e)} className="btn-margin plainLink">
-                        <i className="fa fa-sign-out" />
-                        <span className="nav-text">Log Out</span>
-                    </button>
-                ) : (
-                    <button id="qsLoginBtn" className="btn-margin plainLink" onClick={() => loginWithRedirect({})}>
-                        <i className="fa fa-sign-in" style={login} />{' '}
-                        <span className="nav-text" style={login}>
-                            Log In
-                        </span>
-                    </button>
-                )}
-                {isAuthenticated && !state.auth ? (
-                    <button onClick={(e) => sendBackendAuth(e)} className="plainLink">
-                        <i className="fa fa-shield" /> <span className="nav-text">Auth</span>
-                    </button>
-                ) : (
-                    ''
-                )}
-            </nav>
-            <Snackbar id="example-snackbar" toasts={state.toasts} autohide={state.autohide} onDismiss={dismissToast} />
-
-            {state.pageMode === ONEDAY && <h1>One Day</h1>}
-            {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
-            {isAuthenticated && (
-                <Fragment>
-                    <div className="grid-3mw container">
-                        <button onClick={(e) => handleButtonDirection(e)} className="btn btn-info btn-lrg" value="-1">
-                            <i className="fa fa-chevron-left" /> Prev
-                        </button>
-                        <div>
-                            <span>{moment(state.pageDate).format('dd')}</span>
-                            <input
-                                ref={(elem) => (dateInput = elem)}
-                                type="text"
-                                className="form-control"
-                                id="formDpInput"
-                                defaultValue={state.pageDate}
-                                onChange={(e) => updateDate(e)}
-                            />
-                        </div>
-                        <button onClick={(e) => handleButtonDirection(e)} className="btn btn-success btn-lrg" value="1">
-                            Next <i className="fa fa-chevron-right" />
-                        </button>
-                    </div>
-
-                    <section className="container" ref={state.refForm}>
-                        {showAddEditForm(state.formMode)}
-                    </section>
-
-                    <section className="container">
-                        <ul className="entriesList">
-                            {state.entries.map((entry) => {
-                                let newText = entry.content.replace(/<br \/>/g, '\n');
-                                newText = newText.replace(/..\/uploads/g, `${constants.PROJECT_ROOT}uploads`);
-                                const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-                                let showEntryDate = (
-                                    <button onClick={(e) => showEditForm(e, entry)} className="plainLink">
-                                        {dateFormated}
-                                    </button>
-                                );
-
-                                return (
-                                    <li key={entry.id} className="blogEntry" ref={state.refs[entry.id]}>
-                                        {showEntryDate} |
-                                        <ReactMarkdown source={newText} escapeHtml={false} />
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </section>
-                </Fragment>
-            )}
-            <nav className="navbar navbar-expand-sm navbar-light bg-light row">
-                <div className="col-md-5 text-left">
-                    <RouterNavLink to={`/upload`} className="btn navbar-btn">
-                        <i className="fa fa-file-upload" /> Upload Pix
-                    </RouterNavLink>
-                    <RouterNavLink to="/media">
-                        <i className="fa fa-portrait" /> <span className="nav-text">Media</span>
-                    </RouterNavLink>
-                </div>
-
-                <div className="col-md-5 text-right">
-                    <span>{user && `${user.email}`}</span>
-                </div>
-            </nav>
-        </Fragment>
+  async function logoutWithRedirect() {
+    const result = await axios(
+      `${constants.REST_ENDPOINT}security?logout=true`
     );
+    console.log('result :', result);
+    if (result.status !== 200) {
+      console.log('result.status :', result.status);
+      alert(`loading error : ${result.status}`);
+      return;
+    } else if (typeof result.data === 'string') {
+      console.log('invalid json');
+    } else {
+      const toasts = state.toasts.slice();
+      toasts.push({ text: 'Logged Out' });
+      setState({ ...state, toasts });
+      setTimeout(
+        () =>
+          logout({
+            returnTo: window.location.origin,
+          }),
+        3000
+      );
+    }
+  }
+
+  function dismissToast() {
+    const [, ..._toasts] = state.toasts;
+    setState({ ...state, toasts: _toasts });
+  }
+  const login = { color: 'red' };
+
+  useEffect(() => {
+    console.log('OndeDay: useEffect');
+    let loc = window.location + '';
+    let param = loc.substring(loc.indexOf('?'));
+    console.log('param :', param);
+    let urlParams = new URLSearchParams(param);
+
+    // const _date = moment().format('YYYY-MM-DD');
+    const pageDate = urlParams.has('date')
+      ? urlParams.get('date')
+      : moment().format('YYYY-MM-DD');
+    const pageMode = urlParams.has('pageMode')
+      ? parseInt(urlParams.get('pageMode'))
+      : ONEDAY;
+    console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
+    // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
+    // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
+    const _date = moment().format('YYYY-MM-DD');
+
+    console.log('setting pageDate :>> ', _date);
+    loadDay({ pageDate, pageMode });
+  }, []);
+  return (
+    <Fragment>
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        <RouterNavLink to="/search">
+          <i className="fa fa-search" />{' '}
+          <span className="nav-text">Search</span>
+        </RouterNavLink>
+        {state.pageMode === ONEDAY && (
+          <button onClick={e => changePageMode(SAMEDAY)}>
+            <i className="fa fa-calendar-check" />{' '}
+            <span className="nav-text">Same Day</span>
+          </button>
+        )}
+        {state.pageMode === SAMEDAY && (
+          <button onClick={e => changePageMode(ONEDAY)}>
+            <i className="fa fa-home" /> <span>Home</span>
+          </button>
+        )}
+        <RouterNavLink to="/calendar">
+          <i className="fa fa-calendar" />{' '}
+          <span className="nav-text">Calendar</span>
+        </RouterNavLink>
+
+        {isAuthenticated ? (
+          <button
+            onClick={e => logoutWithRedirect(e)}
+            className="btn-margin plainLink"
+          >
+            <i className="fa fa-sign-out" />
+            <span className="nav-text">Log Out</span>
+          </button>
+        ) : (
+          <button
+            id="qsLoginBtn"
+            className="btn-margin plainLink"
+            onClick={() => loginWithRedirect({})}
+          >
+            <i className="fa fa-sign-in" style={login} />{' '}
+            <span className="nav-text" style={login}>
+              Log In
+            </span>
+          </button>
+        )}
+        {isAuthenticated && !state.auth ? (
+          <button onClick={e => sendBackendAuth(e)} className="plainLink">
+            <i className="fa fa-shield" />{' '}
+            <span className="nav-text">Auth</span>
+          </button>
+        ) : (
+          ''
+        )}
+      </nav>
+      <Snackbar
+        id="example-snackbar"
+        toasts={state.toasts}
+        autohide={state.autohide}
+        onDismiss={dismissToast}
+      />
+
+      {state.pageMode === ONEDAY && <h1>One Day</h1>}
+      {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
+      {isAuthenticated && (
+        <Fragment>
+          <div className="grid-3mw container">
+            <button
+              onClick={e => handleButtonDirection(e)}
+              className="btn btn-info btn-lrg"
+              value="-1"
+            >
+              <i className="fa fa-chevron-left" /> Prev
+            </button>
+            <div>
+              <span>{moment(state.pageDate).format('dd')}</span>
+              <input
+                ref={elem => (dateInput = elem)}
+                type="text"
+                className="form-control"
+                id="formDpInput"
+                defaultValue={state.pageDate}
+                onChange={e => updateDate(e)}
+              />
+            </div>
+            <button
+              onClick={e => handleButtonDirection(e)}
+              className="btn btn-success btn-lrg"
+              value="1"
+            >
+              Next <i className="fa fa-chevron-right" />
+            </button>
+          </div>
+
+          <section className="container" ref={state.refForm}>
+            {showAddEditForm(state.formMode)}
+          </section>
+
+          <section className="container">
+            <ul className="entriesList">
+              {state.entries.map(entry => {
+                let newText = entry.content.replace(/<br \/>/g, '\n');
+                newText = newText.replace(
+                  /..\/uploads/g,
+                  `${constants.PROJECT_ROOT}uploads`
+                );
+                const dateFormated = moment(entry.date).format(
+                  'ddd MMM, DD YYYY'
+                );
+                let showEntryDate = (
+                  <button
+                    onClick={e => showEditForm(e, entry)}
+                    className="plainLink"
+                  >
+                    {dateFormated}
+                  </button>
+                );
+
+                return (
+                  <li
+                    key={entry.id}
+                    className="blogEntry"
+                    ref={state.refs[entry.id]}
+                  >
+                    {showEntryDate} |
+                    <ReactMarkdown source={newText} escapeHtml={false} />
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        </Fragment>
+      )}
+      <nav className="navbar navbar-expand-sm navbar-light bg-light row">
+        <div className="col-md-5 text-left">
+          <RouterNavLink to={'/upload'} className="btn navbar-btn">
+            <i className="fa fa-file-upload" /> Upload Pix
+          </RouterNavLink>
+          <RouterNavLink to="/media">
+            <i className="fa fa-portrait" />{' '}
+            <span className="nav-text">Media</span>
+          </RouterNavLink>
+        </div>
+
+        <div className="col-md-5 text-right">
+          <span>{user && `${user.email}`}</span>
+        </div>
+      </nav>
+    </Fragment>
+  );
 };
 
 export default OneDay;

@@ -29,10 +29,15 @@
     "doc": "npx jsdoc -c conf.json",
     "styleguidist": "npx styleguidist server",
     "stop": "ps aux | grep styleguidist | grep -v grep | awk '{print $2}' | xargs kill -9",
-    "kill": "ps aux | grep react-scripts | grep -v grep | awk '{print $2}' | xargs kill -9"
+    "kill": "ps aux | grep react-scripts | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "lint": "prettier src/ --write --single-quote --arrow-parens avoid && eslint src/ --fix"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "quotes": [2, "single"]
+    } 
+
   },
   "homepage": ".",
   "browserslist": {
