@@ -20,7 +20,7 @@ export const Auth0Provider = ({
   const [popupOpen, setPopupOpen] = useState(false);
 
   const COOKIE_NAME = 'auth0.is.authenticated';
-  const INIT_TIMEOUT = 1500;
+  const INIT_TIMEOUT = 1000;
   function clearCookie() {
     console.log('clear cookie : ');
     document.cookie = `${COOKIE_NAME}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;

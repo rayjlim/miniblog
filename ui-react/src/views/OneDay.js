@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import axios from 'axios';
@@ -45,82 +45,68 @@ const OneDay = () => {
 
   // console.log('state.date :', state.date);
 
-  const loadDay = useCallback(
-    function (loadParams) {
-      console.log(
-        'loadDay :',
-        loadParams.pageDate,
-        'pagemode',
-        loadParams.pageMode
-      );
+  function loadDay(loadParams) {
+    console.log(
+      'loadDay :',
+      loadParams.pageDate,
+      'pagemode',
+      loadParams.pageMode
+    );
 
-      if (!loadParams.pageDate) {
+    if (!loadParams.pageDate) {
+      return;
+    }
+    let endPointURL = '';
+    switch (loadParams.pageMode) {
+      case SAMEDAY: {
+        endPointURL = `${constants.REST_ENDPOINT}api/sameDayEntries/?day=${loadParams.pageDate}`;
+        break;
+      }
+      case SEARCH: {
+        const text = loadParams.searchParam;
+        endPointURL = `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`;
+        break;
+      }
+      default: {
+        endPointURL = `${constants.REST_ENDPOINT}api/posts/?date=${loadParams.pageDate}`;
+        break;
+      }
+    }
+
+    (async () => {
+      const result = await axios(endPointURL);
+
+      console.log('result :', result);
+      if (result.status !== 200) {
+        console.log('result.status :', result.status);
+        alert(`loading error : ${result.status}`);
         return;
-      }
-      let endPointURL = '';
-      switch (loadParams.pageMode) {
-        case SAMEDAY: {
-          endPointURL = `${constants.REST_ENDPOINT}api/sameDayEntries/?day=${loadParams.pageDate}`;
-          break;
-        }
-        case SEARCH: {
-          const text = loadParams.searchParam;
-          endPointURL = `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`;
-          break;
-        }
-        default: {
-          endPointURL = `${constants.REST_ENDPOINT}api/posts/?date=${loadParams.pageDate}`;
-          break;
-        }
-      }
+      } else if (typeof result.data === 'string') {
+        console.log('invalid json');
+      } else {
+        console.log('result.data :>> ', result.data.unauth);
+        if (result.data.unauth) {
+          setState({ ...state, auth: false });
+        } else {
+          const refs = result.data.entries.reduce((acc, value) => {
+            acc[value.id] = React.createRef();
+            return acc;
+          }, {});
 
-      (async () => {
-        try {
-          const result = await axios(endPointURL);
-
-          console.log('result :', result);
-          if (result.status !== 200) {
-            console.log('result.status :', result.status);
-            alert(`loading error : ${result.status}`);
-            return;
-          } else if (typeof result.data === 'string') {
-            console.log('invalid json');
-          } else {
-            console.log('result.data.unauth :>> ', result.data.unauth);
-            if (result.data.unauth) {
-              setState({ ...state, auth: false });
-            } else {
-              const refs = result.data.entries.reduce((acc, value) => {
-                acc[value.id] = React.createRef();
-                return acc;
-              }, {});
-
-              const entries = result.data.entries;
-              console.log('state :>> ', state);
-
-              console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-              if (
-                loadParams.scrollToLast &&
-                refs[loadParams.scrollToLast].current
-              ) {
-                refs[loadParams.scrollToLast].current.scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'start',
-                });
-              } else if (loadParams.scrollToLast) {
-                console.log('reset scroll to :>> ');
-                loadParams.scrollToLast = null;
-              }
-              setState({ ...state, ...loadParams, entries, auth: true, refs });
-            }
+          const entries = result.data.entries;
+          console.log('state :>> ', state);
+          setState({ ...state, ...loadParams, entries, auth: true, refs });
+          console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
+          if (loadParams.scrollToLast) {
+            refs[loadParams.scrollToLast].current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
           }
-        } catch (e) {
-          console.log('LoadDay Error', e);
         }
-      })();
-    },
-    [state]
-  );
+      }
+    })();
+  }
 
   /**
    * Handle change in day Previous | Next
@@ -128,6 +114,7 @@ const OneDay = () => {
    * @param  {Object} e Event of Button click
    */
   function handleButtonDirection(e) {
+    console.log('e :>> ', e);
     let _date = moment(state.pageDate, 'YYYY-MM-DD');
     let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
     dateInput.value = newDate;
@@ -192,10 +179,13 @@ const OneDay = () => {
   }
 
   async function sendBackendAuth(e) {
-    const result = await axios.post(`${constants.REST_ENDPOINT}security`, {
-      email: user.email,
-      sub: user.sub,
-    });
+    const result = await axios.post(
+      `${constants.REST_ENDPOINT}security?debug=off`,
+      {
+        email: user.email,
+        sub: user.sub,
+      }
+    );
     console.log('result :', result);
     if (result.status !== 200) {
       console.log('result.status :', result.status);
@@ -211,7 +201,7 @@ const OneDay = () => {
 
   async function logoutWithRedirect() {
     const result = await axios(
-      `${constants.REST_ENDPOINT}security?logout=true`
+      `${constants.REST_ENDPOINT}security?logout=true&debug=off`
     );
     console.log('result :', result);
     if (result.status !== 200) {
@@ -221,16 +211,10 @@ const OneDay = () => {
     } else if (typeof result.data === 'string') {
       console.log('invalid json');
     } else {
-      const toasts = state.toasts.slice();
-      toasts.push({ text: 'Logged Out' });
-      setState({ ...state, toasts });
-      setTimeout(
-        () =>
-          logout({
-            returnTo: window.location.origin,
-          }),
-        3000
-      );
+      alert('Logged Out');
+      logout({
+        returnTo: window.location.origin,
+      });
     }
   }
 
@@ -262,6 +246,7 @@ const OneDay = () => {
     console.log('setting pageDate :>> ', _date);
     loadDay({ pageDate, pageMode });
   }, []);
+
   return (
     <Fragment>
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -334,7 +319,7 @@ const OneDay = () => {
               <i className="fa fa-chevron-left" /> Prev
             </button>
             <div>
-              <span>{moment(state.pageDate).format('dd')}</span>
+              <span>{moment(state.date).format('dd')}</span>
               <input
                 ref={elem => (dateInput = elem)}
                 type="text"

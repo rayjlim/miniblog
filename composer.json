@@ -1,4 +1,6 @@
 {
+  "name": "lilplaytime/miniblog",
+  "description": "Blog Web application. Backend for headless CMS, front end in Create-React-App",
   "version": "1.2.1",
   "require": {
     "yeriomin/redbean-single-file": "4.*",
