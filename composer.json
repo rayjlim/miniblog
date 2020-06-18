@@ -1,4 +1,6 @@
 {
+  "name": "lilplaytime/miniblog",
+  "description": "Blog Web application. Backend for headless CMS, front end in Create-React-App",
   "version": "1.2.1",
   "require": {
     "yeriomin/redbean-single-file": "4.*",
@@ -35,7 +37,7 @@
   "scripts": {
     "up": "./upload-go.sh",
     "release": "npx standard-version",
-    "test:steps": "vendor/bin/codecept run --steps",
+    "test": "vendor/bin/codecept run --steps",
     "test:acceptance": "vendor/bin/codecept run acceptance",
     "test:api": "vendor/bin/codecept run api",
     "cs": "vendor/bin/phpcs -d standard=PSR2 backend/",
