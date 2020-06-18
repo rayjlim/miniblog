@@ -30,8 +30,7 @@
       "backend/core/_app-constants.php",
       "backend/core/Logger.php",
       "backend/core/DevHelp.php",
-      "backend/core/common_functions.php",
-      "backend/SERVER_CONFIG.php"
+      "backend/core/common_functions.php"
     ]
   },
   "scripts": {
