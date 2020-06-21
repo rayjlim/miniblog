@@ -29,7 +29,7 @@ const OneDay = () => {
   const [state, setState] = useState({
     entries: [],
     auth: false,
-    pageDate: '',
+    pageDate: moment().format('YYYY-MM-DD'),
     searchParam: '',
     formEntry: {},
     toasts: [],
@@ -320,7 +320,7 @@ const OneDay = () => {
               <i className="fa fa-chevron-left" /> Prev
             </button>
             <div>
-              <span>{moment(state.date).format('dd')}</span>
+              <span>{moment(state.pageDate).format('dd')}</span>
               <input
                 ref={elem => (dateInput = elem)}
                 type="text"
