@@ -90,7 +90,7 @@ button:nth-of-type(3) {
 }
 
 .container {
-  margin: 0 0.1em;
+  margin: 0 0.05em;
 }
 
 @media only screen and (max-width: 375px) {
@@ -99,6 +99,15 @@ button:nth-of-type(3) {
   }
   .navbar > button > span {
     display: none;
+  }
+  .container {
+    margin: 0 0.05em;
+    padding: 0 0 0 0.5em;
+  }
+
+  .entriesList {
+    padding-left: 0;
+    padding-bottom: 4em;
   }
 }
 

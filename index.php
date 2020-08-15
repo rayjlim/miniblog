@@ -4,10 +4,7 @@
 // error_reporting(E_ALL);
 require 'common_header.php';
 
-
-use Slim\Slim;
-
-$app = new Slim();
+$app = new Slim\Slim();
 
 if (defined('DEVELOPMENT') && DEVELOPMENT) {
 
@@ -46,7 +43,7 @@ require 'backend/core/page_message.php';
 //          $app->redirect('posts/');
 //      });
 //  }
-// print('check security')
+
 $app->get('/security', function () {
     echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
 });
