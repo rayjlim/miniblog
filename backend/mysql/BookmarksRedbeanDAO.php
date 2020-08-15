@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class BookmarksRedbeanDAO implements SmsSleepStatsDAO
 {
@@ -18,7 +18,7 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
 
     public function getPaths()
     {
-        $sqlParam = 'select distinct path from '.BOOKMARKS.' order by path';
+        $sqlParam = 'select distinct path from ' . BOOKMARKS . ' order by path';
         $rows = R::getAll($sqlParam);
         return $rows;
     }
@@ -28,7 +28,7 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
         $sqlParam = '';
         if ($graphParams->path && $graphParams->path != '') {
             $sqlParam .= 'path = \'' . $graphParams->path . '\' ';
-            $sqlParam .= 'AND createdOn > DATE_SUB(NOW(), INTERVAL '. $graphParams->daterange .' MONTH) ';
+            $sqlParam .= 'AND createdOn > DATE_SUB(NOW(), INTERVAL ' . $graphParams->daterange . ' MONTH) ';
 
             $posts = R::findAll(BOOKMARKS, $sqlParam);
             $curry1 = array_map("getExportValues", $posts);
@@ -36,9 +36,9 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
             $final = array_map("reduceTime", $sequencedArray);
             return $final;
         } else {
-            $sqlParam .= 'select id, sum(count) as count, createdOn, sum(averageAge) as averageAge from 
-                '.BOOKMARKS;
-            $sqlParam .= ' WHERE createdOn > DATE_SUB(NOW(), INTERVAL '. $graphParams->daterange .' MONTH) ';
+            $sqlParam .= 'select id, sum(count) as count, createdOn, sum(averageAge) as averageAge from
+                ' . BOOKMARKS;
+            $sqlParam .= ' WHERE createdOn > DATE_SUB(NOW(), INTERVAL ' . $graphParams->daterange . ' MONTH) ';
             $sqlParam .= '  group by createdOn ';
             $rows = R::getAll($sqlParam);
             $posts = R::convertToBeans('bookmark', $rows);
@@ -62,8 +62,8 @@ class BookmarksRedbeanDAO implements SmsSleepStatsDAO
 }
 
 /**
-* this function is just make the numbers more manageable for display
-*/
+ * this function is just make the numbers more manageable for display
+ */
 function minusBigNumberFromAge($item)
 {
     $item['averageAge'] = $item['averageAge'] - 266411210028800000; //65411110001100000
@@ -72,13 +72,13 @@ function minusBigNumberFromAge($item)
 }
 
 /**
-* find the number of days between createdOn and averageAge
-* average age is in Windows timeformat
-*/
+ * find the number of days between createdOn and averageAge
+ * average age is in Windows timeformat
+ */
 function reduceTime($n)
 {
     $createdTimestamp = strtotime($n['createdOn']);
-    $seconds = (floor($createdTimestamp - ($n['averageAge']  / 1000000-11644473600))); // 11644473600
-    $n['daysAge'] = floor($seconds / (60 * 60 *24));
-    return $n ;
+    $seconds = (floor($createdTimestamp - ($n['averageAge']  / 1000000 - 11644473600))); // 11644473600
+    $n['daysAge'] = floor($seconds / (60 * 60 * 24));
+    return $n;
 }

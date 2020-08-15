@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class DAOFactory
 {
@@ -25,41 +25,16 @@ class DAOFactory
     {
         return new Resource();
     }
-    public static function getEmailDAO()
-    {
-        return new EmailDAO();
-    }
 
     //helpers
     public static function ContentHelper()
     {
         return new ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
-    public static function EntryHelper()
-    {
-        return new EntryHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
-    }
 
-    public static function UserHelper()
-    {
-        return new UserHelper(
-            DAOFactory::getSmsUsersDAO(),
-            DAOFactory::getSmsEntriesDAO(),
-            DAOFactory::getResourceDAO()
-        );
-    }
     public static function GraphHelper()
     {
         return new GraphHelper(DAOFactory::getResourceDAO()->getDateTime());
-    }
-
-    public static function EmailHelper()
-    {
-        return new EmailHelper(
-            DAOFactory::getSmsEntriesDAO(),
-            DAOFactory::getResourceDAO(),
-            DAOFactory::getEmailDAO()
-        );
     }
 
     // controllers
@@ -72,10 +47,12 @@ class DAOFactory
             DAOFactory::ContentHelper()
         );
     }
+
     public static function EntryHandler($app)
     {
         return new EntryHandler($app, DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
+
     public static function GraphHandler($app)
     {
         return new GraphHandler(
@@ -85,22 +62,12 @@ class DAOFactory
             DAOFactory::GraphHelper()
         );
     }
+
     public static function LogHandler($app)
     {
         return new LogHandler($app, DAOFactory::getResourceDAO());
     }
-    public static function UtilityHandler($app)
-    {
-        return new UtilityHandler(
-            $app,
-            DAOFactory::getSmsSleepStatsDAO(),
-            DAOFactory::getResourceDAO()
-        );
-    }
-    public static function BookmarkHandler($app)
-    {
-        return new BookmarkHandler($app, DAOFactory::getBookmarksDAO(), DAOFactory::getResourceDAO());
-    }
+
     public static function UploadHandler($app)
     {
         return new UploadHandler($app, DAOFactory::getResourceDAO());

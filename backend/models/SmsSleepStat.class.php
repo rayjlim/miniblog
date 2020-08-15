@@ -1,5 +1,6 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
 
 class SmsSleepStat
@@ -12,8 +13,8 @@ class SmsSleepStat
     public $deepSleepCount;
     public $lightSleepCount;
     public $ignoreSleepCount;
-    
+
     public $sleepStart;
-    public $startOffset=0;
+    public $startOffset = 0;
 }
  //close of Class

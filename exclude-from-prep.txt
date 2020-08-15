@@ -21,3 +21,12 @@ SERVER_CONFIG.php
 .vscode
 feature_ideas/
 ui-react/
+
+tests/
+scripts/
+doc/
+
+yaml2html.py
+Pipfile
+codeception.yml
+auth-middleware-example.php

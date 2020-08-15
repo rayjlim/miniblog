@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 class SmsUser
 {
     public $id;
@@ -10,12 +10,12 @@ class SmsUser
     public $password = null;
 
     public function __construct(
-        $_id='',
-        $_facebookId='',
-        $_email='',
-        $_fullname='',
-        $_isAuthenticated=false,
-        $_password=''
+        $_id = '',
+        $_facebookId = '',
+        $_email = '',
+        $_fullname = '',
+        $_isAuthenticated = false,
+        $_password = ''
     ) {
         $this->id                  = $_id;
         $this->facebookId          = $_facebookId;

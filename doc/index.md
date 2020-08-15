@@ -10,12 +10,18 @@
 
 ## feature ideas
 
+- remove sleepstats related files
+- remove bookmark tracking related files 
+- graph data as an api endpoint, [most frequent phrases, ??]
+- more logging in production; monologger?
 - Support multiuser; register, media view would need a full makeover
 - fa-classifier
-     ```report on font-awesome icon usage (count of each),
-     text over 140 characters or under 10,
-     common phrases
-     ```
+ 
+```report on font-awesome icon usage (count of each),
+text over 140 characters or under 10,
+common phrases
+```
+
 - have php have an endpoint to return constants. Like features enabled, folder paths. Then have SPA make call to get constants (which constants?)
 - Try Symlink uploads
 - Fa- quick entry helper. Modal to select common used

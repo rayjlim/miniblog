@@ -29,7 +29,7 @@ do
     esac
 done
 
-PREP_DIR='../smsblog_prod'
+PREP_DIR='../miniblog_prod'
 
 if [ -z "$BUILD" ]; then
 
@@ -72,6 +72,6 @@ if [ ! -z $RESETSSH ]; then
   ssh-copy-id -f -i ~/.ssh/id_rsa -oHostKeyAlgorithms=+ssh-dss $FTP_USER@$FTP_HOST
 fi
 
-rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' --exclude-from 'exclude-from-prod.txt' --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER 
+rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' --exclude-from 'exclude-from-prod.txt' --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER
 
 ssh  $FTP_USER@$FTP_HOST "chmod 755 $FTP_TARGETFOLDER"

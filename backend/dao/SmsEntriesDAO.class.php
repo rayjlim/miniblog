@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 interface SmsEntriesDAO
 {
@@ -11,20 +11,20 @@ interface SmsEntriesDAO
      * @Return SmsEntries
      */
     public function load($id);
-    
+
     /**
      * Delete record from table
      * @param smsEntrie primary key
      */
     public function delete($id);
-    
+
     /**
      * Insert record to table
      *
      * @param SmsEntries smsEntrie
      */
     public function insert($smsEntrie);
-    
+
     /**
      * Update record in table
      *

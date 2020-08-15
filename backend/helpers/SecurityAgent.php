@@ -1,5 +1,6 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
 use \Lpt\Logger;
 
@@ -27,7 +28,7 @@ class SecurityAgent
 
             $smsUser->id = $dbUser['id'];
             $smsUser->isAuthenticated = true;
-            $smsUser->fullname =  (!defined("DEVELOPMENT")) ?  'Ray': "dev 1";
+            $smsUser->fullname =  (!defined("DEVELOPMENT")) ?  'Ray' : "dev 1";
 
             $this->logLogin('password: ' . $smsUser->id);
         } else {
@@ -47,11 +48,11 @@ class SecurityAgent
     {
         DevHelp::debugMsg('cookie available, set vars');
         $smsUser = new SmsUser();
-       
+
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
 
-        if(isset($data) && isset($data->email)){
+        if (isset($data) && isset($data->email)) {
             $dbUser = $this->iDao->lookupByEmailGoogleId($data->email, $data->sub);
 
             $smsUser->id = $dbUser['id'];
@@ -97,25 +98,25 @@ class SecurityAgent
         $smsUser = new SmsUser();
         $cookieExpiration = time() + SECONDS_PER_DAY * 30;  // 30 DAYS
 
-        DevHelp::debugMsg('get user id'. $this->iResource->getSession(SESSION_USER_ID));
+        DevHelp::debugMsg('get user id' . $this->iResource->getSession(SESSION_USER_ID));
         DevHelp::debugMsg('$this->iResource->issetSession(SESSION_USER_ID): ' .
-        $this->iResource->issetSession(SESSION_USER_ID));
-        if (! $this->iResource->issetSession(SESSION_USER_ID)) {
-            DevHelp::debugMsg('not logged in, then check url param ' );
+            $this->iResource->issetSession(SESSION_USER_ID));
+        if (!$this->iResource->issetSession(SESSION_USER_ID)) {
+            DevHelp::debugMsg('not logged in, then check url param ');
 
             // check authenticated credentials
             // var_dump($_COOKIE);
             // var_dump($req);
-                if (isset($req['password'])) {
-                    DevHelp::debugMsg('login by password');
-                    $smsUser = $this->checkPassword($req['password']);
-                } elseif ($this->wowo_cookieLogin && isset($_COOKIE['auth0_is_authenticated'])) {
-                    DevHelp::debugMsg('login by cookie');
-                    $smsUser = $this->loginByCookie($req);
-                } else {
-                    DevHelp::debugMsg('no password or cookie');
-                    $smsUser = null;
-                }
+            if (isset($req['password'])) {
+                DevHelp::debugMsg('login by password');
+                $smsUser = $this->checkPassword($req['password']);
+            } elseif ($this->wowo_cookieLogin && isset($_COOKIE['auth0_is_authenticated'])) {
+                DevHelp::debugMsg('login by cookie');
+                $smsUser = $this->loginByCookie($req);
+            } else {
+                DevHelp::debugMsg('no password or cookie');
+                $smsUser = null;
+            }
 
             if ($smsUser !== null) {
                 $this->iResource->setSession(SESSION_USER_ID, $smsUser->id);
@@ -124,7 +125,7 @@ class SecurityAgent
         } else {
             DevHelp::debugMsg('ELSE user is in session');
             DevHelp::debugMsg('$this->iResource->getSession(SESSION_USER_ID)' .
-            $this->iResource->getSession(SESSION_USER_ID));
+                $this->iResource->getSession(SESSION_USER_ID));
             $loggingOut = $this->checkLoggingOut($req);
             if ($loggingOut) {
                 $this->logoutUser();
@@ -133,7 +134,7 @@ class SecurityAgent
             $smsUser = $this->handleSessionUser($smsUser);
         }
 
-        DevHelp::debugMsg('get user id'. $this->iResource->getSession(SESSION_USER_ID));
+        DevHelp::debugMsg('get user id' . $this->iResource->getSession(SESSION_USER_ID));
 
         return $smsUser;
     }
@@ -144,7 +145,7 @@ class SecurityAgent
     }
 }
 
-function session($key, $default=null)
+function session($key, $default = null)
 {
     return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : $default;
 }

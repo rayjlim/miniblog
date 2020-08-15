@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class Resource implements IResourceDAO
 {
@@ -16,7 +16,7 @@ class Resource implements IResourceDAO
         }
         $_SESSION[$key] = $value;
     }
-    
+
     /**
      * getSession
      *
@@ -27,7 +27,7 @@ class Resource implements IResourceDAO
     {
         return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : null;
     }
-    
+
     public function issetSession($key)
     {
         return isset($_SESSION[$key]);
@@ -42,14 +42,14 @@ class Resource implements IResourceDAO
     {
         session_destroy();
     }
-    
+
     public function writeFile($filename, $content)
     {
         $filehandler = fopen($filename, 'a') or die("can't open file");
         fwrite($filehandler, $content);
         fclose($filehandler);
     }
-    
+
     public function readdir($logDirectory)
     {
         $filelist = array();
@@ -61,7 +61,7 @@ class Resource implements IResourceDAO
             }
             closedir($handle);
         }
-        
+
         asort($filelist);
         $filelist2 = array();
         foreach ($filelist as $key => $val) {
@@ -69,28 +69,28 @@ class Resource implements IResourceDAO
         }
         return $filelist;
     }
-    
+
     public function readfile($logfile)
     {
         $myFile = $logfile;
         $fh = fopen($myFile, 'r');
         $fileContents = fread($fh, filesize($myFile));
-        
+
         fclose($fh);
         return $fileContents;
     }
-    
+
     public function removefile($logfile)
     {
         $myFile = $logfile;
         unlink($myFile);
     }
-    
+
     public function getDateTime()
     {
         return new DateTime();
     }
-    
+
     public function sendEmail($email, $subject, $message)
     {
         mail($email, $subject, $message);
@@ -103,17 +103,17 @@ class Resource implements IResourceDAO
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, false);
-        
+
         //curl_setopt($curl, CURLOPT_HTTPHEADER, array("Accept: application/json"));
         $response = curl_exec($curl);
         if ($response === false) {
             die("Curl failed: " . curl_error($curl));
         }
-        
+
         curl_close($curl);
         return $response;
     }
-    
+
     public function echoOut($output)
     {
         echo $output;
