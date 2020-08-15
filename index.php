@@ -1,16 +1,11 @@
 <?php
-ini_set('display_errors', 'On');
+// ini_set('display_errors', 'On');
 //ob_start("ob_gzhandler");
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
 require 'common_header.php';
 
-use Slim\Views\Twig as Twig;
-use Slim\Slim;
+$app = new Slim\Slim();
 
-$app = new Slim(array(
-    'view' => new Twig
-));
- 
 if (defined('DEVELOPMENT') && DEVELOPMENT) {
 
     //Access-Control-Allow-Origin header with wildcard.
@@ -19,10 +14,10 @@ if (defined('DEVELOPMENT') && DEVELOPMENT) {
     header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization");
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
     header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-    $app->add(new AuthMiddleware()); 
+    $app->add(new AuthMiddleware());
 }
 else{
-    $app->add(new AuthMiddleware()); 
+    $app->add(new AuthMiddleware());
 }
 
 $app->view()->appendData(["rooturl" => '/'.ROOT_URL]);
@@ -48,7 +43,7 @@ require 'backend/core/page_message.php';
 //          $app->redirect('posts/');
 //      });
 //  }
-// print('check security')
+
 $app->get('/security', function () {
     echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
 });

@@ -378,7 +378,7 @@ const OneDay = () => {
           </section>
         </Fragment>
       )}
-      <nav className="navbar navbar-expand-sm navbar-light bg-light row">
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="col-md-5 text-left">
           <RouterNavLink to={'/upload'} className="btn navbar-btn">
             <i className="fa fa-file-upload" /> Upload Pix

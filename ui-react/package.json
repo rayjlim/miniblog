@@ -13,7 +13,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.0.0",
@@ -35,9 +35,11 @@
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "quotes": [2, "single"]
-    } 
-
+      "quotes": [
+        2,
+        "single"
+      ]
+    }
   },
   "homepage": ".",
   "browserslist": {
