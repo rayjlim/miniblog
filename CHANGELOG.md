@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/rayjlim/miniblog/compare/v1.2.1...v1.3.0) (2020-08-15)
+
+
+### Features
+
+* 🔥 removing twig template ([958cff6](https://github.com/rayjlim/miniblog/commit/958cff6c1d2d2f24888feebdfa8065d989bc1713))
+
 ### [1.2.1](https://github.com/rayjlim/miniblog/compare/v1.2.0...v1.2.1) (2020-05-25)
 
 ## [1.2.0](https://github.com/rayjlim/miniblog/compare/v1.1.2...v1.2.0) (2020-05-22)
