@@ -1,68 +1,26 @@
 # miniblog
 
-miniblog relies on phpcurl; if FB login is not working look if the module is enabled in the xampp php config
-
-## Dependency
-
-Using Slim ver 2.4 because it works with php5.4 (which is available on godaddy shared hosting). I would like to upgrade to Slim 3 or 4 but ran into issues with `.htaccess` not working when I set the php version to 5.6.
+A headless CMS backend (php) with a Create React App front end.
 
 ## Setup
 
-see basic setup in link below
+- `composer install`
+- cd into `ui-react` directory
+- `npm run start`
 
-    * php.ini
-        * uncomment
-            * extension=php_curl.dll
-            * extension=php_mbstring.dll
-        * composer needs openssl extension
-            * extension=php_openssl.dll
+## Deployment to Production
 
-        set timezone date.timezone = "America/Los_Angeles"
+- `sh upload-go.sh` (requires `env_vars.sh`)
+  - `env_vars.sh` sets up `FTP_HOST`, `FTP_USER`, `FTP_TARGETFOLDER`
 
-    for JS/React
-       install webpack globally
+## Testing
 
-[dropbox link](https://paper.dropbox.com/doc/Project-notes-To-remember-Aqk90sy9YHyVkkxkMuqaZ)
+using Codeception (to write up)
 
-    Basic Setup - Composer
-    Deploying to Production
-    for file to be included in composer autoload
-    Unit Tests - Codeception
-    Jasmine - JS tests
-    Setting up grunt to run Jasmine tests
-    Grunt can watch for js or tests changes
-    php testing: Codeception setup & running
+### Using Enzyme for React
 
-Unit Tests for JS tesingg
+(to write up)
 
-    just run grunt
+## Additional Details
 
-    or
-
-    grunt watchsingle --phpsingletarget=parsers/LongUrlParser
-
-special handling:
-in fullcalendar.css, line 625.
-commented out .fc-content {word-wrap:nowrap}
-so the events display multi line instead of forced to one line
-
-----
-using node ver. 13.2.1
-
-++ start linux dev server
-sudo /opt/lampp/lampp start
-(in linux terminal)
-php directory: /opt/lampp/bin
-    [http://localhost/projects/miniblog3/](http://localhost/projects/miniblog3/)
- 
- running composer
- /opt/lampp/bin/php /usr/local/bin/composer install
-
-
- sql setup required:
- SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-
-service mysql restart
-
- ps aux|grep -v grep| grep react-scripts \
- | awk '{print $2}' | xargs kill -9
+[docs](./doc/index.md)

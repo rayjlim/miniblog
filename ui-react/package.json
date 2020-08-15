@@ -21,6 +21,11 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.4.1"
   },
+  "devDependencies": {
+    "better-docs": "^1.4.7",
+    "jsdocs": "^1.0.0",
+    "react-styleguidist": "^11.0.5"
+  },
   "scripts": {
     "start": "PORT=3001  react-scripts start",
     "build": "react-scripts build",
@@ -53,10 +58,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "better-docs": "^1.4.7",
-    "jsdocs": "^1.0.0",
-    "react-styleguidist": "^11.0.5"
   }
 }
