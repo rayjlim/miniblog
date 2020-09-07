@@ -1,5 +1,6 @@
 <?php
 defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
 
 /**
@@ -19,19 +20,19 @@ class CUDHandler extends AbstractController
         parent::__construct($app);
     }
     /**
- * @OA\Post(
- *     description="Create New Entry",
- *     path="/api/posts/{id}",
- *     @OA\Response(
- *       response="200",
- *       description="Success",
-*         @OA\MediaType(
-*           mediaType="application/json",
-*           @OA\Schema(ref="#/components/schemas/SearchResults"),
-*         )
- *     )
- * )
- */
+     * @OA\Post(
+     *     description="Create New Entry",
+     *     path="/api/posts/{id}",
+     *     @OA\Response(
+     *       response="200",
+     *       description="Success",
+     *         @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
+     *     )
+     * )
+     */
     public function addEntry()
     {
         return function () {
@@ -59,33 +60,33 @@ class CUDHandler extends AbstractController
         };
     }
     /**
-  @OA\Put(
-      description="Update Entry",
-      path="/api/posts/{id}",
-      @OA\Parameter(
-       in="path",
-       name="id",
-       required=true,
-       description="Entry Id",
-      ),
-      @OA\RequestBody(
-          description="Entry content",
-          required=true,
-          @OA\MediaType(
-        mediaType="application/json",
-        @OA\Schema(ref="#/components/schemas/SmsEntrie")
-        )
-      ),
-      @OA\Response(
-    response="200",
-    description="Success",
-    @OA\MediaType(
-      mediaType="application/json",
-       @OA\Schema(ref="#/components/schemas/SearchResults"),
-     )
-      )
-  )
- */
+     * @OA\Put(
+     *      description="Update Entry",
+     *      path="/api/posts/{id}",
+     *      @OA\Parameter(
+     *      in="path",
+     *      name="id",
+     *       required=true,
+     *       description="Entry Id",
+     *      ),
+     *      @OA\RequestBody(
+     *          description="Entry content",
+     *          required=true,
+     *          @OA\MediaType(
+     *        mediaType="application/json",
+     *        @OA\Schema(ref="#/components/schemas/SmsEntrie")
+     *        )
+     *      ),
+     *      @OA\Response(
+     *    response="200",
+     *    description="Success",
+     *    @OA\MediaType(
+     *      mediaType="application/json",
+     *       @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *   )
+     *  )
+     * )
+     */
     public function updateEntry()
     {
         return function ($id) {
@@ -116,10 +117,10 @@ class CUDHandler extends AbstractController
      *     @OA\Response(
      *       response="200",
      *       description="Success",
-    *         @OA\MediaType(
-    *           mediaType="application/json",
-    *           @OA\Schema(ref="#/components/schemas/SearchResults"),
-    *         )
+     *         @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
      *     )
      * )
      */

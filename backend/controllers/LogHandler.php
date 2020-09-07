@@ -1,9 +1,11 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
+
 class LogHandler extends AbstractController
 {
-     var $resource = null;
+    var $resource = null;
     /**
      * Constructor
      *
@@ -14,11 +16,13 @@ class LogHandler extends AbstractController
      *
      * @return array of page params
      */
-    function __construct($app, $resource) {
-         $this->resource = $resource;
+    function __construct($app, $resource)
+    {
+        $this->resource = $resource;
         parent::__construct($app);
     }
-    public function getUrlHandler() {
+    public function getUrlHandler()
+    {
         return function () {
             \Lpt\DevHelp::debugMsg('start logs list');
 
@@ -32,7 +36,8 @@ class LogHandler extends AbstractController
         };
     }
 
-    public function getUrlHandlerWithParam() {
+    public function getUrlHandlerWithParam()
+    {
         return function ($logfileName) {
             \Lpt\DevHelp::debugMsg('start logs list with param');
             $filelist = $this->readFilelist(LOGS_DIR);
@@ -40,9 +45,9 @@ class LogHandler extends AbstractController
         };
     }
 
-    public function delete() {
+    public function delete()
+    {
         return function ($logfileName) {
-
             $this->resource->removefile(LOGS_DIR . DIR_SEP . $logfileName);
 
             $data['pageMessage'] = 'File Removed: ' . $logfileName;
@@ -51,16 +56,12 @@ class LogHandler extends AbstractController
             //forward to xhr_action
             $_SESSION['page_message'] = $data['pageMessage'];
 
-            if ($this->app->request()->isAjax()) {
-                echo json_encode($data);
-            }
-            else {
-                DevHelp::redirectHelper($baseurl . 'logs/');
-            }
+            echo json_encode($data);
         };
     }
 
-    public function readFilelist($targetDir) {
+    public function readFilelist($targetDir)
+    {
 
         $filelist = $this->resource->readdir($targetDir);
 
@@ -73,7 +74,8 @@ class LogHandler extends AbstractController
         return array_values($filelist);
     }
 
-    public function readFileAndRender($logfileName, $filelist) {
+    public function readFileAndRender($logfileName, $filelist)
+    {
 
         // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
         $logfile = '';

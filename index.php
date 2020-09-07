@@ -15,40 +15,17 @@ if (defined('DEVELOPMENT') && DEVELOPMENT) {
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
     header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
     $app->add(new AuthMiddleware());
-}
-else{
+} else {
     $app->add(new AuthMiddleware());
 }
 
-$app->view()->appendData(["rooturl" => '/'.ROOT_URL]);
-$app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
-$app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
-
 require 'backend/core/page_message.php';
 
-// Create monolog logger and store logger in container as singleton
-// (Singleton resources retrieve the same log resource definition each time)
-// $app->container->singleton('log', function () {
-//     $log = new \Monolog\Logger('slim-skeleton');
-//     $log->pushHandler(new \Monolog\Handler\StreamHandler('_logs/app.log', LOGGER_LEVEL));
-//     return $log;
-// });
-
-//  if (!strpos($app->request()->getRootUri(), 'index.php')) {
-//      $app->get('/', function () use ($app) {
-//          $app->redirect('index.php/posts/');
-//      });
-//  } else {
-//      $app->get('/', function () use ($app) {
-//          $app->redirect('posts/');
-//      });
-//  }
-
 $app->get('/security', function () {
-    echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
+    echo "{	\"user_id\":\"" . $_SESSION[SESSION_USER_ID] . "\"}";
 });
 $app->post('/security', function () {
-    echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
+    echo "{	\"user_id\":\"" . $_SESSION[SESSION_USER_ID] . "\"}";
 });
 $app->options('/security', function () {
     echo "options-check";
@@ -86,10 +63,6 @@ $logHandler = DAOFactory::LogHandler($app);
 $app->get('/logs/:logfileName', $logHandler->getUrlHandlerWithParam());
 $app->get('/logs/', $logHandler->getUrlHandler($app));
 $app->delete('/logs/:logfileName', $logHandler->delete($app));
-
-// $bookmarkHandler = DAOFactory::BookmarkHandler($app);
-// $app->get('/bookmark/', $bookmarkHandler->render());
-// $app->get('/api/bookmark/', $bookmarkHandler->apiPath());
 
 $app->get('/ping', function () {
     echo "{	\"ping\":\"true\"}";

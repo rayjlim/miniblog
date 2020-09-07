@@ -1,5 +1,6 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
 
 define("UPLOAD_SIZE_LIMIT", 5 * 1000000); // 5 meg
@@ -18,12 +19,12 @@ class UploadHandler extends AbstractController
         $this->resource = $resource;
         parent::__construct($app);
     }
-    
+
     public function form()
     {
         return function () {
             $this->app->view()->appendData(["page_title" => 'Upload Picture']);
-        
+
             $this->app->render('upload_form.twig');
         };
     }
@@ -33,7 +34,7 @@ class UploadHandler extends AbstractController
             $this->app->view()->appendData(["fileName" => $_GET["fileName"]]);
             $this->app->view()->appendData(["filePath" => $_GET["filePath"]]);
             $this->app->view()->appendData(["page_title" => 'View Upload']);
-        
+
             $this->app->render('upload_viewer.twig');
         };
     }
@@ -50,11 +51,11 @@ class UploadHandler extends AbstractController
         return function () {
             DevHelp::debugMsg('upload' . __FILE__);
 
-            $filePath = $_POST["filePath"].'/' ?? date("Y-m");
+            $filePath = $_POST["filePath"] . '/' ?? date("Y-m");
 
             $targetDir = UPLOAD_DIR . $filePath;
 
-            $targetFileFullPath = UPLOAD_DIR . $filePath. basename($_FILES["fileToUpload"]["name"]);
+            $targetFileFullPath = UPLOAD_DIR . $filePath . basename($_FILES["fileToUpload"]["name"]);
 
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
@@ -77,19 +78,19 @@ class UploadHandler extends AbstractController
                 // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
                     $urlFileName = basename($_FILES["fileToUpload"]["name"]);
-                    throw new Exception(" file already exists." ."![](../uploads/". $filePath.$urlFileName.")" . ' of '. UPLOAD_SIZE_LIMIT);
+                    throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . UPLOAD_SIZE_LIMIT);
                 }
 
                 // Check file size
                 if ($_FILES["fileToUpload"]["size"] > UPLOAD_SIZE_LIMIT) {
-                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"]. ' of '. UPLOAD_SIZE_LIMIT);
+                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"] . ' of ' . UPLOAD_SIZE_LIMIT);
                 }
                 // Allow certain file formats
-                if (! in_array($imageFileType, $validFileExt)) {
+                if (!in_array($imageFileType, $validFileExt)) {
                     throw new Exception("only JPG, JPEG, PNG & GIF files are allowed.");
                 }
 
-                if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
+                if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
                     throw new Exception("Sorry, there was an error moving upload file.");
                 }
 
@@ -101,14 +102,14 @@ class UploadHandler extends AbstractController
                     echo json_encode($data);
                     return;
                 } else {
-                    $this->redirector('../index.html?view=media&fileName='.$urlFileName.'&filePath='.$filePath);
+                    $this->redirector('../index.html?view=media&fileName=' . $urlFileName . '&filePath=' . $filePath);
                 }
             } catch (Exception $e) {
                 echo 'Caught exception: ', $e->getMessage(), '\n';
             }
         };
     }
-    
+
     public function resize()
     {
         return function () {
@@ -120,21 +121,21 @@ class UploadHandler extends AbstractController
             $fileName = $_GET["fileName"];
             $filePath = $_GET["filePath"];
 
-            $targetDir = ABSPATH . "uploads/".$filePath;
+            $targetDir = ABSPATH . "uploads/" . $filePath;
             $fileFullPath = $targetDir . $fileName;
 
             $new_width = 360;
-            
+
             $this->resizer($new_width, $fileFullPath, $fileFullPath);
-            
+
             $urlFileName = $fileName;
-            
+
             if (isset($_GET["api"])) {
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
                 echo json_encode($data);
             } else {
-                $this->redirector('../main#/uploadViewer?fileName='.$urlFileName.'&filePath='.$filePath);
+                $this->redirector('../main#/uploadViewer?fileName=' . $urlFileName . '&filePath=' . $filePath);
             }
         };
     }
@@ -145,26 +146,26 @@ class UploadHandler extends AbstractController
         $mime = $info['mime'];
 
         switch ($mime) {
-                case 'image/jpeg':
-                        $image_create_func = 'imagecreatefromjpeg';
-                        $image_save_func = 'imagejpeg';
-                        $new_image_ext = 'jpg';
-                        break;
+            case 'image/jpeg':
+                $image_create_func = 'imagecreatefromjpeg';
+                $image_save_func = 'imagejpeg';
+                $new_image_ext = 'jpg';
+                break;
 
-                case 'image/png':
-                        $image_create_func = 'imagecreatefrompng';
-                        $image_save_func = 'imagepng';
-                        $new_image_ext = 'png';
-                        break;
+            case 'image/png':
+                $image_create_func = 'imagecreatefrompng';
+                $image_save_func = 'imagepng';
+                $new_image_ext = 'png';
+                break;
 
-                case 'image/gif':
-                        $image_create_func = 'imagecreatefromgif';
-                        $image_save_func = 'imagegif';
-                        $new_image_ext = 'gif';
-                        break;
+            case 'image/gif':
+                $image_create_func = 'imagecreatefromgif';
+                $image_save_func = 'imagegif';
+                $new_image_ext = 'gif';
+                break;
 
-                default:
-                        throw new Exception('Unknown image type.');
+            default:
+                throw new Exception('Unknown image type.');
         }
 
         $img = $image_create_func($originalFile);
@@ -179,7 +180,7 @@ class UploadHandler extends AbstractController
         }
         $image_save_func($tmp, "$targetFile");
     }
-    
+
     public function rotate()
     {
         return function () {
@@ -190,35 +191,35 @@ class UploadHandler extends AbstractController
 
             // File and rotation
 
-            $targetDir = ABSPATH . "uploads/".$filePath;
-            $targetFile = $targetDir.$fileName;
+            $targetDir = ABSPATH . "uploads/" . $filePath;
+            $targetFile = $targetDir . $fileName;
             $info = getimagesize($targetFile);
             $mime = $info['mime'];
             switch ($mime) {
-                    case 'image/jpeg':
-                            $image_create_func = 'imagecreatefromjpeg';
-                            $image_save_func = 'imagejpeg';
-                            $new_image_ext = 'jpg';
-                            break;
+                case 'image/jpeg':
+                    $image_create_func = 'imagecreatefromjpeg';
+                    $image_save_func = 'imagejpeg';
+                    $new_image_ext = 'jpg';
+                    break;
 
-                    case 'image/png':
-                            $image_create_func = 'imagecreatefrompng';
-                            $image_save_func = 'imagepng';
-                            $new_image_ext = 'png';
-                            break;
+                case 'image/png':
+                    $image_create_func = 'imagecreatefrompng';
+                    $image_save_func = 'imagepng';
+                    $new_image_ext = 'png';
+                    break;
 
-                    case 'image/gif':
-                            $image_create_func = 'imagecreatefromgif';
-                            $image_save_func = 'imagegif';
-                            $new_image_ext = 'gif';
-                            break;
+                case 'image/gif':
+                    $image_create_func = 'imagecreatefromgif';
+                    $image_save_func = 'imagegif';
+                    $new_image_ext = 'gif';
+                    break;
 
-                    default:
-                            throw new Exception('Unknown image type.');
+                default:
+                    throw new Exception('Unknown image type.');
             }
             $fileExtension = '.' . $new_image_ext;
 
-            $degrees = isset($_GET["left"]) ? 90 : -90 ;
+            $degrees = isset($_GET["left"]) ? 90 : -90;
             $img = $image_create_func($targetFile);
             $rotated = imagerotate($img, $degrees, 0);
 
@@ -233,13 +234,13 @@ class UploadHandler extends AbstractController
             // Free the memory
             imagedestroy($img);
             imagedestroy($rotated);
-             
+
             if (isset($_GET["api"])) {
                 $data['fileName'] = $fileName;
                 $data['filePath'] = $filePath;
                 echo json_encode($data);
             } else {
-                $this->redirector('../main#/uploadViewer?fileName='.$fileName.'&filePath='.$filePath);
+                $this->redirector('../main#/uploadViewer?fileName=' . $fileName . '&filePath=' . $filePath);
             }
         };
     }
@@ -256,10 +257,10 @@ class UploadHandler extends AbstractController
             $filePath = $entry->filePath;
             $newFileName = $entry->newFileName;
 
-            $targetDir = ABSPATH . "uploads/".$filePath;
-            rename($targetDir.$fileName, $targetDir.$newFileName);
+            $targetDir = ABSPATH . "uploads/" . $filePath;
+            rename($targetDir . $fileName, $targetDir . $newFileName);
             $urlFileName = $newFileName;
-            
+
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
             echo json_encode($data);
@@ -268,24 +269,24 @@ class UploadHandler extends AbstractController
 
     public function listMedia()
     {
-        return function ($currentDir='') {
+        return function ($currentDir = '') {
             \Lpt\DevHelp::debugMsg('start listMedia');
             $currentDir = $currentDir != '' ? $currentDir : '';
             $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
             // \Lpt\DevHelp::debugMsg(print_r($filelist));
 
-            \Lpt\DevHelp::debugMsg('currentDir '. $currentDir);
-            \Lpt\DevHelp::debugMsg('end($filelist)'.is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
-            
-            //h no media in root folder, get from last 
+            \Lpt\DevHelp::debugMsg('currentDir ' . $currentDir);
+            \Lpt\DevHelp::debugMsg('end($filelist)' . is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
+
+            //h no media in root folder, get from last
             if (count($filelist) > 0 && $currentDir == ''  && is_dir(UPLOAD_DIR . DIR_SEP . end($filelist))) {
                 \Lpt\DevHelp::debugMsg('reading first file');
                 $currentDir = end($filelist);
             }
-            
+
             // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
             $dirContent = '';
-        
+
             \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
             $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
 
@@ -300,7 +301,7 @@ class UploadHandler extends AbstractController
             echo json_encode($data);
         };
     }
-    
+
     public function deleteMedia()
     {
         return function () {
@@ -309,16 +310,15 @@ class UploadHandler extends AbstractController
             $filePath = $_GET["filePath"];
             DevHelp::debugMsg('$fileName' . $fileName);
             DevHelp::debugMsg('$filePath' . $filePath);
-            
-            $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
-            
-            $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
-            
-            
+
+            $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath . DIR_SEP . $fileName);
+
+            $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
+
+
             //forward to xhr_action
             $_SESSION['page_message'] = $data['pageMessage'];
             echo json_encode($data);
-             
         };
     }
 }
