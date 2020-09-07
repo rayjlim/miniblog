@@ -1,22 +1,21 @@
 # Mini-Blog
 
-[[app-setup-db]]
-
-[[demo-version]]
-
-[[bugs]]
-
-[[archive]]
+- [[app setup db]]
+- [[Developer Notes]]
+- [[Demo Version]]
+- [[bugs]]
+- [[archive]]
 
 ## feature ideas
 
-- remove sleepstats related files
-- remove bookmark tracking related files 
+- remove sleepstats related files 
+  - find the entries, check if other data in them, export them for back up
+- remove bookmark tracking related files
 - graph data as an api endpoint, [most frequent phrases, ??]
 - more logging in production; monologger?
 - Support multiuser; register, media view would need a full makeover
 - fa-classifier
- 
+
 ```report on font-awesome icon usage (count of each),
 text over 140 characters or under 10,
 common phrases
@@ -57,8 +56,6 @@ use cursor position in textarea edit
 // , array('name' => 'situps', 'code' => 'situps', 'type' => '3x', 'Description' => 'Do 100 pushups 3x a week')
 // );
 
-
-
 add entry filters: via configuration file
 
 mobile: clear auth key
@@ -91,4 +88,3 @@ added adr-tools project to path, to support autogenerate of adr template files
 
 also npm install -g adr-log and then can use
  "adr-log -d . -i" to build table of contents
- 

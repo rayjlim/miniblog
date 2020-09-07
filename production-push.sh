@@ -39,18 +39,18 @@ if [ -z "$BUILD" ]; then
   rsync -avz  _config/.htaccess $PREP_DIR/
   rsync -avz  exclude-from-prod.txt $PREP_DIR/
 
-if [ -z "$NOBUILDREACT" ]; then
+  if [ -z "$NOBUILDREACT" ]; then
 
-  cd ui-react
-  npm run build
-  buildresult=$?
-  if [ $buildresult != 0 ]; then
-    echo "REACT Build Fail"
-    exit 1
+    cd ui-react
+    npm run build
+    buildresult=$?
+    if [ $buildresult != 0 ]; then
+      echo "REACT Build Fail"
+      exit 1
+    fi
+
+    cd ..
   fi
-
-  cd ..
-fi
   rsync -ravz  ui-react/build/ $PREP_DIR/
 
 
@@ -74,4 +74,4 @@ fi
 
 rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' --exclude-from 'exclude-from-prod.txt' --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER
 
-ssh  $FTP_USER@$FTP_HOST "chmod 755 $FTP_TARGETFOLDER"
+ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER"
