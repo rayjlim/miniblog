@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
-
+import MarkdownDisplay from './MarkdownDisplay';
 const AddForm = props => {
   console.log('props :', props.content);
   const [content, setContent] = useState(props.content);
@@ -100,7 +99,7 @@ const AddForm = props => {
         <i className="fa fa-ban" /> Cancel
       </button>
       <div className="markdownDisplay">
-        <ReactMarkdown source={content} escapeHtml={false} />
+        <MarkdownDisplay source={content} />
       </div>
     </div>
   );

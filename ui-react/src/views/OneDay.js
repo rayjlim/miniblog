@@ -2,12 +2,13 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
+
 import moment from 'moment';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
 import { Snackbar } from 'react-md';
+import MarkdownDisplay from '../components/MarkdownDisplay';
 
 const CLOSED = 0;
 const ADD = 1;
@@ -93,7 +94,7 @@ const OneDay = () => {
             return acc;
           }, {});
 
-          const entries = result.data.entries;
+          let entries = result.data.entries;
           console.log('state :>> ', state);
           setState({ ...state, ...loadParams, entries, auth: true, refs });
           console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
@@ -370,7 +371,7 @@ const OneDay = () => {
                     ref={state.refs[entry.id]}
                   >
                     {showEntryDate} |
-                    <ReactMarkdown source={newText} escapeHtml={false} />
+                    <MarkdownDisplay source={newText} />
                   </li>
                 );
               })}
