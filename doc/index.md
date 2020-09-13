@@ -1,26 +1,36 @@
 # Mini-Blog
 
-[[app-setup-db]]
+- [[app-setup-db]]
+- [[demo version]]
+- [[bugs]]
+- [[archive]]
 
-[[demo-version]]
+## Tasks
 
-[[bugs]]
-
-[[archive]]
+- [ ] marked preview to the right in large view
+- [ ] prettierrc check run on push
+- [x] confirm on `delete` button click
+- [ ] bug: delete last entry of day, causes `  refs[loadParams.scrollToLast]` to be undefined
 
 ## feature ideas
 
+- emoji insert use case
+/ typing @@shortcode@@ replaces with emoji
+/ picker button shows widget and inserts at cursor
+
 - Support multiuser; register, media view would need a full makeover
 - fa-classifier
+
      ```report on font-awesome icon usage (count of each),
      text over 140 characters or under 10,
      common phrases
      ```
+
 - have php have an endpoint to return constants. Like features enabled, folder paths. Then have SPA make call to get constants (which constants?)
 - Try Symlink uploads
 - Fa- quick entry helper. Modal to select common used
 - Email formatting. Remove bullets from list. Align more left. Space between date entries
-- quick buttons: intentions, happenings, grateful for, action items; use shortcode $$intenttion$$
+- quick buttons for templates: intentions, happenings, grateful for, action items; use shortcode `$$intenttion$$`
 - show loading... for one day, same day on save
 - idea: add link to images to go to media edit page ; use a regex find/replace to add link in content before markdown render
 - js : create calendar entry manager
@@ -50,8 +60,6 @@ use cursor position in textarea edit
 // , array('name' => 'pushups', 'code' => 'pushups', 'type' => '3x', 'Description' => 'Do 100 pushups 3x a week')
 // , array('name' => 'situps', 'code' => 'situps', 'type' => '3x', 'Description' => 'Do 100 pushups 3x a week')
 // );
-
-
 
 add entry filters: via configuration file
 
@@ -85,4 +93,3 @@ added adr-tools project to path, to support autogenerate of adr template files
 
 also npm install -g adr-log and then can use
  "adr-log -d . -i" to build table of contents
- 

@@ -28,14 +28,14 @@
     "react-styleguidist": "^11.0.5"
   },
   "scripts": {
-    "start": "PORT=3001  react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "doc": "npx jsdoc -c conf.json",
     "styleguidist": "npx styleguidist server",
     "stop": "ps aux | grep styleguidist | grep -v grep | awk '{print $2}' | xargs kill -9",
-    "kill": "ps aux | grep react-scripts | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "kill": "ps ax | grep react-scripts | grep -v grep | awk '{print $1}' | xargs kill -9",
     "lint": "prettier src/ --write --single-quote --arrow-parens avoid && eslint src/ --fix"
   },
   "eslintConfig": {
