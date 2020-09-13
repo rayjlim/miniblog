@@ -3,9 +3,9 @@ import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import axios from 'axios';
 import moment from 'moment';
-import ReactMarkdown from 'react-markdown'; // eslint-disable-line no-unused-vars
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
+import MarkdownDisplay from '../components/MarkdownDisplay';
 
 const DEBOUNCE_TIME = 300;
 
@@ -130,7 +130,7 @@ const TextEntry = () => {
             return (
               <li key={entry.id} className="blogEntry">
                 {showEntryDate}|
-                <ReactMarkdown source={newText} escapeHtml={false} />
+                <MarkdownDisplay source={newText} escapeHtml={false} />
               </li>
             );
           })}
