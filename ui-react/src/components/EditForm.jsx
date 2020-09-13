@@ -47,6 +47,10 @@ const EditForm = props => {
   }
 
   function handleDelete() {
+    let go = window.confirm("You sure?");
+    if (!go) {
+      return;
+    }
     console.log('handleDelete ' + props.entry.id);
     axios
       .delete(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`)

@@ -43,6 +43,10 @@ const MediaList = props => {
   }
 
   function deleteMedia(filePath, fileName) {
+    let go = window.confirm("You sure?");
+    if (!go) {
+      return;
+    }
     (async () => {
       const result = await axios(
         `${constants.REST_ENDPOINT}media/?fileName=${fileName}&filePath=${filePath}`,
