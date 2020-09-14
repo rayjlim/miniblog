@@ -10,7 +10,11 @@
 - [ ] marked preview to the right in large view
 - [ ] prettierrc check run on push
 - [x] confirm on `delete` button click
-- [ ] bug: delete last entry of day, causes `  refs[loadParams.scrollToLast]` to be undefined
+- [ ] bug: delete last entry of day, causes `refs[loadParams.scrollToLast]` to be undefined
+- [ ] task: move prod scripts to `/scripts` folder
+- [ ] editor.md add for large view editing
+- [ ] change default font to bigger
+  - try `-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;`
 
 ## feature ideas
 
