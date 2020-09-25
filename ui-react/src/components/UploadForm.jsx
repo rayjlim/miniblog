@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
-import moment from 'moment';
+import format from 'date-fns/format';
 import axios from 'axios';
 import history from '../utils/history';
 
@@ -20,7 +20,7 @@ const UploadForm = () => {
     const filePath = document.getElementById('filePath').value;
     data.append(
       'filePath',
-      filePath.length ? filePath : moment().format('YYYY-MM')
+      filePath.length ? filePath : format(new Date(), 'yyyy-MM')
     );
     data.append('xhr', true);
 

@@ -2,7 +2,9 @@ import React, { Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import moment from 'moment';
+import add from 'date-fns/add';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import constants from '../constants';
 import axios from 'axios';
 import './main.scss'; // webpack must be configured to do this
@@ -35,7 +37,7 @@ class Calendar extends React.Component {
 
     const _month = urlParams.has('date')
       ? urlParams.get('month')
-      : moment().format('YYYY-MM');
+      : format( new Date(), 'yyyy-MM');
 
     this.setState((state, props) => ({
       month: _month,
@@ -45,18 +47,16 @@ class Calendar extends React.Component {
 
   async getCalendarData(fetchInfo, successCallback) {
     try {
-      let minFirstDay = moment();
+      let minFirstDay = new Date();
       console.log('fetchInfo :', fetchInfo);
       if (fetchInfo) {
-        const targetDay = moment(fetchInfo.start);
-        minFirstDay = targetDay.add(7, 'days');
+        const targetDay = fetchInfo.start;
+        minFirstDay =  add(targetDay, { days: 7 });
       }
       console.log('minFirstDay :', minFirstDay);
 
       const result = await axios(
-        `${constants.REST_ENDPOINT}api/posts/?month=${minFirstDay.format(
-          'YYYY-MM'
-        )}`
+        `${constants.REST_ENDPOINT}api/posts/?month=${format(minFirstDay, 'yyyy-MM')}`
       );
 
       if (result.status !== 200) {
@@ -83,8 +83,8 @@ class Calendar extends React.Component {
   }
 
   gotoDate(date) {
-    const day = moment(date);
-    this.props.history.push(`/?date=${day.format('YYYY-MM-DD')}`);
+    const day = parse(date, 'yyyy-MM-dd', new Date());
+    this.props.history.push(`/?date=${format(day, 'yyyy-MM-dd')}`);
   }
 
   handleDateClick = arg => {

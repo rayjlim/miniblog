@@ -3,7 +3,8 @@ import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import axios from 'axios';
 
-import moment from 'moment';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
@@ -30,7 +31,7 @@ const OneDay = () => {
   const [state, setState] = useState({
     entries: [],
     auth: false,
-    pageDate: moment().format('YYYY-MM-DD'),
+    pageDate: format(new Date(), 'yyyy-mm-dd'),
     searchParam: '',
     formEntry: {},
     toasts: [],
@@ -116,7 +117,7 @@ const OneDay = () => {
    */
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
-    let _date = moment(state.pageDate, 'YYYY-MM-DD');
+    let _date = format(parse(state.pageDate, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd');
     let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
     dateInput.value = newDate;
 
@@ -232,17 +233,18 @@ const OneDay = () => {
     console.log('param :', param);
     let urlParams = new URLSearchParams(param);
 
-    // const _date = moment().format('YYYY-MM-DD');
     const pageDate = urlParams.has('date')
       ? urlParams.get('date')
-      : moment().format('YYYY-MM-DD');
+      : format(new Date(), 'yyyy-MM-dd');
+
     const pageMode = urlParams.has('pageMode')
       ? parseInt(urlParams.get('pageMode'))
       : ONEDAY;
+
     console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
     // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
     // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-    const _date = moment().format('YYYY-MM-DD');
+    const _date = format(new Date(), 'yyyy-MM-dd');
 
     console.log('setting pageDate :>> ', _date);
     loadDay({ pageDate, pageMode });
@@ -321,7 +323,7 @@ const OneDay = () => {
               <i className="fa fa-chevron-left" /> Prev
             </button>
             <div>
-              <span>{moment(state.pageDate).format('dd')}</span>
+              <span>{ state.pageDate }</span>
               <input
                 ref={elem => (dateInput = elem)}
                 type="text"
@@ -352,9 +354,7 @@ const OneDay = () => {
                   /..\/uploads/g,
                   `${constants.PROJECT_ROOT}uploads`
                 );
-                const dateFormated = moment(entry.date).format(
-                  'ddd MMM, DD YYYY'
-                );
+                const dateFormated = format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MM, dd yyyy');
                 let showEntryDate = (
                   <button
                     onClick={e => showEditForm(e, entry)}

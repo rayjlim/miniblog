@@ -1,6 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-
-import moment from 'moment';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import marked from 'marked';
 
 // Override function
@@ -46,13 +46,12 @@ const EntryList = props => {
     <ul className="col-sm-12 list-group ">
       {props.entrys.map(entry => {
         let newText = entry.displayContent.replace(/<br \/>/g, '\n');
-        const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
-        const calLinkDate = `posts/?gotoYearMonth=${moment(entry.date).format(
-          'YYYY-MM'
-        )}`;
-        const oneDayLink = `main#/oneDay?date=${moment(entry.date).format(
-          'YYYY-MM-DD'
-        )}`;
+        const dateFormated =
+        format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MMM, dd yyyy');
+        const calLinkDate = `posts/?gotoYearMonth=${
+          format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'yyyy-MM') }`;
+        const oneDayLink = `main#/oneDay?date=${
+          format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd') }`;
         let showEntryDate = <a href={oneDayLink}>{dateFormated}</a>;
         // <a onclick={e=> {location.href=`main#/oneDay?date=${dateFormated}`}}>{dateFormated}</a>);
         if (props.editLink) {
@@ -63,7 +62,7 @@ const EntryList = props => {
                 props.editLink(entry);
               }}
             >
-              {moment(entry.date).format('ddd MMM, DD YYYY')}
+              { format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MMM, dd yyyy')  }
             </button>
           );
         }

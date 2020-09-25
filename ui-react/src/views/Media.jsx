@@ -2,7 +2,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import axios from 'axios';
-import moment from 'moment';
+import format from 'date-fns/format';
 import constants from '../constants';
 import AddForm from '../components/AddForm.jsx';
 import MediaList from '../components/MediaList.jsx';
@@ -10,7 +10,7 @@ import history from '../utils/history';
 
 const Media = () => {
   const [post, setPost] = useState({
-    date: moment().format('YYYY-MM-DD'),
+    date: format(new Date(), 'yyyy-MM-dd'),
     fileName: '',
     filePath: '',
     prepend: '',

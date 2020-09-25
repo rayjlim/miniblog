@@ -2,7 +2,8 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import axios from 'axios';
-import moment from 'moment';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import MarkdownDisplay from '../components/MarkdownDisplay';
@@ -117,7 +118,7 @@ const TextEntry = () => {
               /..\/uploads/g,
               `${constants.PROJECT_ROOT}uploads`
             );
-            const dateFormated = moment(entry.date).format('ddd MMM, DD YYYY');
+            const dateFormated = format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MM, dd, yyyy');
 
             let showEntryDate = (
               <button
