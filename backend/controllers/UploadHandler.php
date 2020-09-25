@@ -18,12 +18,12 @@ class UploadHandler extends AbstractController
         $this->resource = $resource;
         parent::__construct($app);
     }
-    
+
     public function form()
     {
         return function () {
             $this->app->view()->appendData(["page_title" => 'Upload Picture']);
-        
+
             $this->app->render('upload_form.twig');
         };
     }
@@ -33,7 +33,7 @@ class UploadHandler extends AbstractController
             $this->app->view()->appendData(["fileName" => $_GET["fileName"]]);
             $this->app->view()->appendData(["filePath" => $_GET["filePath"]]);
             $this->app->view()->appendData(["page_title" => 'View Upload']);
-        
+
             $this->app->render('upload_viewer.twig');
         };
     }
@@ -51,14 +51,11 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('upload' . __FILE__);
 
             $filePath = $_POST["filePath"].'/' ?? date("Y-m");
-
             $targetDir = UPLOAD_DIR . $filePath;
-
             $targetFileFullPath = UPLOAD_DIR . $filePath. basename($_FILES["fileToUpload"]["name"]);
-
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
-
+            $createdDir = false;
             try {
                 // Check if image file is a actual image or fake image
                 // if (isset($_POST["submit"])) {
@@ -70,7 +67,7 @@ class UploadHandler extends AbstractController
 
                 // Check if file already exists
                 if (!file_exists($targetDir)) {
-                    echo "Creating directory.";
+                    $createdDir = true;
                     mkdir($targetDir, 0711);
                 }
 
@@ -98,6 +95,8 @@ class UploadHandler extends AbstractController
                 if (isset($_POST['xhr'])) {
                     $data['fileName'] = $urlFileName;
                     $data['filePath'] = $filePath;
+                    $data['createdDir'] = $createdDir;
+
                     echo json_encode($data);
                     return;
                 } else {
@@ -108,7 +107,7 @@ class UploadHandler extends AbstractController
             }
         };
     }
-    
+
     public function resize()
     {
         return function () {
@@ -124,11 +123,11 @@ class UploadHandler extends AbstractController
             $fileFullPath = $targetDir . $fileName;
 
             $new_width = 360;
-            
+
             $this->resizer($new_width, $fileFullPath, $fileFullPath);
-            
+
             $urlFileName = $fileName;
-            
+
             if (isset($_GET["api"])) {
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
@@ -179,7 +178,7 @@ class UploadHandler extends AbstractController
         }
         $image_save_func($tmp, "$targetFile");
     }
-    
+
     public function rotate()
     {
         return function () {
@@ -233,7 +232,7 @@ class UploadHandler extends AbstractController
             // Free the memory
             imagedestroy($img);
             imagedestroy($rotated);
-             
+
             if (isset($_GET["api"])) {
                 $data['fileName'] = $fileName;
                 $data['filePath'] = $filePath;
@@ -259,7 +258,7 @@ class UploadHandler extends AbstractController
             $targetDir = ABSPATH . "uploads/".$filePath;
             rename($targetDir.$fileName, $targetDir.$newFileName);
             $urlFileName = $newFileName;
-            
+
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
             echo json_encode($data);
@@ -276,16 +275,16 @@ class UploadHandler extends AbstractController
 
             \Lpt\DevHelp::debugMsg('currentDir '. $currentDir);
             \Lpt\DevHelp::debugMsg('end($filelist)'.is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
-            
-            //h no media in root folder, get from last 
+
+            //h no media in root folder, get from last
             if (count($filelist) > 0 && $currentDir == ''  && is_dir(UPLOAD_DIR . DIR_SEP . end($filelist))) {
                 \Lpt\DevHelp::debugMsg('reading first file');
                 $currentDir = end($filelist);
             }
-            
+
             // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
             $dirContent = '';
-        
+
             \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
             $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
 
@@ -300,7 +299,7 @@ class UploadHandler extends AbstractController
             echo json_encode($data);
         };
     }
-    
+
     public function deleteMedia()
     {
         return function () {
@@ -309,16 +308,16 @@ class UploadHandler extends AbstractController
             $filePath = $_GET["filePath"];
             DevHelp::debugMsg('$fileName' . $fileName);
             DevHelp::debugMsg('$filePath' . $filePath);
-            
+
             $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
-            
+
             $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
-            
-            
+
+
             //forward to xhr_action
             $_SESSION['page_message'] = $data['pageMessage'];
             echo json_encode($data);
-             
+
         };
     }
 }
