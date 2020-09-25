@@ -274,10 +274,6 @@ const OneDay = () => {
             <i className="fa fa-home" /> <span>Home</span>
           </button>
         )}
-        <RouterNavLink to="/calendar">
-          <i className="fa fa-calendar" />{' '}
-          <span className="nav-text">Calendar</span>
-        </RouterNavLink>
 
         {isAuthenticated ? (
           <button

@@ -152,9 +152,6 @@ const TextEntry = () => {
           {' '}
           <i className="fa fa-calendar-check" /> <span>Same Day</span>
         </RouterNavLink>
-        <RouterNavLink to="/calendar">
-          <i className="fa fa-calendar" /> <span>Calendar</span>
-        </RouterNavLink>
       </nav>
       <br />
       <br />

@@ -29,12 +29,6 @@ const Upload = () => {
               {' '}
               <i className="fa fa-calendar-check" /> <span>Same Day</span>
             </RouterNavLink>
-            <RouterNavLink to="/calendar">
-              <i className="fa fa-calendar" /> <span>Calendar</span>
-            </RouterNavLink>
-            <a href="https://miniblog.lilplaytime.com/login.php">
-              <i className="fa fa-sign-in" /> <span>Login</span>
-            </a>
           </nav>
           <UploadForm />
         </Fragment>

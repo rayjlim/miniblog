@@ -2,7 +2,6 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import Search from './views/Search';
 import OneDay from './views/OneDay';
-import Calendar from './views/Calendar';
 import Media from './views/Media';
 import Login from './views/Login';
 import Upload from './views/Upload';
@@ -26,7 +25,6 @@ function App() {
         <Switch>
           <Route path="/upload" component={Upload} />
           <Route path="/media" component={Media} />
-          <Route path="/calendar" component={Calendar} />
           <Route path="/search" exact component={Search} />
           <Route path="/oneday" component={OneDay} />
           <Route path="/login" component={Login} />
