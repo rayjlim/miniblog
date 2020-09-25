@@ -10,7 +10,6 @@
     "@fullcalendar/react": "^4.4.0",
     "axios": "^0.19.2",
     "marked": "^1.1.1",
-    "mermaid": "^8.8.0",
     "moment": "^2.24.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
@@ -25,9 +24,11 @@
     "@testing-library/user-event": "^7.2.1",
     "better-docs": "^1.4.7",
     "jsdocs": "^1.0.0",
-    "react-styleguidist": "^11.0.5"
+    "react-styleguidist": "^11.0.5",
+    "source-map-explorer": "^2.5.0"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -2,7 +2,6 @@ import React from 'react'; // eslint-disable-line no-unused-vars
 
 import moment from 'moment';
 import marked from 'marked';
-import { mermaidAPI } from 'mermaid';
 
 // Override function
 const renderer = {
@@ -27,10 +26,7 @@ const renderer = {
         '</code></pre>\n'
       );
     }
-    if (lang === 'mermaid') {
-      const id = 'mermaid' + Date.now(); //needs a unique element id
-      return mermaidAPI.render(id, code);
-    }
+
     return (
       '<pre><code class="' +
       this.options.langPrefix +

@@ -1,8 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import marked from 'marked';
-import { mermaidAPI } from 'mermaid';
 
-// Override function
 const renderer = {
   code(code, infostring, escaped = true) {
     const lang = (infostring || '').match(/\S*/)[0];
@@ -26,10 +24,7 @@ const renderer = {
         '</code></pre>\n'
       );
     }
-    if (lang === 'mermaid') {
-      const id = 'mermaid' + Date.now(); //needs a unique element id
-      return mermaidAPI.render(id, code);
-    }
+
     return (
       '<pre><code class="' +
       this.options.langPrefix +
