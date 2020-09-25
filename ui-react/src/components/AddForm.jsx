@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
-import axios from 'axios';
+
 import MarkdownDisplay from './MarkdownDisplay';
 const AddForm = props => {
   console.log('props :', props.content);
@@ -35,13 +35,17 @@ const AddForm = props => {
         date: date.trim(), // TODO: check date format
       };
       try {
-        const result = await axios.post(
-          `${constants.REST_ENDPOINT}api/posts/`,
-          JSON.stringify(entry)
-        );
+        const response = await fetch(`${constants.REST_ENDPOINT}api/posts/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(entry),
+        });
 
         setContent('');
-        console.log('new id :>> ', result.data.id);
+        const data = await response.json();
+        console.log('new id :>> ', data.id);
         props.onSuccess(e);
       } catch (error) {
         console.log(error);

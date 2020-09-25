@@ -6,7 +6,7 @@ import add from 'date-fns/add';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import constants from '../constants';
-import axios from 'axios';
+
 import './main.scss'; // webpack must be configured to do this
 // import { useHistory } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ class Calendar extends React.Component {
 
     const _month = urlParams.has('date')
       ? urlParams.get('month')
-      : format( new Date(), 'yyyy-MM');
+      : format(new Date(), 'yyyy-MM');
 
     this.setState((state, props) => ({
       month: _month,
@@ -51,27 +51,29 @@ class Calendar extends React.Component {
       console.log('fetchInfo :', fetchInfo);
       if (fetchInfo) {
         const targetDay = fetchInfo.start;
-        minFirstDay =  add(targetDay, { days: 7 });
+        minFirstDay = add(targetDay, { days: 7 });
       }
       console.log('minFirstDay :', minFirstDay);
 
-      const result = await axios(
-        `${constants.REST_ENDPOINT}api/posts/?month=${format(minFirstDay, 'yyyy-MM')}`
+      const response = await fetch(
+        `${constants.REST_ENDPOINT}api/posts/?month=${format(
+          minFirstDay,
+          'yyyy-MM'
+        )}`
       );
 
-      if (result.status !== 200) {
-        console.log('result.status :', result.status);
-        alert(`loading error : ${result.status}`);
+      if (!response.ok) {
+        console.log('response.status :', response.status);
+        alert(`loading error : ${response.status}`);
         return;
-      } else if (typeof result.data === 'string') {
-        console.log('invalid json');
       } else {
-        console.log('result.data :>> ', result.data.unauth);
-        if (result.data.unauth) {
+        const data = await response.json();
+        console.log('response.data :>> ', response.data.unauth);
+        if (data.unauth) {
           // setAuth(false);
           alert('no auth');
         } else {
-          const formattedData = result.data.entries.map(entry => {
+          const formattedData = data.entries.map(entry => {
             return { date: entry.date, title: entry.content };
           });
           successCallback(formattedData);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
-import axios from 'axios';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
@@ -30,19 +29,19 @@ const TextEntry = () => {
     console.log('getEntries#text:', text);
     (async () => {
       // You can await here
-      const result = await axios(
+      const response = await fetch(
         `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`
       );
-      console.log('result :', result);
-      if (result.status !== 200) {
-        console.log('result.status :', result.status);
-        alert(`loading error : ${result.status}`);
+      console.log('response :', response);
+      if (!response.ok) {
+        console.log('response.status :', response.status);
+        alert(`loading error : ${response.status}`);
         return;
-      } else if (typeof result.data === 'string') {
-        console.log('invalid json');
       } else {
-        console.log('result.data :>> ', result.data.unauth);
-        if (result.data.unauth) {
+        const data = await response.json();
+
+        console.log('result.data :>> ', data.unauth);
+        if (data.unauth) {
           // setAuth(false);
           alert('no auth');
         } else {
@@ -50,7 +49,7 @@ const TextEntry = () => {
           if (searchVal.length) {
             const reg = new RegExp(searchVal, 'gi');
 
-            const highlightedData = result.data.entries.map(entry => {
+            const highlightedData = data.entries.map(entry => {
               const highlighted = entry.content.replace(reg, str => {
                 return `<b>${str}</b>`;
               });
@@ -60,12 +59,10 @@ const TextEntry = () => {
 
             setData({ entries: highlightedData });
           } else {
-            setData(result.data);
+            setData(data);
           }
         }
       }
-
-      // ...
     })();
   }
 
@@ -118,7 +115,10 @@ const TextEntry = () => {
               /..\/uploads/g,
               `${constants.PROJECT_ROOT}uploads`
             );
-            const dateFormated = format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MM, dd, yyyy');
+            const dateFormated = format(
+              parse(entry.date, 'yyyy-MM-dd', new Date()),
+              'EEE MM, dd, yyyy'
+            );
 
             let showEntryDate = (
               <button

@@ -1,7 +1,7 @@
 /* eslint-disable no-alert, no-console, no-unused-vars */
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
-import axios from 'axios';
+
 import format from 'date-fns/format';
 import constants from '../constants';
 import AddForm from '../components/AddForm.jsx';
@@ -56,10 +56,10 @@ const Media = () => {
 
   async function resize(e) {
     console.log('resize' + post.filePath + ':' + post.fileName);
-    const result = await axios(
+    const response = await fetch(
       `${constants.REST_ENDPOINT}uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`
     );
-    console.log('result :>> ', result);
+    console.log('response :>> ', response);
     let random = Math.random();
     setPost({
       ...post,
@@ -69,10 +69,10 @@ const Media = () => {
 
   async function rotateLeft(e) {
     console.log('ro-left' + post.filePath + ':' + post.fileName);
-    const result = await axios(
+    const response = await fetch(
       `${constants.REST_ENDPOINT}uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`
     );
-    console.log('result :>> ', result);
+    console.log('response :>> ', response);
     let random = Math.random();
     setPost({
       ...post,
@@ -81,10 +81,10 @@ const Media = () => {
   }
   async function rotateRight(e) {
     console.log('ro-right' + post.filePath + ':' + post.fileName);
-    const result = await axios(
+    const response = await fetch(
       `${constants.REST_ENDPOINT}uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`
     );
-    console.log('result :>> ', result);
+    console.log('response :>> ', response);
     let random = Math.random();
     setPost({
       ...post,

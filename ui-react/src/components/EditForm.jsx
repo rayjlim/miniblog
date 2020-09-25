@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
-import axios from 'axios';
 import MarkdownDisplay from './MarkdownDisplay';
 
 const EditForm = props => {
@@ -24,44 +23,55 @@ const EditForm = props => {
     setContent(textareaInput.value);
   }
 
-  function handleSave() {
+  async function handleSave() {
     const entry = {
       content,
       date, // TODO: check date format
     };
-    console.log('axios entry :', entry);
+    console.log('handleSave entry :', entry);
+    try {
+      const response = await fetch(
+        `${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(entry),
+        }
+      );
 
-    axios
-      .put(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`, entry)
-      .then(response => {
-        console.log(response);
-        props.onSuccess();
-      })
-      .catch(error => {
-        console.log(error);
-        alert(error);
-      });
+      console.log(response);
+      props.onSuccess();
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   }
   function handleClear() {
     props.onSuccess();
   }
 
-  function handleDelete() {
-    let go = window.confirm("You sure?");
+  async function handleDelete() {
+    let go = window.confirm('You sure?');
     if (!go) {
       return;
     }
     console.log('handleDelete ' + props.entry.id);
-    axios
-      .delete(`${constants.REST_ENDPOINT}api/posts/${props.entry.id}`)
-      .then(response => {
-        console.log(response);
-        props.onSuccess();
-      })
-      .catch(error => {
-        console.log(error);
-        alert(error);
-      });
+    try {
+      const response = await fetch(
+        `${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
+        {
+          method: 'DELETE',
+        }
+      );
+
+      console.log(response);
+      props.onSuccess();
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   }
 
   return (

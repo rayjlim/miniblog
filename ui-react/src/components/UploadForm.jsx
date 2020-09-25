@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
 import format from 'date-fns/format';
-import axios from 'axios';
+
 import history from '../utils/history';
 
 const UploadForm = () => {
@@ -15,26 +15,27 @@ const UploadForm = () => {
     // const data = new FormData()
     // data.append('file', selectFile)
 
-    const data = new FormData();
-    data.append('fileToUpload', selectFile);
+    const formData = new FormData();
+    formData.append('fileToUpload', selectFile);
     const filePath = document.getElementById('filePath').value;
-    data.append(
+    formData.append(
       'filePath',
       filePath.length ? filePath : format(new Date(), 'yyyy-MM')
     );
-    data.append('xhr', true);
+    formData.append('xhr', true);
 
     (async () => {
-      console.log(`send axios`);
+      console.log(`send upload`);
 
-      const result = await axios.post(
-        `${constants.REST_ENDPOINT}uploadImage/`,
-        data
-      );
+      const response = await fetch(`${constants.REST_ENDPOINT}uploadImage/`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      console.log(result.data);
+      console.log(response);
+      const data = await response.json();
       history.push(
-        `/media?fileName=${result.data.fileName}&filePath=${result.data.filePath}`
+        `/media?fileName=${data.fileName}&filePath=${data.filePath}`
       );
     })();
   }

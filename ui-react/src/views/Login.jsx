@@ -1,23 +1,23 @@
 import React, { Fragment } from 'react';
 import constants from '../constants';
-import axios from 'axios';
+
 import { useAuth0 } from '../utils/react-auth0-spa';
 
 const Home = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const logoutWithRedirect = async () => {
-    const result = await axios(
+    const response = await fetch(
       `${constants.REST_ENDPOINT}security?logout=true&debug=off`
     );
-    console.log('result :', result);
-    if (result.status !== 200) {
-      console.log('result.status :', result.status);
-      alert(`loading error : ${result.status}`);
+    console.log('response :', response);
+    if (!response.ok) {
+      console.log('response.status :', response.status);
+      alert(`loading error : ${response.status}`);
       return;
-    } else if (typeof result.data === 'string') {
-      console.log('invalid json');
     } else {
+      const data = await response.json();
+
       alert('logged out');
       logout({
         returnTo: window.location.origin,

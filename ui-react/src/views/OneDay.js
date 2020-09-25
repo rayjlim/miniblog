@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
-import axios from 'axios';
-
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
@@ -76,26 +74,27 @@ const OneDay = () => {
     }
 
     (async () => {
-      const result = await axios(endPointURL);
+      //load day main
+      const response = await fetch(endPointURL);
 
-      console.log('result :', result);
-      if (result.status !== 200) {
-        console.log('result.status :', result.status);
-        alert(`loading error : ${result.status}`);
+      console.log('response :', response);
+      if (!response.ok) {
+        console.log('response.status :', response.status);
+        alert(`loading error : ${response.status}`);
         return;
-      } else if (typeof result.data === 'string') {
-        console.log('invalid json');
       } else {
-        console.log('result.data :>> ', result.data.unauth);
-        if (result.data.unauth) {
+        const data = await response.json();
+
+        console.log('response.data :>> ', data.unauth);
+        if (data.unauth) {
           setState({ ...state, auth: false });
         } else {
-          const refs = result.data.entries.reduce((acc, value) => {
+          const refs = data.entries.reduce((acc, value) => {
             acc[value.id] = React.createRef();
             return acc;
           }, {});
 
-          let entries = result.data.entries;
+          let entries = data.entries;
           console.log('state :>> ', state);
           setState({ ...state, ...loadParams, entries, auth: true, refs });
           console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
@@ -117,7 +116,10 @@ const OneDay = () => {
    */
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
-    let _date = format(parse(state.pageDate, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd');
+    let _date = format(
+      parse(state.pageDate, 'yyyy-MM-dd', new Date()),
+      'yyyy-MM-dd'
+    );
     let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
     dateInput.value = newDate;
 
@@ -181,38 +183,42 @@ const OneDay = () => {
   }
 
   async function sendBackendAuth(e) {
-    const result = await axios.post(
+    const response = await fetch(
       `${constants.REST_ENDPOINT}security?debug=off`,
       {
-        email: user.email,
-        sub: user.sub,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: user.email,
+          sub: user.sub,
+        }),
       }
     );
-    console.log('result :', result);
-    if (result.status !== 200) {
-      console.log('result.status :', result.status);
-      alert(`loading error : ${result.status}`);
+    console.log('response :', response);
+    if (!response.ok) {
+      console.log('status :', response.status);
+      alert(`loading error : ${response.status}`);
       return;
-    } else if (typeof result.data === 'string') {
-      console.log('invalid json');
     } else {
+      const data = await response.json();
       console.log('sendBacendAuth#loadday', state.pageDate);
       loadDay();
     }
   }
 
   async function logoutWithRedirect() {
-    const result = await axios(
+    const response = await fetch(
       `${constants.REST_ENDPOINT}security?logout=true&debug=off`
     );
-    console.log('result :', result);
-    if (result.status !== 200) {
-      console.log('result.status :', result.status);
-      alert(`loading error : ${result.status}`);
+    console.log('response :', response);
+    if (!response.ok) {
+      console.log('response.status :', response.status);
+      alert(`logout error : ${response.status}`);
       return;
-    } else if (typeof result.data === 'string') {
-      console.log('invalid json');
     } else {
+      const data = await response.json();
       alert('Logged Out');
       logout({
         returnTo: window.location.origin,
@@ -323,7 +329,7 @@ const OneDay = () => {
               <i className="fa fa-chevron-left" /> Prev
             </button>
             <div>
-              <span>{ state.pageDate }</span>
+              <span>{state.pageDate}</span>
               <input
                 ref={elem => (dateInput = elem)}
                 type="text"
@@ -354,7 +360,10 @@ const OneDay = () => {
                   /..\/uploads/g,
                   `${constants.PROJECT_ROOT}uploads`
                 );
-                const dateFormated = format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MM, dd yyyy');
+                const dateFormated = format(
+                  parse(entry.date, 'yyyy-MM-dd', new Date()),
+                  'EEE MM, dd yyyy'
+                );
                 let showEntryDate = (
                   <button
                     onClick={e => showEditForm(e, entry)}
