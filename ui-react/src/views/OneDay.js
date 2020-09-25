@@ -3,6 +3,7 @@ import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
+import add from 'date-fns/add';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
@@ -29,7 +30,7 @@ const OneDay = () => {
   const [state, setState] = useState({
     entries: [],
     auth: false,
-    pageDate: format(new Date(), 'yyyy-mm-dd'),
+    pageDate: format(new Date(), 'yyyy-MM-dd'),
     searchParam: '',
     formEntry: {},
     toasts: [],
@@ -116,14 +117,14 @@ const OneDay = () => {
    */
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
-    let _date = format(
-      parse(state.pageDate, 'yyyy-MM-dd', new Date()),
-      'yyyy-MM-dd'
-    );
-    let newDate = _date.add(e.target.value, 'days').format('YYYY-MM-DD');
-    dateInput.value = newDate;
+    let _date =
+      parse(state.pageDate, 'yyyy-MM-dd', new Date());
 
-    loadDay({ ...state, pageDate: newDate, formMode: CLOSED });
+
+    let newDate = add(_date, { days: e.target.value });
+    dateInput.value = format(newDate, 'yyyy-MM-dd');
+
+    loadDay({ ...state, pageDate: format(newDate, 'yyyy-MM-dd'), formMode: CLOSED });
   }
 
   function resetEntryForm() {
