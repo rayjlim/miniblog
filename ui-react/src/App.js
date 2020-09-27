@@ -17,6 +17,7 @@ function App() {
       console.log('check token', token);
       if (token && token !== '') {
         console.log('logged in:', token);
+        history.push(`/oneday`);
       }
     })();
   }, []);
