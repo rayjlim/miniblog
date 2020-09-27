@@ -119,7 +119,7 @@ const Media = () => {
   function handleAdd(e) {
     console.log(e);
     alert('Entry created');
-    history.push(`/`);
+    history.push(`/oneday`);
   }
 
   // rename(newName) {
@@ -138,7 +138,7 @@ const Media = () => {
   return (
     <Fragment>
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/">
+        <RouterNavLink to="/oneday">
           <i className="fa fa-home" /> <span>Home</span>
         </RouterNavLink>
         <RouterNavLink to="/oneday?pageMode=1">
