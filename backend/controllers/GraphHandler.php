@@ -49,7 +49,7 @@ class GraphHandler extends AbstractController
             $sqlParam.= ' and date <= \'' . $params->endDate . '\'';
         }
 
-        $entries = $this->dao->queryGraphData($this->resource->getSession(SESSION_USER_ID), $params);
+        $entries = $this->dao->queryGraphData($this->app->userId, $params);
         return $this->graphHelper->calculateFields($params, $entries);
     }
 
@@ -85,7 +85,7 @@ class GraphHandler extends AbstractController
             $fileData.= $message . "\n";
             $this->resource->writeFile($filename, $fileData);
 
-            $userId = $this->resource->getSession(SESSION_USER_ID);
+            $userId = $this->app->userId;
             $targetDay = $date;
 
             $entries = $this->dao->getSameDayEntries($userId, $targetDay);

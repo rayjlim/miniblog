@@ -315,7 +315,7 @@ class UploadHandler extends AbstractController
 
 
             //forward to xhr_action
-            $_SESSION['page_message'] = $data['pageMessage'];
+            // $_SESSION['page_message'] = $data['pageMessage'];
             echo json_encode($data);
 
         };
