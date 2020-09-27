@@ -13,7 +13,14 @@ const MediaList = props => {
 
   function loadDir(dir) {
     (async () => {
-      const response = await fetch(`${constants.REST_ENDPOINT}media/${dir}`);
+      const token = window.localStorage.getItem('appToken');
+      const response = await fetch(`${constants.REST_ENDPOINT}media/${dir}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-token': token,
+        },
+      });
       console.log('response :', response);
       if (!response.ok) {
         console.log('response.status :', response.status);
@@ -46,9 +53,16 @@ const MediaList = props => {
       return;
     }
     (async () => {
+      const token = window.localStorage.getItem('appToken');
       const response = await fetch(
         `${constants.REST_ENDPOINT}media/?fileName=${fileName}&filePath=${filePath}`,
-        { method: 'DELETE' }
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-app-token': token,
+          },
+        }
       );
       console.log('response :', response);
       if (!response.ok) {

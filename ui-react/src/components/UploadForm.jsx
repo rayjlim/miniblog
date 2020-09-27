@@ -26,10 +26,14 @@ const UploadForm = () => {
 
     (async () => {
       console.log(`send upload`);
-
+      const token = window.localStorage.getItem('appToken');
       const response = await fetch(`${constants.REST_ENDPOINT}uploadImage/`, {
         method: 'POST',
         body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-token': token,
+        },
       });
 
       console.log(response);

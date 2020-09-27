@@ -35,12 +35,19 @@ const AddForm = props => {
         date: date.trim(), // TODO: check date format
       };
       try {
+        const token = window.localStorage.getItem('appToken');
         const response = await fetch(`${constants.REST_ENDPOINT}api/posts/`, {
           method: 'POST',
+          body: JSON.stringify(entry),
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
+            'x-app-token': token,
           },
-          body: JSON.stringify(entry),
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
         });
 
         setContent('');

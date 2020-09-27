@@ -25,12 +25,20 @@ const TextEntry = () => {
    * Get blog entries for text search
    * @param  {string} text text to search for
    */
-  function getEntries(text) {
+  async function getEntries(text) {
     console.log('getEntries#text:', text);
-    (async () => {
-      // You can await here
+    try {
+      const token = window.localStorage.getItem('appToken');
       const response = await fetch(
-        `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`
+        `${constants.REST_ENDPOINT}api/posts/?searchParam=${text}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-app-token': token,
+          },
+          referrerPolicy: 'no-referrer',
+        }
       );
       console.log('response :', response);
       if (!response.ok) {
@@ -63,7 +71,9 @@ const TextEntry = () => {
           }
         }
       }
-    })();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
