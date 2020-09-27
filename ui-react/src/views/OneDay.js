@@ -9,6 +9,7 @@ import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-va
 import { useAuth0 } from '../utils/react-auth0-spa';
 import { Snackbar } from 'react-md';
 import MarkdownDisplay from '../components/MarkdownDisplay';
+import history from '../utils/history';
 
 const CLOSED = 0;
 const ADD = 1;
@@ -235,6 +236,10 @@ const OneDay = () => {
     }
   }
 
+  const doLogout = () => {
+    window.localStorage.setItem('appToken', null);
+    history.push(`/`);
+  };
 
   const login = { color: 'red' };
 
@@ -280,10 +285,16 @@ const OneDay = () => {
             <i className="fa fa-home" /> <span>Home</span>
           </button>
         )}
-
-        {isAuthenticated ? (
           <button
-            onClick={e => logoutWithRedirect(e)}
+            onClick={e => doLogout(e)}
+            className="btn-margin plainLink"
+          >
+            <i className="fa fa-sign-out" />
+            <span className="nav-text">Log Out</span>
+          </button>
+        {/* {isAuthenticated ? (
+          <button
+            onClick={e => doLogout(e)}
             className="btn-margin plainLink"
           >
             <i className="fa fa-sign-out" />
@@ -308,7 +319,7 @@ const OneDay = () => {
           </button>
         ) : (
           ''
-        )}
+        )} */}
       </nav>
       <Snackbar
         id="example-snackbar"

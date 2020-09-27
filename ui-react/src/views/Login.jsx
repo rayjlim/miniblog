@@ -28,7 +28,7 @@ const Home = () => {
       });
     }
   };
-
+  console.log(isAuthenticated);
   return (
     <Fragment>
       {!isAuthenticated && (
@@ -43,10 +43,10 @@ const Home = () => {
       )}
 
       {isAuthenticated && (
-        <>
+        <Fragment>
           <span>{user.name}</span>
           <button onClick={() => logoutWithRedirect()}>Logout</button>
-        </>
+        </Fragment>
       )}
     </Fragment>
   );

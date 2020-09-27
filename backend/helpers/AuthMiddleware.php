@@ -16,8 +16,8 @@ class AuthMiddleware extends \Slim\Middleware
     {
         $headers = getallheaders();
         // print_r($headers);
-        // echo 'isset app token? '.(isset($headers['x-app-token']) ? 'true'.$headers['x-app-token']:'false');
-        $headerStringValue = isset($headers['x-app-token']) ? $headers['x-app-token'] : '';
+        // echo 'isset app token? '.(isset($headers[TOKEN_HEADER]) ? 'true'.$headers[TOKEN_HEADER]:'false');
+        $headerStringValue = isset($headers[TOKEN_HEADER]) ? $headers[TOKEN_HEADER] : '';
         DevHelp::debugMsg('headerStringValue:' . $headerStringValue);
         $decryptedString = decrypt($headerStringValue);
 
@@ -36,15 +36,13 @@ class AuthMiddleware extends \Slim\Middleware
     private function doLogin($username, $password)
     {
         // Check the access to this function, using logs and ip
-        //--> to be implemented
 
-        // Check credentials
-
+        // TODO:Check credentials against Db
         if ($username !== ACCESS_USER || $password !== ACCESS_PASSWORD) {
             return false;
         }
 
-        echo "{\"token\": \"" . encrypt(1) . "\"}";
+        echo "{\"token\": \"" . encrypt(ACCESS_ID) . "\"}";
         exit;
     }
     public function call()
@@ -64,7 +62,6 @@ class AuthMiddleware extends \Slim\Middleware
         $error = '';
         $userId = $this->isLogged();
         if (!empty($userId)) {
-            // echo $userId;
             $this->app->userId = $userId;
             $this->next->call();
             return;
@@ -78,15 +75,17 @@ class AuthMiddleware extends \Slim\Middleware
         $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
 
         if (isset($loginParams->login)) {
-
             if (!$username || !$password) {
-                $error = 'Please complete both fields.';
+                $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
             } else {
+                DevHelp::debugMsg('doLogin:' . $username.":".$password);
                 if (!$this->doLogin($username, $password)) {
-                    $error = "Wrong password.";
-                } else {
-                    $this->next->call();
+                    $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
                 }
+                // else {
+                //     $this->next->call();
+                //     return;
+                // }
             }
         }
 
@@ -100,7 +99,7 @@ function encrypt($simple_string)
 {
 
     // Display the original string
-    echo "Original String: " . $simple_string;
+    // echo "Original String: " . $simple_string;
 
     // Store the cipher method
     $ciphering = "AES-128-CTR";

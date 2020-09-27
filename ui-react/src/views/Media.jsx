@@ -141,7 +141,7 @@ const Media = () => {
         <RouterNavLink to="/">
           <i className="fa fa-home" /> <span>Home</span>
         </RouterNavLink>
-        <RouterNavLink to="/?pageMode=1">
+        <RouterNavLink to="/oneday?pageMode=1">
           {' '}
           <i className="fa fa-calendar-check" /> <span>Same Day</span>
         </RouterNavLink>
