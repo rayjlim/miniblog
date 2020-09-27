@@ -11,7 +11,7 @@ const UploadForm = () => {
     console.log(event.target.files[0]);
     setSelectedFile(event.target.files[0]);
   }
-  function upload(event) {
+  async function upload(event) {
     // const data = new FormData()
     // data.append('file', selectFile)
 
@@ -22,14 +22,16 @@ const UploadForm = () => {
       'filePath',
       filePath.length ? filePath : format(new Date(), 'yyyy-MM')
     );
-    formData.append('xhr', true);
 
-    (async () => {
+
       console.log(`send upload`);
-
+      const token = window.localStorage.getItem('appToken');
       const response = await fetch(`${constants.REST_ENDPOINT}uploadImage/`, {
         method: 'POST',
         body: formData,
+        headers: {
+          'x-app-token': token,
+        },
       });
 
       console.log(response);
@@ -37,13 +39,14 @@ const UploadForm = () => {
       history.push(
         `/media?fileName=${data.fileName}&filePath=${data.filePath}`
       );
-    })();
+
   }
+
   return (
     <div className="container">
       <form action="../uploadImage/">
         <div className="form-group">
-          <label htmlFor="fileToUpload">Select image to upload:</label>
+          <label htmlFor="fileToUpload">Select image to upload:a</label>
 
           <input
             type="file"
@@ -68,7 +71,7 @@ const UploadForm = () => {
         <button
           type="button"
           className="btn btn-success btn-block"
-          onClick={upload}
+          onClick={e=>upload()}
         >
           Upload
         </button>

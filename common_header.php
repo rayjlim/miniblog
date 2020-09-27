@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'backend/SERVER_CONFIG.php';
 require 'vendor/autoload.php';
 

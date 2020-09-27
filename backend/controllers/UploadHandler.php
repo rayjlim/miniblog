@@ -92,16 +92,14 @@ class UploadHandler extends AbstractController
 
                 $urlFileName = basename($_FILES["fileToUpload"]["name"]);
 
-                if (isset($_POST['xhr'])) {
-                    $data['fileName'] = $urlFileName;
-                    $data['filePath'] = $filePath;
-                    $data['createdDir'] = $createdDir;
 
-                    echo json_encode($data);
-                    return;
-                } else {
-                    $this->redirector('../index.html?view=media&fileName='.$urlFileName.'&filePath='.$filePath);
-                }
+                $data['fileName'] = $urlFileName;
+                $data['filePath'] = $filePath;
+                $data['createdDir'] = $createdDir;
+
+                echo json_encode($data);
+                return;
+
             } catch (Exception $e) {
                 echo 'Caught exception: ', $e->getMessage(), '\n';
             }
@@ -128,13 +126,11 @@ class UploadHandler extends AbstractController
 
             $urlFileName = $fileName;
 
-            if (isset($_GET["api"])) {
+
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
                 echo json_encode($data);
-            } else {
-                $this->redirector('../main#/uploadViewer?fileName='.$urlFileName.'&filePath='.$filePath);
-            }
+
         };
     }
 
@@ -233,13 +229,10 @@ class UploadHandler extends AbstractController
             imagedestroy($img);
             imagedestroy($rotated);
 
-            if (isset($_GET["api"])) {
-                $data['fileName'] = $fileName;
-                $data['filePath'] = $filePath;
-                echo json_encode($data);
-            } else {
-                $this->redirector('../main#/uploadViewer?fileName='.$fileName.'&filePath='.$filePath);
-            }
+            $data['fileName'] = $fileName;
+            $data['filePath'] = $filePath;
+            echo json_encode($data);
+
         };
     }
 
@@ -315,9 +308,8 @@ class UploadHandler extends AbstractController
 
 
             //forward to xhr_action
-            $_SESSION['page_message'] = $data['pageMessage'];
+            // $_SESSION['page_message'] = $data['pageMessage'];
             echo json_encode($data);
-
         };
     }
 }

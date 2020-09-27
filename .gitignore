@@ -13,3 +13,4 @@ ui-react/build/*
 ui-react/node_modules/*
 ui-react/docs/*
 ui-react/styleguide/*
+ui-react/src/constants.js

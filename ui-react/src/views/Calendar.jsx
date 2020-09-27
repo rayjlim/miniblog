@@ -101,7 +101,7 @@ class Calendar extends React.Component {
           <RouterNavLink to="/">
             <i className="fa fa-home" /> Home
           </RouterNavLink>
-          <RouterNavLink to="/?pageMode=1">
+          <RouterNavLink to="/oneday?pageMode=1">
             <i className="fa fa-calendar-check" /> Same Day
           </RouterNavLink>
         </nav>

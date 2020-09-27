@@ -9,6 +9,7 @@ import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-va
 import { useAuth0 } from '../utils/react-auth0-spa';
 import { Snackbar } from 'react-md';
 import MarkdownDisplay from '../components/MarkdownDisplay';
+import history from '../utils/history';
 
 const CLOSED = 0;
 const ADD = 1;
@@ -29,12 +30,11 @@ const OneDay = () => {
 
   const [state, setState] = useState({
     entries: [],
-    auth: false,
     pageDate: format(new Date(), 'yyyy-MM-dd'),
     searchParam: '',
     formEntry: {},
     toasts: [],
-    autohide: true,
+    autohide: "true",
     pageMode: ONEDAY,
     formMode: CLOSED,
     scrollToLast: null,
@@ -75,10 +75,19 @@ const OneDay = () => {
     }
 
     (async () => {
-      //load day main
-      const response = await fetch(endPointURL);
-
-      console.log('response :', response);
+      const token = window.localStorage.getItem('appToken');
+      const response = await fetch(endPointURL, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-token': token,
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      });
       if (!response.ok) {
         console.log('response.status :', response.status);
         alert(`loading error : ${response.status}`);
@@ -86,25 +95,23 @@ const OneDay = () => {
       } else {
         const data = await response.json();
 
-        console.log('response.data :>> ', data.unauth);
-        if (data.unauth) {
-          setState({ ...state, auth: false });
-        } else {
-          const refs = data.entries.reduce((acc, value) => {
-            acc[value.id] = React.createRef();
-            return acc;
-          }, {});
+        console.log('response.data :>> ', data);
 
-          let entries = data.entries;
-          console.log('state :>> ', state);
-          setState({ ...state, ...loadParams, entries, auth: true, refs });
-          console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-          if (loadParams.scrollToLast) {
-            refs[loadParams.scrollToLast].current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start',
-            });
-          }
+        const refs = data.entries.reduce((acc, value) => {
+          acc[value.id] = React.createRef();
+          return acc;
+        }, {});
+
+        let entries = data.entries;
+        console.log('entries :>> ', entries);
+        console.log('state :>> ', state);
+        setState({ ...state, ...loadParams, entries, auth: true, refs });
+        console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
+        if (loadParams.scrollToLast) {
+          refs[loadParams.scrollToLast].current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
         }
       }
     })();
@@ -117,14 +124,16 @@ const OneDay = () => {
    */
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
-    let _date =
-      parse(state.pageDate, 'yyyy-MM-dd', new Date());
-
+    let _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
 
     let newDate = add(_date, { days: e.target.value });
     dateInput.value = format(newDate, 'yyyy-MM-dd');
 
-    loadDay({ ...state, pageDate: format(newDate, 'yyyy-MM-dd'), formMode: CLOSED });
+    loadDay({
+      ...state,
+      pageDate: format(newDate, 'yyyy-MM-dd'),
+      formMode: CLOSED,
+    });
   }
 
   function resetEntryForm() {
@@ -203,7 +212,7 @@ const OneDay = () => {
       alert(`loading error : ${response.status}`);
       return;
     } else {
-      const data = await response.json();
+      // const data = await response.json();
       console.log('sendBacendAuth#loadday', state.pageDate);
       loadDay();
     }
@@ -219,7 +228,7 @@ const OneDay = () => {
       alert(`logout error : ${response.status}`);
       return;
     } else {
-      const data = await response.json();
+      // const data = await response.json();
       alert('Logged Out');
       logout({
         returnTo: window.location.origin,
@@ -227,10 +236,11 @@ const OneDay = () => {
     }
   }
 
-  function dismissToast() {
-    const [, ..._toasts] = state.toasts;
-    setState({ ...state, toasts: _toasts });
-  }
+  const doLogout = () => {
+    window.localStorage.setItem('appToken', null);
+    history.push(`/`);
+  };
+
   const login = { color: 'red' };
 
   useEffect(() => {
@@ -275,10 +285,16 @@ const OneDay = () => {
             <i className="fa fa-home" /> <span>Home</span>
           </button>
         )}
-
-        {isAuthenticated ? (
           <button
-            onClick={e => logoutWithRedirect(e)}
+            onClick={e => doLogout(e)}
+            className="btn-margin plainLink"
+          >
+            <i className="fa fa-sign-out" />
+            <span className="nav-text">Log Out</span>
+          </button>
+        {/* {isAuthenticated ? (
+          <button
+            onClick={e => doLogout(e)}
             className="btn-margin plainLink"
           >
             <i className="fa fa-sign-out" />
@@ -303,88 +319,86 @@ const OneDay = () => {
           </button>
         ) : (
           ''
-        )}
+        )} */}
       </nav>
       <Snackbar
         id="example-snackbar"
         toasts={state.toasts}
         autohide={state.autohide}
-        onDismiss={dismissToast}
-        autohideTimeout={1000}
       />
 
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
-      {isAuthenticated && (
-        <Fragment>
-          <div className="grid-3mw container">
-            <button
-              onClick={e => handleButtonDirection(e)}
-              className="btn btn-info btn-lrg"
-              value="-1"
-            >
-              <i className="fa fa-chevron-left" /> Prev
-            </button>
-            <div>
-              <span>{state.pageDate}</span>
-              <input
-                ref={elem => (dateInput = elem)}
-                type="text"
-                className="form-control"
-                id="formDpInput"
-                defaultValue={state.pageDate}
-                onChange={e => updateDate(e)}
-              />
-            </div>
-            <button
-              onClick={e => handleButtonDirection(e)}
-              className="btn btn-success btn-lrg"
-              value="1"
-            >
-              Next <i className="fa fa-chevron-right" />
-            </button>
+
+      <Fragment>
+        <div className="grid-3mw container">
+          <button
+            onClick={e => handleButtonDirection(e)}
+            className="btn btn-info btn-lrg"
+            value="-1"
+          >
+            <i className="fa fa-chevron-left" /> Prev
+          </button>
+          <div>
+            <span>{state.pageDate}</span>
+            <input
+              ref={elem => (dateInput = elem)}
+              type="text"
+              className="form-control"
+              id="formDpInput"
+              defaultValue={state.pageDate}
+              onChange={e => updateDate(e)}
+            />
           </div>
+          <button
+            onClick={e => handleButtonDirection(e)}
+            className="btn btn-success btn-lrg"
+            value="1"
+          >
+            Next <i className="fa fa-chevron-right" />
+          </button>
+        </div>
 
-          <section className="container" ref={state.refForm}>
-            {showAddEditForm(state.formMode)}
-          </section>
+        <section className="container" ref={state.refForm}>
+          {showAddEditForm(state.formMode)}
+        </section>
 
-          <section className="container">
-            <ul className="entriesList">
-              {state.entries.map(entry => {
-                let newText = entry.content.replace(/<br \/>/g, '\n');
-                newText = newText.replace(
-                  /..\/uploads/g,
-                  `${constants.PROJECT_ROOT}uploads`
-                );
-                const dateFormated = format(
-                  parse(entry.date, 'yyyy-MM-dd', new Date()),
-                  'EEE MM, dd yyyy'
-                );
-                let showEntryDate = (
-                  <button
-                    onClick={e => showEditForm(e, entry)}
-                    className="plainLink"
-                  >
-                    {dateFormated}
-                  </button>
-                );
+        <section className="container">
+          <ul className="entriesList">
+            {state.entries.map(entry => {
+              let newText = entry.content.replace(/<br \/>/g, '\n');
+              newText = newText.replace(
+                /..\/uploads/g,
+                `${constants.PROJECT_ROOT}uploads`
+              );
+              const dateFormated = format(
+                parse(entry.date, 'yyyy-MM-dd', new Date()),
+                'EEE MM, dd yyyy'
+              );
+              let showEntryDate = (
+                <button
+                  onClick={e => showEditForm(e, entry)}
+                  className="plainLink"
+                >
+                  {dateFormated}
+                </button>
+              );
 
-                return (
-                  <li
-                    key={entry.id}
-                    className="blogEntry"
-                    ref={state.refs[entry.id]}
-                  >
-                    {showEntryDate} |
-                    <MarkdownDisplay source={newText} />
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        </Fragment>
-      )}
+              return (
+                <li
+                  key={entry.id}
+                  className="blogEntry"
+                  ref={state.refs[entry.id]}
+                >
+                  {showEntryDate} |
+                  <MarkdownDisplay source={newText} />
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      </Fragment>
+
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="col-md-5 text-left">
           <RouterNavLink to={'/upload'} className="btn navbar-btn">

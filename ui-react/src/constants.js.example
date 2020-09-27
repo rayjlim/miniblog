@@ -10,7 +10,7 @@ const isLocalhost = Boolean(
 
 module.exports = {
   REST_ENDPOINT: isLocalhost
-    ? 'http://localhost:3001/'
-    : 'https://miniblog.lilplaytime.com/',
+    ? 'http://localhost/'
+    : 'https://production/',
   PROJECT_ROOT: isLocalhost ? 'http://localhost/projects/miniblog/' : '/',
 };

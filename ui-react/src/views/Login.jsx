@@ -1,9 +1,13 @@
 import React, { Fragment } from 'react';
 import constants from '../constants';
-
 import { useAuth0 } from '../utils/react-auth0-spa';
+import Loading from '../components/Loading';
 
 const Home = () => {
+  const authVar = useAuth0();
+
+  const { loading } = authVar;
+
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const logoutWithRedirect = async () => {
@@ -24,7 +28,7 @@ const Home = () => {
       });
     }
   };
-
+  console.log(isAuthenticated);
   return (
     <Fragment>
       {!isAuthenticated && (
@@ -39,10 +43,10 @@ const Home = () => {
       )}
 
       {isAuthenticated && (
-        <>
+        <Fragment>
           <span>{user.name}</span>
           <button onClick={() => logoutWithRedirect()}>Logout</button>
-        </>
+        </Fragment>
       )}
     </Fragment>
   );

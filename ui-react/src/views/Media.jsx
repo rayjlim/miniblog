@@ -56,8 +56,16 @@ const Media = () => {
 
   async function resize(e) {
     console.log('resize' + post.filePath + ':' + post.fileName);
+    const token = window.localStorage.getItem('appToken');
     const response = await fetch(
-      `${constants.REST_ENDPOINT}uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`
+      `${constants.REST_ENDPOINT}uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-token': token,
+        },
+      }
     );
     console.log('response :>> ', response);
     let random = Math.random();
@@ -69,8 +77,16 @@ const Media = () => {
 
   async function rotateLeft(e) {
     console.log('ro-left' + post.filePath + ':' + post.fileName);
+    const token = window.localStorage.getItem('appToken');
     const response = await fetch(
-      `${constants.REST_ENDPOINT}uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`
+      `${constants.REST_ENDPOINT}uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-token': token,
+        },
+      }
     );
     console.log('response :>> ', response);
     let random = Math.random();
@@ -81,8 +97,16 @@ const Media = () => {
   }
   async function rotateRight(e) {
     console.log('ro-right' + post.filePath + ':' + post.fileName);
+    const token = window.localStorage.getItem('appToken');
     const response = await fetch(
-      `${constants.REST_ENDPOINT}uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`
+      `${constants.REST_ENDPOINT}uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-token': token,
+        },
+      }
     );
     console.log('response :>> ', response);
     let random = Math.random();
@@ -95,7 +119,7 @@ const Media = () => {
   function handleAdd(e) {
     console.log(e);
     alert('Entry created');
-    history.push(`/`);
+    history.push(`/oneday`);
   }
 
   // rename(newName) {
@@ -114,10 +138,10 @@ const Media = () => {
   return (
     <Fragment>
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/">
+        <RouterNavLink to="/oneday">
           <i className="fa fa-home" /> <span>Home</span>
         </RouterNavLink>
-        <RouterNavLink to="/?pageMode=1">
+        <RouterNavLink to="/oneday?pageMode=1">
           {' '}
           <i className="fa fa-calendar-check" /> <span>Same Day</span>
         </RouterNavLink>

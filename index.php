@@ -2,27 +2,27 @@
 // ini_set('display_errors', 'On');
 //ob_start("ob_gzhandler");
 // error_reporting(E_ALL);
+
 require 'common_header.php';
 
-$app = new Slim\Slim();
-
 if (defined('DEVELOPMENT') && DEVELOPMENT) {
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400');    // cache for 1 day
 
-    //Access-Control-Allow-Origin header with wildcard.
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Expose-Headers: Access-Control-*");
-    header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, x-app-token");
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
     header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-    $app->add(new AuthMiddleware());
-}
-else{
-    $app->add(new AuthMiddleware());
 }
 
-$app->view()->appendData(["rooturl" => '/'.ROOT_URL]);
-$app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
-$app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
+
+$app = new Slim\Slim();
+$app->add(new AuthMiddleware());
+
+// $app->view()->appendData(["rooturl" => '/'.ROOT_URL]);
+// $app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
+// $app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
 
 require 'backend/core/page_message.php';
 
@@ -44,11 +44,11 @@ require 'backend/core/page_message.php';
 //      });
 //  }
 
-$app->get('/security', function () {
-    echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
+$app->get('/security', function ()  use ($app) {
+    echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
 $app->post('/security', function () {
-    echo "{	\"user_id\":\"".$_SESSION[SESSION_USER_ID]."\"}";
+    echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
 $app->options('/security', function () {
     echo "options-check";

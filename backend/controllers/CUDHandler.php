@@ -49,7 +49,7 @@ class CUDHandler extends AbstractController
             }
             $currentDateTime = $this->resource->getDateTime();
             $smsEntry = new SmsEntrie();
-            $smsEntry->userId = $this->resource->getSession(SESSION_USER_ID);
+            $smsEntry->userId = $this->app->userId;
             $smsEntry->date = (!isset($entry->date) || $entry->date == '') ? $currentDateTime->format('Y-m-d G:i:s') : $entry->date;
             $smsEntry->content = trim(urldecode($entry->content));
             $smsEntry = $this->contentHelper->processEntry($smsEntry);
@@ -99,7 +99,7 @@ class CUDHandler extends AbstractController
             $smsEntry = $this->dao->load($id);
             // TODO: check if no entry throw exception; see bug 005
             $temp = $smsEntry['user_id'];
-            if ($this->resource->getSession(SESSION_USER_ID) != $temp) {
+            if ($this->app->userId != $temp) {
                 throw new Exception('Invalid User');
             }
 
@@ -129,7 +129,7 @@ class CUDHandler extends AbstractController
             DevHelp::debugMsg('start delete' . __FILE__);
             $smsEntry = $this->dao->load($id);
 
-            if ($this->resource->getSession(SESSION_USER_ID) != $smsEntry['user_id']) {
+            if ($this->app->userId != $smsEntry['user_id']) {
                 throw new Exception('Invalid User');
             }
             $rows_affected = $this->dao->delete($smsEntry['id']);

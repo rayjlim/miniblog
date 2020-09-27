@@ -30,14 +30,21 @@ const EditForm = props => {
     };
     console.log('handleSave entry :', entry);
     try {
+      const token = window.localStorage.getItem('appToken');
       const response = await fetch(
         `${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
         {
           method: 'PUT',
+          body: JSON.stringify(entry),
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
+            'x-app-token': token,
           },
-          body: JSON.stringify(entry),
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
         }
       );
 
