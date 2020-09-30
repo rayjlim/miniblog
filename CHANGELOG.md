@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/rayjlim/miniblog/compare/v1.3.1...v1.4.0) (2020-09-30)
+
+
+### Features
+
+* ✨ app-token for auth (frontend) ([a22d256](https://github.com/rayjlim/miniblog/commit/a22d25631d83a31c940c15b49d3233ee4186809a))
+* ✨ new auth mechanism using app token (backend) ([8f664d0](https://github.com/rayjlim/miniblog/commit/8f664d0ae7e528c73273d397a91c284092938e42))
+* 🔥 change axios to fetch ([cb7b520](https://github.com/rayjlim/miniblog/commit/cb7b520c9071ba51bee6f6132ada580400bfdf18))
+* 🔥 remove fullcalendar b/c unused ([c0b87a4](https://github.com/rayjlim/miniblog/commit/c0b87a41891d9ae1d40e374040dedf1d78682108))
+* 🔥 remove mermaid due to large lib size and low use case usage ([1003eef](https://github.com/rayjlim/miniblog/commit/1003eefb8a9da9cd981753e7cabfe0ad80729f66))
+
+
+### Bug Fixes
+
+* 🐛 delete call missing token ([1a41017](https://github.com/rayjlim/miniblog/commit/1a4101772a7b75977c62210f369d8fcce6c3c071))
+* 🐛 file upload issue due to content-type ([7855184](https://github.com/rayjlim/miniblog/commit/78551847b0d95956a82389692e884903e74aefde))
+* 🐛 links to oneday as main ([4ad71c0](https://github.com/rayjlim/miniblog/commit/4ad71c07dd400f9f87ec5782e25db1c283539d71))
+* 🐛 update composer.lock ([a9faa31](https://github.com/rayjlim/miniblog/commit/a9faa31dc8d587808722e42da428e4210950bb05))
+* 📝 move to notesee ([d5302b9](https://github.com/rayjlim/miniblog/commit/d5302b9b51bebfff7c6611f0a081a88d3d4555be))
+
 ### [1.3.1](https://github.com/rayjlim/miniblog/compare/v1.3.0...v1.3.1) (2020-09-13)
 
 ## [1.3.0](https://github.com/rayjlim/miniblog/compare/v1.2.1...v1.3.0) (2020-08-15)
