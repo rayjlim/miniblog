@@ -66,10 +66,20 @@ const EditForm = props => {
     }
     console.log('handleDelete ' + props.entry.id);
     try {
+      const token = window.localStorage.getItem('appToken');
       const response = await fetch(
         `${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
         {
           method: 'DELETE',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-app-token': token,
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
         }
       );
 
