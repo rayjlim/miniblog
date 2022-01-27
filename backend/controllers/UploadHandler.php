@@ -2,9 +2,6 @@
 defined('ABSPATH') OR exit('No direct script access allowed');
 use \Lpt\DevHelp;
 
-define("UPLOAD_SIZE_LIMIT", 5 * 1000000); // 5 meg
-define("UPLOAD_DIR", ABSPATH . "uploads/");
-
 /**
  *   This class will handle the Create, Update, Delete Functionality
  *   for the Entrys
