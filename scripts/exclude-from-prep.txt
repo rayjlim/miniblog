@@ -1,0 +1,9 @@
+config/
+vendor/
+tests/
+
+*.txt
+*.md
+
+SERVER_CONFIG.php
+.htaccess
