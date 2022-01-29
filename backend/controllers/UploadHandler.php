@@ -1,5 +1,6 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
 
 /**
@@ -47,9 +48,9 @@ class UploadHandler extends AbstractController
         return function () {
             DevHelp::debugMsg('upload' . __FILE__);
 
-            $filePath = $_POST["filePath"].'/' ?? date("Y-m");
+            $filePath = $_POST["filePath"] . '/' ?? date("Y-m");
             $targetDir = UPLOAD_DIR . $filePath;
-            $targetFileFullPath = UPLOAD_DIR . $filePath. basename($_FILES["fileToUpload"]["name"]);
+            $targetFileFullPath = UPLOAD_DIR . $filePath . basename($_FILES["fileToUpload"]["name"]);
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
             $createdDir = false;
@@ -71,19 +72,19 @@ class UploadHandler extends AbstractController
                 // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
                     $urlFileName = basename($_FILES["fileToUpload"]["name"]);
-                    throw new Exception(" file already exists." ."![](../uploads/". $filePath.$urlFileName.")" . ' of '. UPLOAD_SIZE_LIMIT);
+                    throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . UPLOAD_SIZE_LIMIT);
                 }
 
                 // Check file size
                 if ($_FILES["fileToUpload"]["size"] > UPLOAD_SIZE_LIMIT) {
-                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"]. ' of '. UPLOAD_SIZE_LIMIT);
+                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"] . ' of ' . UPLOAD_SIZE_LIMIT);
                 }
                 // Allow certain file formats
-                if (! in_array($imageFileType, $validFileExt)) {
+                if (!in_array($imageFileType, $validFileExt)) {
                     throw new Exception("only JPG, JPEG, PNG & GIF files are allowed.");
                 }
 
-                if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
+                if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
                     throw new Exception("Sorry, there was an error moving upload file.");
                 }
 
@@ -96,7 +97,6 @@ class UploadHandler extends AbstractController
 
                 echo json_encode($data);
                 return;
-
             } catch (Exception $e) {
                 header('HTTP/1.1 500 Internal Server Error');
                 echo 'Caught exception: ', $e->getMessage(), $targetDir, '\n';
@@ -124,11 +124,9 @@ class UploadHandler extends AbstractController
 
             $urlFileName = $fileName;
 
-
-                $data['fileName'] = $urlFileName;
-                $data['filePath'] = $filePath;
-                echo json_encode($data);
-
+            $data['fileName'] = $urlFileName;
+            $data['filePath'] = $filePath;
+            echo json_encode($data);
         };
     }
 
@@ -138,26 +136,26 @@ class UploadHandler extends AbstractController
         $mime = $info['mime'];
 
         switch ($mime) {
-                case 'image/jpeg':
-                        $image_create_func = 'imagecreatefromjpeg';
-                        $image_save_func = 'imagejpeg';
-                        $new_image_ext = 'jpg';
-                        break;
+            case 'image/jpeg':
+                $image_create_func = 'imagecreatefromjpeg';
+                $image_save_func = 'imagejpeg';
+                $new_image_ext = 'jpg';
+                break;
 
-                case 'image/png':
-                        $image_create_func = 'imagecreatefrompng';
-                        $image_save_func = 'imagepng';
-                        $new_image_ext = 'png';
-                        break;
+            case 'image/png':
+                $image_create_func = 'imagecreatefrompng';
+                $image_save_func = 'imagepng';
+                $new_image_ext = 'png';
+                break;
 
-                case 'image/gif':
-                        $image_create_func = 'imagecreatefromgif';
-                        $image_save_func = 'imagegif';
-                        $new_image_ext = 'gif';
-                        break;
+            case 'image/gif':
+                $image_create_func = 'imagecreatefromgif';
+                $image_save_func = 'imagegif';
+                $new_image_ext = 'gif';
+                break;
 
-                default:
-                        throw new Exception('Unknown image type.');
+            default:
+                throw new Exception('Unknown image type.');
         }
 
         $img = $image_create_func($originalFile);
@@ -184,43 +182,41 @@ class UploadHandler extends AbstractController
             // File and rotation
 
             $targetDir = UPLOAD_DIR . $filePath;
-            $targetFile = $targetDir.$fileName;
+            $targetFile = $targetDir . $fileName;
             $info = getimagesize($targetFile);
             $mime = $info['mime'];
             switch ($mime) {
-                    case 'image/jpeg':
-                            $image_create_func = 'imagecreatefromjpeg';
-                            $image_save_func = 'imagejpeg';
-                            $new_image_ext = 'jpg';
-                            break;
+                case 'image/jpeg':
+                    $image_create_func = 'imagecreatefromjpeg';
+                    $image_save_func = 'imagejpeg';
+                    $new_image_ext = 'jpg';
+                    break;
 
-                    case 'image/png':
-                            $image_create_func = 'imagecreatefrompng';
-                            $image_save_func = 'imagepng';
-                            $new_image_ext = 'png';
-                            break;
+                case 'image/png':
+                    $image_create_func = 'imagecreatefrompng';
+                    $image_save_func = 'imagepng';
+                    $new_image_ext = 'png';
+                    break;
 
-                    case 'image/gif':
-                            $image_create_func = 'imagecreatefromgif';
-                            $image_save_func = 'imagegif';
-                            $new_image_ext = 'gif';
-                            break;
+                case 'image/gif':
+                    $image_create_func = 'imagecreatefromgif';
+                    $image_save_func = 'imagegif';
+                    $new_image_ext = 'gif';
+                    break;
 
-                    default:
-                            throw new Exception('Unknown image type.');
+                default:
+                    throw new Exception('Unknown image type.');
             }
             $fileExtension = '.' . $new_image_ext;
 
-            $degrees = isset($_GET["left"]) ? 90 : -90 ;
+            $degrees = isset($_GET["left"]) ? 90 : -90;
             $img = $image_create_func($targetFile);
             $rotated = imagerotate($img, $degrees, 0);
-
 
             if (file_exists($targetFile)) {
                 unlink($targetFile);
             }
             $image_save_func($rotated, "$targetFile");
-
             //$permissionChanged = chmod($newFileFullName, 0777);
 
             // Free the memory
@@ -230,7 +226,6 @@ class UploadHandler extends AbstractController
             $data['fileName'] = $fileName;
             $data['filePath'] = $filePath;
             echo json_encode($data);
-
         };
     }
 
@@ -247,7 +242,7 @@ class UploadHandler extends AbstractController
             $newFileName = $entry->newFileName;
 
             $targetDir = UPLOAD_DIR . $filePath;
-            rename($targetDir.$fileName, $targetDir.$newFileName);
+            rename($targetDir . $fileName, $targetDir . $newFileName);
             $urlFileName = $newFileName;
 
             $data['fileName'] = $newFileName;
@@ -258,14 +253,14 @@ class UploadHandler extends AbstractController
 
     public function listMedia()
     {
-        return function ($currentDir='') {
+        return function ($currentDir = '') {
             \Lpt\DevHelp::debugMsg('start listMedia');
             $currentDir = $currentDir != '' ? $currentDir : '';
             $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
             // \Lpt\DevHelp::debugMsg(print_r($filelist));
 
-            \Lpt\DevHelp::debugMsg('currentDir '. $currentDir);
-            \Lpt\DevHelp::debugMsg('end($filelist)'.is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
+            \Lpt\DevHelp::debugMsg('currentDir ' . $currentDir);
+            \Lpt\DevHelp::debugMsg('end($filelist)' . is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
 
             //h no media in root folder, get from last
             if (count($filelist) > 0 && $currentDir == ''  && is_dir(UPLOAD_DIR . DIR_SEP . end($filelist))) {
@@ -300,10 +295,9 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('$fileName' . $fileName);
             DevHelp::debugMsg('$filePath' . $filePath);
 
-            $this->resource->removefile(UPLOAD_DIR . DIR_SEP . $filePath. DIR_SEP . $fileName);
+            $this->resource->removefile(UPLOAD_DIR . $filePath . DIR_SEP . $fileName);
 
-            $data['pageMessage'] = 'File Removed: ' . $filePath. DIR_SEP . $fileName;
-
+            $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
 
             //forward to xhr_action
             // $_SESSION['page_message'] = $data['pageMessage'];
