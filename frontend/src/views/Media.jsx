@@ -34,7 +34,7 @@ const Media = () => {
       fileName,
       filePath,
       prepend: `![](../uploads/${filePath}${fileName})`,
-      imgUrl: `${constants.UPLOAD_ROOT}${filePath}${fileName}?r=${random}`,
+      imgUrl: `${constants.UPLOAD_ROOT}/${filePath}${fileName}?r=${random}`,
     });
   }, []);
 
@@ -44,7 +44,7 @@ const Media = () => {
       fileName,
       filePath,
       prepend: `![](../uploads/${filePath}${fileName})`,
-      imgUrl: `${constants.UPLOAD_ROOT}${filePath}${fileName}?r=${random}`,
+      imgUrl: `${constants.UPLOAD_ROOT}/${filePath}${fileName}?r=${random}`,
     });
     setShowMedia(false);
   }
@@ -71,7 +71,7 @@ const Media = () => {
     let random = Math.random();
     setPost({
       ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}${post.filePath}${post.fileName}?r=${random}`,
+      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
     });
   }
 
@@ -92,7 +92,7 @@ const Media = () => {
     let random = Math.random();
     setPost({
       ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}${post.filePath}${post.fileName}?r=${random}`,
+      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
     });
   }
   async function rotateRight(e) {
@@ -112,7 +112,7 @@ const Media = () => {
     let random = Math.random();
     setPost({
       ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}${post.filePath}${post.fileName}?r=${random}`,
+      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
     });
   }
 

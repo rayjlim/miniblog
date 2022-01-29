@@ -98,7 +98,8 @@ class UploadHandler extends AbstractController
                 return;
 
             } catch (Exception $e) {
-                echo 'Caught exception: ', $e->getMessage(), '\n';
+                header('HTTP/1.1 500 Internal Server Error');
+                echo 'Caught exception: ', $e->getMessage(), $targetDir, '\n';
             }
         };
     }
@@ -114,7 +115,7 @@ class UploadHandler extends AbstractController
             $fileName = $_GET["fileName"];
             $filePath = $_GET["filePath"];
 
-            $targetDir = ABSPATH . "uploads/".$filePath;
+            $targetDir = UPLOAD_DIR . $filePath;
             $fileFullPath = $targetDir . $fileName;
 
             $new_width = 360;
@@ -182,7 +183,7 @@ class UploadHandler extends AbstractController
 
             // File and rotation
 
-            $targetDir = ABSPATH . "uploads/".$filePath;
+            $targetDir = UPLOAD_DIR . $filePath;
             $targetFile = $targetDir.$fileName;
             $info = getimagesize($targetFile);
             $mime = $info['mime'];
@@ -245,7 +246,7 @@ class UploadHandler extends AbstractController
             $filePath = $entry->filePath;
             $newFileName = $entry->newFileName;
 
-            $targetDir = ABSPATH . "uploads/".$filePath;
+            $targetDir = UPLOAD_DIR . $filePath;
             rename($targetDir.$fileName, $targetDir.$newFileName);
             $urlFileName = $newFileName;
 

@@ -109,7 +109,7 @@ const MediaList = props => {
               Load
             </button>
             <img
-              src={`${constants.UPLOAD_ROOT}${currentDir}/${key}`}
+              src={`${constants.UPLOAD_ROOT}/${currentDir}/${key}`}
               alt="main_img"
             />
             <button onClick={e => deleteMedia(currentDir + '/', key)}>
