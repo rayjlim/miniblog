@@ -35,25 +35,25 @@ if [ -z "$BUILD" ]; then
   rsync -ravz --exclude-from '../scripts/exclude-from-prep.txt' --delete . ../$PREP_DIR-api
   # rsync -avz  _rsc/vendor $PREP_DIR/_rsc
   rsync -avz  "config/bluehost/SERVER_CONFIG.php"  ../$PREP_DIR-api
-  rsync -avz  "config/bluehost/.htaccess"   ../$PREP_DIR-api
-  rsync -avz  "../scripts/exclude-from-prod.txt" ../$PREP_DIR-api
+  rsync -avz  "config/bluehost/.htaccess"          ../$PREP_DIR-api
+  rsync -avz  "../scripts/exclude-from-prod.txt"   ../$PREP_DIR-api
 
   cd ../$PREP_DIR-api
   /usr/local/bin/composer install  --no-dev
   chmod 755 *.php
 
   echo "build ready"
+  cd ..
 else
   echo "Skip Build"
-  cd $PREP_DIR
+  cd ..
 fi
 
 echo "start frontend build"
-
-
+pwd
 if [ -z "$NOBUILDREACT" ]; then
-  mkdir -p ../$PREP_DIR-ui
-  cd ../frontend
+
+  cd ./frontend
   npm run build
   buildresult=$?
   if [ $buildresult != 0 ]; then
@@ -64,34 +64,34 @@ if [ -z "$NOBUILDREACT" ]; then
   cd ..
 fi
 
-pwd
-
-rsync -ravz frontend/build/ $PREP_DIR-ui/
-
-
 echo "start upload"
 
-# # setup passwordless ssh
-# if [ ! -z $RESETSSH ]; then
-#     echo "Reset ssh key"
-#     ssh-keygen -f $KEY_DIR -R $FTP_HOST
-#     ssh-copy-id -f -i ~/.ssh/id_rsa -oHostKeyAlgorithms=+ssh-dss $FTP_USER@$FTP_HOST
-# else
-#     echo "Skip SSH Reset"
-# fi
+# setup passwordless ssh
+if [ ! -z $RESETSSH ]; then
+    echo "Reset ssh key"
+    ssh-keygen -f $KEY_DIR -R $FTP_HOST
+    ssh-copy-id -f -i ~/.ssh/id_rsa -oHostKeyAlgorithms=+ssh-dss $FTP_USER@$FTP_HOST
+else
+    echo "Skip SSH Reset"
+fi
 
-# cd ./$PREP_DIR-api
-# pwd
-# echo $FTP_TARGETFOLDER_API
-# rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
-#   --exclude-from 'be_production-exclude-push.txt' \
-#   --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_API/
+echo "start upload API"
+cd ./$PREP_DIR-api
+pwd
+echo $FTP_TARGETFOLDER_API
+rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
+  --exclude-from 'exclude-from-prod.txt' \
+  --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_API/
 
-# cd ../$PREP_DIR-ui
-# pwd
-# echo $FTP_TARGETFOLDER_UI
-# rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
-#   --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_UI/
+ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_API/"
+cd ..
 
-# ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_API/"
-# ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_UI/"
+echo "start upload UI"
+cd ./frontend/build/
+pwd
+echo $FTP_TARGETFOLDER_UI
+rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
+  --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_UI/
+
+ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_UI/"
+cd ../..

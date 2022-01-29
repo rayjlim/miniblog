@@ -32,7 +32,7 @@ const EditForm = props => {
     try {
       const token = window.localStorage.getItem('appToken');
       const response = await fetch(
-        `${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
+        `${constants.REST_ENDPOINT}/api/posts/${props.entry.id}`,
         {
           method: 'PUT',
           body: JSON.stringify(entry),
@@ -68,7 +68,7 @@ const EditForm = props => {
     try {
       const token = window.localStorage.getItem('appToken');
       const response = await fetch(
-        `${constants.REST_ENDPOINT}api/posts/${props.entry.id}`,
+        `${constants.REST_ENDPOINT}/api/posts/${props.entry.id}`,
         {
           method: 'DELETE',
           mode: 'cors',

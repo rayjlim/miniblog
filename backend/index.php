@@ -6,16 +6,16 @@
 require 'common_header.php';
 
 if (defined('DEVELOPMENT') && DEVELOPMENT) {
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');    // cache for 1 day
-
-    header('Access-Control-Allow-Origin: *');
     header("Access-Control-Expose-Headers: Access-Control-*");
-    header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, x-app-token");
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-    header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 }
 
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Max-Age: 86400');    // cache for 1 day
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, x-app-token");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 
 $app = new Slim\Slim();
 $app->add(new AuthMiddleware());

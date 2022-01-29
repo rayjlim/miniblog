@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Running pre-commit hook"
+cd ../backend
 composer run test
 
 # $? stores exit value of the last command

@@ -14,7 +14,7 @@ const MediaList = props => {
   function loadDir(dir) {
     (async () => {
       const token = window.localStorage.getItem('appToken');
-      const response = await fetch(`${constants.REST_ENDPOINT}media/${dir}`, {
+      const response = await fetch(`${constants.REST_ENDPOINT}/media/${dir}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const MediaList = props => {
     (async () => {
       const token = window.localStorage.getItem('appToken');
       const response = await fetch(
-        `${constants.REST_ENDPOINT}media/?fileName=${fileName}&filePath=${filePath}`,
+        `${constants.REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {
           method: 'DELETE',
           headers: {

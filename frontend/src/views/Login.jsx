@@ -12,7 +12,7 @@ const Home = () => {
 
   const logoutWithRedirect = async () => {
     const response = await fetch(
-      `${constants.REST_ENDPOINT}security?logout=true&debug=off`
+      `${constants.REST_ENDPOINT}/security?logout=true&debug=off`
     );
     console.log('response :', response);
     if (!response.ok) {

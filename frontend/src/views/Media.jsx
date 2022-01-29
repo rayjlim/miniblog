@@ -58,7 +58,7 @@ const Media = () => {
     console.log('resize' + post.filePath + ':' + post.fileName);
     const token = window.localStorage.getItem('appToken');
     const response = await fetch(
-      `${constants.REST_ENDPOINT}uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`,
+      `${constants.REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`,
       {
         method: 'GET',
         headers: {
@@ -79,7 +79,7 @@ const Media = () => {
     console.log('ro-left' + post.filePath + ':' + post.fileName);
     const token = window.localStorage.getItem('appToken');
     const response = await fetch(
-      `${constants.REST_ENDPOINT}uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`,
+      `${constants.REST_ENDPOINT}/uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`,
       {
         method: 'GET',
         headers: {
@@ -99,7 +99,7 @@ const Media = () => {
     console.log('ro-right' + post.filePath + ':' + post.fileName);
     const token = window.localStorage.getItem('appToken');
     const response = await fetch(
-      `${constants.REST_ENDPOINT}uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`,
+      `${constants.REST_ENDPOINT}/uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`,
       {
         method: 'GET',
         headers: {

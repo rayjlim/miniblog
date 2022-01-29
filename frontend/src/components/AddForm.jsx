@@ -36,7 +36,7 @@ const AddForm = props => {
       };
       try {
         const token = window.localStorage.getItem('appToken');
-        const response = await fetch(`${constants.REST_ENDPOINT}api/posts/`, {
+        const response = await fetch(`${constants.REST_ENDPOINT}/api/posts/`, {
           method: 'POST',
           body: JSON.stringify(entry),
           mode: 'cors',

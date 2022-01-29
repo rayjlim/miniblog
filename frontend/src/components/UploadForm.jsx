@@ -26,7 +26,7 @@ const UploadForm = () => {
 
       console.log(`send upload`);
       const token = window.localStorage.getItem('appToken');
-      const response = await fetch(`${constants.REST_ENDPOINT}uploadImage/`, {
+      const response = await fetch(`${constants.REST_ENDPOINT}/uploadImage/`, {
         method: 'POST',
         body: formData,
         headers: {

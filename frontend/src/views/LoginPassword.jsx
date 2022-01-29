@@ -7,7 +7,6 @@ function LoginPassword() {
   const [password, setPassword] = useState('');
 
   const checkLogin = async function (formUser = '', formPass = '') {
-    const prefix = Constants.REST_ENDPOINT;
     // const formData = new URLSearchParams();
 
     // formData.append('username', formUser);
@@ -19,7 +18,7 @@ function LoginPassword() {
       login: true,
     };
     try {
-      const response = await fetch(`${prefix}security`, {
+      const response = await fetch(`${Constants.REST_ENDPOINT}/security`, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',

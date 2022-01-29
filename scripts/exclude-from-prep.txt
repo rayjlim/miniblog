@@ -7,3 +7,5 @@ tests/
 
 SERVER_CONFIG.php
 .htaccess
+codeception.yml
+cron_script.php
