@@ -34,8 +34,8 @@ if [ -z "$BUILD" ]; then
   cd ../backend
   rsync -ravz --exclude-from '../scripts/exclude-from-prep.txt' --delete . ../$PREP_DIR-api
   # rsync -avz  _rsc/vendor $PREP_DIR/_rsc
-  rsync -avz  "config/bluehost/SERVER_CONFIG.php"  ../$PREP_DIR-api
-  rsync -avz  "config/bluehost/.htaccess"          ../$PREP_DIR-api
+  rsync -avz  "config/SERVER_CONFIG.php.production"  ../$PREP_DIR-api/SERVER_CONFIG.php
+  rsync -avz  "config/.htaccess"          ../$PREP_DIR-api
   rsync -avz  "../scripts/exclude-from-prod.txt"   ../$PREP_DIR-api
 
   cd ../$PREP_DIR-api
