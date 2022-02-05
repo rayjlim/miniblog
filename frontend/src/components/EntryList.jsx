@@ -47,7 +47,7 @@ const EntryList = props => {
       {props.entrys.map(entry => {
         let newText = entry.displayContent.replace(/<br \/>/g, '\n');
         const dateFormated =
-        format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE MMM, dd yyyy');
+        format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'EEE, yyyy-MM-dd');
         const calLinkDate = `posts/?gotoYearMonth=${
           format(parse(entry.date, 'yyyy-MM-dd', new Date()), 'yyyy-MM') }`;
         const oneDayLink = `main#/oneDay?date=${

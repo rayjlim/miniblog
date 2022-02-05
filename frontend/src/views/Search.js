@@ -29,8 +29,9 @@ const TextEntry = () => {
     console.log('getEntries#text:', text);
     try {
       const token = window.localStorage.getItem('appToken');
+
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/api/posts/?searchParam=${text}`,
+        `${constants.REST_ENDPOINT}/api/posts/?searchParam=${encodeURIComponent(text)}`,
         {
           method: 'GET',
           headers: {
@@ -53,7 +54,8 @@ const TextEntry = () => {
           // setAuth(false);
           alert('no auth');
         } else {
-          const searchVal = document.getElementById('searchText').value;
+          const searchVal = document.getElementById('searchText') ?
+            document.getElementById('searchText').value : '';
           if (searchVal.length) {
             const reg = new RegExp(searchVal, 'gi');
 
@@ -127,7 +129,7 @@ const TextEntry = () => {
             );
             const dateFormated = format(
               parse(entry.date, 'yyyy-MM-dd', new Date()),
-              'EEE MM, dd, yyyy'
+              'EEE, yyyy-MM-dd'
             );
 
             let showEntryDate = (
