@@ -1,0 +1,11 @@
+config/
+vendor/
+tests/
+
+*.txt
+*.md
+
+SERVER_CONFIG.php
+.htaccess
+codeception.yml
+cron_script.php

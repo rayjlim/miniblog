@@ -1,9 +1,0 @@
-uploads/
-src/
-node_modules/
-package.json
-package-lock.json
-composer.json
-composer.lock
-*.txt
-exclulde-from-prod.txt

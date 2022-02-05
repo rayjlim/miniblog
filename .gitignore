@@ -1,16 +1,19 @@
 
-/_config/*
-
-/node_modules
-/vendor
-/uploads
-
+backend/config/*
+backend/vendor
 backend/SERVER_CONFIG.php
+
+uploads/*
+
 cron_script.php
 env_vars.sh
 
-ui-react/build/*
-ui-react/node_modules/*
-ui-react/docs/*
-ui-react/styleguide/*
-ui-react/src/constants.js
+frontend/build/*
+frontend/node_modules/*
+frontend/docs/*
+frontend/styleguide/*
+frontend/src/constants.js
+frontend/.env
+
+miniblog-api/*
+miniblog-ui/*
