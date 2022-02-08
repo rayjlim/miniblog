@@ -31,6 +31,7 @@ const Media = () => {
     const filePath = urlParams.has('filePath') ? urlParams.get('filePath') : '';
     let random = Math.random();
     setPost({
+      ...post,
       fileName,
       filePath,
       prepend: `![](../uploads/${filePath}${fileName})`,
@@ -41,6 +42,7 @@ const Media = () => {
   function mediaSelect(filePath, fileName) {
     let random = Math.random();
     setPost({
+      ...post,
       fileName,
       filePath,
       prepend: `![](../uploads/${filePath}${fileName})`,

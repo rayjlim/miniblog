@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'; // eslint-disable-line no-un
 import constants from '../constants';
 
 const MediaList = props => {
-  console.log('props :', props.content);
+  console.log(' MediaList props :', props.content);
   const [media, setMedia] = useState([]);
   const [uploadDirs, setUploadDirs] = useState([]);
   const [currentDir, setCurrentDir] = useState('');
