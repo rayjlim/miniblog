@@ -3,7 +3,7 @@ import constants from '../constants';
 
 import MarkdownDisplay from './MarkdownDisplay';
 const AddForm = props => {
-  console.log('props :', props.content);
+  console.log('props :', props);
   const [content, setContent] = useState(props.content);
   const [date, setDate] = useState(props.date);
   let textareaInput = null;
@@ -65,7 +65,9 @@ const AddForm = props => {
     console.log('clear form');
     props.onSuccess();
   }
+
   console.log('content :>> ', content);
+
   return (
     <div className="well">
       {/* <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>

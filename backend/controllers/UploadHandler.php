@@ -100,6 +100,8 @@ class UploadHandler extends AbstractController
             } catch (Exception $e) {
                 header('HTTP/1.1 500 Internal Server Error');
                 echo 'Caught exception: ', $e->getMessage(), $targetDir, '\n';
+                echo 'targetFileFullPath: ', $targetFileFullPath, '\n';
+
             }
         };
     }
