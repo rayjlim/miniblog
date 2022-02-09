@@ -76,43 +76,48 @@ const OneDay = () => {
 
     (async () => {
       const token = window.localStorage.getItem('appToken');
-      const response = await fetch(endPointURL, {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-app-token': token,
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-      });
-      if (!response.ok) {
-        console.log('response.status :', response.status);
-        alert(`loading error : ${response.status}`);
-        return;
-      } else {
-        const data = await response.json();
+      try {
+        const response = await fetch(endPointURL, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-app-token': token,
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+        });
+        if (!response.ok) {
+          console.log('response.status :', response.status);
+          alert(`loading error : ${response.status}`);
+          return;
+        } else {
+          const data = await response.json();
 
-        console.log('response.data :>> ', data);
+          console.log('response.data :>> ', data);
 
-        const refs = data.entries.reduce((acc, value) => {
-          acc[value.id] = React.createRef();
-          return acc;
-        }, {});
+          const refs = data.entries.reduce((acc, value) => {
+            acc[value.id] = React.createRef();
+            return acc;
+          }, {});
 
-        let entries = data.entries;
-        console.log('entries :>> ', entries);
-        console.log('state :>> ', state);
-        setState({ ...state, ...loadParams, entries, auth: true, refs });
-        console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-        if (loadParams.scrollToLast) {
-          refs[loadParams.scrollToLast].current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
+          let entries = data.entries;
+          console.log('entries :>> ', entries);
+          console.log('state :>> ', state);
+          setState({ ...state, ...loadParams, entries, auth: true, refs });
+          console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
+          if (loadParams.scrollToLast) {
+            refs[loadParams.scrollToLast].current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+          }
         }
+      } catch (err) {
+        console.log(err);
+        alert(`loading error : ${err}`);
       }
     })();
   }

@@ -66,6 +66,7 @@ class AuthMiddleware extends \Slim\Middleware
             $this->next->call();
             return;
         } else {
+
             $error = "Not Logged In";
         }
         $parsedBody = $req->getBody();
@@ -78,7 +79,7 @@ class AuthMiddleware extends \Slim\Middleware
             if (!$username || !$password) {
                 $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
             } else {
-                DevHelp::debugMsg('doLogin:' . $username.":".$password);
+                DevHelp::debugMsg('doLogin:' . $username . ":" . $password);
                 if (!$this->doLogin($username, $password)) {
                     $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
                 }
@@ -90,6 +91,7 @@ class AuthMiddleware extends \Slim\Middleware
         }
 
         // show Login Form
+        header('HTTP/1.0 403 Forbidden');
         echo $error;
         exit(0);
     }
