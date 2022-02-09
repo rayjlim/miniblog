@@ -16,4 +16,3 @@ frontend/src/constants.js
 frontend/.env
 
 miniblog-api/*
-miniblog-ui/*
