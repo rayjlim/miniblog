@@ -27,6 +27,7 @@ class UploadHandler extends AbstractController
     public function upload()
     {
         return function () {
+
             DevHelp::debugMsg('upload' . __FILE__);
 
             $filePath = $_POST["filePath"] . '/' ?? date("Y-m");
@@ -39,11 +40,10 @@ class UploadHandler extends AbstractController
             $createdDir = false;
 
             try {
-
                 // TODO: Check if image file is a actual image or fake image
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                 if ($check == false) {
-                    throw new Exception("File is not an image.");
+                    throw new Exception("File is not an image");
                 }
 
                 // Check if directory already exists
@@ -63,11 +63,11 @@ class UploadHandler extends AbstractController
                 }
                 // Allow certain file formats
                 if (!in_array($imageFileType, $validFileExt)) {
-                    throw new Exception("only JPG, JPEG, PNG & GIF files are allowed.");
+                    throw new Exception("only JPG, JPEG, PNG & GIF files are allowed");
                 }
 
                 if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
-                    throw new Exception("Sorry, there was an error moving upload file.");
+                    throw new Exception("Sorry, there was an error moving upload file");
                 }
 
                 $data['fileName'] = $urlFileName;
@@ -75,9 +75,8 @@ class UploadHandler extends AbstractController
                 $data['createdDir'] = $createdDir;
 
                 echo json_encode($data);
-                return;
             } catch (Exception $e) {
-                header('HTTP/1.1 500 Internal Server Error');
+                http_response_code(500);
                 echo 'Caught exception: ', $e->getMessage(), $targetDir, '\n';
                 echo 'targetFileFullPath: ', $targetFileFullPath, '\n';
             }
