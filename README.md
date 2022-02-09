@@ -4,18 +4,17 @@ A headless CMS backend (php) with a Create React App front end.
 
 ## Setup
 
-- cd into `backend` directory
+- Go into `backend` directory
 - `backend/composer install`
 - create `backend/SERVER_CONFIG.php`
-- cd into `frontend` directory
+- Go into `frontend` directory
 - `npm run start`
 
 ## Deployment to Production
 
 - `cd scripts`
-- in `env_vars.sh`,  set up `FTP_HOST`, `FTP_USER`, `FTP_TARGETFOLDER` (see `env_vars.sh.example`)
-- `sh publish.sh` 
-  
+- in `env_vars.sh`,  set up required vars (see `env_vars.sh.example`)
+- `sh publish.sh`  
 
 ## Testing
 
