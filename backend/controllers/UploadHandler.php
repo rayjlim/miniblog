@@ -5,7 +5,7 @@ use \Lpt\DevHelp;
 
 /**
  *   This class will handle the Create, Update, Delete Functionality
- *   for the Entrys
+ *   for the Images uploaded
  */
 class UploadHandler extends AbstractController
 {
@@ -15,25 +15,6 @@ class UploadHandler extends AbstractController
     {
         $this->resource = $resource;
         parent::__construct($app);
-    }
-
-    public function form()
-    {
-        return function () {
-            $this->app->view()->appendData(["page_title" => 'Upload Picture']);
-
-            $this->app->render('upload_form.twig');
-        };
-    }
-    public function view()
-    {
-        return function () {
-            $this->app->view()->appendData(["fileName" => $_GET["fileName"]]);
-            $this->app->view()->appendData(["filePath" => $_GET["filePath"]]);
-            $this->app->view()->appendData(["page_title" => 'View Upload']);
-
-            $this->app->render('upload_viewer.twig');
-        };
     }
 
     public function redirector($url)
@@ -50,20 +31,22 @@ class UploadHandler extends AbstractController
 
             $filePath = $_POST["filePath"] . '/' ?? date("Y-m");
             $targetDir = UPLOAD_DIR . $filePath;
-            $targetFileFullPath = UPLOAD_DIR . $filePath . basename($_FILES["fileToUpload"]["name"]);
+            $urlFileName = strtolower(preg_replace('/\s+/', '_', trim(basename($_FILES["fileToUpload"]["name"]))));
+            $targetFileFullPath = UPLOAD_DIR . $filePath . $urlFileName;
+
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
             $createdDir = false;
+
             try {
-                // Check if image file is a actual image or fake image
-                // if (isset($_POST["submit"])) {
+
+                // TODO: Check if image file is a actual image or fake image
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                 if ($check == false) {
                     throw new Exception("File is not an image.");
                 }
-                // }
 
-                // Check if file already exists
+                // Check if directory already exists
                 if (!file_exists($targetDir)) {
                     $createdDir = true;
                     mkdir($targetDir, 0711);
@@ -71,7 +54,6 @@ class UploadHandler extends AbstractController
 
                 // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
-                    $urlFileName = basename($_FILES["fileToUpload"]["name"]);
                     throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . UPLOAD_SIZE_LIMIT);
                 }
 
@@ -88,9 +70,6 @@ class UploadHandler extends AbstractController
                     throw new Exception("Sorry, there was an error moving upload file.");
                 }
 
-                $urlFileName = basename($_FILES["fileToUpload"]["name"]);
-
-
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
                 $data['createdDir'] = $createdDir;
@@ -101,7 +80,6 @@ class UploadHandler extends AbstractController
                 header('HTTP/1.1 500 Internal Server Error');
                 echo 'Caught exception: ', $e->getMessage(), $targetDir, '\n';
                 echo 'targetFileFullPath: ', $targetFileFullPath, '\n';
-
             }
         };
     }
@@ -141,19 +119,16 @@ class UploadHandler extends AbstractController
             case 'image/jpeg':
                 $image_create_func = 'imagecreatefromjpeg';
                 $image_save_func = 'imagejpeg';
-                $new_image_ext = 'jpg';
                 break;
 
             case 'image/png':
                 $image_create_func = 'imagecreatefrompng';
                 $image_save_func = 'imagepng';
-                $new_image_ext = 'png';
                 break;
 
             case 'image/gif':
                 $image_create_func = 'imagecreatefromgif';
                 $image_save_func = 'imagegif';
-                $new_image_ext = 'gif';
                 break;
 
             default:
@@ -245,7 +220,6 @@ class UploadHandler extends AbstractController
 
             $targetDir = UPLOAD_DIR . $filePath;
             rename($targetDir . $fileName, $targetDir . $newFileName);
-            $urlFileName = $newFileName;
 
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
@@ -301,8 +275,6 @@ class UploadHandler extends AbstractController
 
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
 
-            //forward to xhr_action
-            // $_SESSION['page_message'] = $data['pageMessage'];
             echo json_encode($data);
         };
     }
