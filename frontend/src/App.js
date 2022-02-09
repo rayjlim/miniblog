@@ -14,10 +14,13 @@ function App() {
       // window.localStorage.setItem('appToken', '/A==');
       // check for token
       const token = window.localStorage.getItem('appToken');
-      console.log('check token', token);
-      if (token && token !== '') {
+      console.log('check token', token, token !== null);
+      if (token !== null && token !== '') {
         console.log('logged in:', token);
         history.push(`/oneday`);
+      }else{
+        console.log('logged out');
+        history.push(`/`);
       }
     })();
   }, []);
