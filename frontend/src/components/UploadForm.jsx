@@ -23,9 +23,10 @@ const UploadForm = () => {
       filePath.length ? filePath : format(new Date(), 'yyyy-MM')
     );
 
+    console.log(`send upload`);
+    const token = window.localStorage.getItem('appToken');
 
-      console.log(`send upload`);
-      const token = window.localStorage.getItem('appToken');
+    try {
       const response = await fetch(`${constants.REST_ENDPOINT}/uploadImage/`, {
         method: 'POST',
         body: formData,
@@ -39,7 +40,10 @@ const UploadForm = () => {
       history.push(
         `/media?fileName=${data.fileName}&filePath=${data.filePath}`
       );
-
+    } catch (error) {
+      console.log(error);
+      alert('Error uploading file ', error);
+    }
   }
 
   return (
@@ -71,7 +75,7 @@ const UploadForm = () => {
         <button
           type="button"
           className="btn btn-success btn-block"
-          onClick={e=>upload()}
+          onClick={e => upload()}
         >
           Upload
         </button>
