@@ -24,10 +24,6 @@ using Codeception (to write up)
 
 (to write up)
 
-## Additional Details
-
-[docs](./doc/index.md)
-
 ## DB Setup
 
 What needs to be setup from the DB perspective for?
