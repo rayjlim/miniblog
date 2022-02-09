@@ -96,9 +96,7 @@ $app->get('/ping', function () {
 });
 
 $uploadHandler = DAOFactory::UploadHandler($app);
-$app->get('/uploadForm/', $uploadHandler->form());
 $app->post('/uploadImage/', $uploadHandler->upload());
-$app->get('/uploadViewer/', $uploadHandler->view());
 $app->get('/uploadRotate/', $uploadHandler->rotate());
 $app->get('/uploadResize/', $uploadHandler->resize());
 $app->post('/uploadRename/', $uploadHandler->rename());

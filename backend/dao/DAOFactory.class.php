@@ -13,21 +13,10 @@ class DAOFactory
     {
         return new SmsUsersRedbeanDAO();
     }
-    public static function getSmsSleepStatsDAO()
-    {
-        return new SmsSleepstatsRedbeanDAO();
-    }
-    public static function getBookmarksDAO()
-    {
-        return new BookmarksRedbeanDAO();
-    }
+
     public static function getResourceDAO()
     {
         return new Resource();
-    }
-    public static function getEmailDAO()
-    {
-        return new EmailDAO();
     }
 
     //helpers
@@ -35,31 +24,9 @@ class DAOFactory
     {
         return new ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
-    public static function EntryHelper()
-    {
-        return new EntryHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
-    }
-
-    public static function UserHelper()
-    {
-        return new UserHelper(
-            DAOFactory::getSmsUsersDAO(),
-            DAOFactory::getSmsEntriesDAO(),
-            DAOFactory::getResourceDAO()
-        );
-    }
     public static function GraphHelper()
     {
         return new GraphHelper(DAOFactory::getResourceDAO()->getDateTime());
-    }
-
-    public static function EmailHelper()
-    {
-        return new EmailHelper(
-            DAOFactory::getSmsEntriesDAO(),
-            DAOFactory::getResourceDAO(),
-            DAOFactory::getEmailDAO()
-        );
     }
 
     // controllers
@@ -89,28 +56,10 @@ class DAOFactory
     {
         return new LogHandler($app, DAOFactory::getResourceDAO());
     }
-    public static function UtilityHandler($app)
-    {
-        return new UtilityHandler(
-            $app,
-            DAOFactory::getSmsSleepStatsDAO(),
-            DAOFactory::getResourceDAO()
-        );
-    }
-    public static function BookmarkHandler($app)
-    {
-        return new BookmarkHandler($app, DAOFactory::getBookmarksDAO(), DAOFactory::getResourceDAO());
-    }
+
     public static function UploadHandler($app)
     {
         return new UploadHandler($app, DAOFactory::getResourceDAO());
     }
 
-    public static function SecurityAgent()
-    {
-        return new SecurityAgent(
-            DAOFactory::getSmsUsersDAO(),
-            DAOFactory::getResourceDAO()
-        );
-    }
 }
