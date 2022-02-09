@@ -237,7 +237,7 @@ const OneDay = () => {
   }
 
   const doLogout = () => {
-    window.localStorage.setItem('appToken', null);
+    window.localStorage.removeItem('appToken');
     history.push(`/`);
   };
 
