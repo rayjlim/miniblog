@@ -12,7 +12,6 @@ frontend/build/*
 frontend/node_modules/*
 frontend/docs/*
 frontend/styleguide/*
-frontend/src/constants.js
 frontend/.env
 
 miniblog-api/*
