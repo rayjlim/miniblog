@@ -5,7 +5,7 @@ Meant to be a personal journal
 
 ## Setup
 
-- Go into `backend` directory
+- Go into the `backend` directory
 - `backend/composer install`
 - create `backend/SERVER_CONFIG.php`
 - Go into `frontend` directory
