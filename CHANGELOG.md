@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.5.0](https://github.com/rayjlim/miniblog/compare/v1.4.0...v1.5.0) (2022-02-09)
+## [1.5.0](https://github.com/rayjlim/miniblog/compare/v1.4.0...v1.5.0) (2022-02-12)
 
 
 ### Features
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. See [standa
 * 🐛 appToken not checked correctly ([#45](https://github.com/rayjlim/miniblog/issues/45)) ([0e9c348](https://github.com/rayjlim/miniblog/commit/0e9c34867c45d6ffe9c10e7ac4600c35a22fd077))
 * 🐛 appToken security check removeItem ([495b397](https://github.com/rayjlim/miniblog/commit/495b39750ac13c32f3571421d5239f387c190a93))
 * 🐛 hashtag search needs urlencode ([73b570a](https://github.com/rayjlim/miniblog/commit/73b570a6a87ee6bc8b1767d0ba6304bdccca4a60))
+* 🐛 missed file constants.js ([20541b3](https://github.com/rayjlim/miniblog/commit/20541b3cc96ecf0da4831262d30f55f50a276aea))
 * 🐛 path ref missed ([ce037b0](https://github.com/rayjlim/miniblog/commit/ce037b057c0566b1e37c54d5209ea5390544e482))
 * 🐛 today as default for add image post([#32](https://github.com/rayjlim/miniblog/issues/32)) ([cdb30b0](https://github.com/rayjlim/miniblog/commit/cdb30b0dc90cb88fe7f1b66152359b39ab93df58))
 * 🐛 validate the filename uploaded ([9812a50](https://github.com/rayjlim/miniblog/commit/9812a50fad30676c41248aec474d0d8ac2394131))
@@ -27,12 +28,12 @@ All notable changes to this project will be documented in this file. See [standa
 * 🔥 remove old ref in gitignore ([26186ad](https://github.com/rayjlim/miniblog/commit/26186ad0eb4691129a0784755ddf0475e21c4f1c))
 * 🔥 remove old security, sleep, bookmark files ([8abb4b2](https://github.com/rayjlim/miniblog/commit/8abb4b2cc7132afcb109f36181cd2873552b76e1))
 * 🚀 add netlify.toml for deployment ([bfa34b6](https://github.com/rayjlim/miniblog/commit/bfa34b661e7c00e97bb9053a48f2e0649cfd3779))
+* 🚑  authwmiddleware not handling Optionscall ([f4c30bb](https://github.com/rayjlim/miniblog/commit/f4c30bb167987cf2c2f4505daef7594cf4fbc464))
 * 🚑  upload dir reference ([5540a43](https://github.com/rayjlim/miniblog/commit/5540a431d6323cbf709c71e81df7b1009abdc3bd))
 * 🚑 catch on upload error ([0d553bf](https://github.com/rayjlim/miniblog/commit/0d553bfb5eca9379ff7b3c5b0efaad0b5829a2b1))
 * 🚑 composer and explude files update ([733c7d2](https://github.com/rayjlim/miniblog/commit/733c7d255f607c35db847238b825f072ed39e560))
 * 🚑 production api references in UI and CORS ([3476d1b](https://github.com/rayjlim/miniblog/commit/3476d1b13e635ee8ea9a56b172c8b26bb8a21fbf))
 * 🚑 wrap OneDay fetch for auth errors ([2090de6](https://github.com/rayjlim/miniblog/commit/2090de611e117e078c646504699a72014fc43066))
-
 
 ## [1.4.0](https://github.com/rayjlim/miniblog/compare/v1.3.1...v1.4.0) (2020-09-30)
 
