@@ -59,8 +59,14 @@ class AuthMiddleware extends \Slim\Middleware
         //     header("location: " . BASE_URL);
         //     exit;
         // }
+        if($app->request->isOptions()){
+            header('HTTP/1.0 200 Ok');
+            exit(0);
+        }
+
         $error = '';
         $userId = $this->isLogged();
+
         if (!empty($userId)) {
             $this->app->userId = $userId;
             $this->next->call();
