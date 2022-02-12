@@ -1,4 +1,4 @@
-# miniblog
+# Miniblog
 
 A headless CMS backend (php) with a Create React App front end.
 
