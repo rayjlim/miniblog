@@ -1,6 +1,7 @@
 # Miniblog
 
-A headless CMS backend (php) with a Create React App front end.
+A headless CMS backend with a React App front end.
+Meant to be a personal journal
 
 ## Setup
 
