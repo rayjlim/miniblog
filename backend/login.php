@@ -17,7 +17,7 @@ $target_url = isset($_REQUEST["target"])
                 ? $_REQUEST["target"]
                 : "";
 
-$app->view()->appendData(["baseurl"=> '/' . ROOT_URL . '/index.php/']);
+$app->view()->appendData(["baseurl"=> '/' . $_ENV['ROOT_URL'] . '/index.php/']);
 $app->view()->appendData(["target" => $target_url]);
 
 //FB login support
@@ -34,7 +34,7 @@ $fb = new Facebook\Facebook([
 //if the user has already allowed the application, you'll be able to get his/her FB UID
 $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email']; // optional
-$fbLoginUrl = $helper->getLoginUrl('http://'.DOMAIN."/".ROOT_URL.'/fb-login-callback.php', $permissions);
+$fbLoginUrl = $helper->getLoginUrl('https://'.$_ENV['DOMAIN']."/".$_ENV['ROOT_URL'].'/fb-login-callback.php', $permissions);
 $app->view()->appendData(["fbLoginUrl" => $fbLoginUrl]);
 
 //Github OAuth
@@ -42,7 +42,7 @@ $authorizeURL = 'https://github.com/login/oauth/authorize?';
 
 $_SESSION['state'] = hash('sha256', microtime(TRUE).rand().$_SERVER['REMOTE_ADDR']);
 unset($_SESSION['access_token']);
-$githubRedirectUrl = 'http://'.DOMAIN."/".ROOT_URL.'/github-login-callback.php';
+$githubRedirectUrl = 'https://'.$_ENV['DOMAIN']."/".$_ENV['ROOT_URL'].'/github-login-callback.php';
 $params = array(
 	'client_id' => OAUTH2_CLIENT_ID,
 	'redirect_uri' => $githubRedirectUrl,
@@ -57,7 +57,7 @@ $app->view()->appendData(["FB_APP_ID" => FB_APP_ID]);
 
 //GOOGLE
 $gAuthorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth?';
-$googleRedirectUrl = 'http://'.DOMAIN."/".ROOT_URL.'/google-login-callback.php';
+$googleRedirectUrl = 'https://'.$_ENV['DOMAIN']."/".$_ENV['ROOT_URL'].'/google-login-callback.php';
 $gParams = array(
   'client_id' => GOOGLE_CLIENT_ID,
   'response_type' => 'code',

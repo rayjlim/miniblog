@@ -6,7 +6,8 @@
   "require": {
     "php": "7.3.*",
     "slim/slim": "2.*",
-    "yeriomin/redbean-single-file": "4.*"
+    "yeriomin/redbean-single-file": "4.*",
+    "vlucas/phpdotenv": "^5.4"
   },
   "require-dev": {
     "codeception/codeception": "^4.1",
