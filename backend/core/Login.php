@@ -33,7 +33,7 @@ class Login
     {
 
         $headerStringValue = $_SERVER['HTTP_X_APP_TOKEN'];
-        $token = base64_encode( ACCESS_USER.ACCESS_PASSWORD );
+        $token = base64_encode( $_ENV['ACCESS_USER'].$_ENV['ACCESS_PASSWORD'] );
         // echo 'header: '.$headerStringValue.", token: ".$token;
         return  ($headerStringValue === $token);
     }
@@ -52,7 +52,7 @@ class Login
 
         // Check credentials
 
-        if ($username !== ACCESS_USER || $password !== ACCESS_PASSWORD) {
+        if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
         echo "{\"token\": \"".base64_encode( $username.$password )."\"}" ;
@@ -65,9 +65,6 @@ class Login
      */
     private function doLogout()
     {
-        // $_SESSION['ACCESS_USER'] = '';
-        // $_SESSION['ACCESS_PASSWORD'] = '';
-
         return true;
     }
 

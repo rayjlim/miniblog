@@ -16,6 +16,7 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate
+      working-directory: ./backend
       
     - name: Cache Composer packages
       id: composer-cache
@@ -25,13 +26,15 @@ jobs:
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
-
+      
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+      working-directory: ./backend
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     - name: Run test suite
       run: composer run-script test
+      working-directory: ./backend

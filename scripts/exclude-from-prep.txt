@@ -5,7 +5,7 @@ tests/
 *.txt
 *.md
 
-SERVER_CONFIG.php
+.env*
 .htaccess
 codeception.yml
 cron_script.php

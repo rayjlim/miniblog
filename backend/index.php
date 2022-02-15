@@ -1,28 +1,23 @@
 <?php
 // ini_set('display_errors', 'On');
-//ob_start("ob_gzhandler");
+// ob_start("ob_gzhandler");
 // error_reporting(E_ALL);
-
 require 'common_header.php';
-
-if (defined('DEVELOPMENT') && DEVELOPMENT) {
-    header("Access-Control-Expose-Headers: Access-Control-*");
-}
+// header("Access-Control-Allow-Origin: *" );
+// if (strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false || strpos($_SERVER['HTTP_ORIGIN'], 'localhost') !== false) {
+//     header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+// }
+header("Access-Control-Allow-Origin: https://" . $_ENV['DOMAIN']);
 
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');    // cache for 1 day
 
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, x-app-token");
+header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, X-App-Token");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 
 $app = new Slim\Slim();
 $app->add(new AuthMiddleware());
-
-// $app->view()->appendData(["rooturl" => '/'.ROOT_URL]);
-// $app->view()->appendData(["baseurl"=> '/'.ROOT_URL.'/index.php/']);
-// $app->view()->appendData(["DEVELOPMENT"=> defined('DEVELOPMENT')]);
 
 require './core/page_message.php';
 
@@ -47,7 +42,7 @@ require './core/page_message.php';
 $app->get('/security', function ()  use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
-$app->post('/security', function () {
+$app->post('/security', function () use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
 $app->options('/security', function () {

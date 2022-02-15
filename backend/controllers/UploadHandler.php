@@ -31,9 +31,9 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('upload' . __FILE__);
 
             $filePath = $_POST["filePath"] . '/' ?? date("Y-m");
-            $targetDir = UPLOAD_DIR . $filePath;
+            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             $urlFileName = strtolower(preg_replace('/\s+/', '_', trim(basename($_FILES["fileToUpload"]["name"]))));
-            $targetFileFullPath = UPLOAD_DIR . $filePath . $urlFileName;
+            $targetFileFullPath = $_ENV['UPLOAD_DIR'] . $filePath . $urlFileName;
 
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
@@ -54,12 +54,12 @@ class UploadHandler extends AbstractController
 
                 // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
-                    throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . UPLOAD_SIZE_LIMIT);
+                    throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
                 }
 
                 // Check file size
-                if ($_FILES["fileToUpload"]["size"] > UPLOAD_SIZE_LIMIT) {
-                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"] . ' of ' . UPLOAD_SIZE_LIMIT);
+                if ($_FILES["fileToUpload"]["size"] > $_ENV['UPLOAD_SIZE_LIMIT']) {
+                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"] . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
                 }
                 // Allow certain file formats
                 if (!in_array($imageFileType, $validFileExt)) {
@@ -94,7 +94,7 @@ class UploadHandler extends AbstractController
             $fileName = $_GET["fileName"];
             $filePath = $_GET["filePath"];
 
-            $targetDir = UPLOAD_DIR . $filePath;
+            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             $fileFullPath = $targetDir . $fileName;
 
             $new_width = 360;
@@ -157,7 +157,7 @@ class UploadHandler extends AbstractController
 
             // File and rotation
 
-            $targetDir = UPLOAD_DIR . $filePath;
+            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             $targetFile = $targetDir . $fileName;
             $info = getimagesize($targetFile);
             $mime = $info['mime'];
@@ -217,7 +217,7 @@ class UploadHandler extends AbstractController
             $filePath = $entry->filePath;
             $newFileName = $entry->newFileName;
 
-            $targetDir = UPLOAD_DIR . $filePath;
+            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             rename($targetDir . $fileName, $targetDir . $newFileName);
 
             $data['fileName'] = $newFileName;
@@ -231,14 +231,14 @@ class UploadHandler extends AbstractController
         return function ($currentDir = '') {
             \Lpt\DevHelp::debugMsg('start listMedia');
             $currentDir = $currentDir != '' ? $currentDir : '';
-            $filelist = preg_grep('/^([^.])/', scandir(UPLOAD_DIR));
+            $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR']));
             // \Lpt\DevHelp::debugMsg(print_r($filelist));
 
             \Lpt\DevHelp::debugMsg('currentDir ' . $currentDir);
-            \Lpt\DevHelp::debugMsg('end($filelist)' . is_dir(UPLOAD_DIR . DIR_SEP . end($filelist)));
+            \Lpt\DevHelp::debugMsg('end($filelist)' . is_dir($_ENV['UPLOAD_DIR'] . DIR_SEP . end($filelist)));
 
             //h no media in root folder, get from last
-            if (count($filelist) > 0 && $currentDir == ''  && is_dir(UPLOAD_DIR . DIR_SEP . end($filelist))) {
+            if (count($filelist) > 0 && $currentDir == ''  && is_dir($_ENV['UPLOAD_DIR'] . DIR_SEP . end($filelist))) {
                 \Lpt\DevHelp::debugMsg('reading first file');
                 $currentDir = end($filelist);
             }
@@ -247,7 +247,7 @@ class UploadHandler extends AbstractController
             $dirContent = '';
 
             \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
-            $dirContent = preg_grep('/^([^.])/', scandir(UPLOAD_DIR . DIR_SEP . $currentDir));
+            $dirContent = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir));
 
             // usort($dirContent, function($a, $b){
             //     return filemtime($a) > filemtime($b);
@@ -270,7 +270,7 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('$fileName' . $fileName);
             DevHelp::debugMsg('$filePath' . $filePath);
 
-            $this->resource->removefile(UPLOAD_DIR . $filePath . DIR_SEP . $fileName);
+            $this->resource->removefile($_ENV['UPLOAD_DIR'] . $filePath . DIR_SEP . $fileName);
 
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
 

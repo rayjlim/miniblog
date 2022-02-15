@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./env_vars.sh
+. .env
 
 if [ ! -n "$FTP_HOST" ]; then
     echo "Missing env_vars"
@@ -13,37 +13,38 @@ usage() {
   echo ""
   echo "Usage: "$0" [-s] [-r]"
   echo ""
-  echo "  -s to Skip Build Step"
+  echo "  -b to Skip Backend Step"
+  echo "  -f to Skip Frontend Step"
   echo "  -r to reset SSH connection"
   echo ""
 }
 
-while getopts rsn option
+while getopts rbf option
 do
     case "${option}" in
     r) RESETSSH=true;;
-    s) BUILD=true;;
-    n) NOBUILDREACT=true;;
+    b) NOBACKENDBUILD=true;;
+    f) NOFRONTENDBUILD=true;;
     [?])  usage
         exit 1;;
     esac
 done
 
-if [ -z "$BUILD" ]; then
-  mkdir -p ../$PREP_DIR-api
+if [ -z "$NOBACKENDBUILD" ]; then
+  mkdir -p ../backend/build
   cd ../backend
-  rsync -ravz --exclude-from '../scripts/exclude-from-prep.txt' --delete . ../$PREP_DIR-api
+  rsync -ravz --exclude-from '../scripts/exclude-from-prep.txt' --delete . ./build
   # rsync -avz  _rsc/vendor $PREP_DIR/_rsc
-  rsync -avz  "config/SERVER_CONFIG.php.production"  ../$PREP_DIR-api/SERVER_CONFIG.php
-  rsync -avz  "config/.htaccess"          ../$PREP_DIR-api
-  rsync -avz  "../scripts/exclude-from-prod.txt"   ../$PREP_DIR-api
+  rsync -avz  ".env.production"  ./build/.env
+  rsync -avz  "config/.htaccess"          ./build
+  rsync -avz  "../scripts/exclude-from-prod.txt"   ./build
 
-  cd ../$PREP_DIR-api
+  cd ./build
   /usr/local/bin/composer install  --no-dev
   chmod 755 *.php
 
   echo "build ready"
-  cd ..
+  cd ../..
 else
   echo "Skip Build"
   cd ..
@@ -51,7 +52,7 @@ fi
 
 echo "start frontend build"
 pwd
-if [ -z "$NOBUILDREACT" ]; then
+if [ -z "$NOFRONTENDBUILD" ]; then
 
   cd ./frontend
   npm run build
@@ -75,23 +76,27 @@ else
     echo "Skip SSH Reset"
 fi
 
-echo "start upload API"
-cd ./$PREP_DIR-api
-pwd
-echo $FTP_TARGETFOLDER_API
-rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
-  --exclude-from 'exclude-from-prod.txt' \
-  --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_API/
+if [ -z "$NOBACKENDBUILD" ]; then
+  echo "start upload API"
+  cd ./backend/build
+  pwd
+  echo $FTP_TARGETFOLDER_API
+  rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
+    --exclude-from 'exclude-from-prod.txt' \
+    --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_API/
 
-ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_API/"
-cd ..
+  ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_API/"
+  cd ../..
+fi
 
-echo "start upload UI"
-cd ./frontend/build/
-pwd
-echo $FTP_TARGETFOLDER_UI
-rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
-  --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_UI/
+if [ -z "$NOFRONTENDBUILD" ]; then
+  echo "start upload UI"
+  cd ./frontend/build/
+  pwd
+  echo $FTP_TARGETFOLDER_UI
+  rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
+    --delete . $FTP_USER@$FTP_HOST:$FTP_TARGETFOLDER_UI/
 
-ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_UI/"
-cd ../..
+  ssh  $FTP_USER@$FTP_HOST "chmod -R 755 $FTP_TARGETFOLDER_UI/"
+  cd ../..
+fi

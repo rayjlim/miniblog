@@ -1,12 +1,11 @@
-
 backend/config/*
 backend/vendor
-backend/SERVER_CONFIG.php
 
 uploads/*
 
 cron_script.php
-env_vars.sh
+.env
+.env.production
 
 frontend/build/*
 frontend/node_modules/*
@@ -15,3 +14,4 @@ frontend/styleguide/*
 frontend/.env
 
 miniblog-api/*
+backend/build/*

@@ -1,5 +1,5 @@
-./scripts/env_vars.sh
+./scripts/.env
 ./frontend/.env
-./backend/SERVER_CONFIG.php
+./backend/.env
+./backend/.env.production
 ./backend/config/.htaccess
-./backend/config/SERVER_CONFIG.php.production

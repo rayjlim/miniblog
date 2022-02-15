@@ -16,14 +16,14 @@ class AuthMiddleware extends \Slim\Middleware
     {
         $headers = getallheaders();
         // print_r($headers);
-        // echo 'isset app token? '.(isset($headers[TOKEN_HEADER]) ? 'true'.$headers[TOKEN_HEADER]:'false');
-        $headerStringValue = isset($headers[TOKEN_HEADER]) ? $headers[TOKEN_HEADER] : '';
-        DevHelp::debugMsg('headerStringValue:' . $headerStringValue);
+        // echo 'isset app token? '.($headers['X-App-Token'] ? 'true'.$headers['X-App-Token']:'false');
+        $headerStringValue = isset($headers['X-App-Token']) ? $headers['X-App-Token'] : '';
+
         $decryptedString = decrypt($headerStringValue);
 
-        // DevHelp::debugMsg('decryptedString:' . $decryptedString);
+        // echo 'decryptedString:' . $decryptedString;
         $this->app->userId = $decryptedString;
-        DevHelp::debugMsg('header: ' . $headerStringValue . ", decryptedString: " . $decryptedString);
+        // echo 'header: ' . $headerStringValue . ", decryptedString: " . $decryptedString;
         return is_numeric(($decryptedString) ? $decryptedString : null);
     }
     /**
@@ -38,11 +38,11 @@ class AuthMiddleware extends \Slim\Middleware
         // Check the access to this function, using logs and ip
 
         // TODO:Check credentials against Db
-        if ($username !== ACCESS_USER || $password !== ACCESS_PASSWORD) {
+        if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
 
-        echo "{\"token\": \"" . encrypt(ACCESS_ID) . "\"}";
+        echo "{\"token\": \"" . encrypt($_ENV['ACCESS_ID']) . "\"}";
         exit;
     }
     public function call()
@@ -123,7 +123,7 @@ function encrypt($simple_string)
     $encryption = openssl_encrypt(
         $simple_string,
         $ciphering,
-        ENCRYPTION_KEY,
+        $_ENV['ENCRYPTION_KEY'],
         $options,
         $encryption_iv
     );
@@ -142,7 +142,7 @@ function decrypt($encryption)
     $decryption = openssl_decrypt(
         $encryption,
         $ciphering,
-        ENCRYPTION_KEY,
+        $_ENV['ENCRYPTION_KEY'],
         $options,
         $decryption_iv
     );
