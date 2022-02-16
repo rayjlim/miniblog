@@ -1,6 +1,8 @@
 <?php
+
 defined('ABSPATH') OR exit('No direct script access allowed');
- // R::debug(TRUE);
+use \RedBeanPHP\R as R;
+// R::debug(TRUE);
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
     public function load($id)
@@ -8,7 +10,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $post = R::load(POSTS, $id);
         return $post->export();
     }
-    
+
     /**
      * Delete record from table
      *
@@ -21,7 +23,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         R::trash($postBean);
         return 1;
     }
-    
+
     /**
      * Insert record to table
      *
@@ -37,7 +39,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $id = R::store($postBean);
         return $id;
     }
-    
+
     /**
      * Update record in table
      *
@@ -51,7 +53,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $postBean->date = $smsEntrie['date'];
         R::store($postBean);
     }
-    
+
     /**
      * @LPT_V2
      */
@@ -64,16 +66,16 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         if ($graphParams->endDate != '') {
             $sqlParam.= ' and date <= \'' . $graphParams->endDate . '\'';
         }
-        
+
         //TODO: CREATE QUERY DEPENDANT IF LIMIT BASED ON COUNT OR DATE RANGE
         $tagParam = "'%" . $graphParams->label . "%'";
         $posts = R::findAll(POSTS, ' user_id = ? and content like ' . $tagParam . ' ' . $sqlParam . ' order by date desc limit  ' . $graphParams->resultLimit, [$userId]);
-        
+
         $sequencedArray = array_values(array_map("getExportValues", $posts));
-        
+
         return $sequencedArray;
     }
-    
+
     /**
      * @LPT_V2
      */
@@ -82,7 +84,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $sqlParam = $this->listParamsToSqlParam($listParams);
         $posts = R::findAll(POSTS, ' user_id = ?  ' . $sqlParam . ' order by date desc limit ?', [$userId, $listParams->resultsLimit]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
-        
+
         return $sequencedArray;
     }
 
@@ -96,7 +98,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $posts = R::findAll(POSTS, $whereClause . ' order by date desc ', [$userId]);
         // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
         $sequencedArray = array_values(array_map("getExportValues", $posts));
-        
+
         return $sequencedArray;
     }
 
@@ -105,7 +107,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $whereClause = ' where user_id = ? GROUP BY Year(sms_entries.date), Month(sms_entries.date), id';
         $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
-        
+
         $onlyDate = array_map("pickDate", $sequencedArray);
         $filtered = array_unique($onlyDate);
         return $filtered;
@@ -117,24 +119,24 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         if ($listParams->searchParam != '') {
             $sqlParam.= ' and content LIKE \'%' . $listParams->searchParam . '%\'';
         }
-        
+
         if (count($listParams->tags) != 0) {
             //todo: change to support array
             $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
         }
-        
+
         if ($listParams->startDate != '') {
             $sqlParam.= ' and date >= \'' . $listParams->startDate . '\'';
         }
         if ($listParams->endDate != '') {
             $sqlParam.= ' and date <= \'' . $listParams->endDate . '\'';
         }
-        
+
         if ($listParams->filterType == FILTER_UNTAGGED) {
             $sqlParam.= ' and content not LIKE \'%#%\'';
             $sqlParam.= ' and content not LIKE \'%@%\'';
         }
-        
+
         if ($listParams->filterType == FILTER_TAGGED) {
             $sqlParam.= 'and (content LIKE \'%#%\'' . ' or content LIKE \'%@%\')';
         }
@@ -144,7 +146,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     public function queryLastTagEntry($userId, $label)
     {
         $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label . '%\' order by date desc limit 1', [$userId]);
-        
+
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         return $sequencedArray[0];
     }

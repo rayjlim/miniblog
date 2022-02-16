@@ -6,7 +6,7 @@
   "require": {
     "php": "7.3.*",
     "slim/slim": "2.*",
-    "yeriomin/redbean-single-file": "4.*",
+    "gabordemooij/redbean": "dev-master",
     "vlucas/phpdotenv": "^5.4"
   },
   "require-dev": {

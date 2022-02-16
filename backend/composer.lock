@@ -4,8 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a939601e369416f93fb31d2f5f38f98c",
+    "content-hash": "41fba448e23ba25830aa58b7b567461c",
     "packages": [
+        {
+            "name": "gabordemooij/redbean",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gabordemooij/redbean.git",
+                "reference": "b8e09d3e0610e90b661c0ca853f3811482e42020"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gabordemooij/redbean/zipball/b8e09d3e0610e90b661c0ca853f3811482e42020",
+                "reference": "b8e09d3e0610e90b661c0ca853f3811482e42020",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RedBeanPHP\\": "RedBeanPHP"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Gabor de Mooij",
+                    "email": "gabor@redbeanphp.com",
+                    "homepage": "https://redbeanphp.com"
+                }
+            ],
+            "description": "RedBeanPHP ORM",
+            "homepage": "https://redbeanphp.com/",
+            "keywords": [
+                "orm"
+            ],
+            "support": {
+                "issues": "https://github.com/gabordemooij/redbean/issues",
+                "source": "https://github.com/gabordemooij/redbean/tree/master"
+            },
+            "time": "2022-01-17T15:51:16+00:00"
+        },
         {
             "name": "graham-campbell/result-type",
             "version": "v1.0.4",
@@ -517,57 +563,6 @@
                 }
             ],
             "time": "2021-12-12T23:22:04+00:00"
-        },
-        {
-            "name": "yeriomin/redbean-single-file",
-            "version": "4.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yeriomin/redbean-single-file.git",
-                "reference": "b9fa7a7ff4b2877c59df60b419e6fd52ccde38a4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yeriomin/redbean-single-file/zipball/b9fa7a7ff4b2877c59df60b419e6fd52ccde38a4",
-                "reference": "b9fa7a7ff4b2877c59df60b419e6fd52ccde38a4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "rb.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gabor de Mooij",
-                    "email": "gabordemooij@gmail.com",
-                    "homepage": "http://www.redbeanphp.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "RedBeanPHP is an easy-to-use, on-the-fly ORM for PHP.",
-            "homepage": "https://github.com/yeriomin/redbean-single-file",
-            "keywords": [
-                "CUBRID",
-                "InnoDB",
-                "mariadb",
-                "mysql",
-                "postgresql",
-                "sqlite3"
-            ],
-            "support": {
-                "issues": "https://github.com/yeriomin/redbean-single-file/issues",
-                "source": "https://github.com/yeriomin/redbean-single-file/tree/master"
-            },
-            "time": "2017-05-06T17:53:19+00:00"
         }
     ],
     "packages-dev": [
@@ -5936,6 +5931,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "gabordemooij/redbean": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,

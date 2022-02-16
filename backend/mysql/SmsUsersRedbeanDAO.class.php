@@ -1,6 +1,6 @@
 <?php
 defined('ABSPATH') OR exit('No direct script access allowed');
-
+use \RedBeanPHP\R as R;
 class SmsUsersRedbeanDAO implements SmsUsersDAO
 {
     public function load($id)
@@ -8,34 +8,34 @@ class SmsUsersRedbeanDAO implements SmsUsersDAO
         $user = R::load(USERS, $id);
         return $user->export();
     }
-    
+
     public function queryAll()
     {
         $users = R::findAll(USERS);
         $sequencedArray = array_values(array_map("getExportValues", $users));
         return $sequencedArray[0];
     }
-    
+
     public function delete($id)
     {
         $postBean = R::load(USERS, $id);
         R::trash($postBean);
         return 1;
     }
-    
+
     public function insert($smsUser)
     {
         $userBean = R::xdispense(USERS);
-        
+
         $userBean->facebook_id = $smsUser->facebookId;
         $userBean->email = $smsUser->email;
         $userBean->last_login = $smsUser->lastLogin;
         $userBean->pref_days_for_reminder = $smsUser->prefDaysForReminder;
-        
+
         $id = R::store($userBean);
         return $id;
     }
-    
+
     public function update($smsUser)
     {
         $userBean = R::load(USERS, $smsEntrie['id']);

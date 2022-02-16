@@ -4,7 +4,7 @@
 // error_reporting(E_ALL);
 require 'common_header.php';
 
-if (strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false) {
+if (array_key_exists('HTTP_ORIGIN', $_SERVER) && strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false) {
     header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
 }
 
@@ -27,16 +27,6 @@ require './core/page_message.php';
 //     $log->pushHandler(new \Monolog\Handler\StreamHandler('_logs/app.log', LOGGER_LEVEL));
 //     return $log;
 // });
-
-//  if (!strpos($app->request()->getRootUri(), 'index.php')) {
-//      $app->get('/', function () use ($app) {
-//          $app->redirect('index.php/posts/');
-//      });
-//  } else {
-//      $app->get('/', function () use ($app) {
-//          $app->redirect('posts/');
-//      });
-//  }
 
 $app->get('/security', function ()  use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
