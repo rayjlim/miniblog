@@ -16,8 +16,10 @@ class AuthMiddleware extends \Slim\Middleware
     {
         $headers = getallheaders();
         // print_r($headers);
+
         // echo 'isset app token? '.($headers['X-App-Token'] ? 'true'.$headers['X-App-Token']:'false');
-        $headerStringValue = isset($headers['X-App-Token']) ? $headers['X-App-Token'] : '';
+        $token = $_ENV['AUTH_TOKEN'];
+        $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
 
         $decryptedString = decrypt($headerStringValue);
 

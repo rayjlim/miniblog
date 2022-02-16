@@ -3,11 +3,10 @@
 // ob_start("ob_gzhandler");
 // error_reporting(E_ALL);
 require 'common_header.php';
-// header("Access-Control-Allow-Origin: *" );
-// if (strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false || strpos($_SERVER['HTTP_ORIGIN'], 'localhost') !== false) {
-//     header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
-// }
-header("Access-Control-Allow-Origin: https://" . $_ENV['DOMAIN']);
+
+if (strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false) {
+    header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+}
 
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');    // cache for 1 day
