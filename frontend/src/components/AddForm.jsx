@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
-
+import DatePicker from 'react-date-picker';
+import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
+
 const AddForm = props => {
   console.log('props :', props);
   const [content, setContent] = useState(props.content);
-  const [date, setDate] = useState(props.date);
+  const [date, setDate] = useState(parse(props.date, 'yyyy-MM-dd', new Date()));
   let textareaInput = null;
 
   useEffect(() => {
@@ -21,10 +23,12 @@ const AddForm = props => {
     setContent(textareaInput.value);
   }
 
-  function dateChange(e) {
-    e.preventDefault();
-    console.log('e.target.value :', e.target.value);
-    setDate(e.target.value);
+  function dateChange(value) {
+    console.log('value :', value);
+    if (value === null) {
+      value = new Date();
+    }
+    setDate(value);
   }
 
   function handleAdd(e) {
@@ -32,7 +36,7 @@ const AddForm = props => {
       console.log('this :', this);
       const entry = {
         content: content.trim(),
-        date: date.trim(), // TODO: check date format
+        date: format(date, 'yyyy-MM-dd'),
       };
       try {
         const token = window.localStorage.getItem('appToken');
@@ -66,8 +70,6 @@ const AddForm = props => {
     props.onSuccess();
   }
 
-  console.log('content :>> ', content);
-
   return (
     <div className="well">
       {/* <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
@@ -96,13 +98,7 @@ const AddForm = props => {
       </div>
 
       <div className="form-group">
-        <input
-          type="text"
-          onChange={e => dateChange(e)}
-          className="form-control"
-          placeholder="Add date..."
-          defaultValue={props.date}
-        />
+        <DatePicker onChange={dateChange} value={date} />
       </div>
 
       <button onClick={handleAdd} className="btn btn-primary">

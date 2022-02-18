@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import constants from '../constants';
 import MarkdownDisplay from './MarkdownDisplay';
-
+import DatePicker from 'react-date-picker';
+import { format, parse } from 'date-fns';
 const EditForm = props => {
   let escapedContent = props.entry.content.replace(
     /<br\s*\/>/g,
@@ -9,7 +10,7 @@ const EditForm = props => {
 `
   );
 
-  const [date, setDate] = useState(props.entry.date);
+  const [date, setDate] = useState(parse(props.entry.date, 'yyyy-MM-dd', new Date()));
   const [content, setContent] = useState(escapedContent);
 
   let textareaInput = null;
@@ -26,7 +27,7 @@ const EditForm = props => {
   async function handleSave() {
     const entry = {
       content,
-      date, // TODO: check date format
+      date: format(date, 'yyyy-MM-dd'), // TODO: check date format
     };
     console.log('handleSave entry :', entry);
     try {
@@ -91,6 +92,15 @@ const EditForm = props => {
     }
   }
 
+  function dateChange(value) {
+    console.log('value :', value);
+    if (value === null) {
+      value = new Date();
+    }
+    setDate(value);
+  }
+  console.log(date);
+
   return (
     <div className="well">
       {/* <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
@@ -116,21 +126,9 @@ const EditForm = props => {
         />
       </div>
       <div className="form-group">
-        <input
-          type="text"
-          onChange={event => setDate(event.target.value)}
-          className="form-control"
-          placeholder="Edit Date..."
-          defaultValue={props.entry.date}
-        />
+        <DatePicker onChange={dateChange} value={date} />
       </div>
 
-      {/* <button onClick={this.subToDate} className="btn btn-info">
-                    subToDate
-                </button>
-                <button onClick={this.addToDate} className="btn btn-success">
-                    addToDate
-                </button> */}
       <div className="editBtns">
         <button onClick={handleSave} className="btn btn-primary">
           <i className="fa fa-save" /> Save

@@ -108,12 +108,12 @@ const OneDay = () => {
           console.log('state :>> ', state);
           setState({ ...state, ...loadParams, entries, auth: true, refs });
           console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-          if (loadParams.scrollToLast) {
-            refs[loadParams.scrollToLast].current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start',
-            });
-          }
+          // if (loadParams.scrollToLast) {
+          //   refs[loadParams.scrollToLast].current.scrollIntoView({
+          //     behavior: 'smooth',
+          //     block: 'start',
+          //   });
+          // }
         }
       } catch (err) {
         console.log(err);
@@ -130,6 +130,11 @@ const OneDay = () => {
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
     let _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
+    if (e.target.value == 0) {
+      _date = new Date();
+    } else {
+      _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
+    }
 
     let newDate = add(_date, { days: e.target.value });
     dateInput.value = format(newDate, 'yyyy-MM-dd');
@@ -342,7 +347,7 @@ const OneDay = () => {
             <i className="fa fa-chevron-left" /> Prev
           </button>
           <div>
-            <span>{state.pageDate}</span>
+            {/* <span>{state.pageDate}</span> */}
             <input
               ref={elem => (dateInput = elem)}
               type="text"
@@ -358,6 +363,13 @@ const OneDay = () => {
             value="1"
           >
             Next <i className="fa fa-chevron-right" />
+          </button>
+          <button
+            onClick={e => handleButtonDirection(e)}
+            className="btn btn-warning btn-lrg"
+            value="0"
+          >
+            Today
           </button>
         </div>
 
