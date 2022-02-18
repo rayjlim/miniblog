@@ -1,15 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import pkg from '../../package.json';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import add from 'date-fns/add';
+import {format, parse, add} from 'date-fns';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
 import { Snackbar } from 'react-md';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import history from '../utils/history';
+import './OneDay.css';
 
 const CLOSED = 0;
 const ADD = 1;
@@ -422,6 +422,7 @@ const OneDay = () => {
             <i className="fa fa-portrait" />{' '}
             <span className="nav-text">Media</span>
           </RouterNavLink>
+          <span className="footer-version">v{pkg.version}</span>
         </div>
 
         <div className="col-md-5 text-right">
