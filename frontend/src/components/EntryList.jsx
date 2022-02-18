@@ -1,6 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import {format, parse} from 'date-fns';
 import marked from 'marked';
 
 // Override function
