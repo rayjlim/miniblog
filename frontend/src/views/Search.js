@@ -1,37 +1,50 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
-import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
+import {format, parse } from 'date-fns';
+import EditForm from '../components/EditForm.jsx';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 
-const DEBOUNCE_TIME = 300;
+const DEBOUNCE_TIME = 350;
+
+const FORM_MODE_NONE = 0;
+const FORM_MODE_EDIT = 1;
+
+const FILTER_MODE_ALL = 0;
+// const FILTER_MODE_TAGGED = 1;
+// const FILTER_MODE_UNTAGGED = 2;
+
 
 const TextEntry = () => {
   // class ContactForm extends React.Component {
-  const [data, setData] = useState({ entries: [] });
-  const [searchText] = useState('');
-  const [formMode, setFormMode] = useState(0);
+  const [posts, setPosts] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
+  const [formMode, setFormMode] = useState(FORM_MODE_NONE);
   const [entry, setEntry] = useState({});
+
+  let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
 
   useEffect(() => {
     console.log('useEffect');
-    getEntries('');
-  }, []);
+
+    debouncedSearch(searchText);
+
+  }, [searchText, searchFilter]);
 
   /**
    * Get blog entries for text search
    * @param  {string} text text to search for
    */
-  async function getEntries(text) {
-    console.log('getEntries#text:', text);
+  async function getEntries() {
+    console.log('getEntries#text:', searchText);
     try {
       const token = window.localStorage.getItem('appToken');
 
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/api/posts/?searchParam=${encodeURIComponent(text)}`,
+        `${constants.REST_ENDPOINT}/api/posts/?searchParam=${encodeURIComponent(
+          searchText
+        )}&filterType=${searchFilter}`,
         {
           method: 'GET',
           headers: {
@@ -47,29 +60,28 @@ const TextEntry = () => {
         alert(`loading error : ${response.status}`);
         return;
       } else {
-        const data = await response.json();
+        const responseData = await response.json();
 
-        console.log('result.data :>> ', data.unauth);
-        if (data.unauth) {
+        console.log('result.responseData :>> ', responseData.unauth);
+        if (responseData.unauth) {  // TODO: should remove as it is unnecessary
           // setAuth(false);
           alert('no auth');
         } else {
-          const searchVal = document.getElementById('searchText') ?
-            document.getElementById('searchText').value : '';
+          const searchVal = searchText;
           if (searchVal.length) {
             const reg = new RegExp(searchVal, 'gi');
 
-            const highlightedData = data.entries.map(entry => {
+            const foundHighlights = responseData.entries.map(entry => {
               const highlighted = entry.content.replace(reg, str => {
                 return `<b>${str}</b>`;
               });
               return { ...entry, content: highlighted };
             });
-            console.log('highlightedData :>> ', highlightedData);
+            console.log('foundHighlights :>> ', foundHighlights);
 
-            setData({ entries: highlightedData });
+            setPosts(foundHighlights);
           } else {
-            setData(data);
+            setPosts(responseData.entries);
           }
         }
       }
@@ -78,41 +90,25 @@ const TextEntry = () => {
     }
   }
 
-  let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
-  function search(text) {
-    console.log('TEC: search' + text);
-    // setText(text);
-    debouncedSearch(text);
-  }
 
-  const btnShowAddForm = (
-    <button onClick={e => showAddForm(e)} className="btn btn-default">
-      Show Add Form
-    </button>
-  );
 
-  function showAddForm(e) {
-    setFormMode(1);
-  }
   function showEditForm(e, entry) {
     e.preventDefault();
     console.log('id :', entry.id);
-    setFormMode(2);
+    setFormMode(FORM_MODE_EDIT);
     setEntry(entry);
   }
 
   function resetEntryForm() {
-    setFormMode(0);
-    getEntries(searchText);
+    setFormMode(FORM_MODE_NONE);
+    getEntries();
   }
 
-  function showAddEditForm(mode) {
-    console.log('mode :', mode);
-    if (!mode || mode === 0) {
-      return btnShowAddForm;
-    } else if (mode === 1) {
-      return <AddForm date={''} onSuccess={() => resetEntryForm()} />;
-    } else if (mode === 2) {
+  function showAddEditForm() {
+    console.log('mode :', formMode);
+    if (formMode === FORM_MODE_NONE) {
+      return <Fragment />;
+    } else if (formMode === FORM_MODE_EDIT) {
       return <EditForm entry={entry} onSuccess={() => resetEntryForm()} />;
     }
   }
@@ -121,7 +117,7 @@ const TextEntry = () => {
     return formMode !== 1 && formMode !== 2 ? (
       <Fragment>
         <ul className="entriesList">
-          {data.entries.map(entry => {
+          {posts.map(entry => {
             let newText = entry.content.replace(/<br \/>/g, '\n');
             newText = newText.replace(
               /..\/uploads/g,
@@ -165,24 +161,32 @@ const TextEntry = () => {
           <i className="fa fa-calendar-check" /> <span>Same Day</span>
         </RouterNavLink>
       </nav>
-      <br />
-      <br />
-
       <h1>Text Search</h1>
 
       <section className="container">
-        <input
+      <input
           id="searchText"
           type="text"
           className="form-control"
-          // value={searchText}
-          defaultValue=""
+          value={searchText}
           placeholder="Search term"
-          onChange={e => search(e.target.value)}
+          onChange={e => setSearchText(e.target.value)}
         />
+
+        <input
+        id="filterId"
+        type="text"
+        className="form-control"
+        value={searchFilter}
+        placeholder="Search term"
+        onChange={e => setSearchFilter(e.target.value)}
+        size="2"
+      />
+      <span >ALL, 0; TAGGED, 1;UNTAGGED, 2</span>
+
       </section>
 
-      <section className="container">{showAddEditForm(formMode)}</section>
+      <section className="container">{showAddEditForm()}</section>
 
       <section className="container">{showEntries()}</section>
 
@@ -194,9 +198,10 @@ const TextEntry = () => {
     </Fragment>
   );
 };
-
+var timeout;
 function debounce(func, wait, immediate) {
-  var timeout;
+
+  console.log('debouncing');
   return function () {
     var context = this,
       args = arguments;
