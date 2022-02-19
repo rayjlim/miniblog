@@ -43,14 +43,11 @@ $app->post('/', function () use ($app) {
 });
 
 $entryHandler = DAOFactory::EntryHandler($app);
-$app->get('/main/', $entryHandler->showMain());
-$app->get('/posts/', $entryHandler->listItems());
 
 $app->get('/api/posts/:id', $entryHandler->itemDetailsApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 
 $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
-$app->get('/api/pebble', $entryHandler->pebbleInfo());
 $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
 
 $cudHandler = DAOFactory::CUDHandler($app);
@@ -62,18 +59,12 @@ $app->options('/api/posts/:id', function () {
 });
 
 $graphHandler = DAOFactory::GraphHandler($app);
-// $app->get('/graph/', $graphHandler->handle());
-// $app->get('/api/graph/', $graphHandler->handleApi());
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
 
 $logHandler = DAOFactory::LogHandler($app);
 $app->get('/logs/:logfileName', $logHandler->getUrlHandlerWithParam());
 $app->get('/logs/', $logHandler->getUrlHandler($app));
 $app->delete('/logs/:logfileName', $logHandler->delete($app));
-
-// $bookmarkHandler = DAOFactory::BookmarkHandler($app);
-// $app->get('/bookmark/', $bookmarkHandler->render());
-// $app->get('/api/bookmark/', $bookmarkHandler->apiPath());
 
 $app->get('/ping', function () {
     echo "{	\"ping\":\"true\"}";

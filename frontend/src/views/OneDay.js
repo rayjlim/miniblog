@@ -130,7 +130,7 @@ const OneDay = () => {
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
     let _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
-    if (e.target.value == 0) {
+    if (e.target.value === 0) {
       _date = new Date();
     } else {
       _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
@@ -202,32 +202,6 @@ const OneDay = () => {
     }
   }
 
-  async function sendBackendAuth(e) {
-    const response = await fetch(
-      `${constants.REST_ENDPOINT}/security?debug=off`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: user.email,
-          sub: user.sub,
-        }),
-      }
-    );
-    console.log('response :', response);
-    if (!response.ok) {
-      console.log('status :', response.status);
-      alert(`loading error : ${response.status}`);
-      return;
-    } else {
-      // const data = await response.json();
-      console.log('sendBacendAuth#loadday', state.pageDate);
-      loadDay();
-    }
-  }
-
   async function logoutWithRedirect() {
     const response = await fetch(
       `${constants.REST_ENDPOINT}/security?logout=true&debug=off`
@@ -250,8 +224,6 @@ const OneDay = () => {
     window.localStorage.removeItem('appToken');
     history.push(`/`);
   };
-
-  const login = { color: 'red' };
 
   useEffect(() => {
     console.log('OndeDay: useEffect');
