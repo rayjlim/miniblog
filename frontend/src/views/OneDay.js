@@ -130,7 +130,7 @@ const OneDay = () => {
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
     let _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
-    if (e.target.value === 0) {
+    if (e.target.value == 0) {
       _date = new Date();
     } else {
       _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
@@ -138,7 +138,6 @@ const OneDay = () => {
 
     let newDate = add(_date, { days: e.target.value });
     dateInput.value = format(newDate, 'yyyy-MM-dd');
-
     loadDay({
       ...state,
       pageDate: format(newDate, 'yyyy-MM-dd'),

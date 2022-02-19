@@ -4,6 +4,7 @@ import constants from '../constants';
 import {format, parse } from 'date-fns';
 import EditForm from '../components/EditForm.jsx';
 import MarkdownDisplay from '../components/MarkdownDisplay';
+import './Search.css';
 
 const DEBOUNCE_TIME = 350;
 
@@ -87,6 +88,7 @@ const TextEntry = () => {
       }
     } catch (err) {
       console.log(err);
+      alert(err);
     }
   }
 
@@ -176,11 +178,10 @@ const TextEntry = () => {
         <input
         id="filterId"
         type="text"
-        className="form-control"
+        className="form-control filterType"
         value={searchFilter}
         placeholder="Search term"
         onChange={e => setSearchFilter(e.target.value)}
-        size="2"
       />
       <span >ALL, 0; TAGGED, 1;UNTAGGED, 2</span>
 
