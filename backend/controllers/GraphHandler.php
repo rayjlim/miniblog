@@ -53,14 +53,14 @@ class GraphHandler extends AbstractController
         return $this->graphHelper->calculateFields($params, $entries);
     }
 
-    public function handle()
-    {
-        return function () {
-            $data = $this->handleCore($this->app->request());
-            $this->app->view()->appendData(["data" => $data]);
-            $this->app->render('tag_track.twig');
-        };
-    }
+    // public function handle()
+    // {
+    //     return function () {
+    //         $data = $this->handleCore($this->app->request());
+    //         $this->app->view()->appendData(["data" => $data]);
+    //         $this->app->render('tag_track.twig');
+    //     };
+    // }
 
     public function handleApi()
     {

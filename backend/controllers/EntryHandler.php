@@ -21,20 +21,6 @@ class EntryHandler extends AbstractController
         parent::__construct($app);
     }
 
-    public function showMain()
-    {
-        return function () {
-            $userId = $this->app->userId;
-            DevHelp::debugMsg('start ' . __FILE__);
-
-
-            $entries = $this->dao->getYearMonths($userId);
-            DevHelp::debugMsg('start ' . implode("|", $entries));
-            $this->app->view()->appendData(["yearmonth" => $entries]);
-            $this->app->render('main.twig');
-        };
-    }
-
     /**
     * @OA\Get(
     *     path="/api/posts/",
@@ -63,35 +49,6 @@ class EntryHandler extends AbstractController
         };
     }
 
-    public function listItems()
-    {
-        return function () {
-            DevHelp::debugMsg(__file__);
-            $request = $this->app->request();
-            if (getValue($request->params(), 'view') == 'mobile') {
-                $this->app->render('mobile.twig');
-                return;
-            }
-            $userId = $this->app->userId;
-
-            $currentDate = $this->resource->getDateTime();
-            $listObj = new ListParams();
-            $listParams = $listObj->loadParams($request->params());
-            $listParams->endDate = $currentDate->format('Y-m-d');
-
-            if (getValue($request->params(), 'view') == 'timeline') {
-                $listParams->resultsLimit = 50;
-                $this->app->view()->appendData(["searchParam" => trim($listParams->searchParam)]);
-            }
-
-            $this->setTemplateVariables($listParams, $currentDate);
-
-            $templateName = (getValue($request->params(), 'view') == 'timeline') ?
-        "blog_list_text.twig" : "blog_list.twig";
-
-            $this->app->render($templateName);
-        };
-    }
     /**
     * @OA\Get(
     *     description="Retrieve entries on same day of year",
@@ -138,7 +95,6 @@ class EntryHandler extends AbstractController
         return function ($id) {
             DevHelp::debugMsg('start ' . __FILE__);
 
-
             $entry = $this->dao->load($id);
             $this->app->response()->header('Content-Type', 'application/json');
             $this->resource->echoOut('{"entry": ' . json_encode($entry) . '}');
@@ -179,59 +135,6 @@ class EntryHandler extends AbstractController
             $entry = $this->dao->getYearMonths($userId);
             $this->app->response()->header('Content-Type', 'application/json');
             $this->resource->echoOut('{"data": ' . json_encode($entry) . '}');
-        };
-    }
-
-    public function setTemplateVariables($listParams, $currentDate)
-    {
-        $showCalendarMonth = isset($listParams->gotoYearMonth) ? $listParams->gotoYearMonth :
-         $currentDate;
-
-        $this->app->view()->appendData(["showDate" => $showCalendarMonth]);
-        $this->app->view()->appendData(["CALENDAR_SUMMARY_LENGTH" => CALENDAR_SUMMARY_LENGTH]);
-        $this->app->view()->appendData(["CALENDAR_UNTAGGED_SUMMARY_LENGTH" =>
-      CALENDAR_UNTAGGED_SUMMARY_LENGTH]);
-        $this->app->view()->appendData(["listParams" => $listParams]);
-    }
-
-    public function pebbleInfo()
-    {
-        return function () {
-            $userId = $this->app->userId;
-
-            $date = $this->resource->getDateTime();
-
-            $data = $date->format("m/d") .' '. $date->format("l") .'
-';
-            $currentDate = $this->resource->getDateTime();
-
-            $weight = $this->dao->getWeightAYearAgo($userId, $date);
-            $data .= '1 yr #:'.$weight.'
-';
-
-            $weightWeekResult = $this->dao->getWeightAYearAgoAverage($userId, $date);
-
-            $weightWeekArray = array();
-            foreach ($weightWeekResult as $entry) {
-                array_push($weightWeekArray, substr($entry['content'], 0, 5));
-            }
-
-            $weekAverage =  substr(array_sum($weightWeekArray) / count($weightWeekArray), 0, 5);
-            $data .= 'wk avg:'.$weekAverage;
-
-            $graphParams = new GraphParams();
-            $graphParams->label = "#weight";
-            $graphParams->resultLimit = "7";
-            $graphParams->sampleSize = "1";
-            $graphParams->weightFactor = ".7";
-            $graphParams->startDate = null;
-            $graphParams->endDate = $currentDate->format('Y-m-d');
-            $posts = $this->dao->queryGraphData($userId, $graphParams);
-
-            $result =new stdClass();
-            $result->content = $data;
-            $result->data = $posts;
-            echo json_encode($result);
         };
     }
 }

@@ -73,18 +73,18 @@ class LogHandler extends AbstractController
         return array_values($filelist);
     }
 
-    public function readFileAndRender($logfileName, $filelist) {
+    // public function readFileAndRender($logfileName, $filelist) {
 
-        // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
-        $logfile = '';
-        if ($logfileName != '') {
-            \Lpt\DevHelp::debugMsg('$logfileName: ' . $logfileName);
+    //     // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
+    //     $logfile = '';
+    //     if ($logfileName != '') {
+    //         \Lpt\DevHelp::debugMsg('$logfileName: ' . $logfileName);
 
-            $logfile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logfileName);
-        }
-        $this->app->view()->appendData(["filelist" => $filelist]);
-        $this->app->view()->appendData(["logfileName" => $logfileName]);
-        $this->app->view()->appendData(["logfile" => $logfile]);
-        $this->app->render('show_logs.twig');
-    }
+    //         $logfile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logfileName);
+    //     }
+    //     $this->app->view()->appendData(["filelist" => $filelist]);
+    //     $this->app->view()->appendData(["logfileName" => $logfileName]);
+    //     $this->app->view()->appendData(["logfile" => $logfile]);
+    //     $this->app->render('show_logs.twig');
+    // }
 }
