@@ -21,13 +21,8 @@ define("HOURS_PER_DAY", 24);
 define("MID_DAY_HOUR", 12);
 define("SECONDS_PER_DAY", 60*60*24);
 
-define("DEFAULT_MONTHS_TO_SHOW", 2);
-
+define("DEFAULT_MONTHS_TO_SHOW", 3);
 define("RESULT_LIMIT_DEFAULT", 100);
-
-define ("COOKIE_USER", "cSmsblogUser");
-define ("SESSION_USER_ID", "sUserId");
-define ("SESSION_USER_FULLNAME", "sUserFullname");
 
 define ("FILTER_ALL", 0);
 define ("FILTER_TAGGED", 1);
@@ -35,3 +30,7 @@ define ("FILTER_UNTAGGED", 2);
 
 define('POSTS', 'sms_entries');
 define('USERS', 'sms_users');
+
+define("FULL_DATETIME_FORMAT", "Y-m-d G:i:s");
+define("YEAR_MONTH_FORMAT", "Y-m");
+define("YEAR_MONTH_DAY_FORMAT", "Y-m-d");

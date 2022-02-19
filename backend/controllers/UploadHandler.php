@@ -30,7 +30,7 @@ class UploadHandler extends AbstractController
 
             DevHelp::debugMsg('upload' . __FILE__);
 
-            $filePath = $_POST["filePath"] . '/' ?? date("Y-m");
+            $filePath = $_POST["filePath"] . '/' ?? date(YEAR_MONTH_FORMAT);
             $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             $urlFileName = strtolower(preg_replace('/\s+/', '_', trim(basename($_FILES["fileToUpload"]["name"]))));
             $targetFileFullPath = $_ENV['UPLOAD_DIR'] . $filePath . $urlFileName;

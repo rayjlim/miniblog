@@ -5,13 +5,13 @@ class Logger
 {
     public static function log($message)
     {
-       
+
             $iResource = new \Resource();
             $date = $iResource->getDateTime();
-            $filename = LOGS_DIR.DIR_SEP.LOG_PREFIX."-" . $date->format("Y-m").".txt";
-            $fileData = $date->format("Y-m-d G:i:s") . "    " . $message."\n";
+            $filename = LOGS_DIR.DIR_SEP.LOG_PREFIX."-" . $date->format(YEAR_MONTH_FORMAT).".txt";
+            $fileData = $date->format(FULL_DATETIME_FORMAT) . "    " . $message."\n";
             $iResource->writeFile($filename, $fileData);
             // echo 'log written'.$filename.'\n';
-        
+
     }
 }

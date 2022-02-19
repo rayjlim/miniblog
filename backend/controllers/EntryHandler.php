@@ -45,7 +45,7 @@ class EntryHandler extends AbstractController
             $entries = $this->dao->queryBlogList($userId, $listParams);
             $this->app->response()->header('Content-Type', 'application/json');
 
-            $this->resource->echoOut('{"entries": ' . json_encode($entries) . '}');
+            $this->resource->echoOut('{"entries": ' . json_encode($entries) . '}'); //TODO: add meta data here
         };
     }
 
@@ -81,7 +81,7 @@ class EntryHandler extends AbstractController
             $currentDate = $this->resource->getDateTime();
             $request = $this->app->request();
             $requestParams = $request->params();
-            $targetDay = getValue($requestParams, 'day') != '' ? DateTime::createFromFormat('Y-m-d', getValue($requestParams, 'day')) : $currentDate;
+            $targetDay = getValue($requestParams, 'day') != '' ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($requestParams, 'day')) : $currentDate;
 
             $entries = $this->dao->getSameDayEntries($userId, $targetDay);
             $this->app->response()->header('Content-Type', 'application/json');

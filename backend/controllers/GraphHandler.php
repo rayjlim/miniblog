@@ -20,8 +20,8 @@ class GraphHandler extends AbstractController
     {
         return function () use ($message) {
             $date = $this->resource->getDateTime();
-            $filename = LOGS_DIR . DIR_SEP . LOG_PREFIX . "_logins-" . $date->format("Y-m") . ".txt";
-            $fileData = $date->format("Y-m-d G:i:s") . "\t" . getenv("REMOTE_ADDR") . "\t";
+            $filename = LOGS_DIR . DIR_SEP . LOG_PREFIX . "_logins-" . $date->format(YEAR_MONTH_FORMAT) . ".txt";
+            $fileData = $date->format(FULL_DATETIME_FORMAT) . "\t" . getenv("REMOTE_ADDR") . "\t";
             $fileData .= $message . "\n";
             $this->resource->writeFile($filename, $fileData);
 
@@ -198,7 +198,7 @@ function printEntrys($carry, $item)
 {
     $entryDay = new DateTime($item['date']);
     $urlPrefix = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['ROOT_URL'];
-    $link = "{$urlPrefix}/index.html?date={$entryDay->format('Y-m-d')}";
+    $link = "{$urlPrefix}/index.html?date={$entryDay->format(YEAR_MONTH_DAY_FORMAT)}";
     $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
     $replacement = "<img src=\"{$urlPrefix}uploads" . '${2}' . "\">";
     $preparedContent = preg_replace($pattern, $replacement, $item['content']);
