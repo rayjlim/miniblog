@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class ListParams extends BaseModel
 {
@@ -9,8 +9,9 @@ class ListParams extends BaseModel
     public $startDate = '';
     public $endDate = '';
     public $filterType = FILTER_ALL;
-    public $resultsLimit = BLOG_LIMIT_DEFAULT;
+    public $resultsLimit = RESULT_LIMIT_DEFAULT;
     public $monthsBackToShow = 3;
+    public $exclude = '';
 
     public $gotoYearMonth;
 
@@ -33,12 +34,19 @@ class ListParams extends BaseModel
             $oListParams->endDate = $request['date'];
         }
 
+
         if (getValue($request, 'month') != '') {
             $oListParams->startDate = $request['month'] . '-1';
             $oListParams->endDate = $request['month'] . '-31';
         }
 
-        $oListParams->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
+        if ($oListParams->startDate === '' && $oListParams->searchParam === '') {
+            $oListParams->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
+            // echo "oListParams->monthsBackToShow: " . $oListParams->monthsBackToShow . "--";
+            $strDescription = '-' . $oListParams->monthsBackToShow . ' months';
+            $oListParams->startDate = date('Y-m-d', strtotime($strDescription));
+        }
+
         return $oListParams;
     }
 }
