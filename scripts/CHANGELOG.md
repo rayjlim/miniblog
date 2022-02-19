@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/rayjlim/miniblog/compare/v2.0.1...v2.1.0) (2022-02-19)
+
+
+### Features
+
+* ✨ date picker for add and edit forms ([#50](https://github.com/rayjlim/miniblog/issues/50)) ([a5554f0](https://github.com/rayjlim/miniblog/commit/a5554f04e9ab151b04854003aefe6a958ca7cfd3))
+* ✨ search form able to filter tags ([aa11cf5](https://github.com/rayjlim/miniblog/commit/aa11cf5695fbde4709aebc5b2ad33639d3711e9b))
+* ✨ search form able to filter tags ([c85f01e](https://github.com/rayjlim/miniblog/commit/c85f01e15628adf07dd9c73722f0648ddc57f254))
+* ✨ show version in the footer [#99](https://github.com/rayjlim/miniblog/issues/99) ([0271524](https://github.com/rayjlim/miniblog/commit/0271524e85b823f9b1ba035decde912659f38f5c))
+* ⬆️ change to dotenv style config files ([d48bec9](https://github.com/rayjlim/miniblog/commit/d48bec9610f6f7dc079335c07e5fb0b6f81ef6c8))
+
+
+### Bug Fixes
+
+* ⬆️ composer.lock update ([b297052](https://github.com/rayjlim/miniblog/commit/b2970529462f3c186b419fad29ae0ce6836775c5))
+* ⬆️ upgrade to redbeanorm 5 ([bb4bae6](https://github.com/rayjlim/miniblog/commit/bb4bae6b38a7e343d6eaaa74edc213d33f9b0966))
+* 🔥 remove unused functions ([e776c26](https://github.com/rayjlim/miniblog/commit/e776c262d2d8f6c59ddeb7f9e8b62cbd7f681820))
+* 🚸  set up base of PWA ([61654ac](https://github.com/rayjlim/miniblog/commit/61654acd4efb175cc823c18d85849cb7ce5d91a7))
+* correct the auth token and origin check ([2040308](https://github.com/rayjlim/miniblog/commit/2040308c19d1ef37e6f913824eb544342179d06d))
+
 ## [1.5.0](https://github.com/rayjlim/miniblog/compare/v1.4.0...v1.5.0) (2022-02-09)
 
 
