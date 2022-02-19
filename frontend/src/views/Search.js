@@ -114,7 +114,7 @@ const TextEntry = () => {
   }
 
   function showEntries() {
-    return formMode !== 1 && formMode !== 2 ? (
+    return formMode !== FORM_MODE_EDIT  ? (
       <Fragment>
         <ul className="entriesList">
           {posts.map(entry => {
