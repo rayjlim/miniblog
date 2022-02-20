@@ -11,43 +11,33 @@ class ListParams extends BaseModel
     public $filterType = FILTER_ALL;
     public $resultsLimit = RESULT_LIMIT_DEFAULT;
     public $monthsBackToShow = 3;
-    public $exclude = '';
-
-    public $gotoYearMonth;
+    public $excludeTags = '';
 
     public function loadParams($request)
     {
-        $oListParams = new ListParams();
         $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType'];
         foreach ($lookingFor as $target) {
             if (getValue($request, $target) != '') {
-                $oListParams->$target = trim($request[$target]);
+                $this->$target = trim($request[$target]);
             }
         }
 
-        if (getValue($request, 'gotoYearMonth') != '') {
-            $oListParams->gotoYearMonth = date($request['gotoYearMonth'] . '-1');
-        }
-
         if (getValue($request, 'date') != '') {
-            $oListParams->startDate = $request['date'];
-            $oListParams->endDate = $request['date'];
+            $this->startDate = $request['date'];
+            $this->endDate = $request['date'];
         }
-
 
         if (getValue($request, 'month') != '') {
-            $oListParams->startDate = $request['month'] . '-1';
-            $oListParams->endDate = $request['month'] . '-31';
+            $this->startDate = $request['month'] . '-1';
+            $this->endDate = $request['month'] . '-31';
         }
 
-        if ($oListParams->startDate === '' && $oListParams->searchParam === '') {
-            $oListParams->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
-            // echo "oListParams->monthsBackToShow: " . $oListParams->monthsBackToShow . "--";
-            $strDescription = '-' . $oListParams->monthsBackToShow . ' months';
-            $oListParams->startDate = date('Y-m-d', strtotime($strDescription));
+        if ($this->startDate === '' && $this->searchParam === '') {
+            $this->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
+            // echo "this->monthsBackToShow: " . $this->monthsBackToShow . "--";
+            $strDescription = '-' . $this->monthsBackToShow . ' months';
+            $this->startDate = date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
         }
-
-        return $oListParams;
     }
 }
 

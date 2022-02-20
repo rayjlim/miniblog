@@ -117,8 +117,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             $sqlParam.= ' and content LIKE \'%' . $listParams->searchParam . '%\'';
         }
 
-        if ($listParams->exclude != '') {
-            $sqlParam.= ' and content NOT LIKE \'%' . $listParams->searchParam . '%\'';
+        if ($listParams->excludeTags != '') {
+            $sqlParam.= ' and content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
         }
 
         if (count($listParams->tags) != 0) {

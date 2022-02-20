@@ -40,12 +40,17 @@ class EntryHandler extends AbstractController
             $request = $this->app->request();
             $requestParams = $request->params();
             $listObj = new ListParams();
-            $listParams = $listObj->loadParams($requestParams);
+            $listObj->loadParams($requestParams);
             $userId = $this->app->userId;
-            $entries = $this->dao->queryBlogList($userId, $listParams);
+            $entries = $this->dao->queryBlogList($userId, $listObj);
             $this->app->response()->header('Content-Type', 'application/json');
 
-            $this->resource->echoOut('{"entries": ' . json_encode($entries) . '}'); //TODO: add meta data here
+            $metaData = new stdClass();
+            $metaData->entries = $entries;
+            $metaData->params = $listObj;
+
+
+            $this->resource->echoOut(json_encode($metaData));
         };
     }
 
@@ -71,12 +76,6 @@ class EntryHandler extends AbstractController
     {
         return function () {
             DevHelp::debugMsg(__file__);
-
-            // $request = $this->app->request();
-            // $requestParams = $request->params();
-            // $listObj = new ListParams();
-            // $listParams = $listObj->loadParams($requestParams);
-
             $userId = $this->app->userId;
             $currentDate = $this->resource->getDateTime();
             $request = $this->app->request();
