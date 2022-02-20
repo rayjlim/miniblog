@@ -76,9 +76,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $sequencedArray;
     }
 
-    /**
-     * @LPT_V2
-     */
     public function queryBlogList($userId, $listParams)
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
@@ -120,6 +117,10 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             $sqlParam.= ' and content LIKE \'%' . $listParams->searchParam . '%\'';
         }
 
+        if ($listParams->excludeTags != '') {
+            $sqlParam.= ' and content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
+        }
+
         if (count($listParams->tags) != 0) {
             //todo: change to support array
             $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
@@ -134,12 +135,14 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
         if ($listParams->filterType == FILTER_UNTAGGED) {
             $sqlParam.= ' and content not LIKE \'%#%\'';
-            $sqlParam.= ' and content not LIKE \'%@%\'';
+            $sqlParam.= ' and content not LIKE \'@%\'';
         }
 
         if ($listParams->filterType == FILTER_TAGGED) {
-            $sqlParam.= 'and (content LIKE \'%#%\'' . ' or content LIKE \'%@%\')';
+            $sqlParam.= ' and (content LIKE \'%#%\' or content LIKE \'@%\')' . ' and content NOT LIKE \'%##%\'';
         }
+        // echo $sqlParam;
+        // exit;
         return $sqlParam;
     }
 

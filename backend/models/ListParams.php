@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class ListParams extends BaseModel
 {
@@ -9,37 +9,35 @@ class ListParams extends BaseModel
     public $startDate = '';
     public $endDate = '';
     public $filterType = FILTER_ALL;
-    public $resultsLimit = BLOG_LIMIT_DEFAULT;
+    public $resultsLimit = RESULT_LIMIT_DEFAULT;
     public $monthsBackToShow = 3;
-
-    public $gotoYearMonth;
+    public $excludeTags = '';
 
     public function loadParams($request)
     {
-        $oListParams = new ListParams();
         $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType'];
         foreach ($lookingFor as $target) {
             if (getValue($request, $target) != '') {
-                $oListParams->$target = trim($request[$target]);
+                $this->$target = trim($request[$target]);
             }
         }
 
-        if (getValue($request, 'gotoYearMonth') != '') {
-            $oListParams->gotoYearMonth = date($request['gotoYearMonth'] . '-1');
-        }
-
         if (getValue($request, 'date') != '') {
-            $oListParams->startDate = $request['date'];
-            $oListParams->endDate = $request['date'];
+            $this->startDate = $request['date'];
+            $this->endDate = $request['date'];
         }
 
         if (getValue($request, 'month') != '') {
-            $oListParams->startDate = $request['month'] . '-1';
-            $oListParams->endDate = $request['month'] . '-31';
+            $this->startDate = $request['month'] . '-1';
+            $this->endDate = $request['month'] . '-31';
         }
 
-        $oListParams->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
-        return $oListParams;
+        if ($this->startDate === '' && $this->searchParam === '') {
+            $this->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
+            // echo "this->monthsBackToShow: " . $this->monthsBackToShow . "--";
+            $strDescription = '-' . $this->monthsBackToShow . ' months';
+            $this->startDate = date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
+        }
     }
 }
 

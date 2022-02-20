@@ -37,20 +37,14 @@ class CUDHandler extends AbstractController
         return function () {
             DevHelp::debugMsg('start add' . __FILE__);
             $request = $this->app->request();
-            $body = $request->getBody();
             $entry = json_decode($request->getBody());
             if (!$entry) {
-                if (strpos($body, '23s')) {
-                    $entry =  new stdClass();
-                    $entry->content = '#s';
-                } else {
                     throw new Exception('Invalid json' . $request->getBody());
-                }
             }
             $currentDateTime = $this->resource->getDateTime();
             $smsEntry = new SmsEntrie();
             $smsEntry->userId = $this->app->userId;
-            $smsEntry->date = (!isset($entry->date) || $entry->date == '') ? $currentDateTime->format('Y-m-d G:i:s') : $entry->date;
+            $smsEntry->date = (!isset($entry->date) || $entry->date == '') ? $currentDateTime->format(FULL_DATETIME_FORMAT) : $entry->date;
             $smsEntry->content = trim(urldecode($entry->content));
             $smsEntry = $this->contentHelper->processEntry($smsEntry);
 
@@ -96,6 +90,7 @@ class CUDHandler extends AbstractController
             if (!$entry) {
                 throw new Exception('Invalid json' . $request->getBody());
             }
+            // TODO: VERIFY entry->userID === $session->userId
             $smsEntry = $this->dao->load($id);
             // TODO: check if no entry throw exception; see bug 005
             $temp = $smsEntry['user_id'];

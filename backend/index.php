@@ -34,9 +34,10 @@ $app->get('/security', function ()  use ($app) {
 $app->post('/security', function () use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
-$app->options('/security', function () {
-    echo "options-check";
-});
+// handled in AuthMiddleware
+// $app->options('/security', function () {
+//     echo "options-check";
+// });
 
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
@@ -54,9 +55,10 @@ $cudHandler = DAOFactory::CUDHandler($app);
 $app->post('/api/posts/', $cudHandler->addEntry());
 $app->put('/api/posts/:id', $cudHandler->updateEntry());
 $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
-$app->options('/api/posts/:id', function () {
-    echo "options-check";
-});
+// handled in AuthMiddleware
+// $app->options('/api/posts/:id', function () {
+//     echo "options-check";
+// });
 
 $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));

@@ -4,10 +4,12 @@ import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
 
+const FULL_DATE_FORMAT = 'yyyy-MM-dd';
+
 const AddForm = props => {
   console.log('props :', props);
   const [content, setContent] = useState(props.content);
-  const [date, setDate] = useState(parse(props.date, 'yyyy-MM-dd', new Date()));
+  const [date, setDate] = useState(parse(props.date, FULL_DATE_FORMAT, new Date()));
   let textareaInput = null;
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const AddForm = props => {
       console.log('this :', this);
       const entry = {
         content: content.trim(),
-        date: format(date, 'yyyy-MM-dd'),
+        date: format(date, FULL_DATE_FORMAT)
       };
       try {
         const token = window.localStorage.getItem('appToken');

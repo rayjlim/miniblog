@@ -18,6 +18,8 @@ const EDIT = 2;
 const ONEDAY = 0;
 const SAMEDAY = 1;
 const SEARCH = 2;
+
+const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 /**
  * Component to Display of One Day style
  *
@@ -30,7 +32,7 @@ const OneDay = () => {
 
   const [state, setState] = useState({
     entries: [],
-    pageDate: format(new Date(), 'yyyy-MM-dd'),
+    pageDate: format(new Date(), FULL_DATE_FORMAT),
     searchParam: '',
     formEntry: {},
     toasts: [],
@@ -129,19 +131,18 @@ const OneDay = () => {
    */
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
-    let _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
-    if (e.target.value === 0) {
+    let _date = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
+    if (e.target.value == 0) {
       _date = new Date();
     } else {
-      _date = parse(state.pageDate, 'yyyy-MM-dd', new Date());
+      _date = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
     }
 
     let newDate = add(_date, { days: e.target.value });
-    dateInput.value = format(newDate, 'yyyy-MM-dd');
-
+    dateInput.value = format(newDate, FULL_DATE_FORMAT);
     loadDay({
       ...state,
-      pageDate: format(newDate, 'yyyy-MM-dd'),
+      pageDate: format(newDate, FULL_DATE_FORMAT),
       formMode: CLOSED,
     });
   }
@@ -234,7 +235,7 @@ const OneDay = () => {
 
     const pageDate = urlParams.has('date')
       ? urlParams.get('date')
-      : format(new Date(), 'yyyy-MM-dd');
+      : format(new Date(), FULL_DATE_FORMAT);
 
     const pageMode = urlParams.has('pageMode')
       ? parseInt(urlParams.get('pageMode'))
@@ -243,7 +244,7 @@ const OneDay = () => {
     console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
     // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
     // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-    const _date = format(new Date(), 'yyyy-MM-dd');
+    const _date = format(new Date(), FULL_DATE_FORMAT);
 
     console.log('setting pageDate :>> ', _date);
     loadDay({ pageDate, pageMode });
@@ -358,7 +359,7 @@ const OneDay = () => {
                 `${constants.UPLOAD_ROOT}`
               );
               const dateFormated = format(
-                parse(entry.date, 'yyyy-MM-dd', new Date()),
+                parse(entry.date, FULL_DATE_FORMAT, new Date()),
                 'EEE MM, dd yyyy'
               );
               let showEntryDate = (

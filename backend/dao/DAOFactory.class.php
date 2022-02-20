@@ -24,10 +24,6 @@ class DAOFactory
     {
         return new ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
-    public static function GraphHelper()
-    {
-        return new GraphHelper(DAOFactory::getResourceDAO()->getDateTime());
-    }
 
     // controllers
     public static function CUDHandler($app)
@@ -48,8 +44,7 @@ class DAOFactory
         return new GraphHandler(
             $app,
             DAOFactory::getSmsEntriesDAO(),
-            DAOFactory::getResourceDAO(),
-            DAOFactory::GraphHelper()
+            DAOFactory::getResourceDAO()
         );
     }
     public static function LogHandler($app)

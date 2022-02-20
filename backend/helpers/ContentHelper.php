@@ -60,18 +60,18 @@ class ContentHelper implements ContentHelperInterface
             DevHelp::debugMsg("fullDatePattern");
             $entryDate = new DateTime(substr($smsEntry->content, 0, 4) . '-' . substr($smsEntry->content, 4, 2) . '-' . substr($smsEntry->content, 6, 2));
 
-            $smsEntry->date = $entryDate->format("Y-m-d G:i:s");
+            $smsEntry->date = $entryDate->format(FULL_DATETIME_FORMAT);
             $smsEntry->content = substr($smsEntry->content, 9);
         } elseif (preg_match($yesterdayTagPattern, $smsEntry->content) != 0) {
             DevHelp::debugMsg("yesterday tag pattern");
             $entryDate = new DateTime($smsEntry->date);
             $entryDate->sub(new DateInterval('P1D'));
-            $smsEntry->date = $entryDate->format("Y-m-d G:i:s");
+            $smsEntry->date = $entryDate->format(FULL_DATETIME_FORMAT);
             $smsEntry->content = preg_replace($yesterdayTagPattern, '', $smsEntry->content);
         } elseif (preg_match($shortDatePattern, $smsEntry->content) != 0) {
             DevHelp::debugMsg("shortDatePattern");
             $entryDate = new DateTime(substr($smsEntry->date, 0, 4) . '-' . substr($smsEntry->content, 0, 2) . '-' . substr($smsEntry->content, 2, 2));
-            $smsEntry->date = $entryDate->format("Y-m-d G:i:s");
+            $smsEntry->date = $entryDate->format(FULL_DATETIME_FORMAT);
             $smsEntry->content = substr($smsEntry->content, 5);
         }
 

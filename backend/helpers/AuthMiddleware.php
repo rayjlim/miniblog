@@ -24,7 +24,7 @@ class AuthMiddleware extends \Slim\Middleware
         $decryptedString = decrypt($headerStringValue);
 
         // echo 'decryptedString:' . $decryptedString;
-        $this->app->userId = $decryptedString;
+        $this->app->userId = $decryptedString;  //TODO: this should be written to session
         // echo 'header: ' . $headerStringValue . ", decryptedString: " . $decryptedString;
         return is_numeric(($decryptedString) ? $decryptedString : null);
     }
@@ -63,6 +63,7 @@ class AuthMiddleware extends \Slim\Middleware
         // }
         if($app->request->isOptions()){
             header('HTTP/1.0 200 Ok');
+            echo "Options METHOD check";
             exit(0);
         }
 

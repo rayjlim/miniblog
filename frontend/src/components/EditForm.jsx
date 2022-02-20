@@ -9,8 +9,9 @@ const EditForm = props => {
     `
 `
   );
+  const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
-  const [date, setDate] = useState(parse(props.entry.date, 'yyyy-MM-dd', new Date()));
+  const [date, setDate] = useState(parse(props.entry.date, FULL_DATE_FORMAT, new Date()));
   const [content, setContent] = useState(escapedContent);
 
   let textareaInput = null;
@@ -27,7 +28,7 @@ const EditForm = props => {
   async function handleSave() {
     const entry = {
       content,
-      date: format(date, 'yyyy-MM-dd'), // TODO: check date format
+      date: format(date, FULL_DATE_FORMAT), // TODO: check date format
     };
     console.log('handleSave entry :', entry);
     try {
