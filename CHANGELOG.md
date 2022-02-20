@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/rayjlim/miniblog/compare/v2.1.0...v2.2.0) (2022-02-20)
+
+
+### Features
+
+* ✨ search by date range [#71](https://github.com/rayjlim/miniblog/issues/71) and [#107](https://github.com/rayjlim/miniblog/issues/107) ([a88528e](https://github.com/rayjlim/miniblog/commit/a88528e9a1ab8861fe9adfc418767bf720451bbc))
+
+
+### Bug Fixes
+
+* ♻️ clean up app-constants, define date formats ([32e21d0](https://github.com/rayjlim/miniblog/commit/32e21d0a3eaa509e0421396568d2c4a0361536f7))
+* ♻️ remove unused graph related; prep for cron fix ([fc802d1](https://github.com/rayjlim/miniblog/commit/fc802d1ab1a1d0a3f660593c7904097b946e84b8))
+* remove unused constants, searching filter upgrade ([91e201b](https://github.com/rayjlim/miniblog/commit/91e201b6a8990e0c2975efba5d3beb07bea1c845))
 
 ## [2.1.0](https://github.com/rayjlim/miniblog/compare/v2.0.1...v2.1.0) (2022-02-19)
 
