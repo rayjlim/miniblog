@@ -43,8 +43,10 @@ class AuthMiddleware extends \Slim\Middleware
         if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
+        $response = new stdClass();
+        $response->token = encrypt($_ENV['ACCESS_ID']);
 
-        echo "{\"token\": \"" . encrypt($_ENV['ACCESS_ID']) . "\"}";
+        echo json_encode($response);
         exit;
     }
     public function call()
