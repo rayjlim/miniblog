@@ -3,8 +3,6 @@
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
-use \Lpt\Logger;
-
 
 class AuthMiddleware extends \Slim\Middleware
 {
@@ -77,7 +75,6 @@ class AuthMiddleware extends \Slim\Middleware
             $this->next->call();
             return;
         } else {
-
             $error = "Not Logged In";
         }
         $parsedBody = $req->getBody();

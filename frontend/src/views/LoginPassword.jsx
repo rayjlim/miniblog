@@ -30,7 +30,7 @@ function LoginPassword() {
 
         console.log(results);
         if (results.token) {
-          window.localStorage.setItem('appToken', results.jwt);
+          window.localStorage.setItem('appToken', results.token);
         }
         return results.token;
       } else {
