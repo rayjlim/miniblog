@@ -1,4 +1,4 @@
-backend/config/*
+
 backend/vendor
 
 uploads/*
@@ -11,7 +11,11 @@ frontend/build/*
 frontend/node_modules/*
 frontend/docs/*
 frontend/styleguide/*
-frontend/.env
+
 
 miniblog-api/*
 backend/build/*
+scripts/passfile.txt
+backend/config/.htaccess
+
+backend/config/feature_ideas/*
