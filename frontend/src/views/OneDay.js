@@ -44,6 +44,7 @@ const OneDay = () => {
     refs: [],
   });
   const [inspiration, setInspiration] = useState(null);
+  const [weight, setWeight] = useState(null);
 
   let dateInput = null;
 
@@ -66,11 +67,11 @@ const OneDay = () => {
         endPointURL = `${constants.REST_ENDPOINT}/api/sameDayEntries/?day=${loadParams.pageDate}`;
         break;
       }
-      case SEARCH: {
-        const text = loadParams.searchParam;
-        endPointURL = `${constants.REST_ENDPOINT}/api/posts/?searchParam=${text}`;
-        break;
-      }
+      // case SEARCH: {
+      //   const text = loadParams.searchParam;
+      //   endPointURL = `${constants.REST_ENDPOINT}/api/posts/?searchParam=${text}`;
+      //   break;
+      // }
       default: {
         endPointURL = `${constants.REST_ENDPOINT}/api/posts/?date=${loadParams.pageDate}`;
         break;
@@ -123,6 +124,7 @@ const OneDay = () => {
         if (inspiration === null) {
           await getInspiration();
         }
+        await getWeight(loadParams.pageDate);
       } catch (err) {
         console.log(err);
         alert(`loading error : ${err}`);
@@ -167,6 +169,29 @@ const OneDay = () => {
         console.log('vercel data.header :>> ', data.header);
         console.log('vercel data.message :>> ', data.message);
         setInspiration(`Question: ${data.prompt} : ${data.category}`);
+      }
+    } catch (err) {
+      console.log(err);
+      alert(`loading error : ${err}`);
+    }
+  }
+
+  async function getWeight(date) {
+    try {
+      console.log(constants);
+      const api = constants.TRACKS_ENDPIONT;
+      const quoteResponse = await fetch(`${api}?start=${date}&end=${date}`, {});
+      if (!quoteResponse.ok) {
+        console.log('quoteResponse.status :', quoteResponse.status);
+        alert(`loading error : ${quoteResponse.status}`);
+        return;
+      } else {
+        const data = await quoteResponse.json();
+        if (data && data.data && data.data[0] && data.data[0].count) {
+          setWeight(data.data[0].count);
+        }else{
+          setWeight("?");
+        }
       }
     } catch (err) {
       console.log(err);
@@ -350,6 +375,7 @@ const OneDay = () => {
         </div>
 
         <section className="container" ref={state.refForm}>
+          {weight && <span>Weight : {weight}</span>}
           {showAddEditForm(state.formMode)}
         </section>
 
@@ -406,7 +432,6 @@ const OneDay = () => {
               [Get Inspiration]
             </button>
           )}
-
         </section>
       )}
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
