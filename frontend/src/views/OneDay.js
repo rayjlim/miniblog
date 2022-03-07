@@ -120,20 +120,21 @@ const OneDay = () => {
         }
 
         // ----
+        if (inspiration === null) {
+          console.log(constants);
+          const quoteApi = constants.INSPIRATION_ENDPOINT;
+          const quoteResponse = await fetch(quoteApi, {});
+          if (!quoteResponse.ok) {
+            console.log('quoteResponse.status :', quoteResponse.status);
+            alert(`loading error : ${quoteResponse.status}`);
+            return;
+          } else {
+            const data = await quoteResponse.json();
 
-        console.log(constants);
-        const quoteApi = constants.INSPIRATION_ENDPOINT;
-        const quoteResponse = await fetch(quoteApi, {});
-        if (!quoteResponse.ok) {
-          console.log('quoteResponse.status :', quoteResponse.status);
-          alert(`loading error : ${quoteResponse.status}`);
-          return;
-        } else {
-          const data = await quoteResponse.json();
-
-          console.log('vercel data.header :>> ', data.header);
-          console.log('vercel data.message :>> ', data.message);
-          setInspiration(`Inspire: ${data.message} : ${data.author}`);
+            console.log('vercel data.header :>> ', data.header);
+            console.log('vercel data.message :>> ', data.message);
+            setInspiration(`Inspire: ${data.message} : ${data.author}`);
+          }
         }
       } catch (err) {
         console.log(err);
