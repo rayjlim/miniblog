@@ -121,20 +121,7 @@ const OneDay = () => {
 
         // ----
         if (inspiration === null) {
-          console.log(constants);
-          const quoteApi = constants.INSPIRATION_ENDPOINT;
-          const quoteResponse = await fetch(quoteApi, {});
-          if (!quoteResponse.ok) {
-            console.log('quoteResponse.status :', quoteResponse.status);
-            alert(`loading error : ${quoteResponse.status}`);
-            return;
-          } else {
-            const data = await quoteResponse.json();
-
-            console.log('vercel data.header :>> ', data.header);
-            console.log('vercel data.message :>> ', data.message);
-            setInspiration(`Inspire: ${data.message} : ${data.author}`);
-          }
+          await getInspiration();
         }
       } catch (err) {
         console.log(err);
@@ -143,9 +130,31 @@ const OneDay = () => {
     })();
   }
 
-  async function getPrompt(e) {
+  async function getInspiration() {
     try {
       console.log(constants);
+      const quoteApi = constants.INSPIRATION_ENDPOINT;
+      const quoteResponse = await fetch(quoteApi, {});
+      if (!quoteResponse.ok) {
+        console.log('quoteResponse.status :', quoteResponse.status);
+        alert(`loading error : ${quoteResponse.status}`);
+        return;
+      } else {
+        const data = await quoteResponse.json();
+
+        console.log('vercel data.header :>> ', data.header);
+        console.log('vercel data.message :>> ', data.message);
+        setInspiration(`Inspire: ${data.message} : ${data.author}`);
+      }
+    } catch (err) {
+      console.log(err);
+      alert(`loading error : ${err}`);
+    }
+  }
+
+  async function getPrompt(e) {
+    try {
+      // console.log(constants);
       const api_endpoint = constants.QUESTION_ENDPIONT;
       const response = await fetch(api_endpoint, {});
       if (!response.ok) {
@@ -389,9 +398,15 @@ const OneDay = () => {
           )} */}
           {constants.QUESTION_ENDPIONT !== '' && (
             <button onClick={e => getPrompt(e)} className="plainLink">
-              Get Prompt
+              [Get Prompt]
             </button>
           )}
+          {constants.INSPIRATION_ENDPOINT !== '' && (
+            <button onClick={e => getInspiration(e)} className="plainLink">
+              [Get Inspiration]
+            </button>
+          )}
+
         </section>
       )}
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
