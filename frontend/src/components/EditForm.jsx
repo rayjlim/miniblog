@@ -11,10 +11,46 @@ const EditForm = props => {
   );
   const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
-  const [date, setDate] = useState(parse(props.entry.date, FULL_DATE_FORMAT, new Date()));
+  const [date, setDate] = useState(
+    parse(props.entry.date, FULL_DATE_FORMAT, new Date())
+  );
   const [content, setContent] = useState(escapedContent);
+  const [weight, setWeight] = useState(null);
 
   let textareaInput = null;
+
+  useEffect(() => {
+    (async () => {
+      if (weight === null) {
+        await getWeight();
+      }
+    })();
+  }, []);
+
+  async function getWeight() {
+    try {
+      console.log(constants);
+      const api = constants.TRACKS_ENDPIONT;
+      const targetDateStr = format(date, FULL_DATE_FORMAT);
+      const quoteResponse = await fetch(
+        `${api}?start=${targetDateStr}&end=${targetDateStr}`,
+        {}
+      );
+      if (!quoteResponse.ok) {
+        console.log('quoteResponse.status :', quoteResponse.status);
+        alert(`loading error : ${quoteResponse.status}`);
+        return;
+      } else {
+        const data = await quoteResponse.json();
+        if(data && data.data && data.data[0] && data.data[0].count){
+         setWeight(data.data[0].count);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      alert(`loading error : ${err}`);
+    }
+  }
 
   function textChange(text) {
     const pattern = /@@([\w-]*)@@/g;
@@ -125,6 +161,7 @@ const EditForm = props => {
           rows="8"
           defaultValue={escapedContent}
         />
+        {weight && <span>Weight : {weight}</span>}
       </div>
       <div className="form-group">
         <DatePicker onChange={dateChange} value={date} />
