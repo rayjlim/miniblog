@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import pkg from '../../package.json';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
-import {format, parse, add} from 'date-fns';
+import { format, parse, add } from 'date-fns';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
@@ -120,12 +120,10 @@ const OneDay = () => {
         }
 
         // ----
-        // const quoteApi = 'http://localhost:8080/api/product';
-        console.log(constants)
-        const quoteApi = constants.INSPIRATION_ENDPOINT;
-        const quoteResponse = await fetch(quoteApi, {
 
-        });
+        console.log(constants);
+        const quoteApi = constants.INSPIRATION_ENDPOINT;
+        const quoteResponse = await fetch(quoteApi, {});
         if (!quoteResponse.ok) {
           console.log('quoteResponse.status :', quoteResponse.status);
           alert(`loading error : ${quoteResponse.status}`);
@@ -135,14 +133,35 @@ const OneDay = () => {
 
           console.log('vercel data.header :>> ', data.header);
           console.log('vercel data.message :>> ', data.message);
-          setInspiration(`${data.message} : ${data.author}`);
-
+          setInspiration(`Inspire: ${data.message} : ${data.author}`);
         }
       } catch (err) {
         console.log(err);
         alert(`loading error : ${err}`);
       }
     })();
+  }
+
+  async function getPrompt(e) {
+    try {
+      console.log(constants);
+      const api_endpoint = constants.QUESTION_ENDPIONT;
+      const response = await fetch(api_endpoint, {});
+      if (!response.ok) {
+        console.log('response.status :', response.status);
+        alert(`loading error : ${response.status}`);
+        return;
+      } else {
+        const data = await response.json();
+
+        console.log('vercel data.header :>> ', data.header);
+        console.log('vercel data.message :>> ', data.message);
+        setInspiration(`Question: ${data.prompt} : ${data.category}`);
+      }
+    } catch (err) {
+      console.log(err);
+      alert(`loading error : ${err}`);
+    }
   }
 
   /**
@@ -359,11 +378,21 @@ const OneDay = () => {
           </ul>
         </section>
       </Fragment>
-      {inspiration &&
-      <section>
-        {inspiration}
-      </section>
-      }
+      {inspiration && (
+        <section>
+          <div>{inspiration}</div>
+          {/* {inspiration !== '' && (
+            <button onClick={e => appendToForm(e)} className="plainLink">
+              Append to Entry
+            </button>
+          )} */}
+          {constants.QUESTION_ENDPIONT !== '' && (
+            <button onClick={e => getPrompt(e)} className="plainLink">
+              Get Prompt
+            </button>
+          )}
+        </section>
+      )}
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="col-md-5 text-left">
           <RouterNavLink to={'/upload'} className="btn navbar-btn">
