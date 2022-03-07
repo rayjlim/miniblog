@@ -5,6 +5,7 @@ import constants from '../constants';
 import { format, parse, add } from 'date-fns';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
+import MovieWindow from '../components/MovieWindow.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
 import { Snackbar } from 'react-md';
 import MarkdownDisplay from '../components/MarkdownDisplay';
@@ -17,7 +18,6 @@ const EDIT = 2;
 
 const ONEDAY = 0;
 const SAMEDAY = 1;
-const SEARCH = 2;
 
 const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 /**
@@ -45,6 +45,7 @@ const OneDay = () => {
   });
   const [inspiration, setInspiration] = useState(null);
   const [weight, setWeight] = useState(null);
+  const [movies, setMovies] = useState([]);
 
   let dateInput = null;
 
@@ -125,6 +126,7 @@ const OneDay = () => {
           await getInspiration();
         }
         await getWeight(loadParams.pageDate);
+        await getMovies(loadParams.pageDate);
       } catch (err) {
         console.log(err);
         alert(`loading error : ${err}`);
@@ -154,7 +156,7 @@ const OneDay = () => {
     }
   }
 
-  async function getPrompt(e) {
+  async function getPrompt() {
     try {
       // console.log(constants);
       const api_endpoint = constants.QUESTION_ENDPIONT;
@@ -189,8 +191,33 @@ const OneDay = () => {
         const data = await quoteResponse.json();
         if (data && data.data && data.data[0] && data.data[0].count) {
           setWeight(data.data[0].count);
-        }else{
-          setWeight("?");
+        } else {
+          setWeight('?');
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      alert(`loading error : ${err}`);
+    }
+  }
+  async function getMovies(date) {
+    try {
+      console.log(constants);
+      const api = constants.MOVIES_ENDPIONT;
+      const quoteResponse = await fetch(
+        `${api}&advanced_search=true&dt_viewed=${date}`,
+        {}
+      );
+      if (!quoteResponse.ok) {
+        console.log('quoteResponse.status :', quoteResponse.status);
+        alert(`loading error : ${quoteResponse.status}`);
+        return;
+      } else {
+        const data = await quoteResponse.json();
+        if (data && data.movies) {
+          setMovies(data.movies);
+        } else {
+          setMovies([]);
         }
       }
     } catch (err) {
@@ -338,82 +365,85 @@ const OneDay = () => {
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
 
-      <Fragment>
-        <div className="grid-3mw container">
-          <button
-            onClick={e => handleButtonDirection(e)}
-            className="btn btn-info btn-lrg"
-            value="-1"
-          >
-            <i className="fa fa-chevron-left" /> Prev
-          </button>
-          <div>
-            {/* <span>{state.pageDate}</span> */}
-            <input
-              ref={elem => (dateInput = elem)}
-              type="text"
-              className="form-control"
-              id="formDpInput"
-              defaultValue={state.pageDate}
-              onChange={e => updateDate(e)}
-            />
-          </div>
-          <button
-            onClick={e => handleButtonDirection(e)}
-            className="btn btn-success btn-lrg"
-            value="1"
-          >
-            Next <i className="fa fa-chevron-right" />
-          </button>
-          <button
-            onClick={e => handleButtonDirection(e)}
-            className="btn btn-warning btn-lrg"
-            value="0"
-          >
-            Today
-          </button>
+      <div className="grid-3mw container">
+        <button
+          onClick={e => handleButtonDirection(e)}
+          className="btn btn-info btn-lrg"
+          value="-1"
+        >
+          <i className="fa fa-chevron-left" /> Prev
+        </button>
+        <div>
+          {/* <span>{state.pageDate}</span> */}
+          <input
+            ref={elem => (dateInput = elem)}
+            type="text"
+            className="form-control"
+            id="formDpInput"
+            defaultValue={state.pageDate}
+            onChange={e => updateDate(e)}
+          />
         </div>
+        <button
+          onClick={e => handleButtonDirection(e)}
+          className="btn btn-success btn-lrg"
+          value="1"
+        >
+          Next <i className="fa fa-chevron-right" />
+        </button>
+        <button
+          onClick={e => handleButtonDirection(e)}
+          className="btn btn-warning btn-lrg"
+          value="0"
+        >
+          Today
+        </button>
+      </div>
 
-        <section className="container" ref={state.refForm}>
-          {weight && <span>Weight : {weight}</span>}
-          {showAddEditForm(state.formMode)}
-        </section>
+      <section className="container" ref={state.refForm}>
+        {weight && <span>Weight : {weight}</span>}
+        {showAddEditForm(state.formMode)}
+      </section>
 
-        <section className="container">
-          <ul className="entriesList">
-            {state.entries.map(entry => {
-              let newText = entry.content.replace(/<br \/>/g, '\n');
-              newText = newText.replace(
-                /..\/uploads/g,
-                `${constants.UPLOAD_ROOT}`
-              );
-              const dateFormated = format(
-                parse(entry.date, FULL_DATE_FORMAT, new Date()),
-                'EEE MM, dd yyyy'
-              );
-              let showEntryDate = (
-                <button
-                  onClick={e => showEditForm(e, entry)}
-                  className="plainLink"
-                >
-                  {dateFormated}
-                </button>
-              );
+      <section className="container">
+        <ul className="entriesList">
+          {state.entries.map(entry => {
+            let newText = entry.content.replace(/<br \/>/g, '\n');
+            newText = newText.replace(
+              /..\/uploads/g,
+              `${constants.UPLOAD_ROOT}`
+            );
+            const dateFormated = format(
+              parse(entry.date, FULL_DATE_FORMAT, new Date()),
+              'EEE MM, dd yyyy'
+            );
+            let showEntryDate = (
+              <button
+                onClick={e => showEditForm(e, entry)}
+                className="plainLink"
+              >
+                {dateFormated}
+              </button>
+            );
 
-              return (
-                <li
-                  key={entry.id}
-                  className="blogEntry"
-                  ref={state.refs[entry.id]}
-                >
-                  {showEntryDate} |
-                  <MarkdownDisplay source={newText} />
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      </Fragment>
+            return (
+              <li
+                key={entry.id}
+                className="blogEntry"
+                ref={state.refs[entry.id]}
+              >
+                {showEntryDate} |
+                <MarkdownDisplay source={newText} />
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <section>
+        <ul>
+          {movies.length > 0 && movies.map(movie => <li><MovieWindow movie={movie} /></li>)}
+        </ul>
+      </section>
       {inspiration && (
         <section>
           <div>{inspiration}</div>

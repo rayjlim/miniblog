@@ -19,7 +19,7 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "REACT_APP_API_ENDPOINT=http://localhost/projects/miniblog/backend REACT_APP_UPLOAD_ROOT=http://localhost/projects/miniblog/uploads REACT_APP_INSPIRATION_API_ENDPIONT=https://express-vercel-git-main-rayjlim1.vercel.app/api/product PORT=3005 react-scripts start",
+    "start": "REACT_APP_API_ENDPOINT=http://localhost/projects/miniblog/backend REACT_APP_UPLOAD_ROOT=http://localhost/projects/miniblog/uploads PORT=3005 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
