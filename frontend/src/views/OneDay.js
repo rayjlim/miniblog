@@ -203,24 +203,6 @@ const OneDay = () => {
     }
   }
 
-  async function logoutWithRedirect() {
-    const response = await fetch(
-      `${constants.REST_ENDPOINT}/security?logout=true&debug=off`
-    );
-    console.log('response :', response);
-    if (!response.ok) {
-      console.log('response.status :', response.status);
-      alert(`logout error : ${response.status}`);
-      return;
-    } else {
-      // const data = await response.json();
-      alert('Logged Out');
-      logout({
-        returnTo: window.location.origin,
-      });
-    }
-  }
-
   const doLogout = () => {
     window.localStorage.removeItem('appToken');
     history.push(`/`);
@@ -272,41 +254,12 @@ const OneDay = () => {
           <i className="fa fa-sign-out" />
           <span className="nav-text">Log Out</span>
         </button>
-        {/* {isAuthenticated ? (
-          <button
-            onClick={e => doLogout(e)}
-            className="btn-margin plainLink"
-          >
-            <i className="fa fa-sign-out" />
-            <span className="nav-text">Log Out</span>
-          </button>
-        ) : (
-          <button
-            id="qsLoginBtn"
-            className="btn-margin plainLink"
-            onClick={() => loginWithRedirect({})}
-          >
-            <i className="fa fa-sign-in" style={login} />{' '}
-            <span className="nav-text" style={login}>
-              Log In
-            </span>
-          </button>
-        )}
-        {isAuthenticated && !state.auth ? (
-          <button onClick={e => sendBackendAuth(e)} className="plainLink">
-            <i className="fa fa-shield" />{' '}
-            <span className="nav-text">Auth</span>
-          </button>
-        ) : (
-          ''
-        )} */}
       </nav>
       <Snackbar
         id="example-snackbar"
         toasts={state.toasts}
         autohide={state.autohide}
       />
-
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
 
