@@ -3,8 +3,6 @@
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
-use \Lpt\Logger;
-
 
 class AuthMiddleware extends \Slim\Middleware
 {
@@ -43,8 +41,10 @@ class AuthMiddleware extends \Slim\Middleware
         if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
+        $response = new stdClass();
+        $response->token = encrypt($_ENV['ACCESS_ID']);
 
-        echo "{\"token\": \"" . encrypt($_ENV['ACCESS_ID']) . "\"}";
+        echo json_encode($response);
         exit;
     }
     public function call()
@@ -75,7 +75,6 @@ class AuthMiddleware extends \Slim\Middleware
             $this->next->call();
             return;
         } else {
-
             $error = "Not Logged In";
         }
         $parsedBody = $req->getBody();

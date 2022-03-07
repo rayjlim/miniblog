@@ -1,6 +1,6 @@
 # Mini blog
 
-## feature
+## Feature
 
 - track: spiritual, mental, physical scale 
   - ex. @spirit 5  (range 1-5)
@@ -26,3 +26,8 @@ OneDay.js:289
 Calendar.jsx:118
 wrench Example fixes
 
+SELECT * FROM sms_entries 
+WHERE content REGEXP '/(?:^|\s)#(\w+)/g'
+
+
+/(?:^|\s)#(\w+)/
