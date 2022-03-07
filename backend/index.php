@@ -4,17 +4,6 @@
 // error_reporting(E_ALL);
 require 'common_header.php';
 
-if (array_key_exists('HTTP_ORIGIN', $_SERVER) && strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false) {
-    header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
-}
-
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 86400');    // cache for 1 day
-
-header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, X-App-Token");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-
 $app = new Slim\Slim();
 $app->add(new AuthMiddleware());
 
@@ -34,10 +23,7 @@ $app->get('/security', function ()  use ($app) {
 $app->post('/security', function () use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
-// handled in AuthMiddleware
-// $app->options('/security', function () {
-//     echo "options-check";
-// });
+
 
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
@@ -56,9 +42,7 @@ $app->post('/api/posts/', $cudHandler->addEntry());
 $app->put('/api/posts/:id', $cudHandler->updateEntry());
 $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
 // handled in AuthMiddleware
-// $app->options('/api/posts/:id', function () {
-//     echo "options-check";
-// });
+
 
 $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));

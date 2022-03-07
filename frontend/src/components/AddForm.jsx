@@ -7,7 +7,6 @@ import MarkdownDisplay from './MarkdownDisplay';
 const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
 const AddForm = props => {
-  console.log('props :', props);
   const [content, setContent] = useState(props.content);
   const [date, setDate] = useState(parse(props.date, FULL_DATE_FORMAT, new Date()));
   let textareaInput = null;
