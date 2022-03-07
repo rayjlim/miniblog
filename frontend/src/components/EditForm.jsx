@@ -15,6 +15,7 @@ const EditForm = props => {
     parse(props.entry.date, FULL_DATE_FORMAT, new Date())
   );
   const [content, setContent] = useState(escapedContent);
+  const [weight, setWeight] = useState(null);
 
   let textareaInput = null;
 
@@ -131,6 +132,7 @@ const EditForm = props => {
           rows="8"
           defaultValue={escapedContent}
         />
+        {weight && <span>Weight : {weight}</span>}
       </div>
       <div className="form-group">
         <DatePicker onChange={dateChange} value={date} />
