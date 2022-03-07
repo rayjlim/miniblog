@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/rayjlim/miniblog/compare/v2.2.0...v2.3.0) (2022-03-07)
+
+
+### Features
+
+* ✨ make call to Quote Api endpoint [#112](https://github.com/rayjlim/miniblog/issues/112) ([05b79dc](https://github.com/rayjlim/miniblog/commit/05b79dcc9dbe081962a02241aca167833af5a0de))
+* ✨ Question Prompt Api ([05dabc5](https://github.com/rayjlim/miniblog/commit/05dabc510445ff972f6f408d0c012e3952d30f2b))
+
+
+### Bug Fixes
+
+* ♻️ clean up cors headers and OPTIONs checks ([23ae553](https://github.com/rayjlim/miniblog/commit/23ae5530b19f3b8022b1d53d2bcbd27365664839))
+* 🔒️ gpg encrypt secrets ([fb8ee5e](https://github.com/rayjlim/miniblog/commit/fb8ee5e04cc7a0b657f84c370ebfecbd3db4491f))
+* 🔧 update composer.lock ([1465626](https://github.com/rayjlim/miniblog/commit/1465626551a5487237535619cc74f5fe6f70703e))
+
 ## [2.2.0](https://github.com/rayjlim/miniblog/compare/v2.1.0...v2.2.0) (2022-02-20)
 
 
