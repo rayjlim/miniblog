@@ -11,7 +11,6 @@ import history from './utils/history';
 function App() {
   useEffect(() => {
     (async () => {
-      // window.localStorage.setItem('appToken', '/A==');
       // check for token
       const token = window.localStorage.getItem('appToken');
       console.log('check token', token, token !== null);

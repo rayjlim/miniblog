@@ -30,8 +30,6 @@ function LoginPassword() {
 
         console.log(results);
         if (results.token) {
-          // TODO: set the cookie with the token
-
           window.localStorage.setItem('appToken', results.token);
         }
         return results.token;

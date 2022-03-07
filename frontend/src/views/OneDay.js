@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import pkg from '../../package.json';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import constants from '../constants';
-import {format, parse, add} from 'date-fns';
+import { format, parse, add } from 'date-fns';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import { useAuth0 } from '../utils/react-auth0-spa';
@@ -43,6 +43,7 @@ const OneDay = () => {
     refForm: React.createRef(),
     refs: [],
   });
+  const [inspiration, setInspiration] = useState(null);
 
   let dateInput = null;
 
@@ -117,11 +118,50 @@ const OneDay = () => {
           //   });
           // }
         }
+
+        // ----
+
+        console.log(constants);
+        const quoteApi = constants.INSPIRATION_ENDPOINT;
+        const quoteResponse = await fetch(quoteApi, {});
+        if (!quoteResponse.ok) {
+          console.log('quoteResponse.status :', quoteResponse.status);
+          alert(`loading error : ${quoteResponse.status}`);
+          return;
+        } else {
+          const data = await quoteResponse.json();
+
+          console.log('vercel data.header :>> ', data.header);
+          console.log('vercel data.message :>> ', data.message);
+          setInspiration(`Inspire: ${data.message} : ${data.author}`);
+        }
       } catch (err) {
         console.log(err);
         alert(`loading error : ${err}`);
       }
     })();
+  }
+
+  async function getPrompt(e) {
+    try {
+      console.log(constants);
+      const api_endpoint = constants.QUESTION_ENDPIONT;
+      const response = await fetch(api_endpoint, {});
+      if (!response.ok) {
+        console.log('response.status :', response.status);
+        alert(`loading error : ${response.status}`);
+        return;
+      } else {
+        const data = await response.json();
+
+        console.log('vercel data.header :>> ', data.header);
+        console.log('vercel data.message :>> ', data.message);
+        setInspiration(`Question: ${data.prompt} : ${data.category}`);
+      }
+    } catch (err) {
+      console.log(err);
+      alert(`loading error : ${err}`);
+    }
   }
 
   /**
@@ -203,24 +243,6 @@ const OneDay = () => {
     }
   }
 
-  async function logoutWithRedirect() {
-    const response = await fetch(
-      `${constants.REST_ENDPOINT}/security?logout=true&debug=off`
-    );
-    console.log('response :', response);
-    if (!response.ok) {
-      console.log('response.status :', response.status);
-      alert(`logout error : ${response.status}`);
-      return;
-    } else {
-      // const data = await response.json();
-      alert('Logged Out');
-      logout({
-        returnTo: window.location.origin,
-      });
-    }
-  }
-
   const doLogout = () => {
     window.localStorage.removeItem('appToken');
     history.push(`/`);
@@ -272,41 +294,12 @@ const OneDay = () => {
           <i className="fa fa-sign-out" />
           <span className="nav-text">Log Out</span>
         </button>
-        {/* {isAuthenticated ? (
-          <button
-            onClick={e => doLogout(e)}
-            className="btn-margin plainLink"
-          >
-            <i className="fa fa-sign-out" />
-            <span className="nav-text">Log Out</span>
-          </button>
-        ) : (
-          <button
-            id="qsLoginBtn"
-            className="btn-margin plainLink"
-            onClick={() => loginWithRedirect({})}
-          >
-            <i className="fa fa-sign-in" style={login} />{' '}
-            <span className="nav-text" style={login}>
-              Log In
-            </span>
-          </button>
-        )}
-        {isAuthenticated && !state.auth ? (
-          <button onClick={e => sendBackendAuth(e)} className="plainLink">
-            <i className="fa fa-shield" />{' '}
-            <span className="nav-text">Auth</span>
-          </button>
-        ) : (
-          ''
-        )} */}
       </nav>
       <Snackbar
         id="example-snackbar"
         toasts={state.toasts}
         autohide={state.autohide}
       />
-
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
 
@@ -385,7 +378,21 @@ const OneDay = () => {
           </ul>
         </section>
       </Fragment>
-
+      {inspiration && (
+        <section>
+          <div>{inspiration}</div>
+          {/* {inspiration !== '' && (
+            <button onClick={e => appendToForm(e)} className="plainLink">
+              Append to Entry
+            </button>
+          )} */}
+          {constants.QUESTION_ENDPIONT !== '' && (
+            <button onClick={e => getPrompt(e)} className="plainLink">
+              Get Prompt
+            </button>
+          )}
+        </section>
+      )}
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="col-md-5 text-left">
           <RouterNavLink to={'/upload'} className="btn navbar-btn">

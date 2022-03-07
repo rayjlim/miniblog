@@ -1,5 +1,7 @@
 # Miniblog
 
+[![PHP Composer](https://github.com/rayjlim/miniblog/actions/workflows/php.yml/badge.svg)](https://github.com/rayjlim/miniblog/actions/workflows/php.yml)
+
 A headless CMS backend with a React App front end.
 Meant to be a personal journal
 
