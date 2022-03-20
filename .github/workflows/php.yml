@@ -29,12 +29,12 @@ jobs:
       
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest --ignore-platform-reqs
+      run: composer install --prefer-dist --no-progress --ignore-platform-reqs
       working-directory: ./backend
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
-    - name: Run test suite
-      run: composer run-script test
-      working-directory: ./backend
+    # - name: Run test suite
+    #   run: composer run-script test
+    #   working-directory: ./backend
