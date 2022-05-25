@@ -441,7 +441,12 @@ const OneDay = () => {
       </section>
       <section>
         <ul>
-          {movies.length > 0 && movies.map(movie => <li><MovieWindow movie={movie} /></li>)}
+          {movies.length > 0 &&
+            movies.map(movie => (
+              <li key={movie.id}>
+                <MovieWindow movie={movie} />
+              </li>
+            ))}
         </ul>
       </section>
       {inspiration && (

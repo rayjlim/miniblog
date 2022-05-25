@@ -17,12 +17,13 @@ class UploadHandler extends AbstractController
         parent::__construct($app);
     }
 
-    public function redirector($url)
-    {
-        header("Location: $url");
-        echo "<head><meta http-equiv=\"refresh\" content=\"0; url=$url\"></head>";
-        echo "<a href=\"$url\">media page</a>";
-    }
+    // Unused
+    // public function redirector($url)
+    // {
+    //     header("Location: $url");
+    //     echo "<head><meta http-equiv=\"refresh\" content=\"0; url=$url\"></head>";
+    //     echo "<a href=\"$url\">media page</a>";
+    // }
 
     public function upload()
     {
@@ -69,6 +70,7 @@ class UploadHandler extends AbstractController
                 if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFileFullPath)) {
                     throw new Exception("Sorry, there was an error moving upload file");
                 }
+                chmod($targetFileFullPath, 0755);
 
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
