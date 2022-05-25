@@ -22,7 +22,6 @@ const EditForm = props => {
   useEffect(() => {
     console.log('EditForm: useEffect');
 
-
     document.addEventListener('keydown', e => {
       console.log('EditForm: handle key presss ' + e.key);
       // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
