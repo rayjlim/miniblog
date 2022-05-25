@@ -8,12 +8,26 @@ const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
 const AddForm = props => {
   const [content, setContent] = useState(props.content);
-  const [date, setDate] = useState(parse(props.date, FULL_DATE_FORMAT, new Date()));
+  const [date, setDate] = useState(
+    parse(props.date, FULL_DATE_FORMAT, new Date())
+  );
   let textareaInput = null;
 
   useEffect(() => {
     console.log('AddForm: useEffect');
     setContent(props.content || '');
+
+    document.addEventListener('keydown', e => {
+      console.log('AddForm: handle key presss ' + e.key);
+      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+      if (e.altKey && e.key === 's') {
+        console.log('S keybinding');
+        // Note: this is a hack because the content value is taken from the init value
+        document.getElementById('saveBtn').click();
+      } else if (e.key === 'Escape') {
+        document.getElementById('cancelBtn').click();
+      }
+    });
   }, [props]);
 
   function textChange(text) {
@@ -37,7 +51,7 @@ const AddForm = props => {
       console.log('this :', this);
       const entry = {
         content: content.trim(),
-        date: format(date, FULL_DATE_FORMAT)
+        date: format(date, FULL_DATE_FORMAT),
       };
       try {
         const token = window.localStorage.getItem('appToken');
@@ -58,7 +72,7 @@ const AddForm = props => {
         setContent('');
         const data = await response.json();
         console.log('new id :>> ', data.id);
-        props.onSuccess(e);
+        props.onSuccess();
       } catch (error) {
         console.log(error);
         alert(error);
@@ -102,10 +116,14 @@ const AddForm = props => {
         <DatePicker onChange={dateChange} value={date} />
       </div>
 
-      <button onClick={handleAdd} className="btn btn-primary">
+      <button onClick={handleAdd} className="btn btn-primary" id="saveBtn">
         <i className="fa fa-save" /> Submit
       </button>
-      <button onClick={clear} className="btn btn-warning pull-right">
+      <button
+        onClick={clear}
+        className="btn btn-warning pull-right"
+        id="cancelBtn"
+      >
         <i className="fa fa-ban" /> Cancel
       </button>
       <div className="markdownDisplay">

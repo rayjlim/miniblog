@@ -4,24 +4,36 @@ import MarkdownDisplay from './MarkdownDisplay';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 const EditForm = props => {
-  let escapedContent = props.entry.content.replace(
-    /<br\s*\/>/g,
-    `
-`
-  );
   const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
   const [date, setDate] = useState(
     parse(props.entry.date, FULL_DATE_FORMAT, new Date())
+  );
+  let escapedContent = props.entry.content.replace(
+    /<br\s*\/>/g,
+    `
+`
   );
   const [content, setContent] = useState(escapedContent);
   const [weight, setWeight] = useState(null);
 
   let textareaInput = null;
 
-  // useEffect(() => {
+  useEffect(() => {
+    console.log('EditForm: useEffect');
 
-  // }, []);
+    document.addEventListener('keydown', e => {
+      console.log('EditForm: handle key presss ' + e.key);
+      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+      if (e.altKey && e.key === 's') {
+        console.log('S keybinding');
+        // Note: this is a hack because the content value is taken from the init value
+        document.getElementById('saveBtn').click();
+      } else if (e.key === 'Escape') {
+        document.getElementById('cancelBtn').click();
+      }
+    });
+  }, [props]);
 
   function textChange(text) {
     const pattern = /@@([\w-]*)@@/g;
@@ -130,7 +142,7 @@ const EditForm = props => {
           className="form-control"
           placeholder="Add ..."
           rows="8"
-          defaultValue={escapedContent}
+          defaultValue={content}
         />
         {weight && <span>Weight : {weight}</span>}
       </div>
@@ -139,10 +151,14 @@ const EditForm = props => {
       </div>
 
       <div className="editBtns">
-        <button onClick={handleSave} className="btn btn-primary">
+        <button onClick={handleSave} className="btn btn-primary" id="saveBtn">
           <i className="fa fa-save" /> Save
         </button>
-        <button onClick={handleClear} className="btn btn-warning pull-right">
+        <button
+          onClick={handleClear}
+          className="btn btn-warning pull-right"
+          id="cancelBtn"
+        >
           <i className="fa fa-ban" /> Cancel
         </button>
         <button onClick={handleDelete} className="btn btn-danger pull-right">
