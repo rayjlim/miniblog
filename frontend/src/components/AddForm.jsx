@@ -24,6 +24,8 @@ const AddForm = props => {
         console.log('S keybinding');
         // Note: this is a hack because the content value is taken from the init value
         document.getElementById('saveBtn').click();
+      } else if (e.key === 'Escape') {
+        document.getElementById('cancelBtn').click();
       }
     });
   }, [props]);
@@ -117,7 +119,11 @@ const AddForm = props => {
       <button onClick={handleAdd} className="btn btn-primary" id="saveBtn">
         <i className="fa fa-save" /> Submit
       </button>
-      <button onClick={clear} className="btn btn-warning pull-right">
+      <button
+        onClick={clear}
+        className="btn btn-warning pull-right"
+        id="cancelBtn"
+      >
         <i className="fa fa-ban" /> Cancel
       </button>
       <div className="markdownDisplay">

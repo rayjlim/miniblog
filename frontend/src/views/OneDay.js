@@ -290,7 +290,11 @@ const OneDay = () => {
     // console.log('formmode :', mode);
     if (!mode || mode === CLOSED) {
       return (
-        <button onClick={e => showAddForm(e)} className="btn btn-default">
+        <button
+          onClick={e => showAddForm(e)}
+          className="btn btn-default"
+          id="addFormBtn"
+        >
           Show Add Form
         </button>
       );
@@ -332,6 +336,23 @@ const OneDay = () => {
 
     console.log('setting pageDate :>> ', _date);
     loadDay({ pageDate, pageMode });
+    document.addEventListener('keydown', e => {
+      console.log('OneDay: handle key presss ' + e.key);
+      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+      if (e.altKey && e.key === 'a') {
+        console.log('S keybinding');
+        // Note: this is a hack because the content value is taken from the init value
+        document.getElementById('addFormBtn').click();
+      } else if (e.altKey && e.key === 'ArrowLeft') {
+        console.log('ArrowLeft keybinding');
+        // Note: this is a hack because the content value is taken from the init value
+        document.getElementById('prevBtn').click();
+      } else if (e.altKey && e.key === 'ArrowRight') {
+        console.log('arrowRight keybinding');
+        // Note: this is a hack because the content value is taken from the init value
+        document.getElementById('nextBtn').click();
+      }
+    });
   }, []);
 
   return (
@@ -370,6 +391,7 @@ const OneDay = () => {
           onClick={e => handleButtonDirection(e)}
           className="btn btn-info btn-lrg"
           value="-1"
+          id="prevBtn"
         >
           <i className="fa fa-chevron-left" /> Prev
         </button>
@@ -388,6 +410,7 @@ const OneDay = () => {
           onClick={e => handleButtonDirection(e)}
           className="btn btn-success btn-lrg"
           value="1"
+          id="nextBtn"
         >
           Next <i className="fa fa-chevron-right" />
         </button>

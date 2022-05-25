@@ -29,6 +29,8 @@ const EditForm = props => {
         console.log('S keybinding');
         // Note: this is a hack because the content value is taken from the init value
         document.getElementById('saveBtn').click();
+      } else if (e.key === 'Escape') {
+        document.getElementById('cancelBtn').click();
       }
     });
   }, [props]);
@@ -152,7 +154,11 @@ const EditForm = props => {
         <button onClick={handleSave} className="btn btn-primary" id="saveBtn">
           <i className="fa fa-save" /> Save
         </button>
-        <button onClick={handleClear} className="btn btn-warning pull-right">
+        <button
+          onClick={handleClear}
+          className="btn btn-warning pull-right"
+          id="cancelBtn"
+        >
           <i className="fa fa-ban" /> Cancel
         </button>
         <button onClick={handleDelete} className="btn btn-danger pull-right">
