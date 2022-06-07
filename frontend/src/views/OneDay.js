@@ -343,12 +343,12 @@ const OneDay = () => {
         console.log('S keybinding');
         // Note: this is a hack because the content value is taken from the init value
         document.getElementById('addFormBtn').click();
-      } else if (e.altKey && e.key === 'ArrowLeft') {
-        console.log('ArrowLeft keybinding');
+      } else if (e.altKey && e.key === ',') {
+        console.log('alt comma keybinding');
         // Note: this is a hack because the content value is taken from the init value
         document.getElementById('prevBtn').click();
-      } else if (e.altKey && e.key === 'ArrowRight') {
-        console.log('arrowRight keybinding');
+      } else if (e.altKey && e.key === '.') {
+        console.log('alt period keybinding');
         // Note: this is a hack because the content value is taken from the init value
         document.getElementById('nextBtn').click();
       }
