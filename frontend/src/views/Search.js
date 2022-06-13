@@ -164,9 +164,9 @@ const TextEntry = () => {
 
   function showEntries() {
     return formMode !== SHOW_EDIT_FORM ? (
-      <Fragment>
+      <>
         <ul className="entriesList">
-          {posts.map(entry => {
+          {posts.length && posts.map(entry => {
             let content =
               searchText.length && entry.highlighted
                 ? entry.highlighted
@@ -196,8 +196,10 @@ const TextEntry = () => {
               </li>
             );
           })}
+          {!posts.length && <li><h2>No Entries Found</h2></li>}
+
         </ul>
-      </Fragment>
+      </>
     ) : (
       ''
     );
