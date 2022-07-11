@@ -56,8 +56,6 @@ function LoginPassword() {
     window.localStorage.setItem('appToken', null);
   };
 
-  //TODO in useEffect; if has localstorage token redirect to /oneday
-
   return (
     <div className="App">
       <span>User</span>

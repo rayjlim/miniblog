@@ -55,6 +55,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 
     /**
+     * Get records that have specific label
      * @LPT_V2
      */
     public function queryGraphData($userId, $graphParams)
@@ -67,7 +68,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             $sqlParam.= ' and date <= \'' . $graphParams->endDate . '\'';
         }
 
-        //TODO: CREATE QUERY DEPENDANT IF LIMIT BASED ON COUNT OR DATE RANGE
         $tagParam = "'%" . $graphParams->label . "%'";
         $posts = R::findAll(POSTS, ' user_id = ? and content like ' . $tagParam . ' ' . $sqlParam . ' order by date desc limit  ' . $graphParams->resultLimit, [$userId]);
 
@@ -122,7 +122,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         }
 
         if (count($listParams->tags) != 0) {
-            //todo: change to support array
             $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
         }
 

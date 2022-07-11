@@ -43,7 +43,6 @@ $app->put('/api/posts/:id', $cudHandler->updateEntry());
 $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
 // handled in AuthMiddleware
 
-
 $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
 

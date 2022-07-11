@@ -15,8 +15,6 @@ const EditForm = props => {
 `
   );
   const [content, setContent] = useState(escapedContent);
-  const [weight, setWeight] = useState(null);
-
   let textareaInput = null;
 
   useEffect(() => {
@@ -47,7 +45,7 @@ const EditForm = props => {
   async function handleSave() {
     const entry = {
       content,
-      date: format(date, FULL_DATE_FORMAT), // TODO: check date format
+      date: format(date, FULL_DATE_FORMAT),
     };
     console.log('handleSave entry :', entry);
     try {
@@ -144,7 +142,6 @@ const EditForm = props => {
           rows="8"
           defaultValue={content}
         />
-        {weight && <span>Weight : {weight}</span>}
       </div>
       <div className="form-group">
         <DatePicker onChange={dateChange} value={date} />

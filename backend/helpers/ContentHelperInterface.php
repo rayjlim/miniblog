@@ -7,6 +7,4 @@ interface ContentHelperInterface
 
     public function processEntry(SmsEntrie $smsEntry);
 
-    public function checkDateShortForms(SmsEntrie $smsEntry);
-
 }

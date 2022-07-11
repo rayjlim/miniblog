@@ -1,5 +1,6 @@
 <?php
 defined('ABSPATH') or exit('No direct script access allowed');
+
 use \Lpt\DevHelp;
 
 /**
@@ -19,19 +20,19 @@ class CUDHandler extends AbstractController
         parent::__construct($app);
     }
     /**
- * @OA\Post(
- *     description="Create New Entry",
- *     path="/api/posts/{id}",
- *     @OA\Response(
- *       response="200",
- *       description="Success",
-*         @OA\MediaType(
-*           mediaType="application/json",
-*           @OA\Schema(ref="#/components/schemas/SearchResults"),
-*         )
- *     )
- * )
- */
+     * @OA\Post(
+     *     description="Create New Entry",
+     *     path="/api/posts/{id}",
+     *     @OA\Response(
+     *       response="200",
+     *       description="Success",
+     *         @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
+     *     )
+     * )
+     */
     public function addEntry()
     {
         return function () {
@@ -39,7 +40,7 @@ class CUDHandler extends AbstractController
             $request = $this->app->request();
             $entry = json_decode($request->getBody());
             if (!$entry) {
-                    throw new Exception('Invalid json' . $request->getBody());
+                throw new Exception('Invalid json' . $request->getBody());
             }
             $currentDateTime = $this->resource->getDateTime();
             $smsEntry = new SmsEntrie();
@@ -79,7 +80,7 @@ class CUDHandler extends AbstractController
      )
       )
   )
- */
+     */
     public function updateEntry()
     {
         return function ($id) {
@@ -90,9 +91,9 @@ class CUDHandler extends AbstractController
             if (!$entry) {
                 throw new Exception('Invalid json' . $request->getBody());
             }
-            // TODO: VERIFY entry->userID === $session->userId
+
             $smsEntry = $this->dao->load($id);
-            // TODO: check if no entry throw exception; see bug 005
+
             $temp = $smsEntry['user_id'];
             if ($this->app->userId != $temp) {
                 throw new Exception('Invalid User');
@@ -111,10 +112,10 @@ class CUDHandler extends AbstractController
      *     @OA\Response(
      *       response="200",
      *       description="Success",
-    *         @OA\MediaType(
-    *           mediaType="application/json",
-    *           @OA\Schema(ref="#/components/schemas/SearchResults"),
-    *         )
+     *         @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
      *     )
      * )
      */

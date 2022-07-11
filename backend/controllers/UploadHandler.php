@@ -17,14 +17,6 @@ class UploadHandler extends AbstractController
         parent::__construct($app);
     }
 
-    // Unused
-    // public function redirector($url)
-    // {
-    //     header("Location: $url");
-    //     echo "<head><meta http-equiv=\"refresh\" content=\"0; url=$url\"></head>";
-    //     echo "<a href=\"$url\">media page</a>";
-    // }
-
     public function upload()
     {
         return function () {
@@ -41,7 +33,6 @@ class UploadHandler extends AbstractController
             $createdDir = false;
 
             try {
-                // TODO: Check if image file is a actual image or fake image
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                 if ($check == false) {
                     throw new Exception("File is not an image");
@@ -245,15 +236,10 @@ class UploadHandler extends AbstractController
                 $currentDir = end($filelist);
             }
 
-            // TODO VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
             $dirContent = '';
 
             \Lpt\DevHelp::debugMsg('$currentDir: ' . $currentDir);
             $dirContent = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir));
-
-            // usort($dirContent, function($a, $b){
-            //     return filemtime($a) > filemtime($b);
-            // });
 
             $data['uploadDirs'] = $filelist;
             $data['currentDir'] = $currentDir;
@@ -273,9 +259,7 @@ class UploadHandler extends AbstractController
             DevHelp::debugMsg('$filePath' . $filePath);
 
             $this->resource->removefile($_ENV['UPLOAD_DIR'] . $filePath . DIR_SEP . $fileName);
-
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
-
             echo json_encode($data);
         };
     }

@@ -7,7 +7,7 @@ use \Lpt\DevHelp;
 class AuthMiddleware extends \Slim\Middleware
 {
     /**
-     * Check if the user is logged
+     * Check if the user is logged in
      * @return boolean
      */
     private function isLogged()
@@ -15,17 +15,19 @@ class AuthMiddleware extends \Slim\Middleware
         $headers = getallheaders();
         // print_r($headers);
 
-        // echo 'isset app token? '.($headers['X-App-Token'] ? 'true'.$headers['X-App-Token']:'false');
+
         $token = $_ENV['AUTH_TOKEN'];
+        DevHelp::debugMsg('isset app token? ' . isset($headers[$token]));
         $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
 
         $decryptedString = decrypt($headerStringValue);
+        DevHelp::debugMsg('decryptedString:' . $decryptedString);
 
-        // echo 'decryptedString:' . $decryptedString;
-        $this->app->userId = $decryptedString;  //TODO: this should be written to session
-        // echo 'header: ' . $headerStringValue . ", decryptedString: " . $decryptedString;
+        $this->app->userId = $decryptedString;
+        DevHelp::debugMsg('header: ' . $headerStringValue . ", decryptedString: " . $decryptedString);
         return is_numeric(($decryptedString) ? $decryptedString : null);
     }
+
     /**
      * Do the login
      * @param  string $ip       IP address
@@ -37,7 +39,6 @@ class AuthMiddleware extends \Slim\Middleware
     {
         // Check the access to this function, using logs and ip
 
-        // TODO:Check credentials against Db
         if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
@@ -61,7 +62,7 @@ class AuthMiddleware extends \Slim\Middleware
         //     header("location: " . BASE_URL);
         //     exit;
         // }
-        if($app->request->isOptions()){
+        if ($app->request->isOptions()) {
             header('HTTP/1.0 200 Ok');
             echo "Options METHOD check";
             exit(0);
@@ -152,8 +153,6 @@ function decrypt($encryption)
     // Display the decrypted string
     return $decryption;
 }
-
-
 
 // DevHelp::debugMsg('$userId' . $app->userId);
 // $app->view()->appendData(["user_fullname" => $app->smsUser->fullname]);

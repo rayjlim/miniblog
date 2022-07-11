@@ -72,47 +72,34 @@ const TextEntry = () => {
         const responseData = await response.json();
 
         console.log('result.responseData :>> ', responseData);
-        if (responseData.unauth) {
-          // TODO: should remove as it is unnecessary
-          alert('no auth');
-        } else {
-          console.log('setSearchParams')
-          setSearchParams(responseData.params);
-          console.log('setStartDate: '+ (responseData.params.startDate.length))
-          setStartDate(
-            responseData.params.startDate.length
-              ? parse(
-                  responseData.params.startDate,
-                  FULL_DATE_FORMAT,
-                  new Date()
-                )
-              : null
-          );
-          console.log('setEndDate' + responseData.params.endDate.length)
-          setEndDate(
-            responseData.params.endDate.length
-              ? parse(
-                  responseData.params.endDate,
-                  FULL_DATE_FORMAT,
-                  new Date()
-                )
-              : null
-          );
 
-          if (searchText.length) {
-            const reg = new RegExp(searchText, 'gi');
+        setSearchParams(responseData.params);
+        console.log('setStartDate: ' + responseData.params.startDate.length);
+        setStartDate(
+          responseData.params.startDate.length
+            ? parse(responseData.params.startDate, FULL_DATE_FORMAT, new Date())
+            : null
+        );
+        console.log('setEndDate' + responseData.params.endDate.length);
+        setEndDate(
+          responseData.params.endDate.length
+            ? parse(responseData.params.endDate, FULL_DATE_FORMAT, new Date())
+            : null
+        );
 
-            const foundHighlights = responseData.entries.map(entry => {
-              const highlighted = entry.content.replace(reg, str => {
-                return `<b>${str}</b>`;
-              });
-              return { ...entry, highlighted };
+        if (searchText.length) {
+          const reg = new RegExp(searchText, 'gi');
+
+          const foundHighlights = responseData.entries.map(entry => {
+            const highlighted = entry.content.replace(reg, str => {
+              return `<b>${str}</b>`;
             });
+            return { ...entry, highlighted };
+          });
 
-            setPosts(foundHighlights);
-          } else {
-            setPosts(responseData.entries);
-          }
+          setPosts(foundHighlights);
+        } else {
+          setPosts(responseData.entries);
         }
       }
     } catch (err) {
@@ -166,38 +153,42 @@ const TextEntry = () => {
     return formMode !== SHOW_EDIT_FORM ? (
       <>
         <ul className="entriesList">
-          {posts.length && posts.map(entry => {
-            let content =
-              searchText.length && entry.highlighted
-                ? entry.highlighted
-                : entry.content;
-            let newText = content.replace(/<br \/>/g, '\n');
-            newText = newText.replace(
-              /..\/uploads/g,
-              `${constants.UPLOAD_ROOT}`
-            );
-            const dateFormated = format(
-              parse(entry.date, FULL_DATE_FORMAT, new Date()),
-              'EEE, yyyy-MM-dd'
-            );
+          {posts.length &&
+            posts.map(entry => {
+              let content =
+                searchText.length && entry.highlighted
+                  ? entry.highlighted
+                  : entry.content;
+              let newText = content.replace(/<br \/>/g, '\n');
+              newText = newText.replace(
+                /..\/uploads/g,
+                `${constants.UPLOAD_ROOT}`
+              );
+              const dateFormated = format(
+                parse(entry.date, FULL_DATE_FORMAT, new Date()),
+                'EEE, yyyy-MM-dd'
+              );
 
-            let showEntryDate = (
-              <button
-                onClick={e => showEditForm(e, entry)}
-                className="plainLink"
-              >
-                {dateFormated}
-              </button>
-            );
-            return (
-              <li key={entry.id} className="blogEntry">
-                {showEntryDate}|
-                <MarkdownDisplay source={newText} escapeHtml={false} />
-              </li>
-            );
-          })}
-          {!posts.length && <li><h2>No Entries Found</h2></li>}
-
+              let showEntryDate = (
+                <button
+                  onClick={e => showEditForm(e, entry)}
+                  className="plainLink"
+                >
+                  {dateFormated}
+                </button>
+              );
+              return (
+                <li key={entry.id} className="blogEntry">
+                  {showEntryDate}|
+                  <MarkdownDisplay source={newText} escapeHtml={false} />
+                </li>
+              );
+            })}
+          {!posts.length && (
+            <li>
+              <h2>No Entries Found</h2>
+            </li>
+          )}
         </ul>
       </>
     ) : (

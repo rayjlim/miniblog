@@ -6,7 +6,7 @@ import { format, parse, add } from 'date-fns';
 import AddForm from '../components/AddForm.jsx'; //eslint-disable no-unused-vars
 import EditForm from '../components/EditForm.jsx'; //eslint-disable no-unused-vars
 import MovieWindow from '../components/MovieWindow.jsx'; //eslint-disable no-unused-vars
-import { useAuth0 } from '../utils/react-auth0-spa';
+
 import { Snackbar } from 'react-md';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import history from '../utils/history';
@@ -28,7 +28,6 @@ const FULL_DATE_FORMAT = 'yyyy-MM-dd';
  * <Route path="/oneday" component={OneDay} />
  */
 const OneDay = () => {
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const [state, setState] = useState({
     entries: [],
@@ -504,9 +503,6 @@ const OneDay = () => {
           <span className="footer-version">v{pkg.version}</span>
         </div>
 
-        <div className="col-md-5 text-right">
-          <span>{user && `${user.email}`}</span>
-        </div>
       </nav>
     </Fragment>
   );
