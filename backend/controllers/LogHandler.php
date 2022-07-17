@@ -54,17 +54,17 @@ class LogHandler
         return array_values($filelist);
     }
 
-    public function readFileAndRender($logfileName, $filelist)
+    public function readFileAndRender($logFileName, $filelist)
     {
-        $logfile = '';
-        if ($logfileName != '' && in_array($logfileName, $filelist)) {
-            \Lpt\DevHelp::debugMsg('$logfileName: ' . $logfileName);
-            $logfile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logfileName);
+        $logFile = '';
+        if ($logFileName != '' && in_array($logFileName, $filelist)) {
+            \Lpt\DevHelp::debugMsg('$logFileName: ' . $logFileName);
+            $logFile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logFileName);
         }
         echo json_encode(array(
             'logs'  => array_values($filelist),
-            'logfileName' => $logfileName,
-            'logfile' => $logfile
+            'logFileName' => $logFileName,
+            'logFile' => $logFile
         ));
     }
 }
