@@ -50,6 +50,7 @@ class CUDHandler extends AbstractController
             $smsEntry = $this->contentHelper->processEntry($smsEntry);
 
             $smsEntry->id = $this->dao->insert($smsEntry);
+            \Lpt\Logger::log("New Entry: \t" . $smsEntry->id . "\t" . $smsEntry->date);
             $this->resource->echoOut(json_encode($smsEntry));
         };
     }
@@ -129,6 +130,7 @@ class CUDHandler extends AbstractController
                 throw new Exception('Invalid User');
             }
             $rows_affected = $this->dao->delete($smsEntry['id']);
+            \Lpt\Logger::log("Delete: \t" . $smsEntry['id'] . "\t" . $smsEntry['date']);
             $this->resource->echoOut('{"rows_affected": ' . $rows_affected . '}');
         };
     }

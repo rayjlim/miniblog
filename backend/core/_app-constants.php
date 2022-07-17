@@ -13,8 +13,8 @@ $DIR_SEP = (strpos($getcwd, "\\") != 0) ? "\\" : "/";
 define("DIR_SEP", $DIR_SEP);
 define("ABSPATH", $getcwd . $DIR_SEP);
 
-define ("LOGS_DIR", dirname( ABSPATH ) . DIR_SEP .'_logs');
-define ("LOG_PREFIX", 'smsblog');
+define ("LOGS_DIR",  ABSPATH . DIR_SEP .'_logs');
+define ("LOG_PREFIX", 'miniblog');
 
 define("MINUTES_PER_HOUR", 60);
 define("HOURS_PER_DAY", 24);
