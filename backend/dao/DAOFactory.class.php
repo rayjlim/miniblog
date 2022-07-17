@@ -1,14 +1,14 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class DAOFactory
 {
-
     // DAO
     public static function getSmsEntriesDAO()
     {
         return new SmsEntriesRedbeanDAO();
     }
+
     public static function getSmsUsersDAO()
     {
         return new SmsUsersRedbeanDAO();
@@ -35,10 +35,12 @@ class DAOFactory
             DAOFactory::ContentHelper()
         );
     }
+
     public static function EntryHandler($app)
     {
         return new EntryHandler($app, DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
+
     public static function GraphHandler($app)
     {
         return new GraphHandler(
@@ -47,14 +49,14 @@ class DAOFactory
             DAOFactory::getResourceDAO()
         );
     }
-    public static function LogHandler($app)
+
+    public static function LogHandler()
     {
-        return new LogHandler($app, DAOFactory::getResourceDAO());
+        return new LogHandler(DAOFactory::getResourceDAO());
     }
 
     public static function UploadHandler($app)
     {
         return new UploadHandler($app, DAOFactory::getResourceDAO());
     }
-
 }

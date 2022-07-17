@@ -49,7 +49,6 @@ class EntryHandler extends AbstractController
             $metaData->entries = $entries;
             $metaData->params = $listObj;
 
-
             $this->resource->echoOut(json_encode($metaData));
         };
     }
@@ -87,7 +86,6 @@ class EntryHandler extends AbstractController
             $this->resource->echoOut('{"user": '. $userId .', "entries": ' . json_encode($entries) . '}');
         };
     }
-
 
     public function itemDetailsApi()
     {

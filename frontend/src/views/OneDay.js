@@ -498,7 +498,11 @@ const OneDay = () => {
           </RouterNavLink>
           <RouterNavLink to="/media">
             <i className="fa fa-portrait" />{' '}
-            <span className="nav-text">Media</span>
+            <span className="nav-text">Media</span>{' '}
+          </RouterNavLink>
+          <RouterNavLink to="/logs">
+            <i className="fa fa-clipboard-list" />{' '}
+            <span className="nav-text">Logs</span>{' '}
           </RouterNavLink>
           <span className="footer-version">v{pkg.version}</span>
         </div>
