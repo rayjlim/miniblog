@@ -7,23 +7,12 @@ require 'common_header.php';
 $app = new Slim\Slim();
 $app->add(new AuthMiddleware());
 
-require './core/page_message.php';
-
-// Create monolog logger and store logger in container as singleton
-// (Singleton resources retrieve the same log resource definition each time)
-// $app->container->singleton('log', function () {
-//     $log = new \Monolog\Logger('slim-skeleton');
-//     $log->pushHandler(new \Monolog\Handler\StreamHandler('_logs/app.log', LOGGER_LEVEL));
-//     return $log;
-// });
-
 $app->get('/security', function ()  use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
 $app->post('/security', function () use ($app) {
     echo "{	\"user_id\":\"" . $app->userId . "\"}";
 });
-
 
 $app->post('/', function () use ($app) {
     $app->redirect('posts/');
