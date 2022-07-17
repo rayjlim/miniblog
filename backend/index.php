@@ -35,15 +35,6 @@ $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
 $graphHandler = DAOFactory::GraphHandler($app);
 $app->get('/cron', $graphHandler->logCronCall("cron called and email"));
 
-$logHandler = DAOFactory::LogHandler($app);
-$app->get('/logs/:logfileName', $logHandler->getUrlHandlerWithParam());
-$app->get('/logs/', $logHandler->getUrlHandler($app));
-$app->delete('/logs/:logfileName', $logHandler->delete($app));
-
-$app->get('/ping', function () {
-    echo "{	\"ping\":\"true\"}";
-});
-
 $uploadHandler = DAOFactory::UploadHandler($app);
 $app->post('/uploadImage/', $uploadHandler->upload());
 $app->get('/uploadRotate/', $uploadHandler->rotate());
@@ -53,5 +44,14 @@ $app->post('/uploadRename/', $uploadHandler->rename());
 $app->get('/media/', $uploadHandler->listMedia());
 $app->get('/media/:currentDir', $uploadHandler->listMedia());
 $app->delete('/media/', $uploadHandler->deleteMedia());
+
+$logHandler = DAOFactory::LogHandler();
+$app->get('/logs/:logfileName', $logHandler->getUrlHandler());
+$app->get('/logs/', $logHandler->getUrlHandler(''));
+$app->delete('/logs/:logfileName', $logHandler->delete());
+
+$app->get('/ping', function () {
+    echo "{	\"ping\":\"true\"}";
+});
 
 $app->run();

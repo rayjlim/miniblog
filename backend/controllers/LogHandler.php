@@ -3,7 +3,7 @@ defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 
-class LogHandler extends AbstractController
+class LogHandler
 {
     var $resource = null;
     /**
@@ -11,59 +11,41 @@ class LogHandler extends AbstractController
      *
      * Initialize dependancies
      *
-     * @param object $_iDao Connection to database
      * @param object $_iResource Connection to database
      *
      * @return array of page params
      */
-    function __construct($app, $resource)
+    function __construct($resource)
     {
         $this->resource = $resource;
-        parent::__construct($app);
     }
+
     public function getUrlHandler()
     {
-        return function () {
+        return function ($logFileName = '') {
             \Lpt\DevHelp::debugMsg('start logs list');
-
-            $logfileName = '';
             $filelist = $this->readFilelist(LOGS_DIR);
-            if (count($filelist) > 0) {
+            if ($logFileName == '') {
                 \Lpt\DevHelp::debugMsg('reading first file');
-                $logfileName = $filelist[count($filelist) - 1];
+                $logFileName = end($filelist);
             }
-            $this->readFileAndRender($logfileName, $filelist);
-        };
-    }
 
-    public function getUrlHandlerWithParam()
-    {
-        return function ($logfileName) {
-            \Lpt\DevHelp::debugMsg('start logs list with param');
-            $filelist = $this->readFilelist(LOGS_DIR);
-            $this->readFileAndRender($logfileName, $filelist);
-        };
+            $this->readFileAndRender($logFileName, $filelist);        };
     }
 
     public function delete()
     {
-        return function ($logfileName) {
-
-            $this->resource->removefile(LOGS_DIR . DIR_SEP . $logfileName);
-
-            $data['pageMessage'] = 'File Removed: ' . $logfileName;
+        return function ($logFileName) {
+            $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
+            $data['pageMessage'] = 'File Removed: ' . $logFileName;
             DevHelp::debugMsg($data['pageMessage']);
-
             echo json_encode($data);
         };
     }
 
     public function readFilelist($targetDir)
     {
-
         $filelist = $this->resource->readdir($targetDir);
-
-        //NEED TO REMOVE NON EP CAL ENTRIES
         for ($i = count($filelist) - 1; $i >= 0; $i--) {
             if (strpos($filelist[$i], LOG_PREFIX) === FALSE) {
                 unset($filelist[$i]);
@@ -72,18 +54,17 @@ class LogHandler extends AbstractController
         return array_values($filelist);
     }
 
-    // public function readFileAndRender($logfileName, $filelist) {
-
-    //     // VALIDATE LOGNAME PASSED IS IN CORRECT FORMAT (PREFIX____.TXT)
-    //     $logfile = '';
-    //     if ($logfileName != '') {
-    //         \Lpt\DevHelp::debugMsg('$logfileName: ' . $logfileName);
-
-    //         $logfile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logfileName);
-    //     }
-    //     $this->app->view()->appendData(["filelist" => $filelist]);
-    //     $this->app->view()->appendData(["logfileName" => $logfileName]);
-    //     $this->app->view()->appendData(["logfile" => $logfile]);
-    //     $this->app->render('show_logs.twig');
-    // }
+    public function readFileAndRender($logfileName, $filelist)
+    {
+        $logfile = '';
+        if ($logfileName != '' && in_array($logfileName, $filelist)) {
+            \Lpt\DevHelp::debugMsg('$logfileName: ' . $logfileName);
+            $logfile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logfileName);
+        }
+        echo json_encode(array(
+            'logs'  => array_values($filelist),
+            'logfileName' => $logfileName,
+            'logfile' => $logfile
+        ));
+    }
 }
