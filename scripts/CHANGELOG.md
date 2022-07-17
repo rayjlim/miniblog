@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/rayjlim/miniblog/compare/v2.3.0...v2.4.0) (2022-07-17)
+
+
+### Features
+
+* ✨ connect moviedb api, get movies seen on that day ([612a192](https://github.com/rayjlim/miniblog/commit/612a192801468a8eb96d3c214a90d02655e1ea5d))
+* ✨ next and prev short cut keys ([e185bd5](https://github.com/rayjlim/miniblog/commit/e185bd5e334db4539274864a9d364a12034ff814))
+* ✨ save on shortcut key ([a0d3a96](https://github.com/rayjlim/miniblog/commit/a0d3a96674f6ec249fa8e91f7fa3b3537a0fc5cf))
+* ✨ save on shortcut key ([c0aacce](https://github.com/rayjlim/miniblog/commit/c0aaccedaaadb359847f86ff857196ca0d933043))
+* ✨ show weight in edit form ([c456e08](https://github.com/rayjlim/miniblog/commit/c456e0814942cdb808eadd182ccf0818eb2a70c4))
+* ✨ show weight in edit form ([18f58ec](https://github.com/rayjlim/miniblog/commit/18f58ec6b5da24df5a01a183bffffa9542b46ce8))
+* 🔊 log on media updates and logins ([89157f4](https://github.com/rayjlim/miniblog/commit/89157f42e4d60d2b9f7a1d5989c911a064d1abfa))
+
+
+### Bug Fixes
+
+* ♻️ change TODO comments into github tasks ([9a69ce6](https://github.com/rayjlim/miniblog/commit/9a69ce64f2afb6ba215baa75308977e7f089c64b))
+* 🐛 Add message when no posts from search ([3d34cca](https://github.com/rayjlim/miniblog/commit/3d34cca25a473e4974a421b381047827eac00eb2))
+* 🐛 logging on add/delete of entry ([6465569](https://github.com/rayjlim/miniblog/commit/6465569b44ff99aec7144e75b3b8628085fdae3a))
+
 ## [2.1.0](https://github.com/rayjlim/miniblog/compare/v2.0.1...v2.1.0) (2022-02-19)
 
 
