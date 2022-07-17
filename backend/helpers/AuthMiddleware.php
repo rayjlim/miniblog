@@ -15,7 +15,6 @@ class AuthMiddleware extends \Slim\Middleware
         $headers = getallheaders();
         // print_r($headers);
 
-
         $token = $_ENV['AUTH_TOKEN'];
         DevHelp::debugMsg('isset app token? ' . isset($headers[$token]));
         $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
@@ -38,7 +37,7 @@ class AuthMiddleware extends \Slim\Middleware
     private function doLogin($username, $password)
     {
         // Check the access to this function, using logs and ip
-
+        \Lpt\Logger::log('User Login: ' . $username);
         if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
@@ -48,20 +47,13 @@ class AuthMiddleware extends \Slim\Middleware
         echo json_encode($response);
         exit;
     }
+
     public function call()
     {
-        // $app = $this->app;
         DevHelp::debugMsg(__FILE__);
         $app = $this->app;
         $req = $app->request;
 
-
-        // if ($_GET['action'] === 'logout') {
-        //     $this->doLogout();
-
-        //     header("location: " . BASE_URL);
-        //     exit;
-        // }
         if ($app->request->isOptions()) {
             header('HTTP/1.0 200 Ok');
             echo "Options METHOD check";
@@ -87,9 +79,11 @@ class AuthMiddleware extends \Slim\Middleware
         if (isset($loginParams->login)) {
             if (!$username || !$password) {
                 $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
+                \Lpt\Logger::log('User Login fail: ' . $error);
             } else {
-                DevHelp::debugMsg('doLogin:' . $username . ":" . $password);
+                \Lpt\Logger::log('doLogin:' . $username);
                 if (!$this->doLogin($username, $password)) {
+                    \Lpt\Logger::log('User Login fail: Wrong password: ' . $username . ":" . $password);
                     $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
                 }
                 // else {
@@ -108,7 +102,6 @@ class AuthMiddleware extends \Slim\Middleware
 
 function encrypt($simple_string)
 {
-
     // Display the original string
     // echo "Original String: " . $simple_string;
 
@@ -153,9 +146,3 @@ function decrypt($encryption)
     // Display the decrypted string
     return $decryption;
 }
-
-// DevHelp::debugMsg('$userId' . $app->userId);
-// $app->view()->appendData(["user_fullname" => $app->smsUser->fullname]);
-// $app->view()->appendData(["authenticated"=> $app->smsUser->isAuthenticated]);
-// $app->view()->appendData(["admin" => isset($app->userId) && $app->userId == 0]);
-// $app->view()->appendData(["userId"=> isset($app->userId) ? $app->userId : -1]);

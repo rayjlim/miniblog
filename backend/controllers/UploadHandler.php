@@ -66,7 +66,7 @@ class UploadHandler extends AbstractController
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
                 $data['createdDir'] = $createdDir;
-
+                \Lpt\Logger::log('File Uploaded: ' . $filePath . " - " . $urlFileName);
                 echo json_encode($data);
             } catch (Exception $e) {
                 http_response_code(500);
@@ -98,6 +98,7 @@ class UploadHandler extends AbstractController
 
             $data['fileName'] = $urlFileName;
             $data['filePath'] = $filePath;
+            \Lpt\Logger::log('File Resized: ' . $filePath . " - " . $urlFileName);
             echo json_encode($data);
         };
     }
@@ -194,6 +195,7 @@ class UploadHandler extends AbstractController
 
             $data['fileName'] = $fileName;
             $data['filePath'] = $filePath;
+            \Lpt\Logger::log('File Rotated: ' . $filePath . " - " . $fileName);
             echo json_encode($data);
         };
     }
@@ -215,6 +217,7 @@ class UploadHandler extends AbstractController
 
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
+            \Lpt\Logger::log('File Renamed: ' . $filePath . " - " . $fileName . " to " . $newFileName);
             echo json_encode($data);
         };
     }
@@ -260,6 +263,7 @@ class UploadHandler extends AbstractController
 
             $this->resource->removefile($_ENV['UPLOAD_DIR'] . $filePath . DIR_SEP . $fileName);
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
+            \Lpt\Logger::log('File Removed: ' . $filePath . DIR_SEP . $fileName);
             echo json_encode($data);
         };
     }
