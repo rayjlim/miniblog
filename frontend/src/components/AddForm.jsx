@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
-import constants from '../constants';
+import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
+import constants from '../constants';
 
 const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
-const AddForm = props => {
-  const [content, setContent] = useState(props.content);
-  const [date, setDate] = useState(
-    parse(props.date, FULL_DATE_FORMAT, new Date())
+const AddForm = ({ content, date, onSuccess }) => {
+  const [formContent, setContent] = useState(content || '');
+  const [formDate, setDate] = useState(
+    parse(date, FULL_DATE_FORMAT, new Date()),
   );
   let textareaInput = null;
 
   useEffect(() => {
     console.log('AddForm: useEffect');
-    setContent(props.content || '');
+    setContent(content || '');
 
     document.addEventListener('keydown', e => {
-      console.log('AddForm: handle key presss ' + e.key);
+      console.log(`AddForm: handle key presss ${e.key}`);
       // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
       if (e.altKey && e.key === 's') {
         console.log('S keybinding');
@@ -28,9 +29,9 @@ const AddForm = props => {
         document.getElementById('cancelBtn').click();
       }
     });
-  }, [props]);
+  }, []);
 
-  function textChange(text) {
+  function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
     textareaInput.value = textareaInput.value.replace(pattern, replacement);
@@ -38,20 +39,17 @@ const AddForm = props => {
     setContent(textareaInput.value);
   }
 
-  function dateChange(value) {
+  function dateChange(value = new Date()) {
     console.log('value :', value);
-    if (value === null) {
-      value = new Date();
-    }
     setDate(value);
   }
 
-  function handleAdd(e) {
+  function handleAdd() {
     (async () => {
       console.log('this :', this);
       const entry = {
-        content: content.trim(),
-        date: format(date, FULL_DATE_FORMAT),
+        content: formContent.trim(),
+        date: format(formDate, FULL_DATE_FORMAT),
       };
       try {
         const token = window.localStorage.getItem('appToken');
@@ -72,7 +70,7 @@ const AddForm = props => {
         setContent('');
         const data = await response.json();
         console.log('new id :>> ', data.id);
-        props.onSuccess();
+        onSuccess();
       } catch (error) {
         console.log(error);
         alert(error);
@@ -81,8 +79,12 @@ const AddForm = props => {
   }
 
   function clear() {
-    console.log('clear form');
-    props.onSuccess();
+    // console.log('clear form');
+    onSuccess();
+  }
+
+  function setRef(elem) {
+    textareaInput = elem;
   }
 
   return (
@@ -95,7 +97,8 @@ const AddForm = props => {
                 </button> */}
       <strong>Add Entry</strong>
       <p>
-        link: [link text](URL){' '}
+        link: [link text](URL)
+        <span>_</span>
         <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">
           Cheatsheet
         </a>
@@ -103,28 +106,36 @@ const AddForm = props => {
 
       <div className="form-group">
         <textarea
-          ref={elem => (textareaInput = elem)}
+          ref={elem => setRef(elem)}
           rows="6"
           onChange={event => textChange(event.target.value)}
           className="form-control"
           placeholder="Add ..."
-          defaultValue={props.content}
+          defaultValue={content}
         />
       </div>
 
       <div className="form-group">
-        <DatePicker onChange={dateChange} value={date} />
+        <DatePicker onChange={() => dateChange()} value={date} />
       </div>
 
-      <button onClick={handleAdd} className="btn btn-primary" id="saveBtn">
-        <i className="fa fa-save" /> Submit
+      <button
+        onClick={handleAdd}
+        className="btn btn-primary"
+        id="saveBtn"
+        type="button"
+      >
+        <i className="fa fa-save" />
+        Submit
       </button>
       <button
+        type="button"
         onClick={clear}
         className="btn btn-warning pull-right"
         id="cancelBtn"
       >
-        <i className="fa fa-ban" /> Cancel
+        <i className="fa fa-ban" />
+        Cancel
       </button>
       <div className="markdownDisplay">
         <MarkdownDisplay source={content} />
@@ -133,57 +144,10 @@ const AddForm = props => {
   );
 };
 
-//     render() {
-//         let templateStyle = {
-//             float: 'right'
-//         };
-//         let formBtns = '';
-//         if (this.props.showDateModBtns != null) {
-//             formBtns = (
-//                 <div>
-//                     <button onClick={this.minusYear} className="btn">
-//                         Minus a year
-//                     </button>
-//                     <button onClick={this.minusDay} className="btn">
-//                         Minus a day
-//                     </button>
-//                 </div>
-//             );
-//         }
-//
-//     }
-
-//     minusYear(e) {
-//         let currDate = new Date(this.refs.date.value);
-//         let year = currDate.getFullYear();
-//         let month = `${currDate.getMonth() + 1}`.lpad('0', 2);
-//         let day = `${currDate.getDate() + 1}`.lpad('0', 2);
-
-//         this.refs.date.value = `${year - 1}-${month}-${day}`;
-//     }
-
-//     minusDay(e) {
-//         console.log('this.refs.date.value :', this.refs.date.value);
-//         let currDate = new Date(this.refs.date.value);
-//         let year = currDate.getFullYear();
-//         let month = `${currDate.getMonth() + 1}`.lpad('0', 2);
-//         let day = `${currDate.getDate() }`.lpad('0', 2);
-
-//         this.refs.date.value = `${year}-${month}-${day}`;
-//     }
-
-//     handleTemplate(e) {
-//         this.refs.content.value += `
-// ### Tomorrow
-
-// ### Obstacles
-//     `;
-//     }
-
-//     addFAtag(e) {
-//         this.refs.content.value += `
-// <i className="fas fa-" /> `;
-//     }
-// }
-
 export default AddForm;
+
+AddForm.propTypes = {
+  content: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+};

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import history from '../utils/history';
+import { useNavigate } from 'react-router-dom';
 import Constants from '../constants';
 
 function LoginPassword() {
+  let navigate = useNavigate();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
@@ -17,6 +18,7 @@ function LoginPassword() {
       password: formPass,
       login: true,
     };
+
     try {
       const response = await fetch(`${Constants.REST_ENDPOINT}/security`, {
         method: 'POST',
@@ -49,12 +51,12 @@ function LoginPassword() {
     setPassword('');
     console.log(token);
     // goto main page
-    history.push(`/oneday`);
+    navigate('/oneday');
   };
 
-  const doLogout = () => {
-    window.localStorage.setItem('appToken', null);
-  };
+  // const doLogout = () => {
+  //   window.localStorage.setItem('appToken', null);
+  // };
 
   return (
     <div className="App">

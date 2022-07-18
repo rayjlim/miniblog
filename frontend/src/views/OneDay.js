@@ -9,7 +9,7 @@ import MovieWindow from '../components/MovieWindow.jsx'; //eslint-disable no-unu
 
 import { Snackbar } from 'react-md';
 import MarkdownDisplay from '../components/MarkdownDisplay';
-import history from '../utils/history';
+import { useNavigate } from 'react-router-dom';
 import './OneDay.css';
 
 const CLOSED = 0;
@@ -28,7 +28,7 @@ const FULL_DATE_FORMAT = 'yyyy-MM-dd';
  * <Route path="/oneday" component={OneDay} />
  */
 const OneDay = () => {
-
+  let navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
     pageDate: format(new Date(), FULL_DATE_FORMAT),
@@ -233,7 +233,7 @@ const OneDay = () => {
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
     let _date = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
-    if (e.target.value == 0) {
+    if (e.target.value === 0) {
       _date = new Date();
     } else {
       _date = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
@@ -310,7 +310,7 @@ const OneDay = () => {
 
   const doLogout = () => {
     window.localStorage.removeItem('appToken');
-    history.push(`/`);
+    navigate('/');
   };
 
   useEffect(() => {
@@ -506,7 +506,6 @@ const OneDay = () => {
           </RouterNavLink>
           <span className="footer-version">v{pkg.version}</span>
         </div>
-
       </nav>
     </Fragment>
   );

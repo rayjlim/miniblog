@@ -6,9 +6,10 @@ import format from 'date-fns/format';
 import constants from '../constants';
 import AddForm from '../components/AddForm.jsx';
 import MediaList from '../components/MediaList.jsx';
-import history from '../utils/history';
+import { useNavigate } from 'react-router-dom';
 
 const Media = () => {
+  let navigate = useNavigate();
   const [post, setPost] = useState({
     date: format(new Date(), 'yyyy-MM-dd'),
     fileName: '',
@@ -121,7 +122,7 @@ const Media = () => {
   function handleAdd(e) {
     console.log(e);
     alert('Entry created');
-    history.push(`/oneday`);
+    navigate('/oneday');
   }
 
   // rename(newName) {
@@ -174,7 +175,7 @@ const Media = () => {
       )}
 
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to={`/upload`} className="btn navbar-btn">
+        <RouterNavLink to={'/upload'} className="btn navbar-btn">
           <i className="fa fa-file-upload" /> Upload Pix
         </RouterNavLink>
       </nav>
