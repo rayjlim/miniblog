@@ -3,6 +3,7 @@
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
+use \Lpt\Logger;
 
 class AuthMiddleware extends \Slim\Middleware
 {
@@ -17,14 +18,18 @@ class AuthMiddleware extends \Slim\Middleware
 
         $token = $_ENV['AUTH_TOKEN'];
         DevHelp::debugMsg('isset app token? ' . isset($headers[$token]));
-        $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
+        if (isset($headers[$token])) {
+            $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
 
-        $decryptedString = decrypt($headerStringValue);
-        DevHelp::debugMsg('decryptedString:' . $decryptedString);
+            $decryptedString = decrypt($headerStringValue);
+            DevHelp::debugMsg('decryptedString:' . $decryptedString);
+            $userObj = json_decode($decryptedString);
 
-        $this->app->userId = $decryptedString;
-        DevHelp::debugMsg('header: ' . $headerStringValue . ", decryptedString: " . $decryptedString);
-        return is_numeric(($decryptedString) ? $decryptedString : null);
+            $this->app->userId = $userObj->userId;
+            Logger::log('header: ' . $headerStringValue . ", decryptedString: " . $decryptedString);
+            return is_numeric($userObj->userId);
+        }
+        return false;
     }
 
     /**
@@ -37,12 +42,17 @@ class AuthMiddleware extends \Slim\Middleware
     private function doLogin($username, $password)
     {
         // Check the access to this function, using logs and ip
-        \Lpt\Logger::log('User Login: ' . $username);
+        Logger::log('doLogin:' . $username);
         if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
+
+        $tokenObj = new stdClass();
+        $tokenObj->userId = $_ENV['ACCESS_ID'];
+        $tokenObj->name = $_ENV['ACCESS_NAME'];
+        $tokenObj->user = $_ENV['ACCESS_USER'];
         $response = new stdClass();
-        $response->token = encrypt($_ENV['ACCESS_ID']);
+        $response->token = encrypt(json_encode($tokenObj));
 
         echo json_encode($response);
         exit;
@@ -76,24 +86,17 @@ class AuthMiddleware extends \Slim\Middleware
         $username = isset($loginParams->username) ? htmlspecialchars($loginParams->username) : null;
         $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
 
-        if (isset($loginParams->login)) {
-            if (!$username || !$password) {
-                $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
-                \Lpt\Logger::log('User Login fail: ' . $error);
-            } else {
-                \Lpt\Logger::log('doLogin:' . $username);
-                if (!$this->doLogin($username, $password)) {
-                    \Lpt\Logger::log('User Login fail: Wrong password: ' . $username . ":" . $password);
-                    $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
-                }
-                // else {
-                //     $this->next->call();
-                //     return;
-                // }
-            }
+        if (!isset($loginParams->login)) {
+            $error = "{\"status\": \"fail\", \"message\":\"Invalid payload\"}";
+            Logger::log('User Login fail: ' . $error);
+        } elseif (!$username || !$password) {
+            $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
+            Logger::log('User Login fail: ' . $error);
+        } elseif (!$this->doLogin($username, $password)) {
+            $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
+            Logger::log('User Login fail: Wrong password: ' . $username . ":" . $password);
         }
 
-        // show Login Form
         header('HTTP/1.0 403 Forbidden');
         echo $error;
         exit(0);
