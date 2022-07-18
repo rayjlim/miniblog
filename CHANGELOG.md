@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://github.com/rayjlim/miniblog/compare/v2.4.0...v2.4.1) (2022-07-18)
+
+
+### Bug Fixes
+
+* ⬆️ react-router-dom, eslint batch 1 ([85d9078](https://github.com/rayjlim/miniblog/commit/85d907846e8047ec6df326c22a0f61a08c0f6b1c))
+* 🚨 eslint batch 2 ([e62c98a](https://github.com/rayjlim/miniblog/commit/e62c98a279a1c6b502c30cec5c15ff23a3d12711))
+
 ## [2.3.0](https://github.com/rayjlim/miniblog/compare/v2.2.0...v2.3.0) (2022-03-07)
 
 
