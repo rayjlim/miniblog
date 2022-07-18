@@ -16,10 +16,8 @@ const App = () => {
       console.log('check token', token, token !== null);
       if (token !== null && token !== '') {
         console.log('logged in:', token);
-        // navigate('/oneday');
       } else {
         console.log('logged out');
-        // navigate('/');
       }
     })();
   }, []);

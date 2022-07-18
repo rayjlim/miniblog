@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Constants from '../constants';
 
-function LoginPassword() {
-  let navigate = useNavigate();
+const LoginPassword = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
-  const checkLogin = async function (formUser = '', formPass = '') {
+  const checkLogin = async (formUser = '', formPass = '') => {
     // const formData = new URLSearchParams();
 
     // formData.append('username', formUser);
@@ -35,15 +35,15 @@ function LoginPassword() {
           window.localStorage.setItem('appToken', results.token);
         }
         return results.token;
-      } else {
-        console.log('Network response was not ok.');
       }
+      console.log('Network response was not ok.');
     } catch (error) {
-      console.log('Error when parsing means not logged in, ' + error);
+      console.log(`Error when parsing means not logged in ${error}`);
     }
+    return true;
   };
 
-  const doLogin = async function () {
+  const doLogin = async () => {
     console.log(user);
     console.log(password);
     const token = await checkLogin(user, password);
@@ -68,9 +68,9 @@ function LoginPassword() {
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
-      <button onClick={e => doLogin()}>Login</button>
+      <button onClick={() => doLogin()} type="button">Login</button>
     </div>
   );
-}
+};
 
 export default LoginPassword;
