@@ -1,5 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import { marked}  from 'marked';
+import PropTypes from 'prop-types';
+import { marked } from 'marked';
 
 const renderer = {
   code(code, infostring, escaped = true) {
@@ -8,41 +9,33 @@ const renderer = {
     // console.log(this.options);
     // console.log(lang);
     // console.log(infostring);
-
-
+    let escapeCheck = escaped;
+    let outputCode = code;
     if (this.options.highlight) {
-      const out = this.options.highlight(code, lang);
-      if (out != null && out !== code) {
-        escaped = true;
-        code = out;
+      const out = this.options.highlight(outputCode, lang);
+      if (out != null && out !== outputCode) {
+        escapeCheck = true;
+        outputCode = out;
       }
     }
 
+    const output = escapeCheck ? outputCode : escape(outputCode, true);
     if (!lang) {
-      return (
-        '<pre><code>' +
-        (escaped ? code : escape(code, true)) +
-        '</code></pre>\n'
-      );
+      return `<pre><code>${output}</code></pre>\n`;
     }
 
-    return (
-      '<pre><code class="' +
-      this.options.langPrefix +
-      escape(lang, true) +
-      '">' +
-      (escaped ? code : escape(code, true)) +
-      '</code></pre>\n'
-    );
+    const escapedLang = escape(lang, true);
+    return `<pre><code class="
+      ${this.options.langPrefix}${escapedLang}">${output}</code></pre>\n`;
   },
 };
 
 marked.use({ renderer });
 
-const MarkdownDisplay = props => {
+const MarkdownDisplay = ({ source }) => {
   let output = '';
   try {
-    output = marked(props.source);
+    output = marked(source);
   } catch (err) {
     console.log(err);
   }
@@ -50,3 +43,7 @@ const MarkdownDisplay = props => {
 };
 
 export default MarkdownDisplay;
+
+MarkdownDisplay.propTypes = {
+  source: PropTypes.string.isRequired,
+};

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
-import constants from '../constants';
-import { format, parse } from 'date-fns';
-import EditForm from '../components/EditForm.jsx';
-import MarkdownDisplay from '../components/MarkdownDisplay';
 import DatePicker from 'react-date-picker';
+import { format, parse } from 'date-fns';
+import EditForm from '../components/EditForm';
+import MarkdownDisplay from '../components/MarkdownDisplay';
+import constants from '../constants';
 import './Search.css';
 
 const DEBOUNCE_TIME = 350;
@@ -18,6 +18,23 @@ const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 // const FILTER_MODE_TAGGED = 1;
 // const FILTER_MODE_UNTAGGED = 2;
 
+let timeout;
+function debounce(func, wait, immediate) {
+  console.log('debouncing');
+  return () => {
+    const context = this;
+    const args = arguments;
+    const later = () => {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
 const TextEntry = () => {
   // class ContactForm extends React.Component {
   const [posts, setPosts] = useState([]);
@@ -28,14 +45,6 @@ const TextEntry = () => {
   const [searchParams, setSearchParams] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
-  let debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
-
-  useEffect(() => {
-    console.log('useEffect');
-
-    debouncedSearch(searchText);
-  }, [searchText, searchFilter]);
 
   /**
    * Get blog entries for text search
@@ -48,7 +57,7 @@ const TextEntry = () => {
       let endpoint = `${
         constants.REST_ENDPOINT
       }/api/posts/?searchParam=${encodeURIComponent(
-        searchText
+        searchText,
       )}&filterType=${searchFilter}`;
       if (startDate) {
         endpoint += `&startDate=${format(startDate, FULL_DATE_FORMAT)}`;
@@ -74,27 +83,25 @@ const TextEntry = () => {
         console.log('result.responseData :>> ', responseData);
 
         setSearchParams(responseData.params);
-        console.log('setStartDate: ' + responseData.params.startDate.length);
+        console.log(`setStartDate : ${responseData.params.startDate.length}`);
         setStartDate(
           responseData.params.startDate.length
             ? parse(responseData.params.startDate, FULL_DATE_FORMAT, new Date())
-            : null
+            : null,
         );
-        console.log('setEndDate' + responseData.params.endDate.length);
+        console.log(`setEndDate : ${responseData.params.endDate.length}`);
         setEndDate(
           responseData.params.endDate.length
             ? parse(responseData.params.endDate, FULL_DATE_FORMAT, new Date())
-            : null
+            : null,
         );
 
         if (searchText.length) {
           const reg = new RegExp(searchText, 'gi');
 
-          const foundHighlights = responseData.entries.map(entry => {
-            const highlighted = entry.content.replace(reg, str => {
-              return `<b>${str}</b>`;
-            });
-            return { ...entry, highlighted };
+          const foundHighlights = responseData.entries.map(entryLocal => {
+            const highlighted = entryLocal.content.replace(reg, str => `<b>${str}</b>`);
+            return { ...entryLocal, highlighted };
           });
 
           setPosts(foundHighlights);
@@ -108,16 +115,18 @@ const TextEntry = () => {
     }
   }
 
-  function showEditForm(e, entry) {
+  const debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
+
+  function showEditForm(e, entryLocal) {
     e.preventDefault();
-    console.log('id :', entry.id);
+    console.log('id :', entryLocal.id);
     setFormMode(SHOW_EDIT_FORM);
-    setEntry(entry);
+    setEntry(entryLocal);
   }
-  function showStartDateEdit(e) {
+  function showStartDateEdit() {
     setStartDate(new Date());
   }
-  function showEndDateEdit(e) {
+  function showEndDateEdit() {
     setEndDate(new Date());
   }
 
@@ -129,82 +138,94 @@ const TextEntry = () => {
   function showSearchSummary() {
     if (searchParams !== null) {
       return (
-        <Fragment>
-          Date:{' '}
-          {searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}{' '}
-          to {searchParams.endDate !== '' ? searchParams.endDate : 'Now'},
-          Limit: {searchParams.resultsLimit}. Found {posts.length}
-        </Fragment>
+        <>
+          Date:
+          {' '}
+          {searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}
+          {' '}
+          to
+          {searchParams.endDate !== '' ? searchParams.endDate : 'Now'}
+          ,Limit:
+          {searchParams.resultsLimit}
+          . Found
+          {posts.length}
+        </>
       );
-    } else {
-      return <Fragment>No Search Params</Fragment>;
     }
+    return <>No Search Params</>;
   }
 
   function editForm() {
     return formMode === SHOW_EDIT_FORM ? (
       <EditForm entry={entry} onSuccess={() => resetEntryForm()} />
     ) : (
-      <Fragment />
+      <>a</>
     );
   }
 
   function showEntries() {
     return formMode !== SHOW_EDIT_FORM ? (
-      <>
-        <ul className="entriesList">
-          {posts.length &&
-            posts.map(entry => {
-              let content =
-                searchText.length && entry.highlighted
-                  ? entry.highlighted
-                  : entry.content;
-              let newText = content.replace(/<br \/>/g, '\n');
-              newText = newText.replace(
-                /..\/uploads/g,
-                `${constants.UPLOAD_ROOT}`
-              );
-              const dateFormated = format(
-                parse(entry.date, FULL_DATE_FORMAT, new Date()),
-                'EEE, yyyy-MM-dd'
-              );
+      <ul className="entriesList">
+        {posts.length
+          && posts.map(localEntry => {
+            const content = searchText.length && localEntry.highlighted
+              ? localEntry.highlighted
+              : localEntry.content;
+            let newText = content.replace(/<br \/>/g, '\n');
+            newText = newText.replace(
+              /..\/uploads/g,
+              `${constants.UPLOAD_ROOT}`,
+            );
+            const dateFormated = format(
+              parse(localEntry.date, FULL_DATE_FORMAT, new Date()),
+              'EEE, yyyy-MM-dd',
+            );
 
-              let showEntryDate = (
-                <button
-                  onClick={e => showEditForm(e, entry)}
-                  className="plainLink"
-                >
-                  {dateFormated}
-                </button>
-              );
-              return (
-                <li key={entry.id} className="blogEntry">
-                  {showEntryDate}|
-                  <MarkdownDisplay source={newText} escapeHtml={false} />
-                </li>
-              );
-            })}
-          {!posts.length && (
-            <li>
-              <h2>No Entries Found</h2>
-            </li>
-          )}
-        </ul>
-      </>
+            const showEntryDate = (
+              <button
+                type="button"
+                onClick={e => showEditForm(e, localEntry)}
+                className="plainLink"
+              >
+                {dateFormated}
+              </button>
+            );
+            return (
+              <li key={localEntry.id} className="blogEntry">
+                {showEntryDate}
+                |
+                <MarkdownDisplay source={newText} escapeHtml={false} />
+              </li>
+            );
+          })}
+        {!posts.length && (
+          <li>
+            <h2>No Entries Found</h2>
+          </li>
+        )}
+      </ul>
     ) : (
       ''
     );
   }
 
+  useEffect(() => {
+    console.log('useEffect');
+
+    debouncedSearch(searchText);
+  }, [searchText, searchFilter]);
+
   return (
-    <Fragment>
+    <>
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">
-          <i className="fa fa-home" /> <span>Home</span>
+          <i className="fa fa-home" />
+          <span>Home</span>
         </RouterNavLink>
         <RouterNavLink to="/oneday?pageMode=1">
           {' '}
-          <i className="fa fa-calendar-check" /> <span>Same Day</span>
+          <i className="fa fa-calendar-check" />
+          <span>Same Day</span>
         </RouterNavLink>
       </nav>
       <h1>Text Search</h1>
@@ -229,35 +250,41 @@ const TextEntry = () => {
         />
         <span>ALL, 0; TAGGED, 1;UNTAGGED, 2</span>
         <div>
-          Start Date:{' '}
+          Start Date:
+          {' '}
           {startDate ? (
             <DatePicker onChange={setStartDate} value={startDate} />
           ) : (
-            <Fragment>
-              None{' '}
+            <>
+              None
+              {' '}
               <button
+                type="button"
                 onClick={e => showStartDateEdit(e, entry)}
                 className="plainLink"
               >
                 Edit
               </button>
-            </Fragment>
+            </>
           )}
         </div>
         <div>
-          End Date:{' '}
+          End Date:
+          {' '}
           {endDate ? (
             <DatePicker onChange={setEndDate} value={endDate} />
           ) : (
-            <Fragment>
-              None{' '}
+            <>
+              None
+              {' '}
               <button
+                type="button"
                 onClick={e => showEndDateEdit(e, entry)}
                 className="plainLink"
               >
                 Edit
               </button>
-            </Fragment>
+            </>
           )}
         </div>
         <span className="container">{showSearchSummary()}</span>
@@ -268,27 +295,18 @@ const TextEntry = () => {
       <section className="container">{showEntries()}</section>
 
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to={'/upload'} className="btn navbar-btn">
-          <i className="fa fa-file-upload" /> Upload Pix
+        <RouterNavLink to="/upload" className="btn navbar-btn">
+          <i className="fa fa-file-upload" />
+          Upload Pix
         </RouterNavLink>
       </nav>
-    </Fragment>
+    </>
   );
 };
-let timeout;
-function debounce(func, wait, immediate) {
-  console.log('debouncing');
-  return function () {
-    let context = this,
-      args = arguments;
-    let later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    let callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
+
 export default TextEntry;
+
+TextEntry.propTypes = {
+  // entrys: PropTypes.array.isRequired,
+  // editLink: PropTypes.func.isRequired,
+};

@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import PropTypes from 'prop-types';
 import constants from '../constants';
 
-const MediaList = props => {
-  console.log(' MediaList props :', props.content);
+const MediaList = ({ content, onMediaSelect }) => {
+  console.log(' MediaList props :', content);
   const [media, setMedia] = useState([]);
   const [uploadDirs, setUploadDirs] = useState([]);
   const [currentDir, setCurrentDir] = useState('');
 
-  useEffect(() => {
-    loadDir('');
-  }, [props]);
-
-  function loadDir(dir) {
+  function loadDir(dir = '') {
     (async () => {
       const token = window.localStorage.getItem('appToken');
       const response = await fetch(`${constants.REST_ENDPOINT}/media/${dir}`, {
@@ -25,30 +22,20 @@ const MediaList = props => {
       if (!response.ok) {
         console.log('response.status :', response.status);
         alert(`loading error : ${response.status}`);
-        return;
       } else {
         const data = await response.json();
-        const _dirs = [];
-        const _media = [];
-        for (let _dir in data.uploadDirs) {
-          console.log(_dir);
-          _dirs.push(data.uploadDirs[_dir]);
-        }
-        setUploadDirs(_dirs);
-        for (let file in data.dirContent) {
-          console.log(file);
-          _media.push(data.dirContent[file]);
-        }
+        const dirs = Object.values(data.uploadDirs);
+        setUploadDirs(dirs);
+        const medias = Object.values(data.dirContent);
 
-        setMedia(_media);
-
+        setMedia(medias);
         setCurrentDir(data.currentDir);
       }
     })();
   }
 
   function deleteMedia(filePath, fileName) {
-    let go = window.confirm('You sure?');
+    const go = window.confirm('You sure?');
     if (!go) {
       return;
     }
@@ -62,57 +49,49 @@ const MediaList = props => {
             'Content-Type': 'application/json',
             'x-app-token': token,
           },
-        }
+        },
       );
       console.log('response :', response);
       if (!response.ok) {
         console.log('response.status :', response.status);
         alert(`loading error : ${response.status}`);
-        return;
       } else {
-        const data = await response.json();
-        const _dirs = [];
-        const _media = [];
-        for (var _dir in data.uploadDirs) {
-          console.log(_dir);
-          _dirs.push(data.uploadDirs[_dir]);
-        }
-        setUploadDirs(_dirs);
-        for (var file in data.dirContent) {
-          console.log(file);
-          _media.push(data.dirContent[file]);
-        }
-
-        setMedia(_media);
-
-        setCurrentDir(response.data.currentDir);
+        // const data = await response.json();
+        loadDir(filePath);
       }
     })();
   }
 
+  useEffect(() => {
+    loadDir('');
+  }, [content]);
+
   return (
     <div>
-      <h2>Dirs {currentDir}</h2>
+      <h2>
+        Dirs
+        {currentDir}
+      </h2>
       {uploadDirs.length}
-      {uploadDirs.length &&
-        uploadDirs.map(dir => (
-          <button onClick={e => loadDir(dir)}>{dir}</button>
+      {uploadDirs.length
+        && uploadDirs.map(dir => (
+          <button onClick={() => loadDir(dir)} type="button">{dir}</button>
         ))}
       <h2>Media</h2>
       {media.length}
       <ul />
-      {media.length &&
-        media.map(key => (
+      {media.length
+        && media.map(key => (
           <li>
             <p>{key}</p>
-            <button onClick={e => props.onMediaSelect(currentDir + '/', key)}>
+            <button onClick={() => onMediaSelect(`${currentDir}/`, key)} type="button">
               Load
             </button>
             <img
               src={`${constants.UPLOAD_ROOT}/${currentDir}/${key}`}
               alt="main_img"
             />
-            <button onClick={e => deleteMedia(currentDir + '/', key)}>
+            <button onClick={() => deleteMedia(`${currentDir}/`, key)} type="button">
               Delete
             </button>
           </li>
@@ -122,3 +101,8 @@ const MediaList = props => {
 };
 
 export default MediaList;
+
+MediaList.propTypes = {
+  content: PropTypes.string.isRequired,
+  onMediaSelect: PropTypes.func.isRequired,
+};

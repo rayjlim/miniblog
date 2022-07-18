@@ -1,17 +1,17 @@
 import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
-import constants from '../constants';
+import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
-
-import history from '../utils/history';
+import constants from '../constants';
 
 const UploadForm = () => {
+  const navigate = useNavigate();
   const [selectFile, setSelectedFile] = useState(null);
 
   function onChangeHandler(event) {
     console.log(event.target.files[0]);
     setSelectedFile(event.target.files[0]);
   }
-  async function upload(event) {
+  async function upload() {
     // const data = new FormData()
     // data.append('file', selectFile)
 
@@ -20,10 +20,10 @@ const UploadForm = () => {
     const filePath = document.getElementById('filePath').value;
     formData.append(
       'filePath',
-      filePath.length ? filePath : format(new Date(), 'yyyy-MM')
+      filePath.length ? filePath : format(new Date(), 'yyyy-MM'),
     );
 
-    console.log(`send upload`);
+    console.log('send upload');
     const token = window.localStorage.getItem('appToken');
 
     try {
@@ -37,9 +37,7 @@ const UploadForm = () => {
 
       console.log(response);
       const data = await response.json();
-      history.push(
-        `/media?fileName=${data.fileName}&filePath=${data.filePath}`
-      );
+      navigate(`/media?fileName=${data.fileName}&filePath=${data.filePath}`);
     } catch (error) {
       console.log(error);
       alert('Error uploading file ', error);
@@ -50,32 +48,36 @@ const UploadForm = () => {
     <div className="container">
       <form action="../uploadImage/">
         <div className="form-group">
-          <label htmlFor="fileToUpload">Select image to upload:a</label>
-
-          <input
-            type="file"
-            name="fileToUpload"
-            onChange={onChangeHandler}
-            id="fileToUpload"
-          />
+          <label htmlFor="fileToUpload">
+            Select image to upload:
+            <input
+              type="file"
+              name="fileToUpload"
+              onChange={onChangeHandler}
+              id="fileToUpload"
+            />
+          </label>
         </div>
         <div className="form-group">
-          <label htmlFor="filePath">Path</label>
-          <input
-            type="text"
-            className="form-control"
-            id="filePath"
-            name="filePath"
-          />
+          <label htmlFor="filePath">
+            Path
+            <input
+              type="text"
+              className="form-control"
+              id="filePath"
+              name="filePath"
+            />
+          </label>
         </div>
         {/* <div className="form-group">
                     <label for="newName">New Name</label>
-                    <input type="text" className="form-control" id="newName" name="newName" value="" />
+                    <input type="text" className="form-control" id="newName"
+                    name="newName" value="" />
                 </div> */}
         <button
           type="button"
           className="btn btn-success btn-block"
-          onClick={e => upload()}
+          onClick={() => upload()}
         >
           Upload
         </button>
