@@ -15,7 +15,7 @@ const Logs = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'x-app-token': token,
+        'X-App-Token': token,
       },
     });
     console.log('response :', response);

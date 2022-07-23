@@ -51,7 +51,7 @@ const EditForm = ({ entry, onSuccess }) => {
           credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
-            'x-app-token': token,
+            'X-App-Token': token,
           },
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
@@ -87,7 +87,7 @@ const EditForm = ({ entry, onSuccess }) => {
           credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
-            'x-app-token': token,
+            'X-App-Token': token,
           },
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
