@@ -19,22 +19,6 @@ const EditForm = ({ entry, onSuccess }) => {
   const [content, setContent] = useState(escapedContent);
   let textareaInput = null;
 
-  useEffect(() => {
-    console.log('EditForm: useEffect');
-
-    document.addEventListener('keydown', e => {
-      console.log(`EditForm: handle key presss ${e.key}`);
-      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
-      if (e.altKey && e.key === 's') {
-        console.log('S keybinding');
-        // Note: this is a hack because the content value is taken from the init value
-        document.getElementById('saveBtn').click();
-      } else if (e.key === 'Escape') {
-        document.getElementById('cancelBtn').click();
-      }
-    });
-  }, [entry]);
-
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
@@ -44,6 +28,11 @@ const EditForm = ({ entry, onSuccess }) => {
     setContent(textareaInput.value);
   }
 
+  /**
+  * It takes the content and date from the form, and sends a PUT
+  * request to the server with the updated
+  * entry
+  */
   async function handleSave() {
     const formEntry = {
       content,
@@ -56,7 +45,7 @@ const EditForm = ({ entry, onSuccess }) => {
         `${constants.REST_ENDPOINT}/api/posts/${entry.id}`,
         {
           method: 'PUT',
-          body: JSON.stringify(entry),
+          body: JSON.stringify(formEntry),
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -76,6 +65,7 @@ const EditForm = ({ entry, onSuccess }) => {
       alert(error);
     }
   }
+
   function handleClear() {
     onSuccess();
   }
@@ -116,11 +106,27 @@ const EditForm = ({ entry, onSuccess }) => {
     console.log('value :', value);
     setDate(value);
   }
-  console.log(date);
 
   function setRef(elem) {
     textareaInput = elem;
   }
+
+  /* A hook that is called when the component is mounted. */
+  useEffect(() => {
+    console.log('EditForm: useEffect');
+
+    document.addEventListener('keydown', e => {
+      console.log(`EditForm: handle key presss ${e.key}`);
+      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+      if (e.altKey && e.key === 's') {
+        console.log('S keybinding');
+        // Note: this is a hack because the content value is taken from the init value
+        document.getElementById('saveBtn').click();
+      } else if (e.key === 'Escape') {
+        document.getElementById('cancelBtn').click();
+      }
+    });
+  }, [entry]);
 
   return (
     <div className="well">
