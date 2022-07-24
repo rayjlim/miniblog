@@ -31,7 +31,7 @@ const UploadForm = () => {
         method: 'POST',
         body: formData,
         headers: {
-          'x-app-token': token,
+          'X-App-Token': token,
         },
       });
 

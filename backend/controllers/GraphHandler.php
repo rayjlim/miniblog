@@ -2,6 +2,7 @@
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
+use \Lpt\Logger;
 
 class GraphHandler extends AbstractController
 {
@@ -16,13 +17,15 @@ class GraphHandler extends AbstractController
         parent::__construct($app);
     }
 
-    public function logCronCall($message)
+    public function logCronCall()
     {
-        return function () use ($message) {
+        return function () {
+            DevHelp::debugMsg('logCronCall start');
+            Logger::log('Cron call: ');
             $date = $this->resource->getDateTime();
             $filename = LOGS_DIR . DIR_SEP . LOG_PREFIX . "_logins-" . $date->format(YEAR_MONTH_FORMAT) . ".txt";
             $fileData = $date->format(FULL_DATETIME_FORMAT) . "\t" . getenv("REMOTE_ADDR") . "\t";
-            $fileData .= $message . "\n";
+            $fileData .= "Cron call and mail\n";
             $this->resource->writeFile($filename, $fileData);
 
             $userId = $this->app->userId;
@@ -78,6 +81,7 @@ class GraphHandler extends AbstractController
         array_push($carry[$year . '-' . $month], $item['weight']);
         return $carry;
     }
+
     public $VIRTUES =  array(
         '1. Temperance: Eat not to dullness; drink not to elevation. ',
         '2. Silence: Speak not but what may benefit others or yourself; avoid trifling conversation. ',
@@ -117,7 +121,7 @@ class GraphHandler extends AbstractController
         'Productivity => producing',
         'Influence comes from trust, proximity, admiration, believe to care for them',
         'Public speaking/persuasion requires presence, clarity, distinction between old/new argument',
-        'Not dead, can’t quit',
+        'Not dead, can\'t quit',
         'Learn at all times at all costs',
         "Be consistent in your beliefs of what you truly value.",
         "Getting better is the goal, every problem is a chance to get better",

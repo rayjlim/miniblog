@@ -15,7 +15,7 @@ const MediaList = ({ content, onMediaSelect }) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'x-app-token': token,
+          'X-App-Token': token,
         },
       });
       console.log('response :', response);
@@ -47,7 +47,7 @@ const MediaList = ({ content, onMediaSelect }) => {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'x-app-token': token,
+            'X-App-Token': token,
           },
         },
       );

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# starts in scripts folder
 gpg -d --passphrase-fd passfile.txt --output .env .env.asc
 cd ..
 

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/rayjlim/miniblog/compare/v2.4.1...v2.4.2) (2022-07-24)
+
+
+### Bug Fixes
+
+* ♻️ auth to return id instead of numeric check ([f08b54e](https://github.com/rayjlim/miniblog/commit/f08b54e487ce791fc4a92afad0fe6e9773cf7db0))
+* 🐛 frontend to auth token name fix ([bc95a66](https://github.com/rayjlim/miniblog/commit/bc95a660fbf1b0d3dd2e5f40ec79af7f2a62f0da))
+
 ## [2.4.0](https://github.com/rayjlim/miniblog/compare/v2.3.0...v2.4.0) (2022-07-17)
 
 

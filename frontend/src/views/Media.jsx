@@ -65,7 +65,7 @@ const Media = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'x-app-token': token,
+          'X-App-Token': token,
         },
       },
     );
@@ -86,7 +86,7 @@ const Media = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'x-app-token': token,
+          'X-App-Token': token,
         },
       },
     );
@@ -106,7 +106,7 @@ const Media = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'x-app-token': token,
+          'X-App-Token': token,
         },
       },
     );

@@ -69,7 +69,7 @@ const TextEntry = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'x-app-token': token,
+          'X-App-Token': token,
         },
         referrerPolicy: 'no-referrer',
       });
