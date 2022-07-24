@@ -17,7 +17,7 @@ class AuthMiddleware extends \Slim\Middleware
         // print_r($headers);
 
         $token = $_ENV['AUTH_TOKEN'];
-        DevHelp::debugMsg('isset app token? ' . isset($headers[$token]));
+        DevHelp::debugMsg('isset app token? ' . $token . isset($headers[$token]));
         if (isset($headers[$token])) {
             $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
 
@@ -26,10 +26,17 @@ class AuthMiddleware extends \Slim\Middleware
             $userObj = json_decode($decryptedString);
 
             $this->app->userId = $userObj->userId;
-            if(is_numeric($userObj->userId)) {
+            if (is_numeric($userObj->userId)) {
                 return $userObj->userId;
             }
         }
+
+        if (isset($_GET["cron_pass"]) && $_GET["cron_pass"] == $_ENV['CRON_PW']) {
+            $ipaddress = getenv("REMOTE_ADDR");
+            Logger::log("Cron called from IP Address: " . $ipaddress);
+            return 1;
+        }
+
         return false;
     }
 
@@ -43,7 +50,8 @@ class AuthMiddleware extends \Slim\Middleware
     private function doLogin($username, $password)
     {
         // Check the access to this function, using logs and ip
-        Logger::log('doLogin:' . $username);
+        $ipaddress = getenv("REMOTE_ADDR");
+        Logger::log('doLogin:' . $username . 'from IP Address: ' . $ipaddress);
         if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
             return false;
         }
@@ -62,10 +70,11 @@ class AuthMiddleware extends \Slim\Middleware
     public function call()
     {
         DevHelp::debugMsg(__FILE__);
+        $ipaddress = getenv("REMOTE_ADDR");
         $app = $this->app;
         $req = $app->request;
 
-        if ($app->request->isOptions()) {
+        if ($req->isOptions()) {
             header('HTTP/1.0 200 Ok');
             echo "Options METHOD check";
             exit(0);
@@ -81,21 +90,25 @@ class AuthMiddleware extends \Slim\Middleware
         } else {
             $error = "Not Logged In";
         }
-        $parsedBody = $req->getBody();
-        DevHelp::debugMsg('parsed:' . $parsedBody);
-        $loginParams = json_decode($parsedBody);
+
+        $reqBody = $req->getBody();
+        DevHelp::debugMsg('reqBody:' . $reqBody);
+        $loginParams = json_decode($reqBody);
+
         $username = isset($loginParams->username) ? htmlspecialchars($loginParams->username) : null;
         $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
+        // DevHelp::debugMsg('$loginParams->login:' . $loginParams->login);
+
 
         if (!isset($loginParams->login)) {
             $error = "{\"status\": \"fail\", \"message\":\"Invalid payload\"}";
-            Logger::log('User Login fail: ' . $error);
+            Logger::log('User Login fail: ' . $error . 'from IP Address: ' . $ipaddress);
         } elseif (!$username || !$password) {
             $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
-            Logger::log('User Login fail: ' . $error);
+            Logger::log('User Login fail: ' . $error. 'from IP Address: ' . $ipaddress);
         } elseif (!$this->doLogin($username, $password)) {
             $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
-            Logger::log('User Login fail: Wrong password: ' . $username . ":" . $password);
+            Logger::log('User Login fail: Wrong password: ' . $username . ":" . $password . 'from IP Address: ' . $ipaddress);
         }
 
         header('HTTP/1.0 403 Forbidden');
