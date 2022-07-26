@@ -165,6 +165,7 @@ const EditForm = ({ entry, onSuccess }) => {
           type="button"
         >
           <i className="fa fa-save" />
+          {' '}
           Save
         </button>
         <button
@@ -174,6 +175,7 @@ const EditForm = ({ entry, onSuccess }) => {
           type="button"
         >
           <i className="fa fa-ban" />
+          {' '}
           Cancel
         </button>
         <button
@@ -182,6 +184,7 @@ const EditForm = ({ entry, onSuccess }) => {
           type="button"
         >
           <i className="fa fa-trash" />
+          {' '}
           Delete
         </button>
       </div>
@@ -195,6 +198,10 @@ const EditForm = ({ entry, onSuccess }) => {
 export default EditForm;
 
 EditForm.propTypes = {
-  entry: PropTypes.object.isRequired,
+  entry: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+  }).isRequired,
   onSuccess: PropTypes.func.isRequired,
 };
