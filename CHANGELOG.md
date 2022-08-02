@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.4](https://github.com/rayjlim/miniblog/compare/v2.4.3...v2.4.4) (2022-08-02)
+
+
+### Bug Fixes
+
+* 🐛 proptypes for moviewindow and editform ([34df718](https://github.com/rayjlim/miniblog/commit/34df7187e320ce071ada6bea16f5f04d0d3a74c8))
+* lowercase constants ([c21f81a](https://github.com/rayjlim/miniblog/commit/c21f81ab7dceff91aedf55a7c66e2d3ef538205e))
+
 ### [2.4.3](https://github.com/rayjlim/miniblog/compare/v2.4.2...v2.4.3) (2022-07-24)
 
 ### [2.4.1](https://github.com/rayjlim/miniblog/compare/v2.4.0...v2.4.1) (2022-07-18)
