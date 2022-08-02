@@ -40,7 +40,7 @@ const EditForm = ({ entry, onSuccess }) => {
     };
     console.log('handleSave entry :', formEntry);
     try {
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       const response = await fetch(
         `${constants.REST_ENDPOINT}/api/posts/${entry.id}`,
         {
@@ -77,7 +77,7 @@ const EditForm = ({ entry, onSuccess }) => {
     }
     console.log(`handleDelete ${entry.id}`);
     try {
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       const response = await fetch(
         `${constants.REST_ENDPOINT}/api/posts/${entry.id}`,
         {

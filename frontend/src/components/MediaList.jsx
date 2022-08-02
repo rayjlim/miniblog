@@ -10,7 +10,7 @@ const MediaList = ({ content, onMediaSelect }) => {
 
   function loadDir(dir = '') {
     (async () => {
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       const response = await fetch(`${constants.REST_ENDPOINT}/media/${dir}`, {
         method: 'GET',
         headers: {
@@ -40,7 +40,7 @@ const MediaList = ({ content, onMediaSelect }) => {
       return;
     }
     (async () => {
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       const response = await fetch(
         `${constants.REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {

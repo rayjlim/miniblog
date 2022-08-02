@@ -58,7 +58,7 @@ const Media = () => {
 
   async function resize(e) {
     console.log(`resize ${post.filePath}:${post.fileName}`);
-    const token = window.localStorage.getItem('appToken');
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
     const response = await fetch(
       `${constants.REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`,
       {
@@ -79,7 +79,7 @@ const Media = () => {
 
   async function rotateLeft(e) {
     console.log(`ro-left ${post.filePath}:${post.fileName}`);
-    const token = window.localStorage.getItem('appToken');
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
     const response = await fetch(
       `${constants.REST_ENDPOINT}/uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`,
       {
@@ -99,7 +99,7 @@ const Media = () => {
   }
   async function rotateRight(e) {
     console.log(`ro-right ${post.filePath}:${post.fileName}`);
-    const token = window.localStorage.getItem('appToken');
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
     const response = await fetch(
       `${constants.REST_ENDPOINT}/uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`,
       {
