@@ -6,13 +6,14 @@ import Media from './views/Media';
 import Upload from './views/Upload';
 import LoginPassword from './views/LoginPassword';
 import Logs from './views/Logs';
+import constants from './constants';
 import './App.css';
 
 const App = () => {
   useEffect(() => {
     (async () => {
       // check for token
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       console.log('check token', token, token !== null);
       if (token !== null && token !== '') {
         console.log('logged in:', token);
@@ -32,7 +33,8 @@ const App = () => {
             <Route path="/search" exact element={<Search />} />
             <Route path="/oneday" element={<OneDay />} />
             <Route path="/logs" element={<Logs />} />
-            <Route path="/" element={<LoginPassword />} />
+            <Route path="/login" element={<LoginPassword />} />
+            <Route path="/" element={<OneDay />} />
           </Routes>
         </BrowserRouter>
       </div>

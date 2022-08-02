@@ -141,7 +141,7 @@ const OneDay = () => {
     }
 
     (async () => {
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       try {
         const response = await fetch(endPointURL, {
           method: 'GET',
@@ -303,8 +303,8 @@ const OneDay = () => {
   }
 
   const doLogout = () => {
-    window.localStorage.removeItem('appToken');
-    navigate('/');
+    window.localStorage.removeItem(constants.STORAGE_KEY);
+    navigate('/login');
   };
 
   function setRef(elem) {
@@ -312,6 +312,11 @@ const OneDay = () => {
   }
 
   useEffect(() => {
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    if (!token) {
+      navigate('/login');
+    }
+
     console.log('OndeDay: useEffect');
     const loc = `${window.location}`;
     const param = loc.substring(loc.indexOf('?'));

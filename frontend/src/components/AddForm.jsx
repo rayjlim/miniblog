@@ -52,7 +52,7 @@ const AddForm = ({ content, date, onSuccess }) => {
         date: format(formDate, FULL_DATE_FORMAT),
       };
       try {
-        const token = window.localStorage.getItem('appToken');
+        const token = window.localStorage.getItem(constants.STORAGE_KEY);
         const response = await fetch(`${constants.REST_ENDPOINT}/api/posts/`, {
           method: 'POST',
           body: JSON.stringify(entry),

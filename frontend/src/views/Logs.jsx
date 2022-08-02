@@ -10,7 +10,7 @@ const Logs = () => {
   const [logFile, setLogFile] = useState('');
 
   const getLog = async (log = '') => {
-    const token = window.localStorage.getItem('appToken');
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
     const response = await fetch(`${constants.REST_ENDPOINT}/logs/${log}`, {
       method: 'GET',
       headers: {

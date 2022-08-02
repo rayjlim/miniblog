@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink as RouterNavLink } from 'react-router-dom';
+import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import EditForm from '../components/EditForm';
@@ -36,7 +36,8 @@ function debounce(func, wait, immediate) {
 }
 
 const TextEntry = () => {
-  // class ContactForm extends React.Component {
+  const navigate = useNavigate();
+
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
@@ -53,7 +54,7 @@ const TextEntry = () => {
   async function getEntries() {
     console.log('getEntries#searchText:', searchText);
     try {
-      const token = window.localStorage.getItem('appToken');
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
       let endpoint = `${
         constants.REST_ENDPOINT
       }/api/posts/?searchParam=${encodeURIComponent(
@@ -210,6 +211,10 @@ const TextEntry = () => {
   }
 
   useEffect(() => {
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    if (!token) {
+      navigate('/login');
+    }
     console.log('useEffect');
 
     debouncedSearch(searchText);

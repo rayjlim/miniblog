@@ -24,7 +24,7 @@ const UploadForm = () => {
     );
 
     console.log('send upload');
-    const token = window.localStorage.getItem('appToken');
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
 
     try {
       const response = await fetch(`${constants.REST_ENDPOINT}/uploadImage/`, {

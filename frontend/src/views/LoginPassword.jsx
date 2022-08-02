@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Constants from '../constants';
+import constants from '../constants';
 
 const LoginPassword = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const LoginPassword = () => {
     };
 
     try {
-      const response = await fetch(`${Constants.REST_ENDPOINT}/security`, {
+      const response = await fetch(`${constants.REST_ENDPOINT}/security`, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -32,7 +32,7 @@ const LoginPassword = () => {
 
         console.log(results);
         if (results.token) {
-          window.localStorage.setItem('appToken', results.token);
+          window.localStorage.setItem(constants.STORAGE_KEY, results.token);
         }
         return results.token;
       }
@@ -55,7 +55,7 @@ const LoginPassword = () => {
   };
 
   // const doLogout = () => {
-  //   window.localStorage.setItem('appToken', null);
+  //   window.localStorage.setItem(constants.STORAGE_KEY, null);
   // };
 
   return (
