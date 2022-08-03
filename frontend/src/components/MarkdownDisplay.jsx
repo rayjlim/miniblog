@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import React from 'react'; // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types';
 import { marked } from 'marked';

@@ -8,6 +8,7 @@ const MediaList = ({ content, onMediaSelect }) => {
   const [uploadDirs, setUploadDirs] = useState([]);
   const [currentDir, setCurrentDir] = useState('');
 
+  // TODO: convert to customHook
   function loadDir(dir = '') {
     (async () => {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
@@ -33,7 +34,7 @@ const MediaList = ({ content, onMediaSelect }) => {
       }
     })();
   }
-
+  // TODO: convert to customHook
   function deleteMedia(filePath, fileName) {
     const go = window.confirm('You sure?');
     if (!go) {

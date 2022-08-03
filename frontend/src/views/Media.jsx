@@ -1,5 +1,5 @@
 /* eslint-disable no-alert, no-console, no-unused-vars */
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 
 import format from 'date-fns/format';
@@ -10,7 +10,7 @@ import MediaList from '../components/MediaList';
 const Media = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState({
-    date: format(new Date(), 'yyyy-MM-dd'),
+    date: format(new Date(), constants.FULL_DATE_FORMAT),
     fileName: '',
     filePath: '',
     prepend: '',
@@ -50,73 +50,48 @@ const Media = () => {
     });
     setShowMedia(false);
   }
+  // TODO: convert to customHook
+  async function xhrCall(url) {
+    console.log(`xhrCall ${url}`);
+    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    const response = await fetch(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-Token': token,
+        },
+      },
+    );
+    console.log('response :>> ', response);
+    const random = Math.random();
+    setPost({
+      ...post,
+      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
+    });
+  }
 
   // ?fileName=0FE2E672-995F-481C-8E9F-ABA02BED3DAB.jpeg&filePath=2019-04/
   // http://localhost/projects/miniblog3/uploads/2019-10/B5BB1508-0AC2-4E85-A63B-22F843EDA3E9.jpeg
   // let fileName = `0FE2E672-995F-481C-8E9F-ABA02BED3DAB.jpeg`;
   // let filePath = `2019-04/`;
-
-  async function resize(e) {
+  // TODO: convert to customHook
+  const resize = async () => {
     console.log(`resize ${post.filePath}:${post.fileName}`);
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
-    const response = await fetch(
-      `${constants.REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
-      },
-    );
-    console.log('response :>> ', response);
-    const random = Math.random();
-    setPost({
-      ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
-    });
-  }
+    const url = `${constants.REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`;
+    await xhrCall(url);
+  };
 
-  async function rotateLeft(e) {
-    console.log(`ro-left ${post.filePath}:${post.fileName}`);
+  const rotate = async (degrees = 90) => {
+    console.log(`ro:${degrees} ${post.filePath}:${post.fileName}`);
     const token = window.localStorage.getItem(constants.STORAGE_KEY);
-    const response = await fetch(
-      `${constants.REST_ENDPOINT}/uploadRotate/?left=true&fileName=${post.fileName}&filePath=${post.filePath}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
-      },
-    );
-    console.log('response :>> ', response);
-    const random = Math.random();
-    setPost({
-      ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
-    });
-  }
-  async function rotateRight(e) {
-    console.log(`ro-right ${post.filePath}:${post.fileName}`);
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
-    const response = await fetch(
-      `${constants.REST_ENDPOINT}/uploadRotate/?&fileName=${post.fileName}&filePath=${post.filePath}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
-      },
-    );
-    console.log('response :>> ', response);
-    const random = Math.random();
-    setPost({
-      ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
-    });
-  }
+    let url = `${constants.REST_ENDPOINT}/uploadRotate/?fileName=${post.fileName}&filePath=${post.filePath}`;
+    if (degrees !== 90) {
+      url += '&left=true';
+    }
+    await xhrCall(url);
+  };
 
   function handleAdd(e) {
     console.log(e);
@@ -155,9 +130,9 @@ const Media = () => {
         <>
           <p className="lead">Prepare the image for use</p>
           <div className="grid-3mw">
-            <button onClick={e => rotateLeft(e)} type="button">Left</button>
-            <button onClick={e => resize(e)} type="button">Resize</button>
-            <button onClick={e => rotateRight(e)} type="button">Right</button>
+            <button onClick={() => rotate(-90)} type="button">Left</button>
+            <button onClick={() => resize()} type="button">Resize</button>
+            <button onClick={() => rotate(90)} type="button">Right</button>
           </div>
           {/* rename={this.rename} */}
           <hr />

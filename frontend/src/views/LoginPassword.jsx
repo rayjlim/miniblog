@@ -7,12 +7,8 @@ const LoginPassword = () => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
+  // TODO: convert to customHook
   const checkLogin = async (formUser = '', formPass = '') => {
-    // const formData = new URLSearchParams();
-
-    // formData.append('username', formUser);
-    // formData.append('password', formPass);
-    // formData.append('login', true);
     const formData = {
       username: formUser,
       password: formPass,

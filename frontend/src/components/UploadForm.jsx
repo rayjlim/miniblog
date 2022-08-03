@@ -11,6 +11,8 @@ const UploadForm = () => {
     console.log(event.target.files[0]);
     setSelectedFile(event.target.files[0]);
   }
+
+  // TODO: convert to customHook
   async function upload() {
     // const data = new FormData()
     // data.append('file', selectFile)

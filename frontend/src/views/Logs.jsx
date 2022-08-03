@@ -9,6 +9,7 @@ const Logs = () => {
   const [logFileName, setLogFileName] = useState('');
   const [logFile, setLogFile] = useState('');
 
+  // TODO: convert to customHook
   const getLog = async (log = '') => {
     const token = window.localStorage.getItem(constants.STORAGE_KEY);
     const response = await fetch(`${constants.REST_ENDPOINT}/logs/${log}`, {
