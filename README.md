@@ -8,16 +8,18 @@ Meant to be a personal journal
 ## Setup
 
 - Go into the `backend` directory
-- `backend/composer install`
-- create `backend/SERVER_CONFIG.php`
+- `composer install`
+- create `.env` and `.env.production` from `.env.example`
+  - Be sure the xampp server is running
 - Go into `frontend` directory
+- create `.env` from `.env.example`
 - `npm run start`
 
 ## Deployment to Production
 
 - `cd scripts`
 - in `env_vars.sh`,  set up required vars (see `env_vars.sh.example`)
-- `sh publish.sh`  
+- `./publish.sh`  
 
 ## Testing
 
