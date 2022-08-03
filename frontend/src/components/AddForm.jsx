@@ -1,86 +1,97 @@
-import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useEffect, useRef } from 'react'; // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
 import constants from '../constants';
 
-const FULL_DATE_FORMAT = 'yyyy-MM-dd';
+const useFetch = () => {
+  const [newId, setId] = useState(null);
+  const [formEntry, setFormEntry] = useState(null);
+  useEffect(() => {
+    if (formEntry !== null) {
+      (async () => {
+        const token = window.localStorage.getItem(constants.STORAGE_KEY);
+        try {
+          const response = await fetch(`${constants.REST_ENDPOINT}/api/posts/`, {
+            method: 'POST',
+            body: JSON.stringify(formEntry),
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-App-Token': token,
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+          });
+          const { id } = await response.json();
+          console.log('new id :>> ', id);
+          setId(id);
+        } catch (error) {
+          console.log(error);
+          alert(error);
+        }
+      })();
+    }
+  }, [formEntry]);
+  return [newId, setFormEntry];
+};
 
 const AddForm = ({ content, date, onSuccess }) => {
-  const [formContent, setContent] = useState(content || '');
-  const [formDate, setDate] = useState(
-    parse(date, FULL_DATE_FORMAT, new Date()),
+  const [formContent, setFormContent] = useState(content || '');
+  const [formDate, setFormDate] = useState(
+    parse(date, constants.FULL_DATE_FORMAT, new Date()),
   );
+  const isMounted = useRef(false);
+  const [id, setParams] = useFetch();
   let textareaInput = null;
 
   useEffect(() => {
     console.log('AddForm: useEffect');
-    setContent(content || '');
+    if (isMounted.current) {
+      // This makes it so this is not called on the first render
+      // but when the Id is set
+      console.log('handleAdd 92:>> ', id);
+      // setFormContent('');
+      onSuccess();
+    } else {
+      isMounted.current = true;
 
-    document.addEventListener('keydown', e => {
-      console.log(`AddForm: handle key presss ${e.key}`);
-      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
-      if (e.altKey && e.key === 's') {
-        console.log('S keybinding');
-        // Note: this is a hack because the content value is taken from the init value
-        document.getElementById('saveBtn').click();
-      } else if (e.key === 'Escape') {
-        document.getElementById('cancelBtn').click();
-      }
-    });
-  }, []);
+      setFormContent(content || '');
+      document.addEventListener('keydown', e => {
+        console.log(`AddForm: handle key presss ${e.key}`);
+        // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+        if (e.altKey && e.key === 's') {
+          console.log('S keybinding');
+          // Note: this is a hack because the content value is taken from the init value
+          document.getElementById('saveBtn').click();
+        } else if (e.key === 'Escape') {
+          document.getElementById('cancelBtn').click();
+        }
+      });
+    }
+  }, [id]);
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
     textareaInput.value = textareaInput.value.replace(pattern, replacement);
 
-    setContent(textareaInput.value);
+    setFormContent(textareaInput.value);
   }
 
   function dateChange(value = new Date()) {
     console.log('value :', value);
-    setDate(value);
+    setFormDate(value);
   }
 
   function handleAdd() {
-    (async () => {
-      console.log('this :', this);
-      const entry = {
-        content: formContent.trim(),
-        date: format(formDate, FULL_DATE_FORMAT),
-      };
-      try {
-        const token = window.localStorage.getItem(constants.STORAGE_KEY);
-        const response = await fetch(`${constants.REST_ENDPOINT}/api/posts/`, {
-          method: 'POST',
-          body: JSON.stringify(entry),
-          mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
-        });
-
-        setContent('');
-        const data = await response.json();
-        console.log('new id :>> ', data.id);
-        onSuccess();
-      } catch (error) {
-        console.log(error);
-        alert(error);
-      }
-    })();
-  }
-
-  function clear() {
-    // console.log('clear form');
-    onSuccess();
+    setParams({
+      content: formContent.trim(),
+      date: format(formDate, constants.FULL_DATE_FORMAT),
+    });
   }
 
   function setRef(elem) {
@@ -130,7 +141,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </button>
       <button
         type="button"
-        onClick={clear}
+        onClick={() => onSuccess()}
         className="btn btn-warning pull-right"
         id="cancelBtn"
       >
