@@ -13,7 +13,6 @@ const HIDE_EDIT_FORM = 0;
 const SHOW_EDIT_FORM = 1;
 
 const FILTER_MODE_ALL = 0;
-const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 
 // const FILTER_MODE_TAGGED = 1;
 // const FILTER_MODE_UNTAGGED = 2;
@@ -61,10 +60,10 @@ const TextEntry = () => {
         searchText,
       )}&filterType=${searchFilter}`;
       if (startDate) {
-        endpoint += `&startDate=${format(startDate, FULL_DATE_FORMAT)}`;
+        endpoint += `&startDate=${format(startDate, constants.FULL_DATE_FORMAT)}`;
       }
       if (endDate) {
-        endpoint += `&endDate=${format(endDate, FULL_DATE_FORMAT)}`;
+        endpoint += `&endDate=${format(endDate, constants.FULL_DATE_FORMAT)}`;
       }
       const response = await fetch(endpoint, {
         method: 'GET',
@@ -87,13 +86,13 @@ const TextEntry = () => {
         console.log(`setStartDate : ${responseData.params.startDate.length}`);
         setStartDate(
           responseData.params.startDate.length
-            ? parse(responseData.params.startDate, FULL_DATE_FORMAT, new Date())
+            ? parse(responseData.params.startDate, constants.FULL_DATE_FORMAT, new Date())
             : null,
         );
         console.log(`setEndDate : ${responseData.params.endDate.length}`);
         setEndDate(
           responseData.params.endDate.length
-            ? parse(responseData.params.endDate, FULL_DATE_FORMAT, new Date())
+            ? parse(responseData.params.endDate, constants.FULL_DATE_FORMAT, new Date())
             : null,
         );
 
@@ -178,7 +177,7 @@ const TextEntry = () => {
               `${constants.UPLOAD_ROOT}`,
             );
             const dateFormated = format(
-              parse(localEntry.date, FULL_DATE_FORMAT, new Date()),
+              parse(localEntry.date, constants.FULL_DATE_FORMAT, new Date()),
               'EEE, yyyy-MM-dd',
             );
 

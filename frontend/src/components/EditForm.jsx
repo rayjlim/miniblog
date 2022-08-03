@@ -6,10 +6,8 @@ import MarkdownDisplay from './MarkdownDisplay';
 import constants from '../constants';
 
 const EditForm = ({ entry, onSuccess }) => {
-  const FULL_DATE_FORMAT = 'yyyy-MM-dd';
-
   const [date, setDate] = useState(
-    parse(entry.date, FULL_DATE_FORMAT, new Date()),
+    parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
   );
   const escapedContent = entry.content.replace(
     /<br\s*\/>/g,
@@ -33,19 +31,19 @@ const EditForm = ({ entry, onSuccess }) => {
   * request to the server with the updated
   * entry
   */
+  // TODO: convert to customHook
   async function handleSave() {
-    const formEntry = {
-      content,
-      date: format(date, FULL_DATE_FORMAT),
-    };
-    console.log('handleSave entry :', formEntry);
+    console.log('handleSave entry :', content, date);
     try {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
       const response = await fetch(
         `${constants.REST_ENDPOINT}/api/posts/${entry.id}`,
         {
           method: 'PUT',
-          body: JSON.stringify(formEntry),
+          body: JSON.stringify({
+            content,
+            date: format(date, constants.FULL_DATE_FORMAT),
+          }),
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -66,20 +64,18 @@ const EditForm = ({ entry, onSuccess }) => {
     }
   }
 
-  function handleClear() {
-    onSuccess();
-  }
-
+  // TODO: convert to customHook
   async function handleDelete() {
     const go = window.confirm('You sure?');
     if (!go) {
       return;
     }
-    console.log(`handleDelete ${entry.id}`);
+    const { id } = entry;
+    console.log(`handleDelete ${id}`);
     try {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/api/posts/${entry.id}`,
+        `${constants.REST_ENDPOINT}/api/posts/${id}`,
         {
           method: 'DELETE',
           mode: 'cors',
@@ -169,7 +165,7 @@ const EditForm = ({ entry, onSuccess }) => {
           Save
         </button>
         <button
-          onClick={handleClear}
+          onClick={() => onSuccess()}
           className="btn btn-warning pull-right"
           id="cancelBtn"
           type="button"

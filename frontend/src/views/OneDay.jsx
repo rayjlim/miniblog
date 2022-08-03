@@ -17,7 +17,6 @@ const EDIT = 2;
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
-const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 /**
  * Component to Display of One Day style
  *
@@ -29,7 +28,7 @@ const OneDay = () => {
   const navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
-    pageDate: format(new Date(), FULL_DATE_FORMAT),
+    pageDate: format(new Date(), constants.FULL_DATE_FORMAT),
     searchParam: '',
     formEntry: {},
     toasts: [],
@@ -224,18 +223,18 @@ const OneDay = () => {
    */
   function handleButtonDirection(e) {
     console.log('e :>> ', e);
-    let localDate = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
+    let localDate = parse(state.pageDate, constants.FULL_DATE_FORMAT, new Date());
     if (e.target.value === 'today') {
       localDate = new Date();
     } else {
-      localDate = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
+      localDate = parse(state.pageDate, constants.FULL_DATE_FORMAT, new Date());
     }
 
     const newDate = add(localDate, { days: e.target.value });
-    dateInput.value = format(newDate, FULL_DATE_FORMAT);
+    dateInput.value = format(newDate, constants.FULL_DATE_FORMAT);
     loadDay({
       ...state,
-      pageDate: format(newDate, FULL_DATE_FORMAT),
+      pageDate: format(newDate, constants.FULL_DATE_FORMAT),
       formMode: CLOSED,
     });
   }
@@ -325,7 +324,7 @@ const OneDay = () => {
 
     const pageDate = urlParams.has('date')
       ? urlParams.get('date')
-      : format(new Date(), FULL_DATE_FORMAT);
+      : format(new Date(), constants.FULL_DATE_FORMAT);
 
     const pageMode = urlParams.has('pageMode')
       ? parseInt(urlParams.get('pageMode'), 10)
@@ -334,7 +333,7 @@ const OneDay = () => {
     console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
     // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
     // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-    const localDate = format(new Date(), FULL_DATE_FORMAT);
+    const localDate = format(new Date(), constants.FULL_DATE_FORMAT);
 
     console.log('setting pageDate :>> ', localDate);
     loadDay({ pageDate, pageMode });
@@ -452,7 +451,7 @@ const OneDay = () => {
               `${constants.UPLOAD_ROOT}`,
             );
             const dateFormated = format(
-              parse(entry.date, FULL_DATE_FORMAT, new Date()),
+              parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
               'EEE MM, dd yyyy',
             );
             const showEntryDate = (
