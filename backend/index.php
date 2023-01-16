@@ -1,7 +1,8 @@
 <?php
-// ini_set('display_errors', 'On');
-// ob_start("ob_gzhandler");
-// error_reporting(E_ALL);
+// error_reporting(E_ALL & E_STRICT);
+// ini_set('display_errors', '1');
+// ini_set('log_errors', '0');
+// ini_set('error_log', './');
 require 'common_header.php';
 
 $app = new Slim\Slim();
