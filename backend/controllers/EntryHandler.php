@@ -37,10 +37,11 @@ class EntryHandler extends AbstractController
     public function listItemsApi()
     {
         return function () {
-            $request = $this->app->request();
-            $requestParams = $request->params();
+            $queries = array();
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+
             $listObj = new ListParams();
-            $listObj->loadParams($requestParams);
+            $listObj->loadParams($queries);
             $userId = $this->app->userId;
             $entries = $this->dao->queryBlogList($userId, $listObj);
             $this->app->response()->header('Content-Type', 'application/json');
@@ -77,9 +78,11 @@ class EntryHandler extends AbstractController
             DevHelp::debugMsg(__file__);
             $userId = $this->app->userId;
             $currentDate = $this->resource->getDateTime();
-            $request = $this->app->request();
-            $requestParams = $request->params();
-            $targetDay = getValue($requestParams, 'day') != '' ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($requestParams, 'day')) : $currentDate;
+            $queries = array();
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+            $targetDay = getValue($queries, 'day') != ''
+                ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($queries, 'day'))
+                : $currentDate;
 
             $entries = $this->dao->getSameDayEntries($userId, $targetDay);
             $this->app->response()->header('Content-Type', 'application/json');
