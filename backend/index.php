@@ -68,6 +68,11 @@ $entryHandler = DAOFactory::EntryHandler();
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
 
+$cudHandler = DAOFactory::CUDHandler();
+$app->post('/api/posts/', $cudHandler->addEntry());
+$app->put('/api/posts/{id}', $cudHandler->updateEntry());
+$app->delete('/api/posts/{id}', $cudHandler->deleteEntry());
+
 $app->get('/ping', function (Request $request, Response $response, $args) {
     echo "{\"pong\":\"true\"}";
     // $response->getBody()->write("{\"pong\":\"true\"}");
@@ -75,24 +80,17 @@ $app->get('/ping', function (Request $request, Response $response, $args) {
 });
 
 $app->run();
-// echo 'index76-';
+
+
 
 // $app->post('/', function (Request $request, Response $response, $args) {
 //     $app->redirect('posts/');
 // });
 
-
-
-
-
-
-
 // $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
 
-// $cudHandler = DAOFactory::CUDHandler($app);
-// $app->post('/api/posts/', $cudHandler->addEntry());
-// $app->put('/api/posts/:id', $cudHandler->updateEntry());
-// $app->delete('/api/posts/:id', $cudHandler->deleteEntry());
+//
+
 // // handled in AuthMiddleware
 
 // $graphHandler = DAOFactory::GraphHandler($app);

@@ -26,10 +26,9 @@ class DAOFactory
     }
 
     // controllers
-    public static function CUDHandler($app)
+    public static function CUDHandler()
     {
         return new CUDHandler(
-            $app,
             DAOFactory::getSmsEntriesDAO(),
             DAOFactory::getResourceDAO(),
             DAOFactory::ContentHelper()
