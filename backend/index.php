@@ -54,15 +54,6 @@ $app->any('/security', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-// $app->get('/', function (Request $request, Response $response, $args) {
-//     $response->getBody()->write("Hello world!");
-//     return $response;
-// });
-
-// $app->post('/', function (Request $request, Response $response, $args) {
-//     $response->getBody()->write("Hello world too!");
-//     return $response;
-// });
 $entryHandler = DAOFactory::EntryHandler();
 // $app->get('/api/posts/:id', $entryHandler->detailItemApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
@@ -91,8 +82,6 @@ $app->get('/ping', function (Request $request, Response $response, $args) {
 
 $app->run();
 
-
-
 // $app->post('/', function (Request $request, Response $response, $args) {
 //     $app->redirect('posts/');
 // });
@@ -102,14 +91,7 @@ $app->run();
 // $graphHandler = DAOFactory::GraphHandler($app);
 // $app->get('/cron', $graphHandler->logCronCall());
 
-
-
-
-
-
 // $logHandler = DAOFactory::LogHandler();
 // $app->get('/logs/:logfileName', $logHandler->getUrlHandler());
 // $app->get('/logs/', $logHandler->getUrlHandler(''));
 // $app->delete('/logs/:logfileName', $logHandler->delete());
-
-
