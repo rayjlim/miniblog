@@ -47,14 +47,10 @@ R::ext('xdispense', function ($type) {
 $app = AppFactory::create();
 
 $app->setBasePath($_ENV['BASE_PATH'] );
-$app->addErrorMiddleware(true, true, true);
+// $app->addErrorMiddleware(true, true, true);
 $app->add(new AuthMiddleware());
 
-$app->get('/security', function (Request $request, Response $response, $args) {
-    return $response;
-});
-
-$app->post('/security', function (Request $request, Response $response, $args) {
+$app->any('/security', function (Request $request, Response $response, $args) {
     return $response;
 });
 
@@ -71,13 +67,15 @@ $entryHandler = DAOFactory::EntryHandler();
 // $app->get('/api/posts/:id', $entryHandler->detailItemApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 
+
 $app->get('/ping', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("{\"ping\":\"true\"}");
+    echo 'index72-';
+    $response->getBody()->write("{\"pong\":\"true\"}");
     return $response;
 });
 
 $app->run();
-
+// echo 'index76-';
 
 // $app->post('/', function (Request $request, Response $response, $args) {
 //     $app->redirect('posts/');
