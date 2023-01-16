@@ -3,24 +3,24 @@ defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
-
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 /**
  *   This class will handle the Create, Update, Delete Functionality
  *   for the Images uploaded
  */
-class UploadHandler extends AbstractController
+class UploadHandler
 {
     public $resource = null;
 
-    public function __construct($app, $resource)
+    public function __construct($resource)
     {
         $this->resource = $resource;
-        parent::__construct($app);
     }
 
     public function upload()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
 
             DevHelp::debugMsg('upload' . __FILE__);
 
@@ -69,6 +69,7 @@ class UploadHandler extends AbstractController
                 $data['createdDir'] = $createdDir;
                 \Lpt\Logger::log('File Uploaded: ' . $filePath . " - " . $urlFileName);
                 echo json_encode($data);
+                return $response;
             } catch (Exception $e) {
                 http_response_code(500);
                 echo 'Caught exception: ', $e->getMessage(), $targetDir, '\n';
@@ -79,7 +80,7 @@ class UploadHandler extends AbstractController
 
     public function resize()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg('resizeImage' . __FILE__);
             // $new_width = 0;
             // $new_height = 0;
@@ -101,6 +102,7 @@ class UploadHandler extends AbstractController
             $data['filePath'] = $filePath;
             \Lpt\Logger::log('File Resized: ' . $filePath . " - " . $urlFileName);
             echo json_encode($data);
+            return $response;
         };
     }
 
@@ -144,7 +146,7 @@ class UploadHandler extends AbstractController
 
     public function rotate()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg('rotateImage' . __FILE__);
 
             $fileName = $_GET["fileName"];
@@ -196,12 +198,13 @@ class UploadHandler extends AbstractController
             $data['filePath'] = $filePath;
             \Lpt\Logger::log('File Rotated: ' . $filePath . " - " . $fileName);
             echo json_encode($data);
+            return $response;
         };
     }
 
     public function rename()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg('rename' . __FILE__);
 
             $request = $this->app->request();
@@ -218,14 +221,16 @@ class UploadHandler extends AbstractController
             $data['filePath'] = $filePath;
             Logger::log('File Renamed: ' . $filePath . " - " . $fileName . " to " . $newFileName);
             echo json_encode($data);
+            return $response;
         };
     }
 
     public function listMedia()
     {
-        return function ($currentDir = '') {
+        return function (Request $request, Response $response, $args) {
+
             DevHelp::debugMsg('start listMedia');
-            $currentDir = $currentDir != '' ? $currentDir : '';
+            $currentDir = isset($args['currentDir']) ? $args['currentDir'] : '';
             $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR']));
             // \Lpt\DevHelp::debugMsg(print_r($filelist));
 
@@ -248,12 +253,13 @@ class UploadHandler extends AbstractController
             $data['dirContent'] = $dirContent;
 
             echo json_encode($data);
+            return $response;
         };
     }
 
     public function deleteMedia()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg('delete media');
             $fileName = $_GET["fileName"];
             $filePath = $_GET["filePath"];
@@ -264,6 +270,7 @@ class UploadHandler extends AbstractController
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
             Logger::log('File Removed: ' . $filePath . DIR_SEP . $fileName);
             echo json_encode($data);
+            return $response;
         };
     }
 }

@@ -1,24 +1,24 @@
 <?php
 defined('ABSPATH') or exit('No direct script access allowed');
 use \Lpt\DevHelp;
-
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 /**
  * @OA\Info(title="Miniblog Api", version="0.1",
  *   @OA\Contact(
- *     email= "rayjlim1@gmail.com"
+ *     email= "rayjlim@yahoo.com"
  *   )
  * )
  */
 
-class EntryHandler extends AbstractController
+class EntryHandler
 {
     public $dao = null;
     public $resource = null;
-    public function __construct($app, $_smsEntriesDAO, $_resource)
+    public function __construct($_smsEntriesDAO, $_resource)
     {
         $this->dao = $_smsEntriesDAO;
         $this->resource = $_resource;
-        parent::__construct($app);
     }
 
     /**
@@ -36,20 +36,22 @@ class EntryHandler extends AbstractController
     */
     public function listItemsApi()
     {
-        return function () {
-            $request = $this->app->request();
-            $requestParams = $request->params();
+        return function (Request $request, Response $response, $args) {
+            $queries = array();
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+
             $listObj = new ListParams();
-            $listObj->loadParams($requestParams);
-            $userId = $this->app->userId;
+            $listObj->loadParams($queries);
+            $userId = $_ENV['ACCESS_ID'];
             $entries = $this->dao->queryBlogList($userId, $listObj);
-            $this->app->response()->header('Content-Type', 'application/json');
+            // $this->app->response()->header('Content-Type', 'application/json');
 
             $metaData = new stdClass();
             $metaData->entries = $entries;
             $metaData->params = $listObj;
 
             $this->resource->echoOut(json_encode($metaData));
+            return $response;
         };
     }
 
@@ -71,23 +73,26 @@ class EntryHandler extends AbstractController
    *     )
     * )
     */
-    public function sameDayEntries()
+    public function listItemsSameDay()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg(__file__);
-            $userId = $this->app->userId;
+            $userId = $_ENV['ACCESS_ID'];
             $currentDate = $this->resource->getDateTime();
-            $request = $this->app->request();
-            $requestParams = $request->params();
-            $targetDay = getValue($requestParams, 'day') != '' ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($requestParams, 'day')) : $currentDate;
+            $queries = array();
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+            $targetDay = getValue($queries, 'day') != ''
+                ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($queries, 'day'))
+                : $currentDate;
 
             $entries = $this->dao->getSameDayEntries($userId, $targetDay);
-            $this->app->response()->header('Content-Type', 'application/json');
+            // $this->app->response()->header('Content-Type', 'application/json');
             $this->resource->echoOut('{"user": '. $userId .', "entries": ' . json_encode($entries) . '}');
+            return $response;
         };
     }
 
-    public function itemDetailsApi()
+    public function detailItemApi()
     {
         return function ($id) {
             DevHelp::debugMsg('start ' . __FILE__);
@@ -126,7 +131,7 @@ class EntryHandler extends AbstractController
     public function yearMonthsApi()
     {
         return function () {
-            $userId = $this->app->userId;
+            $userId = $_ENV['ACCESS_ID'];
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->getYearMonths($userId);

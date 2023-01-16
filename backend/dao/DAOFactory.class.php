@@ -26,19 +26,18 @@ class DAOFactory
     }
 
     // controllers
-    public static function CUDHandler($app)
+    public static function CUDHandler()
     {
         return new CUDHandler(
-            $app,
             DAOFactory::getSmsEntriesDAO(),
             DAOFactory::getResourceDAO(),
             DAOFactory::ContentHelper()
         );
     }
 
-    public static function EntryHandler($app)
+    public static function EntryHandler()
     {
-        return new EntryHandler($app, DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
+        return new EntryHandler(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
     public static function GraphHandler($app)
@@ -55,8 +54,8 @@ class DAOFactory
         return new LogHandler(DAOFactory::getResourceDAO());
     }
 
-    public static function UploadHandler($app)
+    public static function UploadHandler()
     {
-        return new UploadHandler($app, DAOFactory::getResourceDAO());
+        return new UploadHandler(DAOFactory::getResourceDAO());
     }
 }
