@@ -54,8 +54,8 @@ class DAOFactory
         return new LogHandler(DAOFactory::getResourceDAO());
     }
 
-    public static function UploadHandler($app)
+    public static function UploadHandler()
     {
-        return new UploadHandler($app, DAOFactory::getResourceDAO());
+        return new UploadHandler(DAOFactory::getResourceDAO());
     }
 }
