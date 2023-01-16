@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.5](https://github.com/rayjlim/miniblog/compare/v2.4.4...v2.4.5) (2023-01-16)
+
+
+### Bug Fixes
+
+* ⬆️ slim4 dependencies  🚧 ([eb71fa9](https://github.com/rayjlim/miniblog/commit/eb71fa9a040ef21de14d1cd36974afb17fe2e652))
+* clean up index.php, update .env files ([4254894](https://github.com/rayjlim/miniblog/commit/4254894238d3d6fc49957cbb5626dd1dee8009c1))
+* consolidate security call ([32b5de0](https://github.com/rayjlim/miniblog/commit/32b5de05d3d1e48a1ae923803ca63a128afe7a1a))
+* convert route for listItems ([57e304d](https://github.com/rayjlim/miniblog/commit/57e304d97f3343e178502b85e9e250ce020aa169))
+* env file changes ([ea3829d](https://github.com/rayjlim/miniblog/commit/ea3829deba33bee312aeb75765556cc94de09c3d))
+* impl uploadhandler methods ([34b3dcd](https://github.com/rayjlim/miniblog/commit/34b3dcd81d912c69f652e2a4f91dbee722ebe922))
+* implement CUDHandler functions ([c18d9a1](https://github.com/rayjlim/miniblog/commit/c18d9a184c70164fbec82907b4af7320e3044217))
+* php version updated, error logs ([520c7d9](https://github.com/rayjlim/miniblog/commit/520c7d957330081e7b8d2539c0df3e1e804a23e5))
+* replace reading of query params with basic php ([db5d15e](https://github.com/rayjlim/miniblog/commit/db5d15e4451f4d955d60e5d4eb7d44b8786c8f74))
+* sameday items api ([6cec1d6](https://github.com/rayjlim/miniblog/commit/6cec1d6fc5bd84cb27fa04636681288fa5651975))
+* update authmiddleware ([95b1cdf](https://github.com/rayjlim/miniblog/commit/95b1cdf62c6ecfda8a17c0193318f872da198917))
+* validate userObj ([3e0f617](https://github.com/rayjlim/miniblog/commit/3e0f617807c7f73aa587bf802c16fef06049e234))
+
 ### [2.4.4](https://github.com/rayjlim/miniblog/compare/v2.4.3...v2.4.4) (2022-08-02)
 
 
