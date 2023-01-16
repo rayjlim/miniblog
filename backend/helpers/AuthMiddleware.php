@@ -17,10 +17,10 @@ class AuthMiddleware
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $response = $handler->handle($request);
-        $existingContent = (string) $response->getBody();
+        // $existingContent = (string) $response->getBody();
 
         $response = new Response();
-        $response->getBody()->write('BEFORE ' . $existingContent);
+        // $response->getBody()->write('BEFORE ' . $existingContent);
 
         DevHelp::debugMsg(__FILE__);
         $ipaddress = getenv("REMOTE_ADDR");
