@@ -50,7 +50,7 @@ class GraphHandler extends AbstractController
             $qLength = sizeof($this->QUESTIONOTDAY);
             $modulo = $dayNumber % $qLength;
             $text = $this->QUESTIONOTDAY[$modulo];
-            $link = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['ROOT_URL'] . "/oneDay?pretext=#qod";
+            $link = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['BASE_PATH'] . "oneDay?pretext=#qod";
             $additions .= "<strong><a href=\"" . $link . "\">Question of the Day:</a></strong>"
                 . $text . "<br><br>";
 
@@ -201,7 +201,7 @@ class GraphHandler extends AbstractController
 function printEntrys($carry, $item)
 {
     $entryDay = new DateTime($item['date']);
-    $urlPrefix = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['ROOT_URL'];
+    $urlPrefix = "https://" . $_ENV['DOMAIN'] . $_ENV['BASE_PATH'];
     $link = "{$urlPrefix}/index.html?date={$entryDay->format(YEAR_MONTH_DAY_FORMAT)}";
     $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
     $replacement = "<img src=\"{$urlPrefix}uploads" . '${2}' . "\">";
