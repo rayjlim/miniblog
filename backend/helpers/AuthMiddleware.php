@@ -25,7 +25,7 @@ class AuthMiddleware extends \Slim\Middleware
             DevHelp::debugMsg('decryptedString:' . $decryptedString);
             $userObj = json_decode($decryptedString);
 
-            $this->app->userId = $userObj->userId;
+            $this->app->userId = $userObj ? $userObj->userId : NULL;
             if (is_numeric($userObj->userId)) {
                 return $userObj->userId;
             }
