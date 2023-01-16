@@ -73,6 +73,16 @@ $app->post('/api/posts/', $cudHandler->addEntry());
 $app->put('/api/posts/{id}', $cudHandler->updateEntry());
 $app->delete('/api/posts/{id}', $cudHandler->deleteEntry());
 
+$uploadHandler = DAOFactory::UploadHandler();
+$app->post('/uploadImage/', $uploadHandler->upload());
+$app->get('/uploadRotate/', $uploadHandler->rotate());
+$app->get('/uploadResize/', $uploadHandler->resize());
+$app->post('/uploadRename/', $uploadHandler->rename());
+
+$app->get('/media/', $uploadHandler->listMedia());
+$app->get('/media/{currentDir}', $uploadHandler->listMedia());
+$app->delete('/media/', $uploadHandler->deleteMedia());
+
 $app->get('/ping', function (Request $request, Response $response, $args) {
     echo "{\"pong\":\"true\"}";
     // $response->getBody()->write("{\"pong\":\"true\"}");
@@ -89,22 +99,13 @@ $app->run();
 
 // $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
 
-//
-
-// // handled in AuthMiddleware
-
 // $graphHandler = DAOFactory::GraphHandler($app);
 // $app->get('/cron', $graphHandler->logCronCall());
 
-// $uploadHandler = DAOFactory::UploadHandler($app);
-// $app->post('/uploadImage/', $uploadHandler->upload());
-// $app->get('/uploadRotate/', $uploadHandler->rotate());
-// $app->get('/uploadResize/', $uploadHandler->resize());
-// $app->post('/uploadRename/', $uploadHandler->rename());
 
-// $app->get('/media/', $uploadHandler->listMedia());
-// $app->get('/media/:currentDir', $uploadHandler->listMedia());
-// $app->delete('/media/', $uploadHandler->deleteMedia());
+
+
+
 
 // $logHandler = DAOFactory::LogHandler();
 // $app->get('/logs/:logfileName', $logHandler->getUrlHandler());
