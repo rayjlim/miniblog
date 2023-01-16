@@ -58,15 +58,18 @@ $app->post('/security', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello world!");
-    return $response;
-});
+// $app->get('/', function (Request $request, Response $response, $args) {
+//     $response->getBody()->write("Hello world!");
+//     return $response;
+// });
 
-$app->post('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello world too!");
-    return $response;
-});
+// $app->post('/', function (Request $request, Response $response, $args) {
+//     $response->getBody()->write("Hello world too!");
+//     return $response;
+// });
+$entryHandler = DAOFactory::EntryHandler();
+// $app->get('/api/posts/:id', $entryHandler->detailItemApi());
+$app->get('/api/posts/', $entryHandler->listItemsApi());
 
 $app->get('/ping', function (Request $request, Response $response, $args) {
     $response->getBody()->write("{\"ping\":\"true\"}");
@@ -76,15 +79,14 @@ $app->get('/ping', function (Request $request, Response $response, $args) {
 $app->run();
 
 
-
-// $app->post('/', function () use ($app) {
+// $app->post('/', function (Request $request, Response $response, $args) {
 //     $app->redirect('posts/');
 // });
 
-// $entryHandler = DAOFactory::EntryHandler($app);
 
-// $app->get('/api/posts/:id', $entryHandler->itemDetailsApi());
-// $app->get('/api/posts/', $entryHandler->listItemsApi());
+
+
+
 
 // $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
 // $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());

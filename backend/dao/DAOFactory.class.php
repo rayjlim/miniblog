@@ -36,9 +36,9 @@ class DAOFactory
         );
     }
 
-    public static function EntryHandler($app)
+    public static function EntryHandler()
     {
-        return new EntryHandler($app, DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
+        return new EntryHandler(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
     public static function GraphHandler($app)
