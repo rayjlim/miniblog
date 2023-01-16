@@ -73,9 +73,9 @@ class EntryHandler
    *     )
     * )
     */
-    public function sameDayEntries()
+    public function listItemsSameDay()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg(__file__);
             $userId = $_ENV['ACCESS_ID'];
             $currentDate = $this->resource->getDateTime();
@@ -86,8 +86,9 @@ class EntryHandler
                 : $currentDate;
 
             $entries = $this->dao->getSameDayEntries($userId, $targetDay);
-            $this->app->response()->header('Content-Type', 'application/json');
+            // $this->app->response()->header('Content-Type', 'application/json');
             $this->resource->echoOut('{"user": '. $userId .', "entries": ' . json_encode($entries) . '}');
+            return $response;
         };
     }
 

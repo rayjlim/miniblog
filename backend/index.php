@@ -66,11 +66,11 @@ $app->any('/security', function (Request $request, Response $response, $args) {
 $entryHandler = DAOFactory::EntryHandler();
 // $app->get('/api/posts/:id', $entryHandler->detailItemApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
-
+$app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
 
 $app->get('/ping', function (Request $request, Response $response, $args) {
-    echo 'index72-';
-    $response->getBody()->write("{\"pong\":\"true\"}");
+    echo "{\"pong\":\"true\"}";
+    // $response->getBody()->write("{\"pong\":\"true\"}");
     return $response;
 });
 
@@ -86,7 +86,7 @@ $app->run();
 
 
 
-// $app->get('/api/sameDayEntries/', $entryHandler->sameDayEntries());
+
 // $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
 
 // $cudHandler = DAOFactory::CUDHandler($app);
