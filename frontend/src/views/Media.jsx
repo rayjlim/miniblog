@@ -112,6 +112,11 @@ const Media = () => {
   //     EntryApi.renameImg(this.props.fileName, this.props.filePath, changedName);
   // }
 
+  function copyToClipboard() {
+    console.log(post.prepend);
+    navigator.clipboard.writeText(`![](/${post.prepend})`);
+  }
+
   return (
     <>
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -138,6 +143,9 @@ const Media = () => {
           <hr />
           <section className="container">
             {post.imgUrl}
+            <button onClick={() => copyToClipboard()} type="button">
+              [clip]
+            </button>
             <img src={post.imgUrl} alt="edit img" />
           </section>
           <hr />
