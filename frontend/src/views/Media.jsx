@@ -140,16 +140,16 @@ const Media = () => {
             <button onClick={() => rotate(90)} type="button">Right</button>
           </div>
           {/* rename={this.rename} */}
-          <hr />
           <section className="container">
             {post.imgUrl}
             <button onClick={() => copyToClipboard()} type="button">
               [clip]
             </button>
-            <img src={post.imgUrl} alt="edit img" />
+            <div style={{ 'text-align': 'center' }}>
+              <img src={post.imgUrl} alt="edit img" />
+            </div>
           </section>
-          <hr />
-          <h5>Image is automatically prepended on submit</h5>
+          <span style={{ 'font-size': '.8em' }}>Image is automatically prepended on submit</span>
           <AddForm
             date={post.date}
             content={post.prepend}
