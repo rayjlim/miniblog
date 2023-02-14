@@ -11,6 +11,12 @@
     "nyholm/psr7": "^1.5",
     "nyholm/psr7-server": "^1.0"
   },
+  "require-dev": {
+    "codeception/codeception": "^5",
+    "codeception/module-phpbrowser": "^3.0",
+    "codeception/module-asserts": "^3.0"
+
+  },
   "autoload": {
     "classmap": [
       "./controllers",

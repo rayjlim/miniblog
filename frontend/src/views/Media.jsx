@@ -114,7 +114,7 @@ const Media = () => {
 
   function copyToClipboard() {
     console.log(post.prepend);
-    navigator.clipboard.writeText(`![](/${post.prepend})`);
+    navigator.clipboard.writeText(post.prepend);
   }
 
   return (
