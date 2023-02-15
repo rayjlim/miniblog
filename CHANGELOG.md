@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/rayjlim/miniblog/compare/v2.6.1...v2.7.0) (2023-02-15)
+
+
+### Features
+
+* [#177](https://github.com/rayjlim/miniblog/issues/177) change alerts to react-toastify ([88cd030](https://github.com/rayjlim/miniblog/commit/88cd0302a2d356b0c3837112b137ea79e0e252bc))
+
 ### [2.6.1](https://github.com/rayjlim/miniblog/compare/v2.6.0...v2.6.1) (2023-02-15)
 
 
