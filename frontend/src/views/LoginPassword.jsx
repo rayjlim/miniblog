@@ -61,9 +61,7 @@ const LoginPassword = () => {
 
   return (
     <div className="App">
-      <div>
-        <ToastContainer />
-      </div>
+      <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>

@@ -1,7 +1,7 @@
 /* eslint-disable no-alert, no-console, no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
 import format from 'date-fns/format';
 import constants from '../constants';
 import AddForm from '../components/AddForm';
@@ -93,12 +93,6 @@ const Media = () => {
     await xhrCall(url);
   };
 
-  function handleAdd(e) {
-    console.log(e);
-    alert('Entry created');
-    navigate('/oneday');
-  }
-
   // rename(newName) {
   //     console.log('rename');
   //     console.log(newName);
@@ -131,7 +125,7 @@ const Media = () => {
         </RouterNavLink>
         {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>
-
+      <ToastContainer />
       {post.fileName !== '' && (
         <>
           <p className="lead">Prepare the image for use</p>
@@ -146,15 +140,18 @@ const Media = () => {
             <button onClick={() => copyToClipboard()} type="button">
               [clip]
             </button>
-            <div style={{ 'text-align': 'center' }}>
+            <div style={{ textAlign: 'center' }}>
               <img src={post.imgUrl} alt="edit img" />
             </div>
           </section>
-          <span style={{ 'font-size': '.8em' }}>Image is automatically prepended on submit</span>
+          <span style={{ fontSize: '.8em' }}>Image is automatically prepended on submit</span>
           <AddForm
             date={post.date}
             content={post.prepend}
-            onSuccess={e => handleAdd(e)}
+            onSuccess={() => {
+              toast('Entry created');
+              setTimeout((() => { navigate('/oneday'); }), 2000);
+            }}
           />
         </>
       )}
@@ -168,7 +165,7 @@ const Media = () => {
       <button onClick={e => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
       {showMedia && (
         // eslint-disable-next-line react/jsx-no-bind
-        <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
+        <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} content="" />
       )}
     </>
   );

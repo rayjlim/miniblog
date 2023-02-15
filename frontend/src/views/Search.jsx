@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
+import { ToastContainer, toast } from 'react-toastify';
 import { format, parse } from 'date-fns';
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
@@ -77,7 +78,7 @@ const TextEntry = () => {
 
       if (!response.ok) {
         console.log('response.status :', response.status);
-        alert(`loading error : ${response.status}`);
+        throw new Error(`loading error : ${response.status}`);
       } else {
         const responseData = await response.json();
 
@@ -112,7 +113,7 @@ const TextEntry = () => {
       }
     } catch (err) {
       console.log(err);
-      alert(err);
+      toast.error(err);
     }
   }
 
@@ -222,6 +223,7 @@ const TextEntry = () => {
 
   return (
     <>
+      <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">
           <i className="fa fa-home" />
