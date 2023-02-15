@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -38,13 +38,13 @@ const TextEntry = () => {
   const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
-  const [searchText, setSearchText] = useState('');
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
   const [entry, setEntry] = useState({});
   const [searchParams, setSearchParams] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const searchText = useRef({ value: '' });
 
   /**
    * Get blog entries for text search
@@ -52,12 +52,13 @@ const TextEntry = () => {
    */
   async function getEntries() {
     console.log('getEntries#searchText:', searchText);
+    const searchTextValue = searchText.current.value;
     try {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
       let endpoint = `${
         constants.REST_ENDPOINT
       }/api/posts/?searchParam=${encodeURIComponent(
-        searchText,
+        searchTextValue,
       )}&filterType=${searchFilter}`;
       if (startDate) {
         endpoint += `&startDate=${format(startDate, constants.FULL_DATE_FORMAT)}`;
@@ -96,8 +97,8 @@ const TextEntry = () => {
             : null,
         );
 
-        if (searchText.length) {
-          const reg = new RegExp(searchText, 'gi');
+        if (searchTextValue.length) {
+          const reg = new RegExp(searchTextValue, 'gi');
 
           const foundHighlights = responseData.entries.map(entryLocal => {
             const highlighted = entryLocal.content.replace(reg, str => `<b>${str}</b>`);
@@ -168,7 +169,7 @@ const TextEntry = () => {
       <ul className="entriesList">
         {posts.length
           && posts.map(localEntry => {
-            const content = searchText.length && localEntry.highlighted
+            const content = searchText.current.value.length && localEntry.highlighted
               ? localEntry.highlighted
               : localEntry.content;
             let newText = content.replace(/<br \/>/g, '\n');
@@ -216,8 +217,8 @@ const TextEntry = () => {
     }
     console.log('useEffect');
 
-    debouncedSearch(searchText);
-  }, [searchText, searchFilter]);
+    debouncedSearch(searchText.current.value);
+  }, [searchText.current.value, searchFilter]);
 
   return (
     <>
@@ -231,17 +232,17 @@ const TextEntry = () => {
           <i className="fa fa-calendar-check" />
           <span>Same Day</span>
         </RouterNavLink>
+        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>
-      <h1>Text Search</h1>
+      <h1>Text Searchs</h1>
 
       <section className="container">
         <input
           id="searchText"
           type="text"
           className="form-control"
-          value={searchText}
+          ref={searchText}
           placeholder="Search term"
-          onChange={e => setSearchText(e.target.value)}
         />
         Filter:
         <input

@@ -129,6 +129,7 @@ const Media = () => {
           <i className="fa fa-calendar-check" />
           <span>Same Day</span>
         </RouterNavLink>
+        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>
 
       {post.fileName !== '' && (
