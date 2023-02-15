@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/rayjlim/miniblog/compare/v2.5.0...v2.6.0) (2023-02-15)
+
+
+### Features
+
+* add dev banner in nav ([8084c5e](https://github.com/rayjlim/miniblog/commit/8084c5ef8f67d531d120131f90a0a1df20931fbc))
+
+
+### Bug Fixes
+
+* add required prop ([a08dbe3](https://github.com/rayjlim/miniblog/commit/a08dbe3f7f6d7595139268e5db14360cd1141a4d))
+* composer.lock update ([c3b2906](https://github.com/rayjlim/miniblog/commit/c3b29062d3a1a0fcd415ebfff8dcd14aa5c508a5))
+* useRef for search.jsx ([c8ae789](https://github.com/rayjlim/miniblog/commit/c8ae789a1e040d5e81db027ee32fa7001a945830))
+
 ## [2.5.0](https://github.com/rayjlim/miniblog/compare/v2.4.5...v2.5.0) (2023-02-15)
 
 
