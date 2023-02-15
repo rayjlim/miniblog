@@ -150,7 +150,7 @@ const EditForm = ({ entry, onSuccess }) => {
         />
       </div>
       <div className="form-group">
-        <DatePicker onChange={() => dateChange()} value={date} />
+        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
       </div>
 
       <div className="editBtns">

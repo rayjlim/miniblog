@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.1](https://github.com/rayjlim/miniblog/compare/v2.6.0...v2.6.1) (2023-02-15)
+
+
+### Bug Fixes
+
+* change date not being passed ([09f3e85](https://github.com/rayjlim/miniblog/commit/09f3e858c198b9d418bba35722f115d38e29ddef))
+
 ## [2.6.0](https://github.com/rayjlim/miniblog/compare/v2.5.0...v2.6.0) (2023-02-15)
 
 
