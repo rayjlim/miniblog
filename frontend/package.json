@@ -1,6 +1,6 @@
 {
   "name": "miniblog",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "private": true,
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.4",
@@ -11,7 +11,6 @@
     "react": "^17.0.0",
     "react-date-picker": "^8.4.0",
     "react-dom": "^17.0.0",
-    "react-md": "^5.0.0",
     "react-router-dom": "^6.0.0",
     "react-scripts": "^5",
     "react-toastify": "^9.1.1"

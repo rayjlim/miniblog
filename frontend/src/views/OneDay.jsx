@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
-import { Snackbar } from 'react-md';
+import { ToastContainer, toast } from 'react-toastify';
 import { format, parse, add } from 'date-fns';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
@@ -31,7 +31,6 @@ const OneDay = () => {
     pageDate: format(new Date(), constants.FULL_DATE_FORMAT),
     searchParam: '',
     formEntry: {},
-    toasts: [],
     autohide: 'true',
     pageMode: ONEDAY,
     formMode: CLOSED,
@@ -47,68 +46,83 @@ const OneDay = () => {
 
   async function getInspiration() {
     try {
-      console.log(constants);
       const quoteApi = constants.INSPIRATION_ENDPOINT;
-      const quoteResponse = await fetch(quoteApi, {});
-      if (!quoteResponse.ok) {
-        console.log('quoteResponse.status :', quoteResponse.status);
-        alert(`loading error : ${quoteResponse.status}`);
-      } else {
-        const data = await quoteResponse.json();
+      const apiResponse = await fetch(quoteApi, {});
+      if (apiResponse.ok) {
+        const data = await apiResponse.json();
         console.log('vercel data.header :>> ', data.header);
         console.log('vercel data.message :>> ', data.message);
         setInspiration(`Inspire: ${data.message} : ${data.author}`);
+        return;
       }
+      throw new Error(apiResponse.status);
     } catch (err) {
-      console.log(err);
-      alert(`loading error : ${err}`);
+      console.error(err);
+      toast(`getInspiration error : ${err}`);
     }
   }
 
   async function getWeight(date) {
     try {
       const api = constants.TRACKS_ENDPIONT;
-      const quoteResponse = await fetch(`${api}?start=${date}&end=${date}`, {});
-      if (!quoteResponse.ok) {
-        console.log('quoteResponse.status :', quoteResponse.status);
-        alert(`loading error : ${quoteResponse.status}`);
-      } else {
-        const data = await quoteResponse.json();
+      const apiResponse = await fetch(`${api}?start=${date}&end=${date}`, {});
+      if (apiResponse.ok) {
+        const data = await apiResponse.json();
         if (data && data.data && data.data[0] && data.data[0].count) {
           setWeight(data.data[0].count);
         } else {
           setWeight('?');
         }
+        return;
       }
+      throw new Error(apiResponse.status);
     } catch (err) {
-      console.log(err);
-      alert(`loading error : ${err}`);
+      console.error(err);
+      toast.error(`getWeight error : ${err}`);
     }
   }
 
   async function getMovies(date) {
     try {
       const api = constants.MOVIES_ENDPIONT;
-      const quoteResponse = await fetch(
+      const apiResponse = await fetch(
         `${api}&advanced_search=true&dt_viewed=${date}`,
         {},
       );
-      if (!quoteResponse.ok) {
-        console.log('quoteResponse.status :', quoteResponse.status);
-        alert(`loading error : ${quoteResponse.status}`);
-      } else {
-        const data = await quoteResponse.json();
+      if (apiResponse.ok) {
+        const data = await apiResponse.json();
         if (data && data.movies) {
           setMovies(data.movies);
         } else {
           setMovies([]);
         }
+        return;
       }
+      throw new Error(apiResponse.status);
     } catch (err) {
-      console.log(err);
-      alert(`loading error : ${err}`);
+      console.error(err);
+      toast.error(`getMovies error : ${err}`);
     }
   }
+
+  async function getPrompt() {
+    try {
+      const apiEndpoint = constants.QUESTION_ENDPIONT;
+      const apiResponse = await fetch(apiEndpoint, {});
+      if (apiResponse.ok) {
+        const data = await apiResponse.json();
+        console.log('vercel data.header :>> ', data.header);
+        console.log('vercel data.message :>> ', data.message);
+        setInspiration(`Question: ${data.prompt} : ${data.category}`);
+        return;
+      }
+      throw new Error(apiResponse.status);
+    } catch (err) {
+      console.error(err);
+      toast.error(`getPrompt error : ${err}`);
+    }
+  }
+
   function loadDay(loadParams) {
     console.log(
       'loadDay :',
@@ -152,10 +166,7 @@ const OneDay = () => {
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
         });
-        if (!response.ok) {
-          console.log('response.status :', response.status);
-          alert(`loading error : ${response.status}`);
-        } else {
+        if (response.ok) {
           const { entries } = await response.json();
           console.log('response.data :>> ', entries);
           const refs = entries.reduce((acc, value) => {
@@ -179,6 +190,9 @@ const OneDay = () => {
           //     block: 'start',
           //   });
           // }
+        } else {
+          console.error('response.status :', response.status);
+          toast.error(`loading error : ${response.status}`);
         }
 
         // ----
@@ -188,30 +202,10 @@ const OneDay = () => {
         await getWeight(loadParams.pageDate);
         await getMovies(loadParams.pageDate);
       } catch (err) {
-        console.log(err);
-        alert(`loading error : ${err}`);
+        console.error(err);
+        toast.error(`loading error : ${err}`);
       }
     })();
-  }
-
-  async function getPrompt() {
-    try {
-      // console.log(constants);
-      const apiEndpoint = constants.QUESTION_ENDPIONT;
-      const response = await fetch(apiEndpoint, {});
-      if (!response.ok) {
-        console.log('response.status :', response.status);
-        alert(`loading error : ${response.status}`);
-      } else {
-        const data = await response.json();
-        console.log('vercel data.header :>> ', data.header);
-        console.log('vercel data.message :>> ', data.message);
-        setInspiration(`Question: ${data.prompt} : ${data.category}`);
-      }
-    } catch (err) {
-      console.log(err);
-      alert(`loading error : ${err}`);
-    }
   }
 
   /**
@@ -238,9 +232,8 @@ const OneDay = () => {
   }
 
   function resetEntryForm() {
-    const toasts = state.toasts.slice();
-    toasts.push({ text: 'Add/Edit Done' });
-    loadDay({ ...state, toasts, formMode: CLOSED });
+    toast('Add/Edit Done');
+    loadDay({ ...state, formMode: CLOSED });
   }
 
   function showAddForm() {
@@ -356,6 +349,7 @@ const OneDay = () => {
 
   return (
     <>
+      <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/search">
           <i className="fa fa-search" />
@@ -381,11 +375,6 @@ const OneDay = () => {
           <span className="nav-text">Log Out</span>
         </button>
       </nav>
-      <Snackbar
-        id="example-snackbar"
-        toasts={state.toasts}
-        autohide={state.autohide}
-      />
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
 
