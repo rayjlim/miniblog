@@ -65,9 +65,7 @@ const LoginPassword = () => {
         <ToastContainer />
       </div>
       <h1>Login</h1>
-      <div>
-        {constants.ENVIRONMENT}
-      </div>
+      {constants.ENVIRONMENT === 'development' && <span>Development</span>}
       <span>User</span>
       <input type="text" ref={user} />
       <span>Password</span>
