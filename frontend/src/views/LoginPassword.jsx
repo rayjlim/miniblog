@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import constants from '../constants';
 
 const LoginPassword = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
+  const user = useRef();
+  const password = useRef();
 
   // TODO: convert to customHook
   const checkLogin = async (formUser = '', formPass = '') => {
@@ -32,39 +34,47 @@ const LoginPassword = () => {
         }
         return results.token;
       }
-      console.log('Network response was not ok.');
+      // const message = 'Network response was not ok.';
+      // console.error(message);
+      // toast.error(message);
     } catch (error) {
-      console.log(`Error when parsing means not logged in ${error}`);
+      const message = `Error when parsing means not logged in ${error}`;
+      console.error(message);
+      toast.error(message);
     }
-    return true;
+    return false;
   };
 
   const doLogin = async () => {
-    console.log(user);
-    console.log(password);
-    const token = await checkLogin(user, password);
-    setUser('');
-    setPassword('');
-    console.log(token);
-    // goto main page
-    navigate('/oneday');
+    console.log(user.current.value, password.current.value);
+    const token = await checkLogin(user.current.value, password.current.value);
+    if (!token) {
+      user.current.value = '';
+      password.current.value = '';
+      toast.error('Bad Login');
+    } else {
+      console.log(token);
+      // goto main page
+      navigate('/oneday');
+    }
   };
-
-  // const doLogout = () => {
-  //   window.localStorage.setItem(constants.STORAGE_KEY, null);
-  // };
 
   return (
     <div className="App">
+      <div>
+        <ToastContainer />
+      </div>
+      <h1>Login</h1>
+      <div>
+        {constants.ENVIRONMENT}
+      </div>
       <span>User</span>
-      <input type="text" value={user} onChange={e => setUser(e.target.value)} />
+      <input type="text" ref={user} />
       <span>Password</span>
-      <input
-        type="text"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button onClick={() => doLogin()} type="button">Login</button>
+      <input type="password" ref={password} />
+      <button onClick={() => doLogin()} type="button">
+        Login
+      </button>
     </div>
   );
 };

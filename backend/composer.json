@@ -1,7 +1,7 @@
 {
   "name": "lilplaytime/miniblog",
   "description": "Blog Web application. Backend for headless CMS, front end in Create-React-App",
-  "version": "2.4.5",
+  "version": "2.5.0",
   "license": "proprietary",
   "require": {
     "php": "8.1.*",
@@ -15,7 +15,6 @@
     "codeception/codeception": "^5",
     "codeception/module-phpbrowser": "^3.0",
     "codeception/module-asserts": "^3.0"
-
   },
   "autoload": {
     "classmap": [

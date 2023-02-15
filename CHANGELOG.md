@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/rayjlim/miniblog/compare/v2.4.5...v2.5.0) (2023-02-15)
+
+
+### Features
+
+* [#159](https://github.com/rayjlim/miniblog/issues/159) media copy to clipboard ([bc65764](https://github.com/rayjlim/miniblog/commit/bc65764785457fef4d3402ea3898ad5789381a25))
+
+
+### Bug Fixes
+
+* [#154](https://github.com/rayjlim/miniblog/issues/154) useRef in Login form ([84b2f56](https://github.com/rayjlim/miniblog/commit/84b2f5654a3ac2feef1c4a27395142e57d0aa77a))
+* ♻️ change to custom hook ([6450da8](https://github.com/rayjlim/miniblog/commit/6450da849c534a27a98870cc4dbb2b3728bede31))
+* ♻️ put full date in constants ([ecd92c9](https://github.com/rayjlim/miniblog/commit/ecd92c9050dc470c78d79a131c0151390cf038f1))
+* ⬆️ slim4 dependencies  🚧 ([20efbff](https://github.com/rayjlim/miniblog/commit/20efbff414a36e84d338f439147ece91a5da51de))
+* clean up index.php, update .env files ([ae80305](https://github.com/rayjlim/miniblog/commit/ae80305bbcee56ac17ab86de287246975b7603e0))
+* consolidate security call ([38681fa](https://github.com/rayjlim/miniblog/commit/38681fa374e2584322912befa28cd12c1d867af4))
+* convert route for listItems ([70fe289](https://github.com/rayjlim/miniblog/commit/70fe28943208a82d7f0578dcdc80010f1e00a179))
+* env file changes ([947aa29](https://github.com/rayjlim/miniblog/commit/947aa2949b644234dd22c5af0383f8f6e16a5c5a))
+* impl uploadhandler methods ([bd9d519](https://github.com/rayjlim/miniblog/commit/bd9d51982e40521571ec95d4ac24213d0c6c2f41))
+* implement CUDHandler functions ([0b17e49](https://github.com/rayjlim/miniblog/commit/0b17e49c48341de18bff8e263ff52281a4b2bb5a))
+* php codeception test run ([458631d](https://github.com/rayjlim/miniblog/commit/458631dc420b15ab0beed8fb07cbf06a1dc5d6a2))
+* php version updated, error logs ([5e54283](https://github.com/rayjlim/miniblog/commit/5e54283c3fef965b8b5717df8a3cc2c7b263f2a1))
+* replace reading of query params with basic php ([5ef1ad8](https://github.com/rayjlim/miniblog/commit/5ef1ad87a6a4f1fd8b1023f7a24c2ee007b0160a))
+* sameday items api ([25533ba](https://github.com/rayjlim/miniblog/commit/25533ba9b8163859ce93dcbb1e01e425a9e162ce))
+* UI spacing ([832a90d](https://github.com/rayjlim/miniblog/commit/832a90d0c27f4d296bbc13a0949d35e0bca33d84))
+* update authmiddleware ([1ba44dc](https://github.com/rayjlim/miniblog/commit/1ba44dc316a9559253545d872b89c346c3f0473b))
+* validate userObj ([292953b](https://github.com/rayjlim/miniblog/commit/292953b3986ac7321ebc04dd29888d482db1498c))
+
 ### [2.4.5](https://github.com/rayjlim/miniblog/compare/v2.4.4...v2.4.5) (2023-01-16)
 
 
