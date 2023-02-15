@@ -67,7 +67,6 @@ const OneDay = () => {
 
   async function getWeight(date) {
     try {
-      console.log(constants);
       const api = constants.TRACKS_ENDPIONT;
       const quoteResponse = await fetch(`${api}?start=${date}&end=${date}`, {});
       if (!quoteResponse.ok) {
@@ -89,7 +88,6 @@ const OneDay = () => {
 
   async function getMovies(date) {
     try {
-      console.log(constants);
       const api = constants.MOVIES_ENDPIONT;
       const quoteResponse = await fetch(
         `${api}&advanced_search=true&dt_viewed=${date}`,
@@ -291,7 +289,7 @@ const OneDay = () => {
       );
     } else if (mode === ADD) {
       returnValue = (
-        <AddForm date={state.pageDate} onSuccess={() => resetEntryForm()} />
+        <AddForm date={state.pageDate} onSuccess={() => resetEntryForm()} content="" />
       );
     } else if (mode === EDIT) {
       returnValue = (
