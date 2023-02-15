@@ -64,8 +64,10 @@ const LoginPassword = () => {
       <div>
         <ToastContainer />
       </div>
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
+      </nav>
       <h1>Login</h1>
-      {constants.ENVIRONMENT === 'development' && <span>Development</span>}
       <span>User</span>
       <input type="text" ref={user} />
       <span>Password</span>

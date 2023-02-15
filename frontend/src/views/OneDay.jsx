@@ -375,6 +375,7 @@ const OneDay = () => {
             <span>Home</span>
           </button>
         )}
+        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
         <button onClick={e => doLogout(e)} className="btn-margin plainLink" type="button">
           <i className="fa fa-sign-out" />
           <span className="nav-text">Log Out</span>

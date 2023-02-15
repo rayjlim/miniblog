@@ -232,7 +232,7 @@ const TextEntry = () => {
           <i className="fa fa-calendar-check" />
           <span>Same Day</span>
         </RouterNavLink>
-        {constants.ENVIRONMENT === 'development' && <span>Development</span>}
+        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>
       <h1>Text Searchs</h1>
 
