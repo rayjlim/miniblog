@@ -6,6 +6,8 @@ import { format, parse } from 'date-fns';
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import constants from '../constants';
+
+import './ribbon.css';
 import './Search.css';
 
 const DEBOUNCE_TIME = 350;
@@ -223,6 +225,7 @@ const TextEntry = () => {
 
   return (
     <>
+      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">
@@ -234,7 +237,6 @@ const TextEntry = () => {
           <i className="fa fa-calendar-check" />
           <span>Same Day</span>
         </RouterNavLink>
-        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>
       <h1>Text Searchs</h1>
 

@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './ribbon.css';
+
 import constants from '../constants';
 
 const LoginPassword = () => {
@@ -61,10 +63,8 @@ const LoginPassword = () => {
 
   return (
     <div className="App">
+      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
       <ToastContainer />
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
-      </nav>
       <h1>Login</h1>
       <span>User</span>
       <input type="text" ref={user} />

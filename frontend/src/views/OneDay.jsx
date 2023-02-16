@@ -8,6 +8,8 @@ import MovieWindow from '../components/MovieWindow';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import constants from '../constants';
 import pkg from '../../package.json';
+
+import './ribbon.css';
 import './OneDay.css';
 
 const CLOSED = 0;
@@ -349,6 +351,7 @@ const OneDay = () => {
 
   return (
     <>
+      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/search">
@@ -369,7 +372,6 @@ const OneDay = () => {
             <span>Home</span>
           </button>
         )}
-        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
         <button onClick={e => doLogout(e)} className="btn-margin plainLink" type="button">
           <i className="fa fa-sign-out" />
           <span className="nav-text">Log Out</span>
