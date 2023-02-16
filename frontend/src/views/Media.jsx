@@ -1,4 +1,4 @@
-/* eslint-disable no-alert, no-console, no-unused-vars */
+/* eslint-disable no-console, no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -6,6 +6,8 @@ import format from 'date-fns/format';
 import constants from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
+
+import './ribbon.css';
 
 const Media = () => {
   const navigate = useNavigate();
@@ -113,6 +115,8 @@ const Media = () => {
 
   return (
     <>
+      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
+      <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">
           <i className="fa fa-home" />
@@ -123,9 +127,7 @@ const Media = () => {
           <i className="fa fa-calendar-check" />
           <span>Same Day</span>
         </RouterNavLink>
-        {constants.ENVIRONMENT === 'development' && <span style={{ color: 'red' }}>Development</span>}
       </nav>
-      <ToastContainer />
       {post.fileName !== '' && (
         <>
           <p className="lead">Prepare the image for use</p>
