@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/rayjlim/miniblog/compare/v2.7.1...v2.8.0) (2023-02-17)
+
+
+### Features
+
+* [#127](https://github.com/rayjlim/miniblog/issues/127) button to clipboard prompt ([5f2fa5e](https://github.com/rayjlim/miniblog/commit/5f2fa5ee1176b2e7425eddd42b780de771af9207))
+
+
+### Bug Fixes
+
+* [#179](https://github.com/rayjlim/miniblog/issues/179): apis refactored to dedup code ([f0571ac](https://github.com/rayjlim/miniblog/commit/f0571ac0bce2321f5df2b12f1d7225f9584a9f24))
+* composer lock update ([ed1e4a1](https://github.com/rayjlim/miniblog/commit/ed1e4a15a6e725f659d25af473688859ffe17996))
+* don't wait on cancel in media list ([b5157db](https://github.com/rayjlim/miniblog/commit/b5157db9fa7761bcd263a04785459f2941fd437a))
+
 ### [2.7.1](https://github.com/rayjlim/miniblog/compare/v2.7.0...v2.7.1) (2023-02-17)
 
 
