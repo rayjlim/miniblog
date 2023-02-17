@@ -133,7 +133,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </div>
 
       <div className="form-group">
-        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
+        <DatePicker onChange={dateParam => dateChange(dateParam)} value={formDate} />
       </div>
 
       <button

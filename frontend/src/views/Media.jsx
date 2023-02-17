@@ -150,8 +150,10 @@ const Media = () => {
           <AddForm
             date={post.date}
             content={post.prepend}
-            onSuccess={() => {
-              toast('Entry created');
+            onSuccess={msg => {
+              if (msg !== '') {
+                toast(msg);
+              }
               setTimeout((() => { navigate('/oneday'); }), 2000);
             }}
           />
@@ -167,7 +169,7 @@ const Media = () => {
       <button onClick={e => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
       {showMedia && (
         // eslint-disable-next-line react/jsx-no-bind
-        <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} content="" />
+        <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
       )}
     </>
   );
