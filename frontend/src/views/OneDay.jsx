@@ -19,6 +19,22 @@ const EDIT = 2;
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
+async function xhrCall(url, apiDescription) {
+  console.log(`xhrCall ${url}`);
+  try {
+    const apiResponse = await fetch(url, {});
+    if (apiResponse.ok) {
+      const data = await apiResponse.json();
+      return data;
+    }
+    throw new Error(apiResponse.status);
+  } catch (err) {
+    console.error(err);
+    toast(`get ${apiDescription} error : ${err}`);
+  }
+  return false;
+}
+
 /**
  * Component to Display of One Day style
  *
@@ -47,82 +63,35 @@ const OneDay = () => {
   const dateInput = useRef();
 
   async function getInspiration() {
-    try {
-      const quoteApi = constants.INSPIRATION_ENDPOINT;
-      const apiResponse = await fetch(quoteApi, {});
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        console.log('vercel data.header :>> ', data.header);
-        console.log('vercel data.message :>> ', data.message);
-        setInspiration(`Inspire: ${data.message} : ${data.author}`);
-        return;
-      }
-      throw new Error(apiResponse.status);
-    } catch (err) {
-      console.error(err);
-      toast(`getInspiration error : ${err}`);
-    }
+    const quoteApi = constants.INSPIRATION_ENDPOINT;
+    const data = await xhrCall(quoteApi, 'inspiration');
+    console.log('data.header :>> ', data.header);
+    setInspiration(`Inspire: ${data.message} : ${data.author}`);
   }
 
   async function getWeight(date) {
-    try {
-      const api = constants.TRACKS_ENDPIONT;
-      const apiResponse = await fetch(`${api}?start=${date}&end=${date}`, {});
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        if (data && data.data && data.data[0] && data.data[0].count) {
-          setWeight(data.data[0].count);
-        } else {
-          setWeight('?');
-        }
-        return;
-      }
-      throw new Error(apiResponse.status);
-    } catch (err) {
-      console.error(err);
-      toast.error(`getWeight error : ${err}`);
+    const weightApi = `${constants.TRACKS_ENDPIONT}?start=${date}&end=${date}`;
+    const data = await xhrCall(weightApi, 'weight');
+    if (data && data.data && data.data[0] && data.data[0].count) {
+      setWeight(data.data[0].count);
+    } else {
+      setWeight('?');
     }
   }
 
   async function getMovies(date) {
-    try {
-      const api = constants.MOVIES_ENDPIONT;
-      const apiResponse = await fetch(
-        `${api}&advanced_search=true&dt_viewed=${date}`,
-        {},
-      );
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        if (data && data.movies) {
-          setMovies(data.movies);
-        } else {
-          setMovies([]);
-        }
-        return;
-      }
-      throw new Error(apiResponse.status);
-    } catch (err) {
-      console.error(err);
-      toast.error(`getMovies error : ${err}`);
+    const weightApi = `${constants.MOVIES_ENDPIONT}&advanced_search=true&dt_viewed=${date}`;
+    const data = await xhrCall(weightApi, 'movie');
+    if (data && data.movies) {
+      setMovies(data.movies);
+    } else {
+      setMovies([]);
     }
   }
 
   async function getPrompt() {
-    try {
-      const apiEndpoint = constants.QUESTION_ENDPIONT;
-      const apiResponse = await fetch(apiEndpoint, {});
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        console.log('vercel data.header :>> ', data.header);
-        console.log('vercel data.message :>> ', data.message);
-        setInspiration(`Question: ${data.prompt} : ${data.category}`);
-        return;
-      }
-      throw new Error(apiResponse.status);
-    } catch (err) {
-      console.error(err);
-      toast.error(`getPrompt error : ${err}`);
-    }
+    const data = await xhrCall(constants.QUESTION_ENDPIONT, 'prompt');
+    setInspiration(`Question: ${data.prompt} : ${data.category}`);
   }
 
   function loadDay(loadParams) {
