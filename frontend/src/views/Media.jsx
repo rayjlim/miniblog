@@ -153,8 +153,10 @@ const Media = () => {
             onSuccess={msg => {
               if (msg !== '') {
                 toast(msg);
+                setTimeout((() => { navigate('/oneday'); }), 2000);
+              } else {
+                navigate('/oneday');
               }
-              setTimeout((() => { navigate('/oneday'); }), 2000);
             }}
           />
         </>
