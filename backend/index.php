@@ -80,6 +80,12 @@ $app->get('/ping', function (Request $request, Response $response, $args) {
     return $response;
 });
 
+$logHandler = DAOFactory::LogHandler();
+$app->get('/logs/', $logHandler->getUrlHandler());
+$app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
+$app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
+
+
 $app->run();
 
 // $app->post('/', function (Request $request, Response $response, $args) {
@@ -91,7 +97,3 @@ $app->run();
 // $graphHandler = DAOFactory::GraphHandler($app);
 // $app->get('/cron', $graphHandler->logCronCall());
 
-// $logHandler = DAOFactory::LogHandler();
-// $app->get('/logs/:logfileName', $logHandler->getUrlHandler());
-// $app->get('/logs/', $logHandler->getUrlHandler(''));
-// $app->delete('/logs/:logfileName', $logHandler->delete());

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { NavLink as RouterNavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 import constants from '../constants';
@@ -7,6 +7,7 @@ import pkg from '../../package.json';
 import './Logs.css';
 
 const Logs = () => {
+  const navigate = useNavigate();
   const [logs, setLogs] = useState([]);
   const [logFileName, setLogFileName] = useState('');
   const [logFile, setLogFile] = useState('');
@@ -34,6 +35,40 @@ const Logs = () => {
     toast.error(`loading error : ${response.status}`);
   };
 
+  // TODO: convert to customHook
+  async function handleDelete(log) {
+    const go = window.confirm('You sure?');
+    if (!go) {
+      return;
+    }
+
+    try {
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const response = await fetch(
+        `${constants.REST_ENDPOINT}/logs/${log}`,
+        {
+          method: 'DELETE',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-App-Token': token,
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+        },
+      );
+
+      console.log(response);
+      navigate('/logs'); // FIX: it's not sending because already on this page
+      // try to change a state var
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  }
+
   useEffect(() => {
     getLog();
   }, []);
@@ -48,6 +83,13 @@ const Logs = () => {
             <li key={log}>
               <button type="button" onClick={() => getLog(log)}>
                 {log}
+              </button>
+              <button
+                onClick={() => handleDelete(log)}
+                className="btn btn-danger pull-right"
+                type="button"
+              >
+                <i className="fa fa-trash" />
               </button>
             </li>
           ))}
