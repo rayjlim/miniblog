@@ -312,6 +312,11 @@ const OneDay = () => {
     return () => window.removeEventListener('keydown', checkKeyPressed);
   }, []);
 
+  function copyToClipboard(content) {
+    console.log(`clipboard: ${content}`);
+    navigator.clipboard.writeText(content);
+  }
+
   return (
     <>
       {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
@@ -444,11 +449,11 @@ const OneDay = () => {
       {inspiration && (
         <section>
           <div>{inspiration}</div>
-          {/* {inspiration !== '' && (
-            <button onClick={e => appendToForm(e)} className="plainLink">
-              Append to Entry
+          {inspiration !== '' && (
+            <button onClick={() => copyToClipboard(inspiration)} type="button">
+              /clip
             </button>
-          )} */}
+          )}
           {constants.QUESTION_ENDPIONT !== '' && (
             <button onClick={e => getPrompt(e)} className="plainLink" type="button">
               [Get Prompt]

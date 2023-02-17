@@ -108,9 +108,9 @@ const Media = () => {
   //     EntryApi.renameImg(this.props.fileName, this.props.filePath, changedName);
   // }
 
-  function copyToClipboard() {
-    console.log(post.prepend);
-    navigator.clipboard.writeText(post.prepend);
+  function copyToClipboard(content) {
+    console.log(`clipboard: ${content}`);
+    navigator.clipboard.writeText(content);
   }
 
   return (
@@ -139,7 +139,7 @@ const Media = () => {
           {/* rename={this.rename} */}
           <section className="container">
             {post.imgUrl}
-            <button onClick={() => copyToClipboard()} type="button">
+            <button onClick={() => copyToClipboard(post.prepend)} type="button">
               [clip]
             </button>
             <div style={{ textAlign: 'center' }}>
