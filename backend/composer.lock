@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fadc5f04f265b26eafc416a36228e8ab",
+    "content-hash": "5aa073ac13927f20397cff4a367cfd03",
     "packages": [
         {
             "name": "gabordemooij/redbean",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/gabordemooij/redbean.git",
-                "reference": "b6ab15f85edacf98b40ff8e1a287fcaf56e024c2"
+                "reference": "af53cdd530f9e5f80505b48f94810219bfac87f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gabordemooij/redbean/zipball/b6ab15f85edacf98b40ff8e1a287fcaf56e024c2",
-                "reference": "b6ab15f85edacf98b40ff8e1a287fcaf56e024c2",
+                "url": "https://api.github.com/repos/gabordemooij/redbean/zipball/af53cdd530f9e5f80505b48f94810219bfac87f8",
+                "reference": "af53cdd530f9e5f80505b48f94810219bfac87f8",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "issues": "https://github.com/gabordemooij/redbean/issues",
                 "source": "https://github.com/gabordemooij/redbean/tree/master"
             },
-            "time": "2022-11-12T08:03:22+00:00"
+            "time": "2023-02-15T22:42:38+00:00"
         },
         {
             "name": "graham-campbell/result-type",
