@@ -2,7 +2,8 @@
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
-
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 class LogHandler
 {
     var $resource = null;
@@ -22,7 +23,8 @@ class LogHandler
 
     public function getUrlHandler()
     {
-        return function ($logFileName = '') {
+        return function (Request $request, Response $response, $args) {
+            $logFileName = isset($args['logFileName']) ? $args['logFileName'] : '';
             \Lpt\DevHelp::debugMsg('start logs list');
             $filelist = $this->readFilelist(LOGS_DIR);
             if ($logFileName == '') {
@@ -30,16 +32,32 @@ class LogHandler
                 $logFileName = end($filelist);
             }
 
-            $this->readFileAndRender($logFileName, $filelist);        };
+            $logFile = '';
+            if ($logFileName != '' && in_array($logFileName, $filelist)) {
+                \Lpt\DevHelp::debugMsg('$logFileName: ' . $logFileName);
+                $logFile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logFileName);
+            }
+            $this->resource->echoOut(json_encode(array(
+                'logs'  => array_values($filelist),
+                'logFileName' => $logFileName,
+                'logFile' => $logFile
+            )));
+            return $response;
+        };
     }
 
-    public function delete()
+
+    public function deleteHandler()
     {
-        return function ($logFileName) {
-            $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
-            $data['pageMessage'] = 'File Removed: ' . $logFileName;
-            DevHelp::debugMsg($data['pageMessage']);
-            echo json_encode($data);
+        return function (Request $request, Response $response, $args) {
+            $logFileName = isset($args['logFileName']) ? $args['logFileName'] : '';
+            if($logFileName !== ''){
+                $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
+                $pageMessage = 'File Removed: ' . $logFileName;
+                DevHelp::debugMsg($pageMessage);
+                $this->resource->echoOut(json_encode($pageMessage));
+            }
+            return $response;
         };
     }
 
@@ -52,19 +70,5 @@ class LogHandler
             }
         }
         return array_values($filelist);
-    }
-
-    public function readFileAndRender($logFileName, $filelist)
-    {
-        $logFile = '';
-        if ($logFileName != '' && in_array($logFileName, $filelist)) {
-            \Lpt\DevHelp::debugMsg('$logFileName: ' . $logFileName);
-            $logFile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logFileName);
-        }
-        echo json_encode(array(
-            'logs'  => array_values($filelist),
-            'logFileName' => $logFileName,
-            'logFile' => $logFile
-        ));
     }
 }
