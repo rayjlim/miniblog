@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'; // eslint-disable-line no-un
 import PropTypes from 'prop-types';
 import constants from '../constants';
 
-const MediaList = ({ content = '', onMediaSelect }) => {
-  console.log(' MediaList props :', content);
+const MediaList = ({ onMediaSelect }) => {
   const [media, setMedia] = useState([]);
   const [uploadDirs, setUploadDirs] = useState([]);
   const [currentDir, setCurrentDir] = useState('');
@@ -65,25 +64,29 @@ const MediaList = ({ content = '', onMediaSelect }) => {
 
   useEffect(() => {
     loadDir('');
-  }, [content]);
+  }, []);
 
   return (
     <div>
       <h2>
         Dirs
+        {' '}
         {currentDir}
+        {' '}
+        (
+        {uploadDirs.length}
+        )
       </h2>
-      {uploadDirs.length}
       {uploadDirs.length
         && uploadDirs.map(dir => (
-          <button onClick={() => loadDir(dir)} type="button">{dir}</button>
+          <button onClick={() => loadDir(dir)} type="button" key={dir}>{dir}</button>
         ))}
       <h2>Media</h2>
       {media.length}
       <ul />
       {media.length
         && media.map(key => (
-          <li>
+          <li key={key}>
             <p>{key}</p>
             <button onClick={() => onMediaSelect(`${currentDir}/`, key)} type="button">
               Load
@@ -104,6 +107,5 @@ const MediaList = ({ content = '', onMediaSelect }) => {
 export default MediaList;
 
 MediaList.propTypes = {
-  content: PropTypes.string.isRequired,
   onMediaSelect: PropTypes.func.isRequired,
 };
