@@ -142,11 +142,6 @@ const OneDay = () => {
         endPointURL = `${constants.REST_ENDPOINT}/api/sameDayEntries/?day=${loadParams.pageDate}`;
         break;
       }
-      // case SEARCH: {
-      //   const text = loadParams.searchParam;
-      //   endPointURL = `${constants.REST_ENDPOINT}/api/posts/?searchParam=${text}`;
-      //   break;
-      // }
       default: {
         endPointURL = `${constants.REST_ENDPOINT}/api/posts/?date=${loadParams.pageDate}`;
         break;
@@ -216,7 +211,6 @@ const OneDay = () => {
    * @param  {Object} e Event of Button click
    */
   function handleButtonDirection(e) {
-    console.log('e :>> ', e);
     let localDate = parse(state.pageDate, constants.FULL_DATE_FORMAT, new Date());
     if (e.target.value === 'today') {
       localDate = new Date();
@@ -303,6 +297,20 @@ const OneDay = () => {
     dateInput = elem;
   }
 
+  function checkKeyPressed(e) {
+    console.log(`OneDay: handle key presss ${e.key}`);
+
+    if (e.altKey && e.key === ',') {
+      console.log('alt comma keybinding');
+      // Note: this is a hack because the content value is taken from the init value
+      document.getElementById('prevBtn').click();
+    } else if (e.altKey && e.key === '.') {
+      console.log('alt period keybinding');
+      // Note: this is a hack because the content value is taken from the init value
+      document.getElementById('nextBtn').click();
+    }
+  }
+
   useEffect(() => {
     const token = window.localStorage.getItem(constants.STORAGE_KEY);
     if (!token) {
@@ -330,23 +338,9 @@ const OneDay = () => {
 
     console.log('setting pageDate :>> ', localDate);
     loadDay({ pageDate, pageMode });
-    document.addEventListener('keydown', e => {
-      console.log(`OneDay: handle key presss ${e.key}`);
-      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
-      if (e.altKey && e.key === 'a') {
-        console.log('S keybinding');
-        // Note: this is a hack because the content value is taken from the init value
-        document.getElementById('addFormBtn').click();
-      } else if (e.altKey && e.key === ',') {
-        console.log('alt comma keybinding');
-        // Note: this is a hack because the content value is taken from the init value
-        document.getElementById('prevBtn').click();
-      } else if (e.altKey && e.key === '.') {
-        console.log('alt period keybinding');
-        // Note: this is a hack because the content value is taken from the init value
-        document.getElementById('nextBtn').click();
-      }
-    });
+
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => window.removeEventListener('keydown', checkKeyPressed);
   }, []);
 
   return (

@@ -48,6 +48,18 @@ const AddForm = ({ content, date, onSuccess }) => {
   const [id, setParams] = useFetch();
   let textareaInput = null;
 
+  function checkKeyPressed(e) {
+    console.log(`AddForm: handle key presss ${e.key}`);
+    // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+    if (e.altKey && e.key === 's') {
+      console.log('S keybinding');
+      // Note: this is a hack because the content value is taken from the init value
+      document.getElementById('saveBtn').click();
+    } else if (e.key === 'Escape') {
+      document.getElementById('cancelBtn').click();
+    }
+  }
+
   useEffect(() => {
     console.log('AddForm: useEffect');
     if (isMounted.current) {
@@ -60,18 +72,10 @@ const AddForm = ({ content, date, onSuccess }) => {
       isMounted.current = true;
 
       setFormContent(content || '');
-      document.addEventListener('keydown', e => {
-        console.log(`AddForm: handle key presss ${e.key}`);
-        // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
-        if (e.altKey && e.key === 's') {
-          console.log('S keybinding');
-          // Note: this is a hack because the content value is taken from the init value
-          document.getElementById('saveBtn').click();
-        } else if (e.key === 'Escape') {
-          document.getElementById('cancelBtn').click();
-        }
-      });
+      document.addEventListener('keydown', checkKeyPressed);
+      return () => window.removeEventListener('keydown', checkKeyPressed);
     }
+    return true;
   }, [id]);
 
   function textChange() {

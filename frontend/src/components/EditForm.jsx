@@ -107,21 +107,23 @@ const EditForm = ({ entry, onSuccess }) => {
     textareaInput = elem;
   }
 
+  function checkKeyPressed(e) {
+    console.log(`EditForm: handle key presss ${e.key}`);
+    // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
+    if (e.altKey && e.key === 's') {
+      console.log('S keybinding');
+      // Note: this is a hack because the content value is taken from the init value
+      document.getElementById('saveBtn').click();
+    } else if (e.key === 'Escape') {
+      document.getElementById('cancelBtn').click();
+    }
+  }
   /* A hook that is called when the component is mounted. */
   useEffect(() => {
     console.log('EditForm: useEffect');
 
-    document.addEventListener('keydown', e => {
-      console.log(`EditForm: handle key presss ${e.key}`);
-      // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
-      if (e.altKey && e.key === 's') {
-        console.log('S keybinding');
-        // Note: this is a hack because the content value is taken from the init value
-        document.getElementById('saveBtn').click();
-      } else if (e.key === 'Escape') {
-        document.getElementById('cancelBtn').click();
-      }
-    });
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => window.removeEventListener('keydown', checkKeyPressed);
   }, [entry]);
 
   return (
