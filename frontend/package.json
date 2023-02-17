@@ -1,6 +1,6 @@
 {
   "name": "miniblog",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "private": true,
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.4",

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.2](https://github.com/rayjlim/miniblog/compare/v2.8.1...v2.8.2) (2023-02-17)
+
+
+### Bug Fixes
+
+* [#184](https://github.com/rayjlim/miniblog/issues/184) logs api show and delete ([7fe691f](https://github.com/rayjlim/miniblog/commit/7fe691f575540ef22d8d3791b002581726bb2100))
+
 ### [2.8.1](https://github.com/rayjlim/miniblog/compare/v2.8.0...v2.8.1) (2023-02-17)
 
 ## [2.8.0](https://github.com/rayjlim/miniblog/compare/v2.7.1...v2.8.0) (2023-02-17)
