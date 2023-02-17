@@ -227,8 +227,10 @@ const OneDay = () => {
     });
   }
 
-  function resetEntryForm() {
-    toast('Add/Edit Done');
+  function resetEntryForm(msg = '') {
+    if (msg !== '') {
+      toast(msg);
+    }
     loadDay({ ...state, formMode: CLOSED });
   }
 
@@ -280,11 +282,11 @@ const OneDay = () => {
       );
     } else if (mode === ADD) {
       returnValue = (
-        <AddForm date={state.pageDate} onSuccess={() => resetEntryForm()} content="" />
+        <AddForm date={state.pageDate} onSuccess={msg => resetEntryForm(msg)} content="" />
       );
     } else if (mode === EDIT) {
       returnValue = (
-        <EditForm entry={state.formEntry} onSuccess={() => resetEntryForm()} />
+        <EditForm entry={state.formEntry} onSuccess={msg => resetEntryForm(msg)} />
       );
     }
     return returnValue;

@@ -67,7 +67,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       // but when the Id is set
       console.log('handleAdd 92:>> ', id);
       // setFormContent('');
-      onSuccess();
+      onSuccess('Add Done');
     } else {
       isMounted.current = true;
 
@@ -147,7 +147,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </button>
       <button
         type="button"
-        onClick={() => onSuccess()}
+        onClick={() => onSuccess('')}
         className="btn btn-warning pull-right"
         id="cancelBtn"
       >

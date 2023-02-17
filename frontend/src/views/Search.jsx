@@ -134,7 +134,10 @@ const TextEntry = () => {
     setEndDate(new Date());
   }
 
-  function resetEntryForm() {
+  function resetEntryForm(showToast) {
+    if (showToast) {
+      toast('Edit Done');
+    }
     setFormMode(HIDE_EDIT_FORM);
     getEntries();
   }
@@ -157,14 +160,6 @@ const TextEntry = () => {
       );
     }
     return <>No Search Params</>;
-  }
-
-  function editForm() {
-    return formMode === SHOW_EDIT_FORM ? (
-      <EditForm entry={entry} onSuccess={() => resetEntryForm()} />
-    ) : (
-      <>a</>
-    );
   }
 
   function showEntries() {
@@ -299,8 +294,9 @@ const TextEntry = () => {
         <span className="container">{showSearchSummary()}</span>
       </section>
 
-      <section className="container">{editForm()}</section>
-
+      {
+      formMode === SHOW_EDIT_FORM && <section className="container"><EditForm entry={entry} onSuccess={msg => resetEntryForm(msg)} /></section>
+      }
       <section className="container">{showEntries()}</section>
 
       <nav className="navbar navbar-expand-sm navbar-light bg-light">

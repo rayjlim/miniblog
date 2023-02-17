@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 import constants from '../constants';
 import pkg from '../../package.json';
 import './Logs.css';
@@ -20,16 +22,16 @@ const Logs = () => {
       },
     });
     console.log('response :', response);
-    if (!response.ok) {
-      console.log('response.status :', response.status);
-      alert(`loading error : ${response.status}`);
-    } else {
+    if (response.ok) {
       const responseData = await response.json();
       console.log('responseData :', responseData);
       setLogs(responseData.logs);
       setLogFileName(responseData.logFileName);
       setLogFile(responseData.logFile);
+      return;
     }
+    console.error('response.status :', response.status);
+    toast.error(`loading error : ${response.status}`);
   };
 
   useEffect(() => {
@@ -38,6 +40,7 @@ const Logs = () => {
 
   return (
     <>
+      <ToastContainer />
       <h1>Logs</h1>
       <ul>
         {logs.length

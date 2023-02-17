@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useRef, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -15,15 +15,15 @@ const EditForm = ({ entry, onSuccess }) => {
 `,
   );
   const [content, setContent] = useState(escapedContent);
-  let textareaInput = null;
+  const textareaInput = useRef();
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
-    console.log('textarea.value :>> ', textareaInput.value);
-    textareaInput.value = textareaInput.value.replace(pattern, replacement);
+    console.log('textarea.value :>> ', textareaInput.current.value);
+    textareaInput.current.value = textareaInput.current.value.replace(pattern, replacement);
 
-    setContent(textareaInput.value);
+    setContent(textareaInput.current.value);
   }
 
   /**
@@ -57,7 +57,7 @@ const EditForm = ({ entry, onSuccess }) => {
       );
 
       console.log(response);
-      onSuccess();
+      onSuccess('Edit Done');
     } catch (error) {
       console.log(error);
       alert(error);
@@ -91,7 +91,7 @@ const EditForm = ({ entry, onSuccess }) => {
       );
 
       console.log(response);
-      onSuccess();
+      onSuccess('Delete Done');
     } catch (error) {
       console.log(error);
       alert(error);
@@ -103,10 +103,6 @@ const EditForm = ({ entry, onSuccess }) => {
     if (value) {
       setDate(value);
     }
-  }
-
-  function setRef(elem) {
-    textareaInput = elem;
   }
 
   function checkKeyPressed(e) {
@@ -145,7 +141,7 @@ const EditForm = ({ entry, onSuccess }) => {
 
       <div className="form-group">
         <textarea
-          ref={elem => setRef(elem)}
+          ref={textareaInput}
           onChange={event => textChange(event.target.value)}
           className="form-control"
           placeholder="Add ..."
@@ -169,7 +165,7 @@ const EditForm = ({ entry, onSuccess }) => {
           Save
         </button>
         <button
-          onClick={() => onSuccess()}
+          onClick={() => onSuccess('')}
           className="btn btn-warning pull-right"
           id="cancelBtn"
           type="button"
