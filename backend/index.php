@@ -19,6 +19,7 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use \dao\DaoFactory;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -35,7 +36,8 @@ if (array_key_exists('HTTP_ORIGIN', $_SERVER)
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');    // cache for 1 day
 
-header("Access-Control-Allow-Headers: Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization, X-App-Token");
+header("Access-Control-Allow-Headers: Access-Control-*, Origin, "
+    . "X-Requested-With, Content-Type, Accept, Authorization, X-App-Token");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 
@@ -84,17 +86,17 @@ $app->any(
     }
 );
 
-$entryHandler = DAOFactory::EntryHandler();
+$entryHandler = \dao\DAOFactory::getEntryHandler();
 // $app->get('/api/posts/:id', $entryHandler->detailItemApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
 
-$cudHandler = DAOFactory::CUDHandler();
+$cudHandler = DAOFactory::getCUDHandler();
 $app->post('/api/posts/', $cudHandler->addEntry());
 $app->put('/api/posts/{id}', $cudHandler->updateEntry());
 $app->delete('/api/posts/{id}', $cudHandler->deleteEntry());
 
-$uploadHandler = DAOFactory::UploadHandler();
+$uploadHandler = DAOFactory::getUploadHandler();
 $app->post('/uploadImage/', $uploadHandler->upload());
 $app->get('/uploadRotate/', $uploadHandler->rotate());
 $app->get('/uploadResize/', $uploadHandler->resize());
@@ -113,7 +115,7 @@ $app->get(
     }
 );
 
-$logHandler = DAOFactory::LogHandler();
+$logHandler = DAOFactory::getLogHandler();
 $app->get('/logs/', $logHandler->getUrlHandler());
 $app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
 $app->delete('/logs/{logFileName}', $logHandler->deleteHandler());

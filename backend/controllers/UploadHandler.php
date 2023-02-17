@@ -1,4 +1,6 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;

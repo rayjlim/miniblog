@@ -1,5 +1,6 @@
 <?php
 defined('ABSPATH') or exit('No direct script access allowed');
+use \models\SmsEntrie;
 
 interface ContentHelperInterface
 {

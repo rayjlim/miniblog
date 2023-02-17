@@ -1,4 +1,6 @@
 <?php
+namespace dao;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 interface SmsUsersDAO
@@ -8,13 +10,13 @@ interface SmsUsersDAO
     public function lookupByEmail($email);
 
     public function lookupByEmailGoogleId($email, $googleId);
-    
+
     public function queryAll();
 
     public function delete($id);
-    
+
     public function insert($smsUser);
-    
+
     public function update($smsUser);
 
     public function lookupByPassword($password);

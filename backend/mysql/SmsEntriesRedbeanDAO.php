@@ -4,7 +4,7 @@ defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
 
 // R::debug(TRUE);
-class SmsEntriesRedbeanDAO implements SmsEntriesDAO
+class SmsEntriesRedbeanDAO implements dao\SmsEntriesDAO
 {
     public function load($id)
     {

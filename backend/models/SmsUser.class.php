@@ -10,6 +10,7 @@
  * @license  MIT License
  * @link     https://github.com/rayjlim/miniblog/
  */
+namespace models;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 

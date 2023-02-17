@@ -2,6 +2,7 @@
 
 defined('ABSPATH') or exit('No direct script access allowed');
 use \Lpt\DevHelp;
+use \models\SmsEntrie;
 
 /**
  * EntryHelper Class Doc Comment

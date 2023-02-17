@@ -1,7 +1,20 @@
 <?php
+/**
+ * Model for ORM List Params
+ *
+ * PHP version 8
+ *
+ * @category PHP
+ * @package  Miniblog
+ * @author   Raymond Lim <rayjlim@yahoo.com>
+ * @license  MIT License
+ * @link     https://github.com/rayjlim/miniblog/
+ */
+namespace models;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
-class ListParams extends BaseModel
+class ListParams
 {
     public $userId = null;
     public $searchParam = '';

@@ -1,4 +1,17 @@
 <?php
+/**
+ * Model for ORM Entry
+ *
+ * PHP version 8
+ *
+ * @category PHP
+ * @package  Miniblog
+ * @author   Raymond Lim <rayjlim@yahoo.com>
+ * @license  MIT License
+ * @link     https://github.com/rayjlim/miniblog/
+ */
+namespace models;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 use \Lpt\DevHelp;
 
@@ -38,17 +51,17 @@ class SmsEntrie
           * @OA\Property()
           */
     public $userId;
-    
+
     public function __construct($date = '', $content = '')
     {
         $this->date = $date;
         $this->content = $content;
     }
-    
+
     public static function sanitizeContent($content)
     {
         $order = array("\r\n", "\n", "\r");
-        
+
         // Processes \r\n's first so they aren't converted twice.
         $replace = '<br />';
         return stripslashes(str_replace($order, $replace, $content));

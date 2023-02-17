@@ -1,5 +1,8 @@
 <?php
+namespace dao;
+
 defined('ABSPATH') or exit('No direct script access allowed');
+
 
 class Resource implements IResourceDAO
 {
@@ -88,7 +91,7 @@ class Resource implements IResourceDAO
 
     public function getDateTime()
     {
-        return new DateTime();
+        return new \DateTime();
     }
 
     public function sendEmail($email, $subject, $message)

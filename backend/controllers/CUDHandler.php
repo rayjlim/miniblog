@@ -1,7 +1,10 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
+use \models\SmsEntrie;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 

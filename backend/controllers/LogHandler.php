@@ -1,4 +1,6 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
@@ -7,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class LogHandler
 {
-    var $resource = null;
+    private $resource = null;
     /**
      * Constructor
      *
@@ -17,7 +19,7 @@ class LogHandler
      *
      * @return array of page params
      */
-    function __construct($resource)
+    public function __construct($resource)
     {
         $this->resource = $resource;
     }
