@@ -1,7 +1,8 @@
 <?php
 
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
+
 // R::debug(TRUE);
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
@@ -14,7 +15,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     /**
      * Delete record from table
      *
-     * @param smsEntrie primary key
+     * @param  smsEntrie primary key
      * @LPT_V2
      */
     public function delete($id)
@@ -27,7 +28,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     /**
      * Insert record to table
      *
-     * @param SmsEntriesMySql smsEntrie
+     * @param  SmsEntriesMySql smsEntrie
      * @LPT_V2
      */
     public function insert($smsEntrie)
@@ -43,7 +44,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     /**
      * Update record in table
      *
-     * @param SmsEntriesMySql smsEntrie
+     * @param  SmsEntriesMySql smsEntrie
      * @LPT_V2
      */
     public function update($smsEntrie)
@@ -56,6 +57,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
     /**
      * Get records that have specific label
+     *
      * @LPT_V2
      */
     public function queryGraphData($userId, $graphParams)

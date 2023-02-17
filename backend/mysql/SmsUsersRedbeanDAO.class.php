@@ -1,6 +1,7 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
+
 class SmsUsersRedbeanDAO implements SmsUsersDAO
 {
     public function load($id)

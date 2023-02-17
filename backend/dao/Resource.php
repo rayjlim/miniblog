@@ -1,12 +1,12 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 
 class Resource implements IResourceDAO
 {
     /**
      * setSession
      *
-     * @param string $key site url
+     * @param  string $key site url
      * @return none
      */
     public function setSession($key, $value)
@@ -20,7 +20,7 @@ class Resource implements IResourceDAO
     /**
      * getSession
      *
-     * @param string $key    reference
+     * @param  string $key reference
      * @return mixed value
      */
     public function getSession($key)
