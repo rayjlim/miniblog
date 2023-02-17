@@ -100,7 +100,9 @@ const EditForm = ({ entry, onSuccess }) => {
 
   function dateChange(value = new Date()) {
     console.log('value :', value);
-    setDate(value);
+    if (value) {
+      setDate(value);
+    }
   }
 
   function setRef(elem) {

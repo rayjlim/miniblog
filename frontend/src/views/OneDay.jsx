@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { format, parse, add } from 'date-fns';
@@ -44,7 +44,7 @@ const OneDay = () => {
   const [weight, setWeight] = useState(null);
   const [movies, setMovies] = useState([]);
 
-  let dateInput = null;
+  const dateInput = useRef();
 
   async function getInspiration() {
     try {
@@ -219,7 +219,7 @@ const OneDay = () => {
     }
 
     const newDate = add(localDate, { days: e.target.value });
-    dateInput.value = format(newDate, constants.FULL_DATE_FORMAT);
+    dateInput.current.value = format(newDate, constants.FULL_DATE_FORMAT);
     loadDay({
       ...state,
       pageDate: format(newDate, constants.FULL_DATE_FORMAT),
@@ -253,8 +253,10 @@ const OneDay = () => {
   }
 
   function updateDate(e) {
-    console.log('UPDATING DATE  :', e.target.value);
-    loadDay({ ...state, pageDate: e.target.value });
+    const dateRegex = /^\d{4}[./-]\d{2}[./-]\d{2}$/;
+    if (e.target.value.match(dateRegex)) {
+      loadDay({ ...state, pageDate: e.target.value });
+    }
   }
 
   function changePageMode(pageMode) {
@@ -292,10 +294,6 @@ const OneDay = () => {
     window.localStorage.removeItem(constants.STORAGE_KEY);
     navigate('/login');
   };
-
-  function setRef(elem) {
-    dateInput = elem;
-  }
 
   function checkKeyPressed(e) {
     console.log(`OneDay: handle key presss ${e.key}`);
@@ -388,7 +386,7 @@ const OneDay = () => {
         <div>
           {/* <span>{state.pageDate}</span> */}
           <input
-            ref={elem => setRef(elem)}
+            ref={dateInput}
             type="text"
             className="form-control"
             id="formDpInput"

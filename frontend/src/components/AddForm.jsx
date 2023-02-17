@@ -88,7 +88,9 @@ const AddForm = ({ content, date, onSuccess }) => {
 
   function dateChange(value = new Date()) {
     console.log('value :', value);
-    setFormDate(value);
+    if (value) {
+      setFormDate(value);
+    }
   }
 
   function handleAdd() {
@@ -131,7 +133,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </div>
 
       <div className="form-group">
-        <DatePicker onChange={() => dateChange()} value={date} />
+        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
       </div>
 
       <button
