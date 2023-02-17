@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.1](https://github.com/rayjlim/miniblog/compare/v2.7.0...v2.7.1) (2023-02-17)
+
+
+### Bug Fixes
+
+* [#153](https://github.com/rayjlim/miniblog/issues/153) remove listeners on unload ([1b49f05](https://github.com/rayjlim/miniblog/commit/1b49f056e0c2a209cd0abfbba01cdf063da2ad73))
+* [#167](https://github.com/rayjlim/miniblog/issues/167) show ribbon for development id ([5dc4b95](https://github.com/rayjlim/miniblog/commit/5dc4b954270967a109baefa1d7e291737ddd1a13))
+* [#167](https://github.com/rayjlim/miniblog/issues/167) show ribbon for development id ([da54ad9](https://github.com/rayjlim/miniblog/commit/da54ad9cbb3be51d6d8cd9ac63b06031014fee2b))
+* add regex date check to Oneday view ([a73f63b](https://github.com/rayjlim/miniblog/commit/a73f63b18acd752a3582931dcb87ee5374e3f050))
+* addForm using wrong var on initialization ([ea39edd](https://github.com/rayjlim/miniblog/commit/ea39edda8b42bd4f30dc7b6e74388121e994df23))
+* form components send message to parent ([1aee752](https://github.com/rayjlim/miniblog/commit/1aee75279ba5fd27b4e65ef61157c7611194ed27))
+* removed unnecessary content prop ([90a0317](https://github.com/rayjlim/miniblog/commit/90a0317042b31a71c524a63f4c23f2327621265c))
+
 ## [2.7.0](https://github.com/rayjlim/miniblog/compare/v2.6.1...v2.7.0) (2023-02-15)
 
 
