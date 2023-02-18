@@ -3,8 +3,8 @@ namespace dao;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
-use \SmsEntriesRedbeanDAO;
-use \SmsUsersRedbeanDAO;
+use \dao\SmsEntriesRedbeanDAO;
+use \dao\SmsUsersRedbeanDAO;
 
 class DAOFactory
 {
@@ -25,9 +25,9 @@ class DAOFactory
     }
 
     //helpers
-    public static function ContentHelper()
+    public static function getContentHelper()
     {
-        return new \ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
+        return new \helpers\ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
     // controllers
@@ -36,7 +36,7 @@ class DAOFactory
         return new \controllers\CUDHandler(
             DAOFactory::getSmsEntriesDAO(),
             DAOFactory::getResourceDAO(),
-            DAOFactory::ContentHelper()
+            DAOFactory::getContentHelper()
         );
     }
 

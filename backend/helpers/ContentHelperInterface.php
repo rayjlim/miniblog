@@ -1,4 +1,6 @@
 <?php
+namespace helpers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 use \models\SmsEntrie;
 

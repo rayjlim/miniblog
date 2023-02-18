@@ -1,4 +1,5 @@
 <?php
+namespace middleware;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 

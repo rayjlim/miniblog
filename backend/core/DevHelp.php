@@ -12,7 +12,7 @@ class DevHelp
      *
      * @return None
      */
-    static function debugMsg($msg)
+    public static function debugMsg($msg)
     {
         if ((isset($_SESSION['debug']) &&  $_SESSION['debug']) && !isset($_REQUEST["xhr"])) {
             echo $msg.'<br>';
@@ -25,7 +25,7 @@ class DevHelp
      *
      * @return None
      */
-    static function redirectHelper($url)
+    public static function redirectHelper($url)
     {
         if (isset($_SESSION['debug']) && $_SESSION['debug']) {
             echo '<a href="'.$url.'">Follow Redirect '.$url.'</a>';

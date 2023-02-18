@@ -1,5 +1,6 @@
 <?php
 namespace dao;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 interface IResourceDAO
