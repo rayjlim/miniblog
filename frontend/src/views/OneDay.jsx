@@ -309,7 +309,7 @@ const OneDay = () => {
     loadDay({ pageDate, pageMode });
 
     document.addEventListener('keydown', checkKeyPressed);
-    return () => window.removeEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
 
   function copyToClipboard(content) {

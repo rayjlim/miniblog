@@ -121,7 +121,7 @@ const EditForm = ({ entry, onSuccess }) => {
     console.log('EditForm: useEffect');
 
     document.addEventListener('keydown', checkKeyPressed);
-    return () => window.removeEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [entry]);
 
   return (
@@ -155,7 +155,7 @@ const EditForm = ({ entry, onSuccess }) => {
 
       <div className="editBtns">
         <button
-          onClick={handleSave}
+          onClick={() => handleSave()}
           className="btn btn-primary"
           id="saveBtn"
           type="button"

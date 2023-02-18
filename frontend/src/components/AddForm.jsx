@@ -73,7 +73,7 @@ const AddForm = ({ content, date, onSuccess }) => {
 
       setFormContent(content || '');
       document.addEventListener('keydown', checkKeyPressed);
-      return () => window.removeEventListener('keydown', checkKeyPressed);
+      return () => document.removeEventListener('keydown', checkKeyPressed);
     }
     return true;
   }, [id]);
@@ -137,7 +137,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </div>
 
       <button
-        onClick={handleAdd}
+        onClick={() => handleAdd()}
         className="btn btn-primary"
         id="saveBtn"
         type="button"
