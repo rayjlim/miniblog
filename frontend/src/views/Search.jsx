@@ -64,7 +64,10 @@ const TextEntry = () => {
         searchTextValue,
       )}&filterType=${searchFilter}`;
       if (startDate) {
-        endpoint += `&startDate=${format(startDate, constants.FULL_DATE_FORMAT)}`;
+        endpoint += `&startDate=${format(
+          startDate,
+          constants.FULL_DATE_FORMAT,
+        )}`;
       }
       if (endDate) {
         endpoint += `&endDate=${format(endDate, constants.FULL_DATE_FORMAT)}`;
@@ -90,13 +93,21 @@ const TextEntry = () => {
         console.log(`setStartDate : ${responseData.params.startDate.length}`);
         setStartDate(
           responseData.params.startDate.length
-            ? parse(responseData.params.startDate, constants.FULL_DATE_FORMAT, new Date())
+            ? parse(
+              responseData.params.startDate,
+              constants.FULL_DATE_FORMAT,
+              new Date(),
+            )
             : null,
         );
         console.log(`setEndDate : ${responseData.params.endDate.length}`);
         setEndDate(
           responseData.params.endDate.length
-            ? parse(responseData.params.endDate, constants.FULL_DATE_FORMAT, new Date())
+            ? parse(
+              responseData.params.endDate,
+              constants.FULL_DATE_FORMAT,
+              new Date(),
+            )
             : null,
         );
 
@@ -104,7 +115,10 @@ const TextEntry = () => {
           const reg = new RegExp(searchTextValue, 'gi');
 
           const foundHighlights = responseData.entries.map(entryLocal => {
-            const highlighted = entryLocal.content.replace(reg, str => `<b>${str}</b>`);
+            const highlighted = entryLocal.content.replace(
+              reg,
+              str => `<b>${str}</b>`,
+            );
             return { ...entryLocal, highlighted };
           });
 
@@ -151,61 +165,18 @@ const TextEntry = () => {
           {searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}
           {' '}
           to
+          {' '}
           {searchParams.endDate !== '' ? searchParams.endDate : 'Now'}
-          ,Limit:
+          , Limit:
+          {' '}
           {searchParams.resultsLimit}
           . Found
+          {' '}
           {posts.length}
         </>
       );
     }
     return <>No Search Params</>;
-  }
-
-  function showEntries() {
-    return formMode !== SHOW_EDIT_FORM ? (
-      <ul className="entriesList">
-        {posts.length
-          && posts.map(localEntry => {
-            const content = searchText.current.value.length && localEntry.highlighted
-              ? localEntry.highlighted
-              : localEntry.content;
-            let newText = content.replace(/<br \/>/g, '\n');
-            newText = newText.replace(
-              /..\/uploads/g,
-              `${constants.UPLOAD_ROOT}`,
-            );
-            const dateFormated = format(
-              parse(localEntry.date, constants.FULL_DATE_FORMAT, new Date()),
-              'EEE, yyyy-MM-dd',
-            );
-
-            const showEntryDate = (
-              <button
-                type="button"
-                onClick={e => showEditForm(e, localEntry)}
-                className="plainLink"
-              >
-                {dateFormated}
-              </button>
-            );
-            return (
-              <li key={localEntry.id} className="blogEntry">
-                {showEntryDate}
-                |
-                <MarkdownDisplay source={newText} escapeHtml={false} />
-              </li>
-            );
-          })}
-        {!posts.length && (
-          <li>
-            <h2>No Entries Found</h2>
-          </li>
-        )}
-      </ul>
-    ) : (
-      ''
-    );
   }
 
   useEffect(() => {
@@ -220,7 +191,16 @@ const TextEntry = () => {
 
   return (
     <>
-      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
+      {constants.ENVIRONMENT === 'development' && (
+        <a
+          className="github-fork-ribbon"
+          href="https://url.to-your.repo"
+          data-ribbon="Development"
+          title="Development"
+        >
+          Development
+        </a>
+      )}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">
@@ -242,8 +222,10 @@ const TextEntry = () => {
           className="form-control"
           ref={searchText}
           placeholder="Search term"
+          onChange={() => debouncedSearch(searchText.current.value)}
         />
         Filter:
+        <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
         <input
           id="filterId"
           type="text"
@@ -251,53 +233,103 @@ const TextEntry = () => {
           value={searchFilter}
           placeholder="Search term"
           onChange={e => setSearchFilter(e.target.value)}
+          style={{ display: 'inline', margin: '0 1em' }}
         />
-        <span>ALL, 0; TAGGED, 1;UNTAGGED, 2</span>
-        <div>
-          Start Date:
-          {' '}
-          {startDate ? (
-            <DatePicker onChange={setStartDate} value={startDate} />
-          ) : (
-            <>
-              None
-              {' '}
-              <button
-                type="button"
-                onClick={e => showStartDateEdit(e, entry)}
-                className="plainLink"
-              >
-                Edit
-              </button>
-            </>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <div>
+            Start Date:
+            {' '}
+            {startDate ? (
+              <DatePicker onChange={setStartDate} value={startDate} />
+            ) : (
+              <>
+                None
+                {' '}
+                <button
+                  type="button"
+                  onClick={e => showStartDateEdit(e, entry)}
+                  className="plainLink"
+                >
+                  Edit
+                </button>
+              </>
+            )}
+          </div>
+          <div>
+            End Date:
+            {' '}
+            {endDate ? (
+              <DatePicker onChange={setEndDate} value={endDate} />
+            ) : (
+              <>
+                None
+                {' '}
+                <button
+                  type="button"
+                  onClick={e => showEndDateEdit(e, entry)}
+                  className="plainLink"
+                >
+                  Edit
+                </button>
+              </>
+            )}
+          </div>
         </div>
-        <div>
-          End Date:
-          {' '}
-          {endDate ? (
-            <DatePicker onChange={setEndDate} value={endDate} />
-          ) : (
-            <>
-              None
-              {' '}
-              <button
-                type="button"
-                onClick={e => showEndDateEdit(e, entry)}
-                className="plainLink"
-              >
-                Edit
-              </button>
-            </>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          {showSearchSummary()}
         </div>
-        <span className="container">{showSearchSummary()}</span>
       </section>
 
-      {
-      formMode === SHOW_EDIT_FORM && <section className="container"><EditForm entry={entry} onSuccess={msg => resetEntryForm(msg)} /></section>
-      }
-      <section className="container">{showEntries()}</section>
+      {formMode === SHOW_EDIT_FORM && (
+        <section className="container">
+          <EditForm entry={entry} onSuccess={msg => resetEntryForm(msg)} />
+        </section>
+      )}
+      <section className="container">
+        {formMode !== SHOW_EDIT_FORM && (
+          <ul className="entriesList">
+            {posts.length
+              && posts.map(localEntry => {
+                const content = searchText.current.value.length
+                  && localEntry.highlighted
+                  ? localEntry.highlighted
+                  : localEntry.content;
+                let newText = content.replace(/<br \/>/g, '\n');
+                newText = newText.replace(
+                  /..\/uploads/g,
+                  `${constants.UPLOAD_ROOT}`,
+                );
+                const dateFormated = format(
+                  parse(
+                    localEntry.date,
+                    constants.FULL_DATE_FORMAT,
+                    new Date(),
+                  ),
+                  constants.DISPLAY_DATE_FORMAT,
+                );
+
+                return (
+                  <li key={localEntry.id} className="blogEntry">
+                    <button
+                      type="button"
+                      onClick={e => showEditForm(e, localEntry)}
+                      className="plainLink"
+                    >
+                      {dateFormated}
+                    </button>
+                    |
+                    <MarkdownDisplay source={newText} escapeHtml={false} />
+                  </li>
+                );
+              })}
+            {!posts.length && (
+              <li>
+                <h2>No Entries Found</h2>
+              </li>
+            )}
+          </ul>
+        )}
+      </section>
 
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/upload" className="btn navbar-btn">
