@@ -51,12 +51,14 @@ class UploadHandler
 
                 // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
-                    throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
+                    throw new Exception(" file already exists." . "![](../uploads/"
+                    . $filePath . $urlFileName . ")" . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
                 }
 
                 // Check file size
                 if ($_FILES["fileToUpload"]["size"] > $_ENV['UPLOAD_SIZE_LIMIT']) {
-                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"] . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
+                    throw new Exception("Sorry, your file is too large."
+                    . $_FILES["fileToUpload"]["size"] . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
                 }
                 // Allow certain file formats
                 if (!in_array($imageFileType, $validFileExt)) {

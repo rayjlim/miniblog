@@ -72,7 +72,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         }
 
         $tagParam = "'%" . $graphParams->label . "%'";
-        $posts = R::findAll(POSTS, ' user_id = ? and content like ' . $tagParam . ' ' . $sqlParam . ' order by date desc limit  ' . $graphParams->resultLimit, [$userId]);
+        $posts = R::findAll(POSTS, ' user_id = ? and content like ' . $tagParam . ' '
+            . $sqlParam . ' order by date desc limit  ' . $graphParams->resultLimit, [$userId]);
 
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
@@ -90,7 +91,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
     public function getSameDayEntries($userId, $date)
     {
-        $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m') . ' and Day(date) = ' . $date->format('d')
+        $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m')
+            . ' and Day(date) = ' . $date->format('d')
             . ' and content not like "#s%"'
             . ' and content not like "#x%"'
             . ' and content not like "@w%"'
@@ -124,9 +126,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             $sqlParam.= ' and content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
         }
 
-        if (count($listParams->tags) != 0) {
-            $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
-        }
+        // if (count($listParams->tags) != 0) {
+        //     $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
+        // }
 
         if ($listParams->startDate != '') {
             $sqlParam.= ' and date >= \'' . $listParams->startDate . '\'';
@@ -141,7 +143,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         }
 
         if ($listParams->filterType == FILTER_TAGGED) {
-            $sqlParam.= ' and (content LIKE \'%#%\' or content LIKE \'@%\')' . ' and content NOT LIKE \'%##%\'';
+            $sqlParam.= ' and (content LIKE \'%#%\' or content LIKE \'@%\')'
+                . ' and content NOT LIKE \'%##%\'';
         }
         // echo $sqlParam;
         // exit;
@@ -150,7 +153,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
     public function queryLastTagEntry($userId, $label)
     {
-        $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label . '%\' order by date desc limit 1', [$userId]);
+        $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label
+            . '%\' order by date desc limit 1', [$userId]);
 
         $sequencedArray = array_values(array_map("getExportValues", $posts));
         return $sequencedArray[0];

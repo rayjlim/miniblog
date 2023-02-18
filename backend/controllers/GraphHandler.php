@@ -5,6 +5,7 @@ defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
+use \DateTime;
 
 class GraphHandler extends AbstractController
 {
@@ -101,7 +102,8 @@ class GraphHandler extends AbstractController
     );
 
     public $MANTRAS =  array(
-        'Determination - “In the heart of the strong shines a relentless ray of resolve... It cannot be stopped, it cannot be controlled, and it will not fail.”',
+        'Determination - “In the heart of the strong shines a relentless ray of resolve... '
+        . 'It cannot be stopped, it cannot be controlled, and it will not fail.”',
         'Don\'t be afraid of your dreams',
         'Be more optimistic for more productivity',
         'Love should be authentic. Real, unconditional',
@@ -214,6 +216,7 @@ function printEntrys($carry, $item)
     $replacement = '&lt;${1}&gt; :';
     $preparedContent = preg_replace($pattern, $replacement, $preparedContent);
 
-    $message =  "<li><strong><a href=\"" . $link . "\">" . $entryDay->format('Y-D') . '</a>:</strong> ' . $preparedContent . "</li>";
+    $message =  "<li><strong><a href=\"" . $link . "\">" . $entryDay->format('Y-D')
+        . '</a>:</strong> ' . $preparedContent . "</li>";
     return $carry .= $message;
 }

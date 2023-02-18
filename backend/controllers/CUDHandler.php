@@ -7,6 +7,7 @@ use \Lpt\DevHelp;
 use \models\SmsEntrie;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \Exception;
 
 /**
  *   This class will handle the Create, Update, Delete Functionality
@@ -50,7 +51,9 @@ class CUDHandler
             $currentDateTime = $this->resource->getDateTime();
             $smsEntry = new SmsEntrie();
             $smsEntry->userId = $_ENV['ACCESS_ID'];
-            $smsEntry->date = (!isset($entry->date) || $entry->date == '') ? $currentDateTime->format(FULL_DATETIME_FORMAT) : $entry->date;
+            $smsEntry->date = (!isset($entry->date) || $entry->date == '')
+                ? $currentDateTime->format(FULL_DATETIME_FORMAT)
+                : $entry->date;
             $smsEntry->content = trim(urldecode($entry->content));
             $smsEntry = $this->contentHelper->processEntry($smsEntry);
 
