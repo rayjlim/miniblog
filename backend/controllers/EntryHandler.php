@@ -6,7 +6,9 @@ use \Lpt\DevHelp;
 use \models\ListParams;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \DateTime;
 use \stdClass;
+
 
 /**
  * @OA\Info(title="Miniblog Api", version="0.1",
@@ -103,7 +105,7 @@ class EntryHandler
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->load($id);
-            $this->app->response()->header('Content-Type', 'application/json');
+            // $this->app->response()->header('Content-Type', 'application/json'); // TODO: fix
             $this->resource->echoOut('{"entry": ' . json_encode($entry) . '}');
         };
     }
@@ -140,7 +142,7 @@ class EntryHandler
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->getYearMonths($userId);
-            $this->app->response()->header('Content-Type', 'application/json');
+            // $this->app->response()->header('Content-Type', 'application/json'); // TODO: fix
             $this->resource->echoOut('{"data": ' . json_encode($entry) . '}');
         };
     }
