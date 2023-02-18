@@ -357,11 +357,14 @@ const TextEntry = () => {
                     <button
                       type="button"
                       onClick={e => showEditForm(e, localEntry)}
-                      className="plainLink"
+                      className="plainLink margin-rt-1"
                     >
                       {dateFormated}
                     </button>
-                    |
+                    <RouterNavLink to={`/oneday?pageMode=1&date=${localEntry.date}`}>
+                      {' '}
+                      <i className="fa fa-calendar-check" title="Same Day" />
+                    </RouterNavLink>
                     <MarkdownDisplay source={newText} escapeHtml={false} />
                   </li>
                 );
