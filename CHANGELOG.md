@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.4](https://github.com/rayjlim/miniblog/compare/v2.8.3...v2.8.4) (2023-02-18)
+
+
+### Bug Fixes
+
+* [#180](https://github.com/rayjlim/miniblog/issues/180) phpmd errors ([b2744c7](https://github.com/rayjlim/miniblog/commit/b2744c7a61460ed3bf691128fff39605a134c95c))
+* code sniffer errors ([634ed96](https://github.com/rayjlim/miniblog/commit/634ed96e9e9f896fc1606bfe8ef30e1af4fca66e))
+* codesniffer errors ([05b0a59](https://github.com/rayjlim/miniblog/commit/05b0a59f3aa79c010591b5e2169169c6d74e98ee))
+* codesniffer include and auto fixes ([ae2ab18](https://github.com/rayjlim/miniblog/commit/ae2ab186e882dcf2a7dcc5ace5b175535bd695d8))
+* phpcs warnings ([f68ed4c](https://github.com/rayjlim/miniblog/commit/f68ed4cb344893dbef26ee8907eb261c13893ada))
+
 ### [2.8.3](https://github.com/rayjlim/miniblog/compare/v2.8.2...v2.8.3) (2023-02-17)
 
 ### [2.8.2](https://github.com/rayjlim/miniblog/compare/v2.8.1...v2.8.2) (2023-02-17)
