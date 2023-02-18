@@ -1,10 +1,14 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \Exception;
+
 /**
  *   This class will handle the Create, Update, Delete Functionality
  *   for the Images uploaded
@@ -47,12 +51,14 @@ class UploadHandler
 
                 // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
-                    throw new Exception(" file already exists." . "![](../uploads/" . $filePath . $urlFileName . ")" . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
+                    throw new Exception(" file already exists." . "![](../uploads/"
+                    . $filePath . $urlFileName . ")" . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
                 }
 
                 // Check file size
                 if ($_FILES["fileToUpload"]["size"] > $_ENV['UPLOAD_SIZE_LIMIT']) {
-                    throw new Exception("Sorry, your file is too large." . $_FILES["fileToUpload"]["size"] . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
+                    throw new Exception("Sorry, your file is too large."
+                    . $_FILES["fileToUpload"]["size"] . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
                 }
                 // Allow certain file formats
                 if (!in_array($imageFileType, $validFileExt)) {
@@ -63,11 +69,11 @@ class UploadHandler
                     throw new Exception("Sorry, there was an error moving upload file");
                 }
                 chmod($targetFileFullPath, 0755);
-
+                $data = [];
                 $data['fileName'] = $urlFileName;
                 $data['filePath'] = $filePath;
                 $data['createdDir'] = $createdDir;
-                \Lpt\Logger::log('File Uploaded: ' . $filePath . " - " . $urlFileName);
+                Logger::log('File Uploaded: ' . $filePath . " - " . $urlFileName);
                 echo json_encode($data);
                 return $response;
             } catch (Exception $e) {
@@ -97,10 +103,10 @@ class UploadHandler
             $this->resizer($new_width, $fileFullPath, $fileFullPath);
 
             $urlFileName = $fileName;
-
+            $data = [];
             $data['fileName'] = $urlFileName;
             $data['filePath'] = $filePath;
-            \Lpt\Logger::log('File Resized: ' . $filePath . " - " . $urlFileName);
+            Logger::log('File Resized: ' . $filePath . " - " . $urlFileName);
             echo json_encode($data);
             return $response;
         };
@@ -193,10 +199,10 @@ class UploadHandler
             // Free the memory
             imagedestroy($img);
             imagedestroy($rotated);
-
+            $data = [];
             $data['fileName'] = $fileName;
             $data['filePath'] = $filePath;
-            \Lpt\Logger::log('File Rotated: ' . $filePath . " - " . $fileName);
+            Logger::log('File Rotated: ' . $filePath . " - " . $fileName);
             echo json_encode($data);
             return $response;
         };
@@ -216,7 +222,7 @@ class UploadHandler
 
             $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             rename($targetDir . $fileName, $targetDir . $newFileName);
-
+            $data = [];
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
             Logger::log('File Renamed: ' . $filePath . " - " . $fileName . " to " . $newFileName);
@@ -232,7 +238,6 @@ class UploadHandler
             DevHelp::debugMsg('start listMedia');
             $currentDir = isset($args['currentDir']) ? $args['currentDir'] : '';
             $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR']));
-            // \Lpt\DevHelp::debugMsg(print_r($filelist));
 
             DevHelp::debugMsg('currentDir ' . $currentDir);
             DevHelp::debugMsg('end($filelist)' . is_dir($_ENV['UPLOAD_DIR'] . DIR_SEP . end($filelist)));
@@ -247,7 +252,7 @@ class UploadHandler
 
             DevHelp::debugMsg('$currentDir: ' . $currentDir);
             $dirContent = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir));
-
+            $data = [];
             $data['uploadDirs'] = $filelist;
             $data['currentDir'] = $currentDir;
             $data['dirContent'] = $dirContent;
@@ -267,6 +272,7 @@ class UploadHandler
             DevHelp::debugMsg('$filePath' . $filePath);
 
             $this->resource->removefile($_ENV['UPLOAD_DIR'] . $filePath . DIR_SEP . $fileName);
+            $data = [];
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
             Logger::log('File Removed: ' . $filePath . DIR_SEP . $fileName);
             echo json_encode($data);

@@ -18,3 +18,4 @@ scripts/passfile.txt
 doc/reference files/*
 backend/_logs/*
 backend/error_log
+feature_ideas/*

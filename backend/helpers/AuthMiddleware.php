@@ -1,11 +1,11 @@
 <?php
+namespace middleware;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
-
-
+use \stdClass;
 
 // use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -36,9 +36,9 @@ class AuthMiddleware
 
         if (!empty($userId)) {
             return $response;
-        } else {
-            $error = "Not Logged In";
         }
+
+        $error = "Not Logged In";
 
         $reqBody = $request->getBody();
         DevHelp::debugMsg('reqBody:' . $reqBody);
@@ -76,6 +76,7 @@ class AuthMiddleware
 
     /**
      * Check if the user is logged in
+     *
      * @return boolean
      */
     private function isLoggedIn()
@@ -108,6 +109,7 @@ class AuthMiddleware
 
     /**
      * Do the login
+     *
      * @param  string $ip       IP address
      * @param  string $username Username
      * @param  string $password Password
@@ -120,7 +122,6 @@ class AuthMiddleware
         Logger::log('doLogin:' . $username . 'from IP Address: ' . $ipaddress);
         return $username === $_ENV['ACCESS_USER'] && $password === $_ENV['ACCESS_PASSWORD'];
     }
-
 }
 
 function encrypt($simple_string)

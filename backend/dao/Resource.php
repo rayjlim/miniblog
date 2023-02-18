@@ -1,12 +1,15 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+namespace dao;
+
+defined('ABSPATH') or exit('No direct script access allowed');
+use \DateTime;
 
 class Resource implements IResourceDAO
 {
     /**
      * setSession
      *
-     * @param string $key site url
+     * @param  string $key site url
      * @return none
      */
     public function setSession($key, $value)
@@ -20,7 +23,7 @@ class Resource implements IResourceDAO
     /**
      * getSession
      *
-     * @param string $key    reference
+     * @param  string $key reference
      * @return mixed value
      */
     public function getSession($key)
@@ -53,14 +56,14 @@ class Resource implements IResourceDAO
     public function readdir($logDirectory)
     {
         $filelist = array();
-        if ($handle = opendir($logDirectory)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && $file != ".svn") {
-                    array_push($filelist, $file);
-                }
+        $handle = opendir($logDirectory);
+
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != ".." && $file != ".svn") {
+                array_push($filelist, $file);
             }
-            closedir($handle);
         }
+        closedir($handle);
 
         asort($filelist);
         $filelist2 = array();

@@ -1,11 +1,16 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 use \Lpt\DevHelp;
+use \models\ListParams;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \stdClass;
+
 /**
  * @OA\Info(title="Miniblog Api", version="0.1",
- *   @OA\Contact(
+ * @OA\Contact(
  *     email= "rayjlim@yahoo.com"
  *   )
  * )
@@ -22,18 +27,18 @@ class EntryHandler
     }
 
     /**
-    * @OA\Get(
-    *     path="/api/posts/",
-    *     @OA\Response(
-    *       response="200",
-    *       description="Retrieve entries limit 50",
-    *       @OA\MediaType(
-    *         mediaType="application/json",
-    *         @OA\Schema(ref="#/components/schemas/SmsEntrie"),
-    *       )
-    *     )
-    * )
-    */
+     * @OA\Get(
+     *     path="/api/posts/",
+     * @OA\Response(
+     *       response="200",
+     *       description="Retrieve entries limit 50",
+     * @OA\MediaType(
+     *         mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SmsEntrie"),
+     *       )
+     *     )
+     * )
+     */
     public function listItemsApi()
     {
         return function (Request $request, Response $response, $args) {
@@ -56,23 +61,23 @@ class EntryHandler
     }
 
     /**
-    * @OA\Get(
-    *     description="Retrieve entries on same day of year",
-    *     path="/api/sameDayEntries",
-   *     @OA\Response(
-   *         response=200,
-   *         description="success",
-   *         @OA\MediaType(
-   *           mediaType="application/json",
-   *           @OA\Schema(ref="#/components/schemas/SearchResults"),
-   *         )
-   *     ),
-   *     @OA\Response(
-   *         response=404,
-   *         description="Could Not Find Resource"
-   *     )
-    * )
-    */
+     * @OA\Get(
+     *     description="Retrieve entries on same day of year",
+     *     path="/api/sameDayEntries",
+     * @OA\Response(
+     *         response=200,
+     *         description="success",
+     * @OA\MediaType(
+     *           mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response=404,
+     *         description="Could Not Find Resource"
+     *     )
+     * )
+     */
     public function listItemsSameDay()
     {
         return function (Request $request, Response $response, $args) {
@@ -102,31 +107,31 @@ class EntryHandler
             $this->resource->echoOut('{"entry": ' . json_encode($entry) . '}');
         };
     }
-   /**
-   * @OA\Get(
-   *     description="Retrieve entries limit 50",
-   *     path="/api/yearMonth",
-   *     @OA\RequestBody(
-   *         description="Client side search object",
-   *         required=true,
-   *         @OA\MediaType(
-   *             mediaType="application/json",
-   *         )
-   *     ),
-   *     @OA\Response(
-   *         response=200,
-   *         description="success",
-   *         @OA\MediaType(
-   *           mediaType="application/json",
-   *           @OA\Schema(ref="#/components/schemas/SearchResults"),
-   *         )
-   *     ),
-   *     @OA\Response(
-   *         response=404,
-   *         description="Could Not Find Resource"
-   *     )
-    * )
-    */
+    /**
+     * @OA\Get(
+     *     description="Retrieve entries limit 50",
+     *     path="/api/yearMonth",
+     * @OA\RequestBody(
+     *         description="Client side search object",
+     *         required=true,
+     * @OA\MediaType(
+     *             mediaType="application/json",
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response=200,
+     *         description="success",
+     * @OA\MediaType(
+     *           mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response=404,
+     *         description="Could Not Find Resource"
+     *     )
+     * )
+     */
 
     public function yearMonthsApi()
     {

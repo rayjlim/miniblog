@@ -1,6 +1,9 @@
 <?php
-defined('ABSPATH') OR exit('No direct script access allowed');
+namespace dao;
+
+defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
+
 class SmsUsersRedbeanDAO implements SmsUsersDAO
 {
     public function load($id)
@@ -38,7 +41,7 @@ class SmsUsersRedbeanDAO implements SmsUsersDAO
 
     public function update($smsUser)
     {
-        $userBean = R::load(USERS, $smsEntrie['id']);
+        $userBean = R::load(USERS, $smsUser['id']);
         $userBean->facebook_id = $smsUser->facebookId;
         $userBean->email = $smsUser->email;
         $userBean->pref_days_for_reminder = $smsUser->prefDaysForReminder;

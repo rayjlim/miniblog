@@ -1,9 +1,14 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
+use \models\SmsEntrie;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \Exception;
+
 /**
  *   This class will handle the Create, Update, Delete Functionality
  *   for the Entrys
@@ -24,12 +29,12 @@ class CUDHandler
      * @OA\Post(
      *     description="Create New Entry",
      *     path="/api/posts/{id}",
-     *     @OA\Response(
+     * @OA\Response(
      *       response="200",
      *       description="Success",
-     *         @OA\MediaType(
+     * @OA\MediaType(
      *           mediaType="application/json",
-     *           @OA\Schema(ref="#/components/schemas/SearchResults"),
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
      *         )
      *     )
      * )
@@ -46,7 +51,9 @@ class CUDHandler
             $currentDateTime = $this->resource->getDateTime();
             $smsEntry = new SmsEntrie();
             $smsEntry->userId = $_ENV['ACCESS_ID'];
-            $smsEntry->date = (!isset($entry->date) || $entry->date == '') ? $currentDateTime->format(FULL_DATETIME_FORMAT) : $entry->date;
+            $smsEntry->date = (!isset($entry->date) || $entry->date == '')
+                ? $currentDateTime->format(FULL_DATETIME_FORMAT)
+                : $entry->date;
             $smsEntry->content = trim(urldecode($entry->content));
             $smsEntry = $this->contentHelper->processEntry($smsEntry);
 
@@ -57,32 +64,32 @@ class CUDHandler
         };
     }
     /**
-    *  @OA\Put(
-    *      description="Update Entry",
-    *     path="/api/posts/{id}",
-    *     @OA\Parameter(
-    *     in="path",
-    *     name="id",
-    *     required=true,
-    *     description="Entry Id",
-    *     ),
-    *     @OA\RequestBody(
-    *         description="Entry content",
-    *         required=true,
-    *         @OA\MediaType(
-    *         mediaType="application/json",
-    *         @OA\Schema(ref="#/components/schemas/SmsEntrie")
-    *         )
-    *     ),
-    *     @OA\Response(
-    *     response="200",
-    *     description="Success",
-    *     @OA\MediaType(
-    *     mediaType="application/json",
-    *     @OA\Schema(ref="#/components/schemas/SearchResults"),
-    *     )
-    *     )
-    * )
+     * @OA\Put(
+     *      description="Update Entry",
+     *     path="/api/posts/{id}",
+     * @OA\Parameter(
+     *     in="path",
+     *     name="id",
+     *     required=true,
+     *     description="Entry Id",
+     *     ),
+     * @OA\RequestBody(
+     *         description="Entry content",
+     *         required=true,
+     * @OA\MediaType(
+     *         mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SmsEntrie")
+     *         )
+     *     ),
+     * @OA\Response(
+     *     response="200",
+     *     description="Success",
+     * @OA\MediaType(
+     *     mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *     )
+     *     )
+     * )
      */
     public function updateEntry()
     {
@@ -111,12 +118,12 @@ class CUDHandler
      * @OA\Delete(
      *     description="Remove Entry",
      *     path="/api/posts/{id}",
-     *     @OA\Response(
+     * @OA\Response(
      *       response="200",
      *       description="Success",
-     *         @OA\MediaType(
+     * @OA\MediaType(
      *           mediaType="application/json",
-     *           @OA\Schema(ref="#/components/schemas/SearchResults"),
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
      *         )
      *     )
      * )
