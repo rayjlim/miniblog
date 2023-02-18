@@ -7,6 +7,7 @@ use \Lpt\DevHelp;
 use \models\SmsEntrie;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \stdClass;
 use \Exception;
 
 /**
@@ -94,17 +95,32 @@ class CUDHandler
     public function updateEntry()
     {
         return function (Request $request, Response $response, $args) {
-            DevHelp::debugMsg('start update' . __FILE__);
+            DevHelp::debugMsg('start update ' . __FILE__);
 
             $entry = json_decode($request->getBody());
             if (!$entry) {
                 throw new Exception('Invalid json' . $request->getBody());
             }
 
-            $smsEntry = $this->dao->load($args['id']);
 
+            $smsEntry = $this->dao->load($args['id']);
+            if($smsEntry["id"] == 0){
+                header('HTTP/1.0 404 File Not Found');
+                $metaData = new stdClass();
+                $metaData->message = "Entry not valid";
+                $metaData->status = "fail";
+
+                $this->resource->echoOut(json_encode($metaData));
+                die();
+            }
             if ($_ENV['ACCESS_ID'] != $smsEntry['user_id']) {
-                throw new Exception('Invalid User');
+                header('HTTP/1.0 403 Forbidden');
+                $metaData = new stdClass();
+                $metaData->message = "Unauthorized User";
+                $metaData->status = "fail";
+
+                $this->resource->echoOut(json_encode($metaData));
+                die();
             }
 
             $smsEntry['content'] = SmsEntrie::sanitizeContent($entry->content);

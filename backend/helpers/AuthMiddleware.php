@@ -16,13 +16,13 @@ class AuthMiddleware
 {
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
+        DevHelp::debugMsg(__FILE__);
         $response = $handler->handle($request);
         // $existingContent = (string) $response->getBody();
 
         $response = new Response();
         // $response->getBody()->write('BEFORE ' . $existingContent);
 
-        DevHelp::debugMsg(__FILE__);
         $ipaddress = getenv("REMOTE_ADDR");
 
         if ($request->getMethod() == "OPTIONS") {
@@ -87,7 +87,8 @@ class AuthMiddleware
         $token = $_ENV['AUTH_TOKEN'];
         DevHelp::debugMsg('isset app token? ' . $token . isset($headers[$token]));
         if (isset($headers[$token])) {
-            $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
+            DevHelp::debugMsg('decrypting token ' . $headers[$token]);
+            $headerStringValue = $headers[$token];
 
             $decryptedString = decrypt($headerStringValue);
             DevHelp::debugMsg('decryptedString:' . $decryptedString);

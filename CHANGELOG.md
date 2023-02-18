@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/rayjlim/miniblog/compare/v2.8.4...v2.9.0) (2023-02-18)
+
+
+### Features
+
+* script to automate version update ([fce799d](https://github.com/rayjlim/miniblog/commit/fce799dbf34cd038e73f6f83826ba126025f322d))
+
+
+### Bug Fixes
+
+* [#139](https://github.com/rayjlim/miniblog/issues/139) check entry found and correct user ([ebf6753](https://github.com/rayjlim/miniblog/commit/ebf6753449e9b150912dced7413729a5345cf715))
+* broken tests ([3ae091f](https://github.com/rayjlim/miniblog/commit/3ae091f96cdbb74da307f4315c8d3554dbb3f85c))
+* codesniffer clean ups ([d5e97df](https://github.com/rayjlim/miniblog/commit/d5e97df9a532c26c79fa6bd73133ba8696b0f3f3))
+
 ### [2.8.4](https://github.com/rayjlim/miniblog/compare/v2.8.3...v2.8.4) (2023-02-18)
 
 
