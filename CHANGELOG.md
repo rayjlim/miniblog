@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.11.0](https://github.com/rayjlim/miniblog/compare/v2.10.0...v2.11.0) (2023-02-18)
+
+
+### Features
+
+* [#108](https://github.com/rayjlim/miniblog/issues/108) add link ([a0f9c2e](https://github.com/rayjlim/miniblog/commit/a0f9c2ee3bce3f283a06ec5760b71c074b83c472))
+
 ## [2.10.0](https://github.com/rayjlim/miniblog/compare/v2.9.0...v2.10.0) (2023-02-18)
 
 
