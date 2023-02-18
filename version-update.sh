@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# npx standard-version
+npx standard-version
 cd backend
 composer update
 git add composer.lock
