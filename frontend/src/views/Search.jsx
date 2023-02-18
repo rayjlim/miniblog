@@ -331,51 +331,50 @@ const TextEntry = () => {
       )}
       <section className="container">
         {formMode !== SHOW_EDIT_FORM && (
-          <ul className="entriesList">
-            {posts.length
-              && posts.map(localEntry => {
-                const content = searchText.current.value.length
-                  && localEntry.highlighted
-                  ? localEntry.highlighted
-                  : localEntry.content;
-                let newText = content.replace(/<br \/>/g, '\n');
-                newText = newText.replace(
-                  /..\/uploads/g,
-                  `${constants.UPLOAD_ROOT}`,
-                );
-                const dateFormated = format(
-                  parse(
-                    localEntry.date,
-                    constants.FULL_DATE_FORMAT,
-                    new Date(),
-                  ),
-                  constants.DISPLAY_DATE_FORMAT,
-                );
+          posts.length
+            ? (
+              <ul className="entriesList">
+                {posts.map(localEntry => {
+                  const content = searchText.current.value.length
+                    && localEntry.highlighted
+                    ? localEntry.highlighted
+                    : localEntry.content;
+                  let newText = content.replace(/<br \/>/g, '\n');
+                  newText = newText.replace(
+                    /..\/uploads/g,
+                    `${constants.UPLOAD_ROOT}`,
+                  );
+                  const dateFormated = format(
+                    parse(
+                      localEntry.date,
+                      constants.FULL_DATE_FORMAT,
+                      new Date(),
+                    ),
+                    constants.DISPLAY_DATE_FORMAT,
+                  );
 
-                return (
-                  <li key={localEntry.id} className="blogEntry">
-                    <button
-                      type="button"
-                      onClick={e => showEditForm(e, localEntry)}
-                      className="plainLink margin-rt-1"
-                    >
-                      {dateFormated}
-                    </button>
-                    <RouterNavLink to={`/oneday?pageMode=1&date=${localEntry.date}`}>
-                      {' '}
-                      <i className="fa fa-calendar-check" title="Same Day" />
-                    </RouterNavLink>
-                    <MarkdownDisplay source={newText} escapeHtml={false} />
-                  </li>
-                );
-              })}
-            {!posts.length && (
-              <li>
-                <h2>No Entries Found</h2>
-              </li>
-            )}
-          </ul>
-        )}
+                  return (
+                    <li key={localEntry.id} className="blogEntry">
+                      <button
+                        type="button"
+                        onClick={e => showEditForm(e, localEntry)}
+                        className="plainLink margin-rt-1"
+                      >
+                        {dateFormated}
+                      </button>
+                      <RouterNavLink to={`/oneday?pageMode=1&date=${localEntry.date}`}>
+                        {' '}
+                        <i className="fa fa-calendar-check" title="Same Day" />
+                      </RouterNavLink>
+                      <MarkdownDisplay source={newText} escapeHtml={false} />
+                    </li>
+                  );
+                })}
+              </ul>
+            )
+            : (
+              <h2>No Entries Found</h2>
+            ))}
       </section>
 
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
