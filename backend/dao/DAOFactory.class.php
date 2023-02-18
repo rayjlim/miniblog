@@ -3,8 +3,15 @@ namespace dao;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
+use \controllers\CUDHandler;
+use \controllers\EntryHandler;
+use \controllers\GraphHandler;
+use \controllers\LogHandler;
+use \controllers\UploadHandler;
+
 use \dao\SmsEntriesRedbeanDAO;
 use \dao\SmsUsersRedbeanDAO;
+use \helpers\ContentHelper;
 
 class DAOFactory
 {
@@ -27,13 +34,13 @@ class DAOFactory
     //helpers
     public static function getContentHelper()
     {
-        return new \helpers\ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
+        return new ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
     // controllers
     public static function getCUDHandler()
     {
-        return new \controllers\CUDHandler(
+        return new CUDHandler(
             DAOFactory::getSmsEntriesDAO(),
             DAOFactory::getResourceDAO(),
             DAOFactory::getContentHelper()
@@ -42,12 +49,12 @@ class DAOFactory
 
     public static function getEntryHandler()
     {
-        return new \controllers\EntryHandler(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
+        return new EntryHandler(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
     public static function getGraphHandler($app)
     {
-        return new \controllers\GraphHandler(
+        return new GraphHandler(
             $app,
             DAOFactory::getSmsEntriesDAO(),
             DAOFactory::getResourceDAO()
@@ -56,11 +63,11 @@ class DAOFactory
 
     public static function getLogHandler()
     {
-        return new \controllers\LogHandler(DAOFactory::getResourceDAO());
+        return new LogHandler(DAOFactory::getResourceDAO());
     }
 
     public static function getUploadHandler()
     {
-        return new \controllers\UploadHandler(DAOFactory::getResourceDAO());
+        return new UploadHandler(DAOFactory::getResourceDAO());
     }
 }

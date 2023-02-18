@@ -29,9 +29,9 @@ class DevHelp
     {
         if (isset($_SESSION['debug']) && $_SESSION['debug']) {
             echo '<a href="'.$url.'">Follow Redirect '.$url.'</a>';
-        } else {
-            header("Location: $url");
+            exit;
         }
+        header("Location: $url");
         exit;
     }
 }

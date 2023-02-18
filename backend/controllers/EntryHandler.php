@@ -6,6 +6,7 @@ use \Lpt\DevHelp;
 use \models\ListParams;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \stdClass;
 
 /**
  * @OA\Info(title="Miniblog Api", version="0.1",
@@ -50,7 +51,7 @@ class EntryHandler
             $entries = $this->dao->queryBlogList($userId, $listObj);
             // $this->app->response()->header('Content-Type', 'application/json');
 
-            $metaData = new \stdClass();
+            $metaData = new stdClass();
             $metaData->entries = $entries;
             $metaData->params = $listObj;
 

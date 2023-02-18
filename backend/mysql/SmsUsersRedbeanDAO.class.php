@@ -41,7 +41,7 @@ class SmsUsersRedbeanDAO implements SmsUsersDAO
 
     public function update($smsUser)
     {
-        $userBean = R::load(USERS, $smsEntrie['id']);
+        $userBean = R::load(USERS, $smsUser['id']);
         $userBean->facebook_id = $smsUser->facebookId;
         $userBean->email = $smsUser->email;
         $userBean->pref_days_for_reminder = $smsUser->prefDaysForReminder;

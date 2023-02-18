@@ -5,6 +5,7 @@ defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
+use \stdClass;
 
 // use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -35,9 +36,9 @@ class AuthMiddleware
 
         if (!empty($userId)) {
             return $response;
-        } else {
-            $error = "Not Logged In";
         }
+
+        $error = "Not Logged In";
 
         $reqBody = $request->getBody();
         DevHelp::debugMsg('reqBody:' . $reqBody);

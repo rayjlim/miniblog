@@ -2,7 +2,7 @@
 namespace dao;
 
 defined('ABSPATH') or exit('No direct script access allowed');
-
+use \DateTime;
 
 class Resource implements IResourceDAO
 {
@@ -56,14 +56,14 @@ class Resource implements IResourceDAO
     public function readdir($logDirectory)
     {
         $filelist = array();
-        if ($handle = opendir($logDirectory)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && $file != ".svn") {
-                    array_push($filelist, $file);
-                }
+        $handle = opendir($logDirectory);
+
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != ".." && $file != ".svn") {
+                array_push($filelist, $file);
             }
-            closedir($handle);
         }
+        closedir($handle);
 
         asort($filelist);
         $filelist2 = array();
@@ -91,7 +91,7 @@ class Resource implements IResourceDAO
 
     public function getDateTime()
     {
-        return new \DateTime();
+        return new DateTime();
     }
 
     public function sendEmail($email, $subject, $message)
