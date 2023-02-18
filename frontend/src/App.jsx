@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter, Route, Routes, Navigate,
+} from 'react-router-dom';
 import Search from './views/Search';
 import OneDay from './views/OneDay';
 import Media from './views/Media';
@@ -35,6 +37,7 @@ const App = () => {
             <Route path="/logs" element={<Logs />} />
             <Route path="/login" element={<LoginPassword />} />
             <Route path="/" element={<OneDay />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </div>
