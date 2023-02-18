@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { ToastContainer, toast } from 'react-toastify';
-import { format, parse } from 'date-fns';
+import { format, parse, subMonths } from 'date-fns';
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import constants from '../constants';
@@ -45,16 +45,17 @@ const TextEntry = () => {
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
   const [entry, setEntry] = useState({});
   const [searchParams, setSearchParams] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [viewState, setViewState] = useState({ showStartDate: false, showEndDate: false });
   const searchText = useRef({ value: '' });
+  const startDate = useRef(subMonths(new Date(), 3));
+  const endDate = useRef();
 
   /**
    * Get blog entries for text search
    * @param  {string} text text to search for
    */
   async function getEntries() {
-    console.log('getEntries#searchText:', searchText);
+    console.log('getEntries#searchText:', searchText.current.value);
     const searchTextValue = searchText.current.value;
     try {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
@@ -63,11 +64,14 @@ const TextEntry = () => {
       }/api/posts/?searchParam=${encodeURIComponent(
         searchTextValue,
       )}&filterType=${searchFilter}`;
-      if (startDate) {
-        endpoint += `&startDate=${format(startDate, constants.FULL_DATE_FORMAT)}`;
+      if (startDate.current) {
+        endpoint += `&startDate=${format(
+          startDate.current,
+          constants.FULL_DATE_FORMAT,
+        )}`;
       }
-      if (endDate) {
-        endpoint += `&endDate=${format(endDate, constants.FULL_DATE_FORMAT)}`;
+      if (endDate.current) {
+        endpoint += `&endDate=${format(endDate.current, constants.FULL_DATE_FORMAT)}`;
       }
       const response = await fetch(endpoint, {
         method: 'GET',
@@ -87,24 +91,43 @@ const TextEntry = () => {
         console.log('result.responseData :>> ', responseData);
 
         setSearchParams(responseData.params);
-        console.log(`setStartDate : ${responseData.params.startDate.length}`);
-        setStartDate(
-          responseData.params.startDate.length
-            ? parse(responseData.params.startDate, constants.FULL_DATE_FORMAT, new Date())
-            : null,
-        );
-        console.log(`setEndDate : ${responseData.params.endDate.length}`);
-        setEndDate(
-          responseData.params.endDate.length
-            ? parse(responseData.params.endDate, constants.FULL_DATE_FORMAT, new Date())
-            : null,
-        );
 
+        if (responseData.params.startDate !== '') {
+          console.log('set start date from response');
+          startDate.current = parse(
+            responseData.params.startDate,
+            constants.FULL_DATE_FORMAT,
+            new Date(),
+          );
+          console.log(startDate.current);
+        } else {
+          startDate.current = null;
+        }
+
+        if (responseData.params.endDate !== '') {
+          console.log('set end date from response');
+          endDate.current = parse(
+            responseData.params.endDate,
+            constants.FULL_DATE_FORMAT,
+            new Date(),
+          );
+        } else {
+          endDate.current = null;
+        }
+
+        setViewState({
+          ...viewState,
+          showStartDate: responseData.params.startDate !== '',
+          showEndDate: responseData.params.endDate !== '',
+        });
         if (searchTextValue.length) {
           const reg = new RegExp(searchTextValue, 'gi');
 
           const foundHighlights = responseData.entries.map(entryLocal => {
-            const highlighted = entryLocal.content.replace(reg, str => `<b>${str}</b>`);
+            const highlighted = entryLocal.content.replace(
+              reg,
+              str => `<b>${str}</b>`,
+            );
             return { ...entryLocal, highlighted };
           });
 
@@ -114,7 +137,7 @@ const TextEntry = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       toast.error(err);
     }
   }
@@ -127,12 +150,6 @@ const TextEntry = () => {
     setFormMode(SHOW_EDIT_FORM);
     setEntry(entryLocal);
   }
-  function showStartDateEdit() {
-    setStartDate(new Date());
-  }
-  function showEndDateEdit() {
-    setEndDate(new Date());
-  }
 
   function resetEntryForm(showToast) {
     if (showToast) {
@@ -142,70 +159,18 @@ const TextEntry = () => {
     getEntries();
   }
 
-  function showSearchSummary() {
-    if (searchParams !== null) {
-      return (
-        <>
-          Date:
-          {' '}
-          {searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}
-          {' '}
-          to
-          {searchParams.endDate !== '' ? searchParams.endDate : 'Now'}
-          ,Limit:
-          {searchParams.resultsLimit}
-          . Found
-          {posts.length}
-        </>
-      );
+  function changeDate(date, type) {
+    console.log('change date called', date, type);
+    if (type === 'start') {
+      const showStartDate = date !== null;
+      setViewState({ ...viewState, showStartDate });
+      startDate.current = date === null ? new Date('2000-01-01') : date; // TODO: fix search override 3 month default in the backend
+    } else {
+      const showEndDate = date !== null;
+      setViewState({ ...viewState, showEndDate });
+      endDate.current = date;
     }
-    return <>No Search Params</>;
-  }
-
-  function showEntries() {
-    return formMode !== SHOW_EDIT_FORM ? (
-      <ul className="entriesList">
-        {posts.length
-          && posts.map(localEntry => {
-            const content = searchText.current.value.length && localEntry.highlighted
-              ? localEntry.highlighted
-              : localEntry.content;
-            let newText = content.replace(/<br \/>/g, '\n');
-            newText = newText.replace(
-              /..\/uploads/g,
-              `${constants.UPLOAD_ROOT}`,
-            );
-            const dateFormated = format(
-              parse(localEntry.date, constants.FULL_DATE_FORMAT, new Date()),
-              'EEE, yyyy-MM-dd',
-            );
-
-            const showEntryDate = (
-              <button
-                type="button"
-                onClick={e => showEditForm(e, localEntry)}
-                className="plainLink"
-              >
-                {dateFormated}
-              </button>
-            );
-            return (
-              <li key={localEntry.id} className="blogEntry">
-                {showEntryDate}
-                |
-                <MarkdownDisplay source={newText} escapeHtml={false} />
-              </li>
-            );
-          })}
-        {!posts.length && (
-          <li>
-            <h2>No Entries Found</h2>
-          </li>
-        )}
-      </ul>
-    ) : (
-      ''
-    );
+    debouncedSearch();
   }
 
   useEffect(() => {
@@ -215,12 +180,21 @@ const TextEntry = () => {
     }
     console.log('useEffect');
 
-    debouncedSearch(searchText.current.value);
+    debouncedSearch();
   }, [searchText.current.value, searchFilter]);
 
   return (
     <>
-      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
+      {constants.ENVIRONMENT === 'development' && (
+        <a
+          className="github-fork-ribbon"
+          href="https://url.to-your.repo"
+          data-ribbon="Development"
+          title="Development"
+        >
+          Development
+        </a>
+      )}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">
@@ -242,8 +216,10 @@ const TextEntry = () => {
           className="form-control"
           ref={searchText}
           placeholder="Search term"
+          onChange={() => debouncedSearch(searchText.current.value)}
         />
         Filter:
+        <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
         <input
           id="filterId"
           type="text"
@@ -251,53 +227,153 @@ const TextEntry = () => {
           value={searchFilter}
           placeholder="Search term"
           onChange={e => setSearchFilter(e.target.value)}
+          style={{ display: 'inline', margin: '0 1em' }}
         />
-        <span>ALL, 0; TAGGED, 1;UNTAGGED, 2</span>
-        <div>
-          Start Date:
-          {' '}
-          {startDate ? (
-            <DatePicker onChange={setStartDate} value={startDate} />
-          ) : (
-            <>
-              None
-              {' '}
-              <button
-                type="button"
-                onClick={e => showStartDateEdit(e, entry)}
-                className="plainLink"
-              >
-                Edit
-              </button>
-            </>
-          )}
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <div style={{ padding: '0 0.5em' }}>
+            Start Date:
+            {' '}
+            {viewState.showStartDate ? (
+              <DatePicker onChange={x => changeDate(x, 'start')} value={startDate.current} />
+            ) : (
+              <>
+                None
+                {' '}
+                <button
+                  type="button"
+                  onClick={() => changeDate(new Date(), 'start')}
+                  className="plainLink"
+                >
+                  Edit
+                </button>
+              </>
+            )}
+          </div>
+          <div style={{ padding: '0 0.5em' }}>
+            End Date:
+            {' '}
+            {viewState.showEndDate ? (
+              <DatePicker onChange={x => changeDate(x, 'end')} value={endDate.current} />
+            ) : (
+              <>
+                None
+                {' '}
+                <button
+                  type="button"
+                  onClick={() => changeDate(new Date(), 'end')}
+                  className="plainLink"
+                >
+                  Edit
+                </button>
+              </>
+            )}
+          </div>
         </div>
         <div>
-          End Date:
-          {' '}
-          {endDate ? (
-            <DatePicker onChange={setEndDate} value={endDate} />
-          ) : (
-            <>
-              None
-              {' '}
-              <button
-                type="button"
-                onClick={e => showEndDateEdit(e, entry)}
-                className="plainLink"
-              >
-                Edit
-              </button>
-            </>
-          )}
+          <button
+            type="button"
+            onClick={() => {
+              changeDate(subMonths(new Date(), 3), 'start');
+              changeDate(new Date(), 'end');
+            }}
+            className="plainLink rangeBtn"
+          >
+            3 mths
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              changeDate(subMonths(new Date(), 6), 'start');
+              changeDate(new Date(), 'end');
+            }}
+            className="plainLink rangeBtn"
+          >
+            6 mths
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              changeDate(subMonths(new Date(), 12), 'start');
+              changeDate(new Date(), 'end');
+            }}
+            className="plainLink rangeBtn"
+          >
+            12 mths
+          </button>
         </div>
-        <span className="container">{showSearchSummary()}</span>
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          { searchParams !== null
+            ? (
+              <>
+                Date:
+                {' '}
+                {searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}
+                {' '}
+                to
+                {' '}
+                {searchParams.endDate !== '' ? searchParams.endDate : 'Now'}
+                , Limit:
+                {' '}
+                {searchParams.resultsLimit}
+                . Found
+                {' '}
+                {posts.length}
+              </>
+            )
+            : (<>No Search Params</>)}
+        </div>
       </section>
 
-      {
-      formMode === SHOW_EDIT_FORM && <section className="container"><EditForm entry={entry} onSuccess={msg => resetEntryForm(msg)} /></section>
-      }
-      <section className="container">{showEntries()}</section>
+      {formMode === SHOW_EDIT_FORM && (
+        <section className="container">
+          <EditForm entry={entry} onSuccess={msg => resetEntryForm(msg)} />
+        </section>
+      )}
+      <section className="container">
+        {formMode !== SHOW_EDIT_FORM && (
+          <ul className="entriesList">
+            {posts.length
+              && posts.map(localEntry => {
+                const content = searchText.current.value.length
+                  && localEntry.highlighted
+                  ? localEntry.highlighted
+                  : localEntry.content;
+                let newText = content.replace(/<br \/>/g, '\n');
+                newText = newText.replace(
+                  /..\/uploads/g,
+                  `${constants.UPLOAD_ROOT}`,
+                );
+                const dateFormated = format(
+                  parse(
+                    localEntry.date,
+                    constants.FULL_DATE_FORMAT,
+                    new Date(),
+                  ),
+                  constants.DISPLAY_DATE_FORMAT,
+                );
+
+                return (
+                  <li key={localEntry.id} className="blogEntry">
+                    <button
+                      type="button"
+                      onClick={e => showEditForm(e, localEntry)}
+                      className="plainLink"
+                    >
+                      {dateFormated}
+                    </button>
+                    |
+                    <MarkdownDisplay source={newText} escapeHtml={false} />
+                  </li>
+                );
+              })}
+            {!posts.length && (
+              <li>
+                <h2>No Entries Found</h2>
+              </li>
+            )}
+          </ul>
+        )}
+      </section>
 
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/upload" className="btn navbar-btn">

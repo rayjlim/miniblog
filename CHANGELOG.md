@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/rayjlim/miniblog/compare/v2.9.0...v2.10.0) (2023-02-18)
+
+
+### Features
+
+* [#121](https://github.com/rayjlim/miniblog/issues/121) date range links for search ([594540d](https://github.com/rayjlim/miniblog/commit/594540db8236391246bf9fe600cc8d913c4182e8))
+
+
+### Bug Fixes
+
+* [#185](https://github.com/rayjlim/miniblog/issues/185) remove was on wrong element ([dbed3bc](https://github.com/rayjlim/miniblog/commit/dbed3bc3a5836888468ad9b250f5a8621f8e9c67))
+* tidy up code ([1ebd410](https://github.com/rayjlim/miniblog/commit/1ebd410493a8341cfb858ef2f8ac976bd739f289))
+
 ## [2.9.0](https://github.com/rayjlim/miniblog/compare/v2.8.4...v2.9.0) (2023-02-18)
 
 
