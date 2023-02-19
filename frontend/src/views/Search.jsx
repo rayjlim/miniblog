@@ -384,11 +384,7 @@ const TextEntry = () => {
                     && localEntry.highlighted
                     ? localEntry.highlighted
                     : localEntry.content;
-                  let newText = content.replace(/<br \/>/g, '\n');
-                  newText = newText.replace(
-                    /..\/uploads/g,
-                    `${constants.UPLOAD_ROOT}`,
-                  );
+
                   const dateFormated = format(
                     parse(
                       localEntry.date,
@@ -399,7 +395,7 @@ const TextEntry = () => {
                   );
 
                   return (
-                    <li key={localEntry.id} className="blogEntry">
+                    <li key={localEntry.id}>
                       <button
                         type="button"
                         onClick={e => showEditForm(e, localEntry)}
@@ -411,7 +407,7 @@ const TextEntry = () => {
                         {' '}
                         <i className="fa fa-calendar-check" title="Same Day" />
                       </RouterNavLink>
-                      <MarkdownDisplay source={newText} escapeHtml={false} />
+                      <MarkdownDisplay source={content} escapeHtml={false} />
                     </li>
                   );
                 })}

@@ -154,7 +154,7 @@ const AddForm = ({ content, date, onSuccess }) => {
         <i className="fa fa-ban" />
         Cancel
       </button>
-      <div className="markdownDisplay">
+      <div className="markdownDisplay preview">
         <MarkdownDisplay source={content} />
       </div>
     </div>

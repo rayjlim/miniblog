@@ -410,33 +410,26 @@ const OneDay = () => {
 
       <section className="container">
         <ul className="entriesList">
-          {state.entries.map(entry => {
-            let newText = entry.content.replace(/<br \/>/g, '\n');
-            newText = newText.replace(
-              /..\/uploads/g,
-              `${constants.UPLOAD_ROOT}`,
-            );
-
-            return (
-              <li
-                key={entry.id}
-                className="blogEntry"
-                ref={state.refs[entry.id]}
+          {state.entries.map(entry => (
+            <li
+              key={entry.id}
+              ref={state.refs[entry.id]}
+            >
+              <button
+                onClick={e => showEditForm(e, entry)}
+                className="plainLink"
+                type="button"
               >
-                <button
-                  onClick={e => showEditForm(e, entry)}
-                  className="plainLink"
-                  type="button"
-                >
-                  { format(
-                    parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
-                    'EEE MM, dd yyyy',
-                  )}
-                </button>
-                <MarkdownDisplay source={newText} />
-              </li>
-            );
-          })}
+                { format(
+                  parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
+                  'EEE MM, dd yyyy',
+                )}
+              </button>
+              <div className="markdownDisplay">
+                <MarkdownDisplay source={entry.content} />
+              </div>
+            </li>
+          ))}
         </ul>
       </section>
       {state.pageMode === ONEDAY

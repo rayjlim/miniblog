@@ -2,6 +2,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types';
 import { marked } from 'marked';
+import constants from '../constants';
 
 const renderer = {
   code(code, infostring, escaped = true) {
@@ -36,7 +37,14 @@ marked.use({ renderer });
 const MarkdownDisplay = ({ source }) => {
   let output = '';
   try {
-    output = marked(source);
+    console.log(source);
+    let newText = source.replace(/<br \/>/g, '\n');
+    newText = newText.replace(
+      /..\/uploads/g,
+      `${constants.UPLOAD_ROOT}`,
+    );
+
+    output = marked(newText);
   } catch (err) {
     console.log(err);
   }

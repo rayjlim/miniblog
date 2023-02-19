@@ -45,26 +45,10 @@
   padding-left: 0.5rem;
   padding-bottom: 1em;
 }
-.entriesList h1 {
-  font-size: 1.4em;
-  margin-bottom: 0;
-}
-.entriesList h2 {
-  font-size: 1.2em;
-  margin-bottom: 0;
-}
-.entriesList p {
-  margin-bottom: 0.1rem;
-}
-.entriesList ul {
-  padding-left: 1.25em;
-}
 .entriesList> li {
   list-style-type: none;
 }
-.entriesList>.blogEntry li {
-  list-style-type: disc;
-}
+
 
 .plainLink {
   background: none !important;
@@ -80,7 +64,7 @@
 
 .markdownDisplay {
   text-align: left;
-  padding-bottom: 4em;
+  padding-bottom: 2em;
 }
 .markdownDisplay h1 {
   font-size: 1.4em;
@@ -96,9 +80,40 @@
 .markdownDisplay ul {
   padding-left: 1.25em;
   margin-bottom: 0;
-}
-.markdownDisplay li {
   list-style-type: disc;
+}
+.markdownDisplay ol {
+  padding-left: 1.25em;
+  margin-bottom: 0;
+}
+
+.markdownDisplay pre {
+  box-sizing: border-box;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: auto;
+	overflow-y: hidden;
+	font-size: 0.8em;
+	line-height: 1.1rem;
+	background: #efefef;
+	border: 1px solid #777;
+	padding: 10px;
+	color: #000;
+}
+.markdownDisplay blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1em 0.25em;
+  padding: 0.5em 5px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+
+.preview {
+  margin: 0.1rem auto 10rem auto;
+  border: 1px dashed black;
+  padding: 0.2em;
+  min-height: 15em;;
 }
 
 

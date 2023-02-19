@@ -142,7 +142,7 @@ const EditForm = ({ entry, onSuccess }) => {
       <div className="form-group">
         <textarea
           ref={textareaInput}
-          onChange={event => textChange(event.target.value)}
+          onChange={() => textChange()}
           className="form-control"
           placeholder="Add ..."
           rows="8"
@@ -184,7 +184,7 @@ const EditForm = ({ entry, onSuccess }) => {
           Delete
         </button>
       </div>
-      <div className="markdownDisplay">
+      <div className="markdownDisplay preview">
         <MarkdownDisplay source={content} />
       </div>
     </div>
