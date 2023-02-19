@@ -1,7 +1,8 @@
 import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
-import { useNavigate } from 'react-router-dom';
+import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
 import constants from '../constants';
+import pkg from '../../package.json';
 
 const UploadForm = () => {
   const navigate = useNavigate();
@@ -47,44 +48,66 @@ const UploadForm = () => {
   }
 
   return (
-    <div className="container">
-      <form action="../uploadImage/">
-        <div className="form-group">
-          <label htmlFor="fileToUpload">
-            Select image to upload:
-            <input
-              type="file"
-              name="fileToUpload"
-              onChange={onChangeHandler}
-              id="fileToUpload"
-            />
-          </label>
-        </div>
-        <div className="form-group">
-          <label htmlFor="filePath">
-            Path
-            <input
-              type="text"
-              className="form-control"
-              id="filePath"
-              name="filePath"
-            />
-          </label>
-        </div>
-        {/* <div className="form-group">
-                    <label for="newName">New Name</label>
-                    <input type="text" className="form-control" id="newName"
-                    name="newName" value="" />
-                </div> */}
-        <button
-          type="button"
-          className="btn btn-success btn-block"
-          onClick={() => upload()}
-        >
-          Upload
-        </button>
-      </form>
-    </div>
+    <>
+      <div className="container">
+        <form action="../uploadImage/">
+          <input
+            type="hidden"
+            className="form-control"
+            id="filePath"
+            name="filePath"
+            value=""
+          />
+          <div className="form-group">
+            <label htmlFor="fileToUpload">
+              Select image to upload:
+              {' '}
+              <input
+                type="file"
+                name="fileToUpload"
+                onChange={onChangeHandler}
+                id="fileToUpload"
+              />
+            </label>
+          </div>
+          {/* <div className="form-group">
+                      <label for="newName">New Name</label>
+                      <input type="text" className="form-control" id="newName"
+                      name="newName" value="" />
+                  </div> */}
+          <button
+            type="button"
+            className="btn btn-success btn-block"
+            onClick={() => upload()}
+          >
+            Upload
+          </button>
+        </form>
+      </div>
+      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left">
+        <RouterNavLink to="/upload">
+          <i className="fa fa-file-upload" />
+          {' '}
+          <span className="nav-text">Upload Pix</span>
+        </RouterNavLink>
+        <RouterNavLink to="/media">
+          <i className="fa fa-portrait" />
+          {' '}
+          <span className="nav-text">Media</span>
+          {' '}
+        </RouterNavLink>
+        <RouterNavLink to="/logs">
+          <i className="fa fa-clipboard-list" />
+          {' '}
+          <span className="nav-text">Logs</span>
+          {' '}
+        </RouterNavLink>
+        <span className="footer-version">
+          v
+          {pkg.version}
+        </span>
+      </nav>
+    </>
   );
 };
 

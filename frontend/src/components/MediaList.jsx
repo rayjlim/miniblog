@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'; // eslint-disable-line no-un
 import PropTypes from 'prop-types';
 import constants from '../constants';
 
+import './MediaList.css';
+
 const MediaList = ({ onMediaSelect }) => {
   const [media, setMedia] = useState([]);
   const [uploadDirs, setUploadDirs] = useState([]);
@@ -81,25 +83,30 @@ const MediaList = ({ onMediaSelect }) => {
         && uploadDirs.map(dir => (
           <button onClick={() => loadDir(dir)} type="button" key={dir}>{dir}</button>
         ))}
-      <h2>Media</h2>
-      {media.length}
-      <ul />
-      {media.length
-        && media.map(key => (
-          <li key={key}>
-            <p>{key}</p>
-            <button onClick={() => onMediaSelect(`${currentDir}/`, key)} type="button">
-              Load
-            </button>
-            <img
-              src={`${constants.UPLOAD_ROOT}/${currentDir}/${key}`}
-              alt="main_img"
-            />
-            <button onClick={() => deleteMedia(`${currentDir}/`, key)} type="button">
-              Delete
-            </button>
-          </li>
-        ))}
+      <h2>
+        Media (
+        {media.length}
+        )
+      </h2>
+      {media.length && (
+        <ul className="media-preview">
+          { media.map(key => (
+            <li key={key}>
+              <button onClick={() => onMediaSelect(`${currentDir}/`, key)} type="button">
+                Load
+              </button>
+              <button onClick={() => deleteMedia(`${currentDir}/`, key)} type="button" className="delete">
+                Delete
+              </button>
+              <img
+                src={`${constants.UPLOAD_ROOT}/${currentDir}/${key}`}
+                alt="main_img"
+                title={key}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
