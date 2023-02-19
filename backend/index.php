@@ -91,6 +91,7 @@ $entryHandler = \dao\DAOFactory::getEntryHandler();
 // $app->get('/api/posts/:id', $entryHandler->detailItemApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
+$app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
 
 $cudHandler = DAOFactory::getCUDHandler();
 $app->post('/api/posts/', $cudHandler->addEntry());
@@ -128,7 +129,7 @@ $app->run();
 //     $app->redirect('posts/');
 // });
 
-// $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
+
 
 // $graphHandler = DAOFactory::GraphHandler($app);
 // $app->get('/cron', $graphHandler->logCronCall());

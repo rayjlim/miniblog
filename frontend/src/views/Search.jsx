@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { ToastContainer, toast } from 'react-toastify';
-import { format, parse, subMonths } from 'date-fns';
+import Select from 'react-select';
+import {
+  format, parse, subMonths, startOfMonth, endOfMonth,
+} from 'date-fns';
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import constants from '../constants';
@@ -41,6 +44,7 @@ const TextEntry = () => {
   const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
+  const [yearMonths, setYearMonths] = useState([]);
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
   const [entry, setEntry] = useState({});
@@ -55,7 +59,7 @@ const TextEntry = () => {
    * @param  {string} text text to search for
    */
   async function getEntries() {
-    console.log('getEntries#searchText:', searchText.current.value);
+    console.log('getEntries#searchText: ', searchText.current.value);
     const searchTextValue = searchText.current.value;
     try {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
@@ -93,19 +97,16 @@ const TextEntry = () => {
         setSearchParams(responseData.params);
 
         if (responseData.params.startDate !== '') {
-          console.log('set start date from response');
           startDate.current = parse(
             responseData.params.startDate,
             constants.FULL_DATE_FORMAT,
             new Date(),
           );
-          console.log(startDate.current);
         } else {
           startDate.current = null;
         }
 
         if (responseData.params.endDate !== '') {
-          console.log('set end date from response');
           endDate.current = parse(
             responseData.params.endDate,
             constants.FULL_DATE_FORMAT,
@@ -135,6 +136,36 @@ const TextEntry = () => {
         } else {
           setPosts(responseData.entries);
         }
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err);
+    }
+  }
+
+  async function getYearMonths() {
+    console.log('getYearMonths');
+
+    try {
+      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const endpoint = `${constants.REST_ENDPOINT}/api/yearMonth`;
+
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-Token': token,
+        },
+        referrerPolicy: 'no-referrer',
+      });
+
+      if (!response.ok) {
+        console.log('response.status :', response.status);
+        throw new Error(`loading error : ${response.status}`);
+      } else {
+        const responseData = await response.json();
+
+        setYearMonths(responseData.map(row => ({ label: row, value: row })));
       }
     } catch (err) {
       console.error(err);
@@ -181,6 +212,8 @@ const TextEntry = () => {
     console.log('useEffect');
 
     debouncedSearch();
+
+    getYearMonths();
   }, [searchText.current.value, searchFilter]);
 
   return (
@@ -300,6 +333,18 @@ const TextEntry = () => {
           >
             12 mths
           </button>
+          <Select
+            options={yearMonths}
+            onChange={chosen => {
+              console.log(chosen);
+              const parts = chosen.value.split('-');
+              changeDate(startOfMonth(new Date(parts[0], parts[1] - 1)), 'start');
+              changeDate(endOfMonth(new Date(parts[0], parts[1] - 1)), 'end');
+            }}
+            // onInputChange={value => {
+            //   console.log(value);
+            // }}
+          />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
           { searchParams !== null
