@@ -6,6 +6,7 @@ import format from 'date-fns/format';
 import constants from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
+import pkg from '../../package.json';
 
 import './ribbon.css';
 
@@ -20,7 +21,7 @@ const Media = () => {
   });
 
   const [mediaBaseDir, setMediaBaseDir] = useState('');
-  const [showMedia, setShowMedia] = useState(false);
+  const [showMedia, setShowMedia] = useState(true);
 
   useEffect(() => {
     console.log('Media: useEffect');
@@ -161,18 +162,21 @@ const Media = () => {
           />
         </>
       )}
-
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/upload" className="btn navbar-btn">
-          <i className="fa fa-file-upload" />
-          Upload Pix
-        </RouterNavLink>
-      </nav>
       <button onClick={e => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
       {showMedia && (
         // eslint-disable-next-line react/jsx-no-bind
         <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
       )}
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        <RouterNavLink to="/upload" className="btn navbar-btn">
+          <i className="fa fa-file-upload" />
+          Upload Pix
+        </RouterNavLink>
+        <span className="footer-version">
+          v
+          {pkg.version}
+        </span>
+      </nav>
     </>
   );
 };

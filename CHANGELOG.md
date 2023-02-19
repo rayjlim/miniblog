@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.0](https://github.com/rayjlim/miniblog/compare/v2.12.1...v2.13.0) (2023-02-19)
+
+
+### Features
+
+* [#110](https://github.com/rayjlim/miniblog/issues/110) css fix up for media view, unify bottom nav ([21cd12c](https://github.com/rayjlim/miniblog/commit/21cd12c2ddbf136dd4a526e3457b2f117a24aee5))
+
+
+### Bug Fixes
+
+* [#197](https://github.com/rayjlim/miniblog/issues/197) markdown image url logic consolidated ([68135d0](https://github.com/rayjlim/miniblog/commit/68135d03ff90398ca969ccc7ee7c294e9c128146))
+* limit show of weight and movies to oneday view ([c9f39f9](https://github.com/rayjlim/miniblog/commit/c9f39f99bec63980d3b6fc873ce024009ad76b07))
+* shortcut key for show add form ([539705e](https://github.com/rayjlim/miniblog/commit/539705e204d747905746eac24162dc0f59c7923a))
+
 ### [2.12.1](https://github.com/rayjlim/miniblog/compare/v2.12.0...v2.12.1) (2023-02-19)
 
 

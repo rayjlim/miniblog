@@ -461,29 +461,28 @@ const OneDay = () => {
           )}
         </section>
       )}
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <div className="col-md-5 text-left">
-          <RouterNavLink to="/upload" className="btn navbar-btn">
-            <i className="fa fa-file-upload" />
-            Upload Pix
-          </RouterNavLink>
-          <RouterNavLink to="/media">
-            <i className="fa fa-portrait" />
-            {' '}
-            <span className="nav-text">Media</span>
-            {' '}
-          </RouterNavLink>
-          <RouterNavLink to="/logs">
-            <i className="fa fa-clipboard-list" />
-            {' '}
-            <span className="nav-text">Logs</span>
-            {' '}
-          </RouterNavLink>
-          <span className="footer-version">
-            v
-            {pkg.version}
-          </span>
-        </div>
+      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left">
+        <RouterNavLink to="/upload">
+          <i className="fa fa-file-upload" />
+          {' '}
+          <span className="nav-text">Upload Pix</span>
+        </RouterNavLink>
+        <RouterNavLink to="/media">
+          <i className="fa fa-portrait" />
+          {' '}
+          <span className="nav-text">Media</span>
+          {' '}
+        </RouterNavLink>
+        <RouterNavLink to="/logs">
+          <i className="fa fa-clipboard-list" />
+          {' '}
+          <span className="nav-text">Logs</span>
+          {' '}
+        </RouterNavLink>
+        <span className="footer-version">
+          v
+          {pkg.version}
+        </span>
       </nav>
     </>
   );
