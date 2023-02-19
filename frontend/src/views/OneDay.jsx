@@ -408,19 +408,6 @@ const OneDay = () => {
               /..\/uploads/g,
               `${constants.UPLOAD_ROOT}`,
             );
-            const dateFormated = format(
-              parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
-              'EEE MM, dd yyyy',
-            );
-            const showEntryDate = (
-              <button
-                onClick={e => showEditForm(e, entry)}
-                className="plainLink"
-                type="button"
-              >
-                {dateFormated}
-              </button>
-            );
 
             return (
               <li
@@ -428,24 +415,30 @@ const OneDay = () => {
                 className="blogEntry"
                 ref={state.refs[entry.id]}
               >
-                {showEntryDate}
-                |
+                <button
+                  onClick={e => showEditForm(e, entry)}
+                  className="plainLink"
+                  type="button"
+                >
+                  { format(
+                    parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
+                    'EEE MM, dd yyyy',
+                  )}
+                </button>
                 <MarkdownDisplay source={newText} />
               </li>
             );
           })}
         </ul>
       </section>
-      <section>
-        <ul>
-          {movies.length > 0
-            && movies.map(movie => (
-              <li key={movie.id}>
-                <MovieWindow movie={movie} />
-              </li>
-            ))}
-        </ul>
-      </section>
+      {movies.length > 0
+            && (
+              <section className="movieList">
+                {movies.map(movie => (
+                  <MovieWindow movie={movie} />
+                ))}
+              </section>
+            )}
       {inspiration && (
         <section>
           <div>{inspiration}</div>

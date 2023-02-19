@@ -1,3 +1,9 @@
 .footer-version {
   margin: 0 3em;
 }
+.movieList {
+  margin: 0 1em;
+}
+.movieList li {
+  list-style-type: none;
+}

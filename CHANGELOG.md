@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.12.1](https://github.com/rayjlim/miniblog/compare/v2.12.0...v2.12.1) (2023-02-19)
+
+
+### Bug Fixes
+
+* [#43](https://github.com/rayjlim/miniblog/issues/43) css for lists, p, movies ([e0bcff1](https://github.com/rayjlim/miniblog/commit/e0bcff17edd0876a95579777747828584f6bf33d))
+
 ## [2.12.0](https://github.com/rayjlim/miniblog/compare/v2.11.0...v2.12.0) (2023-02-19)
 
 

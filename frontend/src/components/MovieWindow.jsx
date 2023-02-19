@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './MovieWindow.css';
 
 const MovieWindow = ({ movie }) => {
   const { title, imdbImageId, imdbId } = movie;
@@ -7,12 +8,11 @@ const MovieWindow = ({ movie }) => {
   const imdbUrl = `https://www.imdb.com/title/${imdbId}/`;
 
   return (
-    <div className="spinner">
-      <span>{title}</span>
-      {' '}
+    <div className="movie">
       <a href={imdbUrl} target="_blank" rel="noreferrer">
         <img src={imageUrl} height="100px" alt="movie" />
       </a>
+      <div>{title}</div>
     </div>
   );
 };
