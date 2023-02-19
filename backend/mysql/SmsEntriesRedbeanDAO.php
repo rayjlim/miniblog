@@ -5,6 +5,10 @@ defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
 
 // R::debug(TRUE);
+function groupYearMonth(array $row): string
+{
+    return $row["Year"] . "-" . $row["Month"];
+}
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
     public function load($id)
@@ -106,15 +110,11 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
     public function getYearMonths($userId)
     {
-        $whereClause = ' where user_id = ? GROUP BY Year(sms_entries.date), Month(sms_entries.date), id';
-        $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-
-        $onlyDate = array_map("pickDate", $sequencedArray);
-        $filtered = array_unique($onlyDate);
-        return $filtered;
+        $posts = R::getAll( 'SELECT DISTINCT YEAR(date) AS "Year", MONTH(date) AS "Month" FROM sms_entries where user_id = 1 order by YEAR(date) desc, month(date) desc' );
+        return array_map("dao\groupYearMonth", $posts);
     }
 
+    // ;
     public function listParamsToSqlParam($listParams)
     {
         $sqlParam = '';
@@ -165,3 +165,5 @@ function pickDate($n)
 {
     return(substr($n['date'], 0, 7));
 }
+
+

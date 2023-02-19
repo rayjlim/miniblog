@@ -137,13 +137,15 @@ class EntryHandler
 
     public function yearMonthsApi()
     {
-        return function () {
+        return function (Request $request, Response $response, $args) {
             $userId = $_ENV['ACCESS_ID'];
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->getYearMonths($userId);
-            // $this->app->response()->header('Content-Type', 'application/json'); // TODO: fix
-            $this->resource->echoOut('{"data": ' . json_encode($entry) . '}');
+            header('Content-Type: application/json');
+            $this->resource->echoOut(json_encode($entry));
+            die();
+            // return $response;
         };
     }
 }

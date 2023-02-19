@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.12.0](https://github.com/rayjlim/miniblog/compare/v2.11.0...v2.12.0) (2023-02-19)
+
+
+### Features
+
+* [#65](https://github.com/rayjlim/miniblog/issues/65) api and display for search by year/month ([3f0f0ca](https://github.com/rayjlim/miniblog/commit/3f0f0ca91ad90125e66f91b93df7b426dbefd5e4))
+
+
+### Bug Fixes
+
+* catch all for react routes ([44d487a](https://github.com/rayjlim/miniblog/commit/44d487ac432cfdca96c63924210ad3c7fa26ce78))
+* unorder list was wrapping H2 on no results ([9e0afdf](https://github.com/rayjlim/miniblog/commit/9e0afdf396d2807131f85d46b2c45808742e354c))
+
 ## [2.11.0](https://github.com/rayjlim/miniblog/compare/v2.10.0...v2.11.0) (2023-02-18)
 
 
