@@ -279,6 +279,10 @@ const OneDay = () => {
       console.log('alt period keybinding');
       // Note: this is a hack because the content value is taken from the init value
       document.getElementById('nextBtn').click();
+    } else if (e.altKey && e.key === 'a') {
+      console.log('alt period keybinding');
+      // Note: this is a hack because the content value is taken from the init value
+      document.getElementById('addFormBtn').click();
     }
   }
 
