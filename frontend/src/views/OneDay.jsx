@@ -165,8 +165,10 @@ const OneDay = () => {
         if (inspiration === null) {
           await getInspiration();
         }
-        await getWeight(loadParams.pageDate);
-        await getMovies(loadParams.pageDate);
+        if (state.pageMode === ONEDAY) {
+          await getWeight(loadParams.pageDate);
+          await getMovies(loadParams.pageDate);
+        }
       } catch (err) {
         console.error(err);
         toast.error(`loading error : ${err}`);
@@ -391,12 +393,14 @@ const OneDay = () => {
       </div>
 
       <section className="container" ref={state.refForm}>
-        {weight && (
-        <span>
-          Weight :
-          {weight}
-        </span>
-        )}
+        {state.pageMode === ONEDAY
+          && weight
+          && (
+          <span>
+            Weight :
+            {weight}
+          </span>
+          )}
         {showAddEditForm(state.formMode)}
       </section>
 
@@ -431,14 +435,15 @@ const OneDay = () => {
           })}
         </ul>
       </section>
-      {movies.length > 0
-            && (
-              <section className="movieList">
-                {movies.map(movie => (
-                  <MovieWindow movie={movie} />
-                ))}
-              </section>
-            )}
+      {state.pageMode === ONEDAY
+        && movies.length > 0
+        && (
+          <section className="movieList">
+            {movies.map(movie => (
+              <MovieWindow movie={movie} />
+            ))}
+          </section>
+        )}
       {inspiration && (
         <section>
           <div>{inspiration}</div>
