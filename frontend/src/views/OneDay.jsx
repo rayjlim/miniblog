@@ -46,7 +46,7 @@ const OneDay = () => {
   const navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
-    pageDate: format(new Date(), constants.FULL_DATE_FORMAT),
+    pageDate: null,
     searchParam: '',
     formEntry: {},
     autohide: 'true',
@@ -301,6 +301,8 @@ const OneDay = () => {
     const pageDate = urlParams.has('date')
       ? urlParams.get('date')
       : format(new Date(), constants.FULL_DATE_FORMAT);
+
+    setState({ ...state, pageDate });
 
     const pageMode = urlParams.has('pageMode')
       ? parseInt(urlParams.get('pageMode'), 10)
