@@ -50,6 +50,7 @@ class EntryHandler
             $listObj = new ListParams();
             $listObj->loadParams($queries);
             $userId = $_ENV['ACCESS_ID'];
+            $listObj->userId = $userId;
             $entries = $this->dao->queryBlogList($userId, $listObj);
             // $this->app->response()->header('Content-Type', 'application/json');
 
