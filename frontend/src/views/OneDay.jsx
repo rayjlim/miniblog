@@ -210,7 +210,7 @@ const OneDay = () => {
     setState({ ...state, formMode: ADD });
   }
 
-  function showEditForm(e, entry) {
+  function showEditForm(entry) {
     console.log('id :', entry.id);
 
     setState({
@@ -416,7 +416,7 @@ const OneDay = () => {
               ref={state.refs[entry.id]}
             >
               <button
-                onClick={e => showEditForm(e, entry)}
+                onClick={() => showEditForm(entry)}
                 className="plainLink"
                 type="button"
               >
