@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.13.1](https://github.com/rayjlim/miniblog/compare/v2.13.0...v2.13.1) (2023-02-20)
+
+
+### Bug Fixes
+
+* css for search result ([2d11aeb](https://github.com/rayjlim/miniblog/commit/2d11aebea9d5dadf75c5b0ed9b3d5d67025ca716))
+* preview in add form, box shadow css, move delete btn ([3472ee7](https://github.com/rayjlim/miniblog/commit/3472ee7f203cda3e85921226684c9e6078baf3fb))
+* refactor unused var from showEditForm ([7a65dc4](https://github.com/rayjlim/miniblog/commit/7a65dc426a275b1ad738d8001f5511311ae4917f))
+* userId not set in search params ([d4e1235](https://github.com/rayjlim/miniblog/commit/d4e12352475e3508a161d804c41e8cec54a090a2))
+
 ## [2.13.0](https://github.com/rayjlim/miniblog/compare/v2.12.1...v2.13.0) (2023-02-19)
 
 
