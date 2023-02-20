@@ -73,7 +73,7 @@ const OneDay = () => {
     const weightApi = `${constants.TRACKS_ENDPIONT}?start=${date}&end=${date}`;
     const data = await xhrCall(weightApi, 'weight');
     if (data && data.data && data.data[0] && data.data[0].count) {
-      setWeight(data.data[0].count);
+      setWeight(data.data[0]);
     } else {
       setWeight('?');
     }
@@ -400,9 +400,10 @@ const OneDay = () => {
         {state.pageMode === ONEDAY
           && weight
           && (
-          <span>
+          <span className="weight">
             Weight :
-            {weight}
+            {weight.count}
+            {weight.comment && weight.comment !== '' && <span title={weight.comment}>...</span>}
           </span>
           )}
         {showAddEditForm(state.formMode)}
@@ -445,7 +446,7 @@ const OneDay = () => {
         <section>
           <div>{inspiration}</div>
           {inspiration !== '' && (
-            <button onClick={() => copyToClipboard(inspiration)} type="button">
+            <button onClick={() => copyToClipboard(inspiration)} type="button" style={{ margin: '0 1em', lineHeight: '1em' }}>
               /clip
             </button>
           )}

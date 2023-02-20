@@ -7,3 +7,6 @@
 .movieList li {
   list-style-type: none;
 }
+.weight {
+  margin: 0 3em;
+}
