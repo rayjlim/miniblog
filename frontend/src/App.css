@@ -67,11 +67,19 @@
   padding-bottom: 2em;
 }
 .markdownDisplay h1 {
-  font-size: 1.4em;
+  font-size: 1.6em;
   margin-bottom: 0;
 }
 .markdownDisplay h2 {
+  font-size: 1.4em;
+  margin-bottom: 0;
+}
+.markdownDisplay h3 {
   font-size: 1.2em;
+  margin-bottom: 0;
+}
+.markdownDisplay h4 {
+  font-size: 1.1em;
   margin-bottom: 0;
 }
 .markdownDisplay p {

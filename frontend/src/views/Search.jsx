@@ -408,7 +408,9 @@ const TextEntry = () => {
                         {' '}
                         <i className="fa fa-calendar-check" title="Same Day" />
                       </RouterNavLink>
-                      <MarkdownDisplay source={content} escapeHtml={false} />
+                      <div className="markdownDisplay">
+                        <MarkdownDisplay source={content} escapeHtml={false} />
+                      </div>
                     </li>
                   );
                 })}
