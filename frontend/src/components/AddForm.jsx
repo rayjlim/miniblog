@@ -46,7 +46,7 @@ const AddForm = ({ content, date, onSuccess }) => {
   );
   const isMounted = useRef(false);
   const [id, setParams] = useFetch();
-  let textareaInput = null;
+  const textareaInput = useRef();
 
   function checkKeyPressed(e) {
     console.log(`AddForm: handle key presss ${e.key}`);
@@ -81,9 +81,9 @@ const AddForm = ({ content, date, onSuccess }) => {
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
-    textareaInput.value = textareaInput.value.replace(pattern, replacement);
+    textareaInput.current.value = textareaInput.current.value.replace(pattern, replacement);
 
-    setFormContent(textareaInput.value);
+    setFormContent(textareaInput.current.value);
   }
 
   function dateChange(value = new Date()) {
@@ -100,10 +100,6 @@ const AddForm = ({ content, date, onSuccess }) => {
     });
   }
 
-  function setRef(elem) {
-    textareaInput = elem;
-  }
-
   return (
     <div className="well">
       {/* <button onClick={this.handleTemplate} className="btn btn-primary" style={templateStyle}>
@@ -112,20 +108,26 @@ const AddForm = ({ content, date, onSuccess }) => {
                 <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
                     fa-template
                 </button> */}
-      <strong>Add Entry</strong>
-      <p>
-        link: [link text](URL)
-        <span>_</span>
-        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">
-          Cheatsheet
-        </a>
-      </p>
+      <h2>Add Entry</h2>
+      <div style={{ display: 'flex', flexDirection: 'row', padding: '0 1rem' }}>
+        <div>
+          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>use `@@fa-tag@@` for quick font-awesome icon</p>
+          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>link: [link text](URL)</p>
+          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
+            Cheatsheet
+          </a>
+          {', '}
+          <a href="https://fontawesome.com/icons" target="_new">
+            Font Awesome
+          </a>
+        </div>
+      </div>
 
       <div className="form-group">
         <textarea
-          ref={elem => setRef(elem)}
+          ref={textareaInput}
           rows="6"
-          onChange={event => textChange(event.target.value)}
+          onChange={() => textChange()}
           className="form-control"
           placeholder="Add ..."
           defaultValue={content}
@@ -154,8 +156,8 @@ const AddForm = ({ content, date, onSuccess }) => {
         <i className="fa fa-ban" />
         Cancel
       </button>
-      <div className="markdownDisplay preview">
-        <MarkdownDisplay source={content} />
+      <div className="markdownDisplay preview dashBorder">
+        <MarkdownDisplay source={formContent} />
       </div>
     </div>
   );

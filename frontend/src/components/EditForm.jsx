@@ -19,7 +19,7 @@ const EditForm = ({ entry, onSuccess }) => {
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
-    const replacement = '<i class="fa fa-$1" /> ';
+    const replacement = '<i class="fa fa-$1" ></i> ';
     console.log('textarea.value :>> ', textareaInput.current.value);
     textareaInput.current.value = textareaInput.current.value.replace(pattern, replacement);
 
@@ -130,15 +130,31 @@ const EditForm = ({ entry, onSuccess }) => {
                     fa-template
                 </button> */}
       <h2>Edit Entry</h2>
-      <span>use `@@fa-tag@@` for quick font-awesome icon</span>
-      <p>
-        link: [link text](URL)
-        <span> </span>
-        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links">
-          Cheatsheet
-        </a>
-      </p>
 
+      <div style={{ display: 'flex', flexDirection: 'row', padding: '0 1rem' }}>
+        <div>
+          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>use `@@fa-tag@@` for quick font-awesome icon</p>
+          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>link: [link text](URL)</p>
+          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
+            Cheatsheet
+          </a>
+          {', '}
+          <a href="https://fontawesome.com/icons" target="_new">
+            Font Awesome
+          </a>
+        </div>
+        <div style={{ marginLeft: 'auto' }}>
+          <button
+            onClick={handleDelete}
+            className="btn btn-danger pull-right"
+            type="button"
+          >
+            <i className="fa fa-trash" />
+            {' '}
+            Delete
+          </button>
+        </div>
+      </div>
       <div className="form-group">
         <textarea
           ref={textareaInput}
@@ -149,10 +165,6 @@ const EditForm = ({ entry, onSuccess }) => {
           defaultValue={content}
         />
       </div>
-      <div className="form-group">
-        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
-      </div>
-
       <div className="editBtns">
         <button
           onClick={() => handleSave()}
@@ -164,6 +176,7 @@ const EditForm = ({ entry, onSuccess }) => {
           {' '}
           Save
         </button>
+        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
         <button
           onClick={() => onSuccess('')}
           className="btn btn-warning pull-right"
@@ -174,17 +187,8 @@ const EditForm = ({ entry, onSuccess }) => {
           {' '}
           Cancel
         </button>
-        <button
-          onClick={handleDelete}
-          className="btn btn-danger pull-right"
-          type="button"
-        >
-          <i className="fa fa-trash" />
-          {' '}
-          Delete
-        </button>
       </div>
-      <div className="markdownDisplay preview">
+      <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={content} />
       </div>
     </div>

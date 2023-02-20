@@ -144,7 +144,7 @@ const Media = () => {
               [clip]
             </button>
             <div style={{ textAlign: 'center' }}>
-              <img src={post.imgUrl} alt="edit img" />
+              <img src={post.imgUrl} alt="edit img" className="preview" />
             </div>
           </section>
           <span style={{ fontSize: '.8em' }}>Image is automatically prepended on submit</span>

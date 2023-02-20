@@ -119,9 +119,13 @@
 
 .preview {
   margin: 0.1rem auto 10rem auto;
-  border: 1px dashed black;
   padding: 0.2em;
-  min-height: 15em;;
+  min-height: 15em;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5)  ;
+}
+
+.dashBorder {
+  border: 1px dashed black;
 }
 
 

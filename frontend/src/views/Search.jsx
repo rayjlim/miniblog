@@ -404,7 +404,7 @@ const TextEntry = () => {
                       >
                         {dateFormated}
                       </button>
-                      <RouterNavLink to={`/oneday?pageMode=1&date=${localEntry.date}`}>
+                      <RouterNavLink to={`/oneday?pageMode=0&date=${localEntry.date}`}>
                         {' '}
                         <i className="fa fa-calendar-check" title="Same Day" />
                       </RouterNavLink>
