@@ -1,17 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './index.css';
+import './views/ribbon.css';
 import App from './App';
+import constants from './constants';
 import * as serviceWorker from './serviceWorker';
 
 import GithubCorner from './components/GithubCorner';
 
-const showGHCorner = false;
+const showGHCorner = constants.ENVIRONMENT !== 'development';
+const showDevRibbon = constants.ENVIRONMENT === 'development';
+// const showDevRibbon = false;
 ReactDOM.render(
-  <React.StrictMode>
-    {showGHCorner && <GithubCorner />}
-    <App />
-  </React.StrictMode>,
+  <GoogleOAuthProvider clientId={constants.GOOGLE_CLIENTID}>
+    <React.StrictMode>
+      {showGHCorner && <GithubCorner />}
+      {showDevRibbon && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
+      <App />
+    </React.StrictMode>
+  </GoogleOAuthProvider>,
   document.getElementById('root'),
 );
 
