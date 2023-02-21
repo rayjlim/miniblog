@@ -51,13 +51,29 @@ class AuthMiddleware
             $error = "{\"status\": \"fail\", \"message\":\"Invalid payload\"}";
             Logger::log('User Login : ' . $error . ' from IP Address: ' . $ipaddress . ' '
                 . $_SERVER['REQUEST_URI']);
+            header('HTTP/1.0 403 Forbidden');
+            echo $error;
+            exit(0);
         } elseif (!$username || !$password) {
             $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
             Logger::log('User Login: ' . $error . ' from IP Address: ' . $ipaddress);
-        } elseif (!$this->doLogin($username, $password)) {
-            $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
-            Logger::log('User Login: Wrong password: ' . $username . ":" . $password . ' from IP Address: ' . $ipaddress);
-        } else {
+            header('HTTP/1.0 403 Forbidden');
+            echo $error;
+            exit(0);
+        }
+
+        if($loginParams->id !== '' && $loginParams->id == $_ENV['GOOGLE_ID'])
+        {
+            $tokenObj = new stdClass();
+            $tokenObj->userId = $_ENV['ACCESS_ID'];
+            $tokenObj->name = $_ENV['ACCESS_NAME'];
+            $tokenObj->user = $_ENV['ACCESS_USER'];
+            $response = new stdClass();
+            $response->token = encrypt(json_encode($tokenObj));
+
+            echo json_encode($response);
+            exit;
+        } elseif ($this->doLogin($username, $password)) {
             // successful login
             $tokenObj = new stdClass();
             $tokenObj->userId = $_ENV['ACCESS_ID'];
@@ -68,11 +84,16 @@ class AuthMiddleware
 
             echo json_encode($response);
             exit;
+        } else {
+            $error = "{\"status\": \"fail\", \"message\":\"Wrong username/password\"}";
+            Logger::log('User Login: Wrong password: ' . $username . ":" . $password . ' from IP Address: ' . $ipaddress);
+            header('HTTP/1.0 403 Forbidden');
+            echo $error;
+            exit(0);
+
         }
 
-        header('HTTP/1.0 403 Forbidden');
-        echo $error;
-        exit(0);
+
     }
 
     /**

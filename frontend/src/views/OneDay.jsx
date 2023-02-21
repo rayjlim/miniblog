@@ -9,7 +9,6 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 import constants from '../constants';
 import pkg from '../../package.json';
 
-import './ribbon.css';
 import './OneDay.css';
 
 const CLOSED = 0;
@@ -327,7 +326,6 @@ const OneDay = () => {
 
   return (
     <>
-      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/search">
@@ -348,7 +346,7 @@ const OneDay = () => {
             <span>Home</span>
           </button>
         )}
-        <button onClick={e => doLogout(e)} className="btn-margin plainLink" type="button">
+        <button onClick={() => doLogout()} className="btn-margin plainLink" type="button">
           <i className="fa fa-sign-out" />
           <span className="nav-text">Log Out</span>
         </button>
@@ -440,7 +438,7 @@ const OneDay = () => {
         && (
           <section className="movieList">
             {movies.map(movie => (
-              <MovieWindow movie={movie} />
+              <MovieWindow movie={movie} key={movie.id} />
             ))}
           </section>
         )}
