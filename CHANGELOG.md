@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.0](https://github.com/rayjlim/miniblog/compare/v2.13.1...v2.14.0) (2023-02-21)
+
+
+### Features
+
+* [#140](https://github.com/rayjlim/miniblog/issues/140) add google login logic ([2c83397](https://github.com/rayjlim/miniblog/commit/2c833971621176c30677666d9464c694d0ef029e))
+* setup deps for google oauth ([873c6ff](https://github.com/rayjlim/miniblog/commit/873c6ffdd04b9b41ed6ec0ca9c746502eaad4e0b))
+
+
+### Bug Fixes
+
+* add key to movielist ([93f703b](https://github.com/rayjlim/miniblog/commit/93f703b31de45add00209c421b4715dc9f40292a))
+* date not showing when passed to oneday ([a8f8c49](https://github.com/rayjlim/miniblog/commit/a8f8c490c34d2ad9ea8ff0503d7a1495740af343))
+* refactor-move ribbon to index ([415d328](https://github.com/rayjlim/miniblog/commit/415d3284eeeca166ebd78769efbefe2bf42b6e3f))
+* secrets encryption ([6ff2c85](https://github.com/rayjlim/miniblog/commit/6ff2c8549bf065abd4d95197bee3fc421bc6df1d))
+
 ### [2.13.1](https://github.com/rayjlim/miniblog/compare/v2.13.0...v2.13.1) (2023-02-20)
 
 
