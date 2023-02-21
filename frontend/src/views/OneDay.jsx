@@ -438,7 +438,7 @@ const OneDay = () => {
         && (
           <section className="movieList">
             {movies.map(movie => (
-              <MovieWindow movie={movie} />
+              <MovieWindow movie={movie} key={movie.id} />
             ))}
           </section>
         )}
