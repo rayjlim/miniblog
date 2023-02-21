@@ -346,7 +346,7 @@ const OneDay = () => {
             <span>Home</span>
           </button>
         )}
-        <button onClick={e => doLogout(e)} className="btn-margin plainLink" type="button">
+        <button onClick={() => doLogout()} className="btn-margin plainLink" type="button">
           <i className="fa fa-sign-out" />
           <span className="nav-text">Log Out</span>
         </button>
