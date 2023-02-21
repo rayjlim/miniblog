@@ -11,7 +11,6 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 import constants from '../constants';
 import pkg from '../../package.json';
 
-import './ribbon.css';
 import './Search.css';
 
 const DEBOUNCE_TIME = 350;
@@ -219,16 +218,6 @@ const TextEntry = () => {
 
   return (
     <>
-      {constants.ENVIRONMENT === 'development' && (
-        <a
-          className="github-fork-ribbon"
-          href="https://url.to-your.repo"
-          data-ribbon="Development"
-          title="Development"
-        >
-          Development
-        </a>
-      )}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">

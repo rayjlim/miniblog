@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './ribbon.css';
 
 import constants from '../constants';
 
@@ -63,7 +62,6 @@ const LoginPassword = () => {
 
   return (
     <div className="App">
-      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
       <ToastContainer />
       <h1>Login</h1>
       <span>User</span>

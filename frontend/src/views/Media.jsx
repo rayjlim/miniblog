@@ -8,8 +8,6 @@ import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
 import pkg from '../../package.json';
 
-import './ribbon.css';
-
 const Media = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState({
@@ -116,7 +114,6 @@ const Media = () => {
 
   return (
     <>
-      {constants.ENVIRONMENT === 'development' && <a className="github-fork-ribbon" href="https://url.to-your.repo" data-ribbon="Development" title="Development">Development</a>}
       <ToastContainer />
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/oneday">

@@ -23,7 +23,7 @@ const App = () => {
         console.log('logged out');
       }
     })();
-  }, []);
+  });
 
   return (
     <div>
