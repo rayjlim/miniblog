@@ -333,23 +333,23 @@ const OneDay = () => {
           {' '}
           <span className="nav-text">Search</span>
         </RouterNavLink>
-        {state.pageMode === ONEDAY && (
+        {state.pageMode === ONEDAY ? (
           <button onClick={() => changePageMode(SAMEDAY)} type="button">
             <i className="fa fa-calendar-check" />
             {' '}
             <span className="nav-text">Same Day</span>
           </button>
-        )}
-        {state.pageMode === SAMEDAY && (
+        ) : (
           <button onClick={() => changePageMode(ONEDAY)} type="button">
             <i className="fa fa-home" />
             <span>Home</span>
           </button>
         )}
-        <button onClick={() => doLogout()} className="btn-margin plainLink" type="button">
-          <i className="fa fa-sign-out" />
-          <span className="nav-text">Log Out</span>
-        </button>
+        <RouterNavLink to="/search">
+          <i className="fa fa-search" />
+          {' '}
+          <span className="nav-text">Search</span>
+        </RouterNavLink>
       </nav>
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
@@ -480,6 +480,10 @@ const OneDay = () => {
           <span className="nav-text">Logs</span>
           {' '}
         </RouterNavLink>
+        <button onClick={() => doLogout()} className="btn-margin plainLink" type="button">
+          <i className="fa fa-sign-out" />
+          <span className="nav-text">Log Out</span>
+        </button>
         <span className="footer-version">
           v
           {pkg.version}

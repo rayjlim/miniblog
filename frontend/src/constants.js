@@ -9,5 +9,6 @@ module.exports = {
   STORAGE_KEY: 'MINIBLOG_TOKEN',
   FULL_DATE_FORMAT: 'yyyy-MM-dd',
   DISPLAY_DATE_FORMAT: 'EEE, yyyy-MM-dd',
+  SHOW_GH_CORNER: process.env.REACT_APP_SHOW_GH_CORNER,
   ENVIRONMENT: process.env.NODE_ENV,
 };
