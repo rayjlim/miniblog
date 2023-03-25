@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
 
-import constants from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
 const LoginPassword = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const LoginPassword = () => {
     };
 
     try {
-      const response = await fetch(`${constants.REST_ENDPOINT}/security`, {
+      const response = await fetch(`${REST_ENDPOINT}/security`, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -40,7 +40,7 @@ const LoginPassword = () => {
 
         console.log(results);
         if (results.token) {
-          window.localStorage.setItem(constants.STORAGE_KEY, results.token);
+          window.localStorage.setItem(STORAGE_KEY, results.token);
         }
         return results.token;
       }
@@ -75,7 +75,7 @@ const LoginPassword = () => {
   };
 
   const logOut = () => {
-    window.localStorage.removeItem(constants.STORAGE_KEY);
+    window.localStorage.removeItem(STORAGE_KEY);
     googleLogout();
     setProfile(null);
   };
