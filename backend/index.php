@@ -22,6 +22,11 @@ use Slim\Factory\AppFactory;
 use \dao\DaoFactory;
 use \middleware\AuthMiddleware;
 
+if (!is_file('.env') ) {
+    echo "Missing Config file";
+    exit;
+}
+
 require __DIR__ . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
