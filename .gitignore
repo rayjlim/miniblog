@@ -2,12 +2,11 @@ backend/build/*
 backend/config/.htaccess
 backend/config/feature_ideas/*
 backend/vendor
+backend/.env.production
 
 uploads/*
 
 cron_script.php
-.env
-.env.production
 
 frontend/build/*
 frontend/node_modules/*
@@ -19,3 +18,8 @@ doc/reference files/*
 backend/_logs/*
 backend/error_log
 feature_ideas/*
+frontend/.env.developoment
+frontend/.env.production
+
+backend/.env
+scripts/.env
