@@ -18,8 +18,9 @@ doc/reference files/*
 backend/_logs/*
 backend/error_log
 feature_ideas/*
-frontend/.env.developoment
+frontend/.env
 frontend/.env.production
+frontend/.htaccess.production
 
 backend/.env
 scripts/.env
