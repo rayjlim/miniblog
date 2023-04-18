@@ -36,7 +36,7 @@ if [ -z "$NOBACKENDBUILD" ]; then
   rsync -ravz --exclude-from '../scripts/exclude-from-prep.txt' --delete . ./build
   # rsync -avz  _rsc/vendor $PREP_DIR/_rsc
   rsync -avz  ".env.production"  ./build/.env
-  rsync -avz  "config/.htaccess"          ./build
+  rsync -avz  ".htaccess.production"          ./build/.htaccess
   rsync -avz  "../scripts/exclude-from-prod.txt"   ./build
 
   cd ./build
@@ -61,7 +61,7 @@ if [ -z "$NOFRONTENDBUILD" ]; then
     echo "REACT Build Fail"
     exit 1
   fi
-
+  rsync -avz  ".htaccess.production"          ./build/.htaccess
   cd ..
 fi
 

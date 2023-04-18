@@ -4,7 +4,11 @@ backend/config/feature_ideas/*
 backend/vendor
 backend/.env.production
 
-uploads/*
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*/*.jpg
+uploads/*/*.jpeg
+uploads/*/*.png
 
 cron_script.php
 
@@ -18,8 +22,10 @@ doc/reference files/*
 backend/_logs/*
 backend/error_log
 feature_ideas/*
-frontend/.env.developoment
+frontend/.env
 frontend/.env.production
+frontend/.htaccess.production
 
 backend/.env
 scripts/.env
+
