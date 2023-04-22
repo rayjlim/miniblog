@@ -31,14 +31,9 @@ class AuthMiddleware
             exit(0);
         }
 
-        $error = '';
-        $userId = $this->isLoggedIn();
-
-        if (!empty($userId)) {
+        if ($this->isLoggedIn()) {
             return $response;
         }
-
-        $error = "Not Logged In";
 
         $reqBody = $request->getBody();
         DevHelp::debugMsg('reqBody:' . $reqBody);
@@ -48,52 +43,58 @@ class AuthMiddleware
         $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
 
         if (!isset($loginParams->login)) {
-            $error = "{\"status\": \"fail\", \"message\":\"Invalid payload\"}";
-            Logger::log('User Login : ' . $error . ' from IP Address: ' . $ipaddress . ' '
-                . $_SERVER['REQUEST_URI']);
-            header('HTTP/1.0 403 Forbidden');
-            echo $error;
-            exit(0);
+            $this->loginError('Invalid payload' . $_SERVER['REQUEST_URI']);
         } elseif (!$username || !$password) {
-            $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
-            Logger::log('User Login: ' . $error . ' from IP Address: ' . $ipaddress);
-            header('HTTP/1.0 403 Forbidden');
-            echo $error;
-            exit(0);
+            $this->loginError('Missing Fields');
+       }
+
+        if (isset($loginParams->id) && $loginParams->id !== '') {
+            if ($loginParams->id == $_ENV['GOOGLE_ID']) {
+                $this->generateToken();
+            }
+            $this->loginError('Wrong id');
         }
 
-        if($loginParams->id !== '' && $loginParams->id == $_ENV['GOOGLE_ID'])
-        {
-            $tokenObj = new stdClass();
-            $tokenObj->userId = $_ENV['ACCESS_ID'];
-            $tokenObj->name = $_ENV['ACCESS_NAME'];
-            $tokenObj->user = $_ENV['ACCESS_USER'];
-            $response = new stdClass();
-            $response->token = encrypt(json_encode($tokenObj));
+        if ($this->doLogin($username, $password)) {
+            $this->generateToken();
+        }
+        $this->loginError('Wrong username/password');
+    }
 
-            echo json_encode($response);
-            exit;
-        } elseif ($this->doLogin($username, $password)) {
-            // successful login
-            $tokenObj = new stdClass();
-            $tokenObj->userId = $_ENV['ACCESS_ID'];
-            $tokenObj->name = $_ENV['ACCESS_NAME'];
-            $tokenObj->user = $_ENV['ACCESS_USER'];
-            $response = new stdClass();
-            $response->token = encrypt(json_encode($tokenObj));
+    private function generateToken(){
+        $tokenObj = new stdClass();
+        $tokenObj->userId = $_ENV['ACCESS_ID'];
+        $tokenObj->name = $_ENV['ACCESS_NAME'];
+        $tokenObj->user = $_ENV['ACCESS_USER'];
+        echo encrypt(json_encode($tokenObj));
+        exit;
+    }
 
-            echo json_encode($response);
-            exit;
-        } else {
-            $error = "{\"status\": \"fail\", \"message\":\"Wrong username/password\"}";
-            Logger::log('User Login: Wrong password: ' . $username . ":" . $password . ' from IP Address: ' . $ipaddress);
-            header('HTTP/1.0 403 Forbidden');
-            echo $error;
-            exit(0);
+    private function loginError($message){
+        $ipaddress = $this->getRealIpAddr();
+        $response = new stdClass();
+        $response->status = "fail";
+        $response->message = $message;
 
+        Logger::log('User Login: '.$message.' from IP Address: ' . $ipaddress);
+        header('HTTP/1.0 403 Forbidden');
+        echo json_encode($response);
+        exit(0);
+    }
+    /**
+     * Get the IP address of the visitor
+     * @return string
+     */
+    private function getRealIpAddr()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+            return $_SERVER['HTTP_CLIENT_IP'];
+        }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
 
-
+        return $_SERVER['REMOTE_ADDR'];
     }
 
     /**
@@ -104,27 +105,26 @@ class AuthMiddleware
     private function isLoggedIn()
     {
         $headers = getallheaders();
-        // print_r($headers);
 
         $token = $_ENV['AUTH_TOKEN'];
         DevHelp::debugMsg('isset app token? ' . $token . isset($headers[$token]));
         if (isset($headers[$token])) {
             DevHelp::debugMsg('decrypting token ' . $headers[$token]);
             $headerStringValue = $headers[$token];
-
             $decryptedString = decrypt($headerStringValue);
-            DevHelp::debugMsg('decryptedString:' . $decryptedString);
             $userObj = json_decode($decryptedString);
+            return ($userObj
+                && $userObj->username == $_ENV['ACCESS_USER']
+                && $userObj->password == $_ENV['ACCESS_PASSWORD']);
 
-            if ($userObj && is_numeric($userObj->userId) && $userObj->userId == $_ENV['ACCESS_ID']) {
-                return $userObj->userId;
-            }
+            $userObj = json_decode($decryptedString);
+            return ($userObj && is_numeric($userObj->userId) && $userObj->userId == $_ENV['ACCESS_ID']);
         }
 
         if (isset($_GET["cron_pass"]) && $_GET["cron_pass"] == $_ENV['CRON_PW']) {
             $ipaddress = getenv("REMOTE_ADDR");
             Logger::log("Cron called from IP Address: " . $ipaddress);
-            return 1;
+            return true;
         }
 
         return false;

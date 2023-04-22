@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+// import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+// import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
@@ -10,13 +11,13 @@ const LoginPassword = () => {
   const navigate = useNavigate();
   const username = useRef();
   const password = useRef();
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
 
-  const login = useGoogleLogin({
-    onSuccess: codeResponse => setUser(codeResponse),
-    onError: error => console.log('Login Failed:', error),
-  });
+  // const login = useGoogleLogin({
+  //   onSuccess: codeResponse => setUser(codeResponse),
+  //   onError: error => console.log('Login Failed:', error),
+  // });
 
   // TODO: convert to customHook
   const checkLogin = async ({ formUser = '', formPass = '', id = '' }) => {
@@ -76,34 +77,41 @@ const LoginPassword = () => {
 
   const logOut = () => {
     window.localStorage.removeItem(STORAGE_KEY);
-    googleLogout();
+    // googleLogout();
     setProfile(null);
   };
 
-  useEffect(
-    async () => {
-      if (user) {
-        try {
-          const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`);
-          const results = await response.json();
-          console.log(results);
-          setProfile(results);
-          if (user.access_token) {
-            doLogin(results.id);
-          }
-          // create security backend that takes an ID
-          // encrypt .env files
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },
-    [user],
-  );
+  // useEffect(
+  //   async () => {
+  //     if (user) {
+  //       try {
+  //         const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`);
+  //         const results = await response.json();
+  //         console.log(results);
+  //         setProfile(results);
+  //         if (user.access_token) {
+  //           doLogin(results.id);
+  //         }
+  //         // create security backend that takes an ID
+  //         // encrypt .env files
+  //       } catch (err) {
+  //         console.error(err);
+  //       }
+  //     }
+  //   },
+  //   [user],
+  // );
   return (
     <div className="App">
       <ToastContainer />
-      <h1>Login</h1>
+      <h1>
+        Login
+        -
+        {process.env.NODE_ENV}
+        -
+        {REST_ENDPOINT}
+        -
+      </h1>
       <span>User</span>
       <input type="text" ref={username} />
       <span>Password</span>
@@ -130,7 +138,8 @@ const LoginPassword = () => {
             <button onClick={logOut} type="button">Log out</button>
           </div>
         ) : (
-          <button onClick={() => login()} type="button">Sign in with Google</button>
+          // <button onClick={() => login()} type="button">Sign in with Google</button>
+          <button onClick={() => console.log('google login')} type="button">Sign in with Google</button>
         )}
       </div>
     </div>
