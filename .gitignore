@@ -7,8 +7,10 @@ backend/.env.production
 uploads/*.jpg
 uploads/*.jpeg
 uploads/*/*.jpg
+uploads/*/*.JPG
 uploads/*/*.jpeg
 uploads/*/*.png
+uploads/*/*.PNG
 
 cron_script.php
 
@@ -29,3 +31,4 @@ frontend/.htaccess.production
 backend/.env
 scripts/.env
 
+uploads/*/*.PNG
