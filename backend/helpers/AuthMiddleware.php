@@ -66,7 +66,10 @@ class AuthMiddleware
         $tokenObj->userId = $_ENV['ACCESS_ID'];
         $tokenObj->name = $_ENV['ACCESS_NAME'];
         $tokenObj->user = $_ENV['ACCESS_USER'];
-        echo encrypt(json_encode($tokenObj));
+        $response = new stdClass();
+        $response->token = encrypt(json_encode($tokenObj));
+
+        echo json_encode($response);
         exit;
     }
 
@@ -105,20 +108,15 @@ class AuthMiddleware
     private function isLoggedIn()
     {
         $headers = getallheaders();
-
-        $token = $_ENV['AUTH_TOKEN'];
-        DevHelp::debugMsg('isset app token? ' . $token . isset($headers[$token]));
-        if (isset($headers[$token])) {
-            DevHelp::debugMsg('decrypting token ' . $headers[$token]);
-            $headerStringValue = $headers[$token];
+        $tokenName = $_ENV['AUTH_TOKEN'];
+        DevHelp::debugMsg('isset app tokenName? ' . $tokenName . isset($headers[$tokenName]));
+        if (isset($headers[$tokenName])) {
+            $headerStringValue = $headers[$tokenName];
             $decryptedString = decrypt($headerStringValue);
+
             $userObj = json_decode($decryptedString);
             return ($userObj
-                && $userObj->username == $_ENV['ACCESS_USER']
-                && $userObj->password == $_ENV['ACCESS_PASSWORD']);
-
-            $userObj = json_decode($decryptedString);
-            return ($userObj && is_numeric($userObj->userId) && $userObj->userId == $_ENV['ACCESS_ID']);
+                && $userObj->userId == $_ENV['ACCESS_ID']);
         }
 
         if (isset($_GET["cron_pass"]) && $_GET["cron_pass"] == $_ENV['CRON_PW']) {
