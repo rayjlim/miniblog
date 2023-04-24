@@ -7,7 +7,6 @@ use \Lpt\DevHelp;
 use \Lpt\Logger;
 use \stdClass;
 
-// use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Nyholm\Psr7\Response;
@@ -18,12 +17,7 @@ class AuthMiddleware
     {
         DevHelp::debugMsg(__FILE__);
         $response = $handler->handle($request);
-        // $existingContent = (string) $response->getBody();
-
         $response = new Response();
-        // $response->getBody()->write('BEFORE ' . $existingContent);
-
-        $ipaddress = getenv("REMOTE_ADDR");
 
         if ($request->getMethod() == "OPTIONS") {
             header('HTTP/1.0 200 Ok');
@@ -39,15 +33,6 @@ class AuthMiddleware
         DevHelp::debugMsg('reqBody:' . $reqBody);
         $loginParams = json_decode($reqBody);
 
-        $username = isset($loginParams->username) ? htmlspecialchars($loginParams->username) : null;
-        $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
-
-        if (!isset($loginParams->login)) {
-            $this->loginError('Invalid payload' . $_SERVER['REQUEST_URI']);
-        } elseif (!$username || !$password) {
-            $this->loginError('Missing Fields');
-       }
-
         if (isset($loginParams->id) && $loginParams->id !== '') {
             if ($loginParams->id == $_ENV['GOOGLE_ID']) {
                 $this->generateToken();
@@ -55,10 +40,18 @@ class AuthMiddleware
             $this->loginError('Wrong id');
         }
 
-        if ($this->doLogin($username, $password)) {
-            $this->generateToken();
+        $username = isset($loginParams->username) ? htmlspecialchars($loginParams->username) : null;
+        $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
+
+        if (!isset($loginParams->login)) {
+            $this->loginError('Invalid payload' . $_SERVER['REQUEST_URI']);
+        } elseif (!$username || !$password) {
+            $this->loginError('Missing Fields');
+        } elseif (!$this->isValidUsernamePassword($username, $password)) {
+            $this->loginError('Wrong username/password');
         }
-        $this->loginError('Wrong username/password');
+
+        $this->generateToken();
     }
 
     private function generateToken(){
@@ -129,18 +122,16 @@ class AuthMiddleware
     }
 
     /**
-     * Do the login
+     * Check Username and Password
      *
-     * @param  string $ip       IP address
      * @param  string $username Username
      * @param  string $password Password
      * @return boolean
      */
-    private function doLogin($username, $password)
+    private function isValidUsernamePassword($username, $password)
     {
-        // Check the access to this function, using logs and ip
         $ipaddress = getenv("REMOTE_ADDR");
-        Logger::log('doLogin:' . $username . 'from IP Address: ' . $ipaddress);
+        Logger::log('isValidUsernamePassword:' . $username . 'from IP Address: ' . $ipaddress);
         return $username === $_ENV['ACCESS_USER'] && $password === $_ENV['ACCESS_PASSWORD'];
     }
 }

@@ -35,7 +35,7 @@ interface SmsEntriesDAO
      */
     public function update($smsEntrie);
 
-    public function queryGraphData($userId, $graphParams);
-    public function queryBlogList($userId, $listParams);
-    public function queryLastTagEntry($userId, $label);
+    public function list($listParams);
+
+    public function getYearMonths();
 }

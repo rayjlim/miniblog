@@ -18,9 +18,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 
     /**
-     * Delete record from table
+     * Delete Journal record from table
      *
-     * @param  smsEntrie primary key
+     * @param  id primary key
      * @LPT_V2
      */
     public function delete($id)
@@ -31,7 +31,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 
     /**
-     * Insert record to table
+     * Insert Journal record
      *
      * @param  SmsEntriesMySql smsEntrie
      * @LPT_V2
@@ -47,7 +47,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 
     /**
-     * Update record in table
+     * Update Journal Entry
      *
      * @param  SmsEntriesMySql smsEntrie
      * @LPT_V2
@@ -61,56 +61,54 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 
     /**
-     * Get records that have specific label
+     * List Journal Entries
      *
+     * @param  listParams search options
      * @LPT_V2
      */
-    public function queryGraphData($userId, $graphParams)
-    {
-        $sqlParam = '';
-        if ($graphParams->startDate != '') {
-            $sqlParam.= ' and date > \'' . $graphParams->startDate . '\'';
-        }
-        if ($graphParams->endDate != '') {
-            $sqlParam.= ' and date <= \'' . $graphParams->endDate . '\'';
-        }
-
-        $tagParam = "'%" . $graphParams->label . "%'";
-        $posts = R::findAll(POSTS, ' user_id = ? and content like ' . $tagParam . ' '
-            . $sqlParam . ' order by date desc limit  ' . $graphParams->resultLimit, [$userId]);
-
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-
-        return $sequencedArray;
-    }
-
-    public function queryBlogList($userId, $listParams)
+    public function list($listParams)
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
-        $posts = R::findAll(POSTS, ' user_id = ?  ' . $sqlParam . ' order by date desc limit ?', [$userId, $listParams->resultsLimit]);
+        $posts = R::findAll(POSTS, '1 = 1 ' . $sqlParam . ' order by date desc limit ?', [$listParams->resultsLimit]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
         return $sequencedArray;
     }
 
-    public function getSameDayEntries($userId, $date)
+    /**
+     * Get Entries that are from the same day of the year
+     *
+     * @param  date Target date
+     * @LPT_V2
+     */
+    public function getSameDayEntries($date)
     {
-        $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m')
+        $whereClause = ' where MONTH(date) = ' . $date->format('m')
             . ' and Day(date) = ' . $date->format('d')
             . ' and content not like "#s%"'
             . ' and content not like "#x%"'
             . ' and content not like "@w%"'
             . ' and content not like "#a%"';
-        $posts = R::findAll(POSTS, $whereClause . ' order by date desc ', [$userId]);
+        $posts = R::findAll(POSTS, $whereClause . ' order by date desc ', []);
         // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
         return $sequencedArray;
     }
 
-    public function getYearMonths($userId)
+    /**
+     * Get Year and Months list of all entries
+     *
+     * @param  none
+     * @LPT_V2
+     */
+    public function getYearMonths()
     {
-        $posts = R::getAll( 'SELECT DISTINCT YEAR(date) AS "Year", MONTH(date) AS "Month" FROM sms_entries where user_id = 1 order by YEAR(date) desc, month(date) desc' );
+        $posts = R::getAll('SELECT DISTINCT YEAR(date) AS "Year", '
+            . 'MONTH(date) AS "Month" '
+            . 'FROM sms_entries '
+            . 'where user_id = 1 '
+            . 'order by YEAR(date) desc, month(date) desc' );
         return array_map("dao\groupYearMonth", $posts);
     }
 
@@ -151,14 +149,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $sqlParam;
     }
 
-    public function queryLastTagEntry($userId, $label)
-    {
-        $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label
-            . '%\' order by date desc limit 1', [$userId]);
-
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-        return $sequencedArray[0];
-    }
 }
 
 function pickDate($n)

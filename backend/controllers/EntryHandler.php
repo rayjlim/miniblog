@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use \DateTime;
 use \stdClass;
 
-
 /**
  * @OA\Info(title="Miniblog Api", version="0.1",
  * @OA\Contact(
@@ -17,7 +16,6 @@ use \stdClass;
  *   )
  * )
  */
-
 class EntryHandler
 {
     public $dao = null;
@@ -51,7 +49,7 @@ class EntryHandler
             $listObj->loadParams($queries);
             $userId = $_ENV['ACCESS_ID'];
             $listObj->userId = $userId;
-            $entries = $this->dao->queryBlogList($userId, $listObj);
+            $entries = $this->dao->list($listObj);
             // $this->app->response()->header('Content-Type', 'application/json');
 
             $metaData = new stdClass();
@@ -93,7 +91,7 @@ class EntryHandler
                 ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($queries, 'day'))
                 : $currentDate;
 
-            $entries = $this->dao->getSameDayEntries($userId, $targetDay);
+            $entries = $this->dao->getSameDayEntries($targetDay);
             // $this->app->response()->header('Content-Type', 'application/json');
             $this->resource->echoOut('{"user": '. $userId .', "entries": ' . json_encode($entries) . '}');
             return $response;
@@ -136,19 +134,20 @@ class EntryHandler
      * )
      */
 
-    public function yearMonthsApi()
-    {
-        return function (Request $request, Response $response, $args) {
-            $userId = $_ENV['ACCESS_ID'];
-            DevHelp::debugMsg('start ' . __FILE__);
+     public function yearMonthsApi()
+     {
+         return function (Request $request, Response $response, $args) {
+             $userId = $_ENV['ACCESS_ID'];
+             DevHelp::debugMsg('start ' . __FILE__);
 
-            $entry = $this->dao->getYearMonths($userId);
-            header('Content-Type: application/json');
-            $this->resource->echoOut(json_encode($entry));
-            die();
-            // return $response;
-        };
-    }
+             $entry = $this->dao->getYearMonths($userId);
+             header('Content-Type: application/json');
+             $this->resource->echoOut(json_encode($entry));
+             die();
+             // return $response;
+         };
+     }
+
 }
 /**
  * @OA\Schema(

@@ -34,7 +34,7 @@ class GraphHandler extends AbstractController
             $userId = $this->app->userId;
             $targetDay = $date;
 
-            $entries = $this->dao->getSameDayEntries($userId, $targetDay);
+            $entries = $this->dao->getSameDayEntries($targetDay);
 
             $printedNonWeight = array_reduce($entries, "printEntrys");
 
