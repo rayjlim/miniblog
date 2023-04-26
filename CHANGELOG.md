@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](https://github.com/rayjlim/miniblog/compare/v2.14.0...v2.15.0) (2023-04-26)
+
+
+### Features
+
+* license file ([b009a97](https://github.com/rayjlim/miniblog/commit/b009a976b1a5b79f3abebe068e78a25f5c927970))
+
+
+### Bug Fixes
+
+* .env usage in fronted to remove vars set in package.json ([3cdd257](https://github.com/rayjlim/miniblog/commit/3cdd2574da00ea95c560876e97ae1262fbfd9bd8))
+* [#213](https://github.com/rayjlim/miniblog/issues/213) deprecate auth0 refs ([539586e](https://github.com/rayjlim/miniblog/commit/539586e461388c66808b1479d7d0a1e9ff678374))
+* add movie poster to constants ([7c4fc7a](https://github.com/rayjlim/miniblog/commit/7c4fc7a3e86dc13e404046c60e4226b4f7fd2d59))
+* add uploads folder ([5725245](https://github.com/rayjlim/miniblog/commit/57252451add85ffbd22739f60b37e152061a2b25))
+* alphabetize fields ([a984069](https://github.com/rayjlim/miniblog/commit/a9840692c86f2fd51a81b523f72570239393a092))
+* github corner only shown when env flag ([815f71d](https://github.com/rayjlim/miniblog/commit/815f71d1c044b0144ce6ead2a171af740ba23a12))
+* re-encrypt secret ([c8800a6](https://github.com/rayjlim/miniblog/commit/c8800a651dbf4855e1a0fdaf99f1c9bc65cbca64))
+* refactor function names, remove usage of userId ([b974e28](https://github.com/rayjlim/miniblog/commit/b974e28cc5293ea2cc5530b5209d1d238c40a7b6))
+* remove default port override ([0cb6bf3](https://github.com/rayjlim/miniblog/commit/0cb6bf36d6b6e7176bc5025f9da47449a3808e38))
+* remove node-sass ([9d0c879](https://github.com/rayjlim/miniblog/commit/9d0c879d5109ae4cb21ed002fb11bc46cdb4e3e8))
+* setup for windows ([3aa2914](https://github.com/rayjlim/miniblog/commit/3aa29146c2ba5582ecffaff8a149854fba757595))
+* update .env files ([fcaaab7](https://github.com/rayjlim/miniblog/commit/fcaaab776a9e892bcc0f3ffb476bb9256c85bd04))
+* update git ignore list ([e9b1b15](https://github.com/rayjlim/miniblog/commit/e9b1b153c6a3fa5aaeb069ebc961e4b0dd601ae2))
+* update secrets; move icons to assets ([611ae38](https://github.com/rayjlim/miniblog/commit/611ae38f00ad0da64feaccad097cb4e4d07c685c))
+* upgrade @react-oauth/google from 0.7.1 to 0.8.0 ([8b44159](https://github.com/rayjlim/miniblog/commit/8b441593e8caf7abe118a1835094542c963797bf))
+* upgrade marked from 4.2.12 to 4.3.0 ([31eb6b1](https://github.com/rayjlim/miniblog/commit/31eb6b106218d0ad8af56bbcfe0c4399c7c73481))
+* upgrade react-router-dom from 6.8.1 to 6.8.2 ([4271da3](https://github.com/rayjlim/miniblog/commit/4271da3461951dff979afab87f3537a8306dc6d9))
+* upgrade react-select from 5.7.0 to 5.7.1 ([769a428](https://github.com/rayjlim/miniblog/commit/769a428fac38bb9c511f01165c0a78c2eb62da92))
+* upgrade react-toastify from 9.1.1 to 9.1.2 ([2f1eb5b](https://github.com/rayjlim/miniblog/commit/2f1eb5b9eb88f9879b05135ceb33a26ec2d1970f))
+
 ## [2.14.0](https://github.com/rayjlim/miniblog/compare/v2.13.1...v2.14.0) (2023-02-21)
 
 
