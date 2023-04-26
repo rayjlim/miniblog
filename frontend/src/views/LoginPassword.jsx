@@ -30,7 +30,6 @@ const LoginPassword = () => {
     try {
       const response = await fetch(`${REST_ENDPOINT}/security`, {
         method: 'POST',
-        mode: 'cors',
         cache: 'no-cache',
         body: JSON.stringify(formData),
       });
