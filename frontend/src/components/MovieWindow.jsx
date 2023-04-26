@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './MovieWindow.css';
 
+import { MOVIES_POSTERS } from '../constants';
+
 const MovieWindow = ({ movie }) => {
   const { title, imdbImageId, imdbId } = movie;
-  const imageUrl = `https://www.lilplaytime.com/moviedb_posters/${imdbImageId}.jpg`;
+  const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
   const imdbUrl = `https://www.imdb.com/title/${imdbId}/`;
 
   return (
