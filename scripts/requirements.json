@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "name": "/frontend/.env",
+      "content": "REACT_APP_API_ENDPOINT",
+      "type": "frontend"
+    },
+    {
+      "name": "/frontend/.env.production",
+      "content": "REACT_APP_API_ENDPOINT",
+      "type": "frontend"
+    },
+    {
+      "name": "/backend/.env",
+      "content": ["DB_HOST","DB_USER", "DB_PASSWORD", "DB_NAME"],
+      "type": "backend"
+    },
+    {
+      "name": "/backend/.env.production",
+      "content": ["DB_HOST","DB_USER"],
+      "type": "backend"
+    }
+  ]
+}
