@@ -106,15 +106,15 @@ const AddForm = ({ content, date, onSuccess }) => {
                     fa-template
                 </button> */}
       <h2>Add Entry</h2>
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '0 1rem' }}>
+      <div className="entry-bar">
         <div>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>use `@@fa-tag@@` for quick font-awesome icon</p>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>link: [link text](URL)</p>
-          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
+          <p className="small">use `@@fa-tag@@` for quick font-awesome icon</p>
+          <p className="small">link: [link text](URL)</p>
+          <a className="small" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
             Cheatsheet
           </a>
           {', '}
-          <a href="https://fontawesome.com/icons" target="_new">
+          <a className="small" href="https://fontawesome.com/icons" target="_new">
             Font Awesome
           </a>
         </div>

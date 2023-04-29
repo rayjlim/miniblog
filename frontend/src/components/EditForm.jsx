@@ -5,6 +5,8 @@ import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
 import constants from '../constants';
 
+import './EditForm.css';
+
 const EditForm = ({ entry, onSuccess }) => {
   const [date, setDate] = useState(
     parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
@@ -128,29 +130,27 @@ const EditForm = ({ entry, onSuccess }) => {
                 </button> */}
       <h2>Edit Entry</h2>
 
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '0 1rem' }}>
+      <div className="entry-bar">
         <div>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>use `@@fa-tag@@` for quick font-awesome icon</p>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>link: [link text](URL)</p>
-          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
+          <p className="small">use `@@fa-tag@@` for quick font-awesome icon</p>
+          <p className="small">link: [link text](URL)</p>
+          <a className="small" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
             Cheatsheet
           </a>
           {', '}
-          <a href="https://fontawesome.com/icons" target="_new">
+          <a className="small" href="https://fontawesome.com/icons" target="_new">
             Font Awesome
           </a>
         </div>
-        <div style={{ marginLeft: 'auto' }}>
-          <button
-            onClick={handleDelete}
-            className="btn btn-danger pull-right"
-            type="button"
-          >
-            <i className="fa fa-trash" />
-            {' '}
-            Delete
-          </button>
-        </div>
+        <button
+          onClick={handleDelete}
+          className="btn btn-danger pull-right delete-btn"
+          type="button"
+        >
+          <i className="fa fa-trash" />
+          {' '}
+          Delete
+        </button>
       </div>
       <div className="form-group">
         <textarea
