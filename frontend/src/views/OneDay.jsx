@@ -70,6 +70,8 @@ const OneDay = () => {
 
   const dateInput = useRef();
 
+  const usersFullname = window.localStorage.getItem('user-name');
+
   async function getInspiration() {
     const quoteApi = INSPIRATION_API;
     const data = await xhrCall(quoteApi, 'inspiration');
@@ -488,6 +490,9 @@ const OneDay = () => {
           {pkg.version}
         </span>
       </nav>
+      <div>
+        {usersFullname}
+      </div>
     </>
   );
 };

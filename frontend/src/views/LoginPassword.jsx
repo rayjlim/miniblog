@@ -66,13 +66,13 @@ const LoginPassword = () => {
       toast.error('Bad Login');
     } else {
       console.log(token);
-      // goto main page
       navigate('/oneday');
     }
   };
 
   const logOut = () => {
     window.localStorage.removeItem(STORAGE_KEY);
+    window.localStorage.removeItem('user-name');
     googleLogout();
     setProfile(null);
   };
@@ -86,12 +86,15 @@ const LoginPassword = () => {
           const results = await response.json();
           console.log(results);
           setProfile(results);
+          window.localStorage.setItem('user-name', results.name);
           if (user.access_token) {
             doLogin(results.id);
           }
         } catch (err) {
           console.error(err);
         }
+      } else {
+        logOut();
       }
     },
     [user],
