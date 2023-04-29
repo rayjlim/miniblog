@@ -48,20 +48,10 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 header('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // The request is using the POST method
+    // OPTIONS method is preceded in CORS checks before a POST (typically) is sent
     echo "options-check";
     exit();
 }
-// TODO: move to .env
-define("IV_SIZE", 16); //mcrypt_get_IV_SIZE(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-define(
-    "KEY",
-    pack(
-        'H*',
-        "b1904b71903ad0F8b54763051cef08bc55abe054Ddeba19e1d417e2ffb2a0193"
-    )
-);
-// -- MOVE to Middleware
 
 use \RedBeanPHP\R as R;
 
@@ -93,7 +83,6 @@ $app->any(
 );
 
 $entryHandler = \dao\DAOFactory::getEntryHandler();
-// $app->get('/api/posts/:id', $entryHandler->detailItemApi());
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
 $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
@@ -127,14 +116,4 @@ $app->get('/logs/', $logHandler->getUrlHandler());
 $app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
 $app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
 
-
 $app->run();
-
-// $app->post('/', function (Request $request, Response $response, $args) {
-//     $app->redirect('posts/');
-// });
-
-
-
-// $graphHandler = DAOFactory::GraphHandler($app);
-// $app->get('/cron', $graphHandler->logCronCall());

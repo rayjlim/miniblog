@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import constants from '../constants';
 
@@ -9,7 +9,6 @@ const MediaList = ({ onMediaSelect }) => {
   const [uploadDirs, setUploadDirs] = useState([]);
   const [currentDir, setCurrentDir] = useState('');
 
-  // TODO: convert to customHook
   function loadDir(dir = '') {
     (async () => {
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
@@ -35,7 +34,6 @@ const MediaList = ({ onMediaSelect }) => {
       }
     })();
   }
-  // TODO: convert to customHook
   function deleteMedia(filePath, fileName) {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -58,6 +56,7 @@ const MediaList = ({ onMediaSelect }) => {
         console.log('response.status :', response.status);
         alert(`loading error : ${response.status}`);
       } else {
+        // Do anything with the metadata return after delete?
         // const data = await response.json();
         loadDir(filePath);
       }

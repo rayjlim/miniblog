@@ -18,7 +18,6 @@ const LoginPassword = () => {
     onError: error => console.log('Login Failed:', error),
   });
 
-  // TODO: convert to customHook
   const checkLogin = async ({ formUser = '', formPass = '', id = '' }) => {
     const formData = {
       id,
@@ -34,7 +33,9 @@ const LoginPassword = () => {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      } else {
         const results = await response.json();
 
         console.log(results);
@@ -43,11 +44,8 @@ const LoginPassword = () => {
         }
         return results.token;
       }
-      // const message = 'Network response was not ok.';
-      // console.error(message);
-      // toast.error(message);
     } catch (error) {
-      const message = `Error when parsing means not logged in ${error}`;
+      const message = (`Error when parsing means not logged in, ${error}`);
       console.error(message);
       toast.error(message);
     }
@@ -83,15 +81,14 @@ const LoginPassword = () => {
     async () => {
       if (user) {
         try {
-          const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`);
+          const endpoint = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`;
+          const response = await fetch(endpoint);
           const results = await response.json();
           console.log(results);
           setProfile(results);
           if (user.access_token) {
             doLogin(results.id);
           }
-          // create security backend that takes an ID
-          // encrypt .env files
         } catch (err) {
           console.error(err);
         }

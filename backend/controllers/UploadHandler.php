@@ -50,16 +50,15 @@ class UploadHandler
                     mkdir($targetDir, 0711);
                 }
 
-                // Check if file already exists
                 if (file_exists($targetFileFullPath)) {
                     throw new Exception(" file already exists." . "![](../uploads/"
-                    . $filePath . $urlFileName . ")" . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
+                    . $filePath . $urlFileName . ")");
                 }
 
                 // Check file size
-                if ($_FILES["fileToUpload"]["size"] > $_ENV['UPLOAD_SIZE_LIMIT']) {
+                if ($_FILES["fileToUpload"]["size"] > UPLOAD_SIZE_LIMIT) {
                     throw new Exception("Sorry, your file is too large."
-                    . $_FILES["fileToUpload"]["size"] . ' of ' . $_ENV['UPLOAD_SIZE_LIMIT']);
+                    . $_FILES["fileToUpload"]["size"] . ' of ' . UPLOAD_SIZE_LIMIT);
                 }
                 // Allow certain file formats
                 if (!in_array($imageFileType, $validFileExt)) {
@@ -89,9 +88,6 @@ class UploadHandler
     {
         return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg('resizeImage' . __FILE__);
-            // $new_width = 0;
-            // $new_height = 0;
-
             //375 x 667 (iphone 7)
             $fileName = $_GET["fileName"];
             $filePath = $_GET["filePath"];
@@ -99,7 +95,7 @@ class UploadHandler
             $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
             $fileFullPath = $targetDir . $fileName;
 
-            $new_width = 360;  // TODO - get from config
+            $new_width = $_ENV['IMG_RESIZE_WIDTH'];
 
             $this->resizer($new_width, $fileFullPath, $fileFullPath);
 

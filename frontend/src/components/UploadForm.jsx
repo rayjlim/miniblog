@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
 import constants from '../constants';
@@ -13,11 +13,7 @@ const UploadForm = () => {
     setSelectedFile(event.target.files[0]);
   }
 
-  // TODO: convert to customHook
   async function upload() {
-    // const data = new FormData()
-    // data.append('file', selectFile)
-
     const formData = new FormData();
     formData.append('fileToUpload', selectFile);
     const filePath = document.getElementById('filePath').value;
@@ -70,11 +66,6 @@ const UploadForm = () => {
               />
             </label>
           </div>
-          {/* <div className="form-group">
-                      <label for="newName">New Name</label>
-                      <input type="text" className="form-control" id="newName"
-                      name="newName" value="" />
-                  </div> */}
           <button
             type="button"
             className="btn btn-success btn-block"

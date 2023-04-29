@@ -1,0 +1,16 @@
+.entry-bar {
+  display: flex;
+  flex-direction: row;
+  padding: 0 1rem;
+  justify-content: space-between;
+}
+.small {
+  line-height: 1em;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.delete-btn {
+  margin-left: 'auto'
+
+}

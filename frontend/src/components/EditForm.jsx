@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
 import constants from '../constants';
+
+import './EditForm.css';
 
 const EditForm = ({ entry, onSuccess }) => {
   const [date, setDate] = useState(
@@ -31,7 +33,6 @@ const EditForm = ({ entry, onSuccess }) => {
   * request to the server with the updated
   * entry
   */
-  // TODO: convert to customHook
   async function handleSave() {
     console.log('handleSave entry :', content, date);
     try {
@@ -64,7 +65,6 @@ const EditForm = ({ entry, onSuccess }) => {
     }
   }
 
-  // TODO: convert to customHook
   async function handleDelete() {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -107,7 +107,6 @@ const EditForm = ({ entry, onSuccess }) => {
 
   function checkKeyPressed(e) {
     console.log(`EditForm: handle key presss ${e.key}`);
-    // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value is taken from the init value
@@ -116,7 +115,7 @@ const EditForm = ({ entry, onSuccess }) => {
       document.getElementById('cancelBtn').click();
     }
   }
-  /* A hook that is called when the component is mounted. */
+
   useEffect(() => {
     console.log('EditForm: useEffect');
 
@@ -131,29 +130,27 @@ const EditForm = ({ entry, onSuccess }) => {
                 </button> */}
       <h2>Edit Entry</h2>
 
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '0 1rem' }}>
+      <div className="entry-bar">
         <div>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>use `@@fa-tag@@` for quick font-awesome icon</p>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>link: [link text](URL)</p>
-          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
+          <p className="small">use `@@fa-tag@@` for quick font-awesome icon</p>
+          <p className="small">link: [link text](URL)</p>
+          <a className="small" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
             Cheatsheet
           </a>
           {', '}
-          <a href="https://fontawesome.com/icons" target="_new">
+          <a className="small" href="https://fontawesome.com/icons" target="_new">
             Font Awesome
           </a>
         </div>
-        <div style={{ marginLeft: 'auto' }}>
-          <button
-            onClick={handleDelete}
-            className="btn btn-danger pull-right"
-            type="button"
-          >
-            <i className="fa fa-trash" />
-            {' '}
-            Delete
-          </button>
-        </div>
+        <button
+          onClick={handleDelete}
+          className="btn btn-danger pull-right delete-btn"
+          type="button"
+        >
+          <i className="fa fa-trash" />
+          {' '}
+          Delete
+        </button>
       </div>
       <div className="form-group">
         <textarea

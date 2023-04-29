@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 import PropTypes from 'prop-types';
 import { marked } from 'marked';
 import constants from '../constants';
@@ -7,6 +7,7 @@ import constants from '../constants';
 const renderer = {
   code(code, infostring, escaped = true) {
     const lang = (infostring || '').match(/\S*/)[0];
+    // TODO: document the meaning of the each variable
     // console.log(code);
     // console.log(this.options);
     // console.log(lang);

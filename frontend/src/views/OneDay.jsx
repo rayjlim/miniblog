@@ -6,7 +6,16 @@ import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
 import MovieWindow from '../components/MovieWindow';
 import MarkdownDisplay from '../components/MarkdownDisplay';
-import constants from '../constants';
+import {
+  FULL_DATE_FORMAT,
+  INSPIRATION_API,
+  MOVIES_API,
+  REST_ENDPOINT,
+  STORAGE_KEY,
+  TRACKS_API,
+  QUESTION_API,
+} from '../constants';
+
 import pkg from '../../package.json';
 
 import './OneDay.css';
@@ -62,14 +71,14 @@ const OneDay = () => {
   const dateInput = useRef();
 
   async function getInspiration() {
-    const quoteApi = constants.INSPIRATION_ENDPOINT;
+    const quoteApi = INSPIRATION_API;
     const data = await xhrCall(quoteApi, 'inspiration');
     console.log('data.header :>> ', data.header);
     setInspiration(`Inspire: ${data.message} : ${data.author}`);
   }
 
   async function getWeight(date) {
-    const weightApi = `${constants.TRACKS_ENDPIONT}?start=${date}&end=${date}`;
+    const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
     const data = await xhrCall(weightApi, 'weight');
     if (data && data.data && data.data[0] && data.data[0].count) {
       setWeight(data.data[0]);
@@ -79,7 +88,7 @@ const OneDay = () => {
   }
 
   async function getMovies(date) {
-    const weightApi = `${constants.MOVIES_ENDPIONT}&advanced_search=true&dt_viewed=${date}`;
+    const weightApi = `${MOVIES_API}&advanced_search=true&dt_viewed=${date}`;
     const data = await xhrCall(weightApi, 'movie');
     if (data && data.movies) {
       setMovies(data.movies);
@@ -89,7 +98,7 @@ const OneDay = () => {
   }
 
   async function getPrompt() {
-    const data = await xhrCall(constants.QUESTION_ENDPIONT, 'prompt');
+    const data = await xhrCall(QUESTION_API, 'prompt');
     setInspiration(`Question: ${data.prompt} : ${data.category}`);
   }
 
@@ -107,17 +116,17 @@ const OneDay = () => {
     let endPointURL = '';
     switch (loadParams.pageMode) {
       case SAMEDAY: {
-        endPointURL = `${constants.REST_ENDPOINT}/api/sameDayEntries/?day=${loadParams.pageDate}`;
+        endPointURL = `${REST_ENDPOINT}/api/sameDayEntries/?day=${loadParams.pageDate}`;
         break;
       }
       default: {
-        endPointURL = `${constants.REST_ENDPOINT}/api/posts/?date=${loadParams.pageDate}`;
+        endPointURL = `${REST_ENDPOINT}/api/posts/?date=${loadParams.pageDate}`;
         break;
       }
     }
 
     (async () => {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY);
       try {
         const response = await fetch(endPointURL, {
           method: 'GET',
@@ -149,18 +158,12 @@ const OneDay = () => {
             refs,
           });
           console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-          // if (loadParams.scrollToLast) {
-          //   refs[loadParams.scrollToLast].current.scrollIntoView({
-          //     behavior: 'smooth',
-          //     block: 'start',
-          //   });
-          // }
         } else {
           console.error('response.status :', response.status);
           toast.error(`loading error : ${response.status}`);
         }
 
-        // ----
+        // ---- Call external APIS
         if (inspiration === null) {
           await getInspiration();
         }
@@ -181,18 +184,18 @@ const OneDay = () => {
    * @param  {Object} e Event of Button click
    */
   function handleButtonDirection(e) {
-    let localDate = parse(state.pageDate, constants.FULL_DATE_FORMAT, new Date());
+    let localDate = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
     if (e.target.value === 'today') {
       localDate = new Date();
     } else {
-      localDate = parse(state.pageDate, constants.FULL_DATE_FORMAT, new Date());
+      localDate = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
     }
 
     const newDate = add(localDate, { days: e.target.value });
-    dateInput.current.value = format(newDate, constants.FULL_DATE_FORMAT);
+    dateInput.current.value = format(newDate, FULL_DATE_FORMAT);
     loadDay({
       ...state,
-      pageDate: format(newDate, constants.FULL_DATE_FORMAT),
+      pageDate: format(newDate, FULL_DATE_FORMAT),
       formMode: CLOSED,
     });
   }
@@ -263,30 +266,29 @@ const OneDay = () => {
   }
 
   const doLogout = () => {
-    window.localStorage.removeItem(constants.STORAGE_KEY);
+    window.localStorage.removeItem(STORAGE_KEY);
     navigate('/login');
   };
 
   function checkKeyPressed(e) {
     console.log(`OneDay: handle key presss ${e.key}`);
 
+    // Note: getting element by id is a hack because
+    // the content value is taken from the init value
     if (e.altKey && e.key === ',') {
       console.log('alt comma keybinding');
-      // Note: this is a hack because the content value is taken from the init value
       document.getElementById('prevBtn').click();
     } else if (e.altKey && e.key === '.') {
       console.log('alt period keybinding');
-      // Note: this is a hack because the content value is taken from the init value
       document.getElementById('nextBtn').click();
     } else if (e.altKey && e.key === 'a') {
       console.log('alt period keybinding');
-      // Note: this is a hack because the content value is taken from the init value
       document.getElementById('addFormBtn').click();
     }
   }
 
   useEffect(() => {
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY);
     if (!token) {
       navigate('/login');
     }
@@ -299,7 +301,7 @@ const OneDay = () => {
 
     const pageDate = urlParams.has('date')
       ? urlParams.get('date')
-      : format(new Date(), constants.FULL_DATE_FORMAT);
+      : format(new Date(), FULL_DATE_FORMAT);
 
     setState({ ...state, pageDate });
 
@@ -308,9 +310,7 @@ const OneDay = () => {
       : ONEDAY;
 
     console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
-    // console.log('urlParams.has(fileName) :', urlParams.has('fileName'));
-    // console.log('urlParams.has(filePath) :', urlParams.has('filePath'));
-    const localDate = format(new Date(), constants.FULL_DATE_FORMAT);
+    const localDate = format(new Date(), FULL_DATE_FORMAT);
 
     console.log('setting pageDate :>> ', localDate);
     loadDay({ pageDate, pageMode });
@@ -366,7 +366,6 @@ const OneDay = () => {
           Prev
         </button>
         <div>
-          {/* <span>{state.pageDate}</span> */}
           <input
             ref={dateInput}
             type="text"
@@ -422,7 +421,7 @@ const OneDay = () => {
                 type="button"
               >
                 { format(
-                  parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
+                  parse(entry.date, FULL_DATE_FORMAT, new Date()),
                   'EEE MM, dd yyyy',
                 )}
               </button>
@@ -446,16 +445,16 @@ const OneDay = () => {
         <section>
           <div>{inspiration}</div>
           {inspiration !== '' && (
-            <button onClick={() => copyToClipboard(inspiration)} type="button" style={{ margin: '0 1em', lineHeight: '1em' }}>
+            <button onClick={() => copyToClipboard(inspiration)} type="button" className="copy-btn">
               /clip
             </button>
           )}
-          {constants.QUESTION_ENDPIONT !== '' && (
+          {QUESTION_API !== '' && (
             <button onClick={e => getPrompt(e)} className="plainLink" type="button">
               [Get Prompt]
             </button>
           )}
-          {constants.INSPIRATION_ENDPOINT !== '' && (
+          {INSPIRATION_API !== '' && (
             <button onClick={e => getInspiration(e)} className="plainLink" type="button">
               [Get Inspiration]
             </button>

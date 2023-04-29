@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -50,10 +50,9 @@ const AddForm = ({ content, date, onSuccess }) => {
 
   function checkKeyPressed(e) {
     console.log(`AddForm: handle key presss ${e.key}`);
-    // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
-      // Note: this is a hack because the content value is taken from the init value
+      // Note: this is a hack because the content value was taken from the init value
       document.getElementById('saveBtn').click();
     } else if (e.key === 'Escape') {
       document.getElementById('cancelBtn').click();
@@ -65,8 +64,6 @@ const AddForm = ({ content, date, onSuccess }) => {
     if (isMounted.current) {
       // This makes it so this is not called on the first render
       // but when the Id is set
-      console.log('handleAdd 92:>> ', id);
-      // setFormContent('');
       onSuccess('Add Done');
     } else {
       isMounted.current = true;
@@ -109,15 +106,15 @@ const AddForm = ({ content, date, onSuccess }) => {
                     fa-template
                 </button> */}
       <h2>Add Entry</h2>
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '0 1rem' }}>
+      <div className="entry-bar">
         <div>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>use `@@fa-tag@@` for quick font-awesome icon</p>
-          <p style={{ lineHeight: '1em', fontSize: '.8rem', margin: '0' }}>link: [link text](URL)</p>
-          <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
+          <p className="small">use `@@fa-tag@@` for quick font-awesome icon</p>
+          <p className="small">link: [link text](URL)</p>
+          <a className="small" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links" target="_new">
             Cheatsheet
           </a>
           {', '}
-          <a href="https://fontawesome.com/icons" target="_new">
+          <a className="small" href="https://fontawesome.com/icons" target="_new">
             Font Awesome
           </a>
         </div>
