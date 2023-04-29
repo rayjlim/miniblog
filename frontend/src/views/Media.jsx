@@ -7,6 +7,8 @@ import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
 import pkg from '../../package.json';
 
+import './Media.css';
+
 const Media = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState({
@@ -120,11 +122,11 @@ const Media = () => {
             <button onClick={() => copyToClipboard(post.prepend)} type="button">
               [clip]
             </button>
-            <div style={{ textAlign: 'center' }}>
+            <div className="preview-img-container">
               <img src={post.imgUrl} alt="edit img" className="preview" />
             </div>
           </section>
-          <span style={{ fontSize: '.8em' }}>Image is automatically prepended on submit</span>
+          <span className="footnote">Image is automatically prepended on submit</span>
           <AddForm
             date={post.date}
             content={post.prepend}

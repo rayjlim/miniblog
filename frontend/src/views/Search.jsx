@@ -244,16 +244,14 @@ const TextEntry = () => {
         Filter:
         <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
         <input
-          id="filterId"
           type="text"
           className="form-control filterType"
           value={searchFilter}
           placeholder="Search term"
           onChange={e => setSearchFilter(e.target.value)}
-          style={{ display: 'inline', margin: '0 1em' }}
         />
-        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-          <div style={{ padding: '0 0.5em' }}>
+        <div className="search-date-container">
+          <div className="search-date-field">
             Start Date:
             {' '}
             {viewState.showStartDate ? (
@@ -272,7 +270,7 @@ const TextEntry = () => {
               </>
             )}
           </div>
-          <div style={{ padding: '0 0.5em' }}>
+          <div className="search-date-field">
             End Date:
             {' '}
             {viewState.showEndDate ? (
@@ -336,7 +334,7 @@ const TextEntry = () => {
             // }}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        <div className="search-param-description">
           { searchParams !== null
             ? (
               <>

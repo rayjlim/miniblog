@@ -445,7 +445,7 @@ const OneDay = () => {
         <section>
           <div>{inspiration}</div>
           {inspiration !== '' && (
-            <button onClick={() => copyToClipboard(inspiration)} type="button" style={{ margin: '0 1em', lineHeight: '1em' }}>
+            <button onClick={() => copyToClipboard(inspiration)} type="button" className="copy-btn">
               /clip
             </button>
           )}
