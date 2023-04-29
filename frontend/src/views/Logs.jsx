@@ -12,7 +12,6 @@ const Logs = () => {
   const [logFileName, setLogFileName] = useState('');
   const [logFile, setLogFile] = useState('');
 
-  // TODO: convert to customHook
   const getLog = async (log = '') => {
     const token = window.localStorage.getItem(constants.STORAGE_KEY);
     const response = await fetch(`${constants.REST_ENDPOINT}/logs/${log}`, {
@@ -35,7 +34,6 @@ const Logs = () => {
     toast.error(`loading error : ${response.status}`);
   };
 
-  // TODO: convert to customHook
   async function handleDelete(log) {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -61,8 +59,7 @@ const Logs = () => {
       );
 
       console.log(response);
-      navigate('/logs'); // FIX: it's not sending because already on this page
-      // try to change a state var
+      navigate('/logs');
     } catch (error) {
       console.log(error);
       alert(error);

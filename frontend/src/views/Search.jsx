@@ -195,7 +195,7 @@ const TextEntry = () => {
     if (type === 'start') {
       const showStartDate = date !== null;
       setViewState({ ...viewState, showStartDate });
-      startDate.current = date === null ? new Date('2000-01-01') : date; // TODO: fix search override 3 month default in the backend
+      startDate.current = date === null ? new Date('2000-01-01') : date;
     } else {
       const showEndDate = date !== null;
       setViewState({ ...viewState, showEndDate });

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -31,7 +31,6 @@ const EditForm = ({ entry, onSuccess }) => {
   * request to the server with the updated
   * entry
   */
-  // TODO: convert to customHook
   async function handleSave() {
     console.log('handleSave entry :', content, date);
     try {
@@ -64,7 +63,6 @@ const EditForm = ({ entry, onSuccess }) => {
     }
   }
 
-  // TODO: convert to customHook
   async function handleDelete() {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -107,7 +105,6 @@ const EditForm = ({ entry, onSuccess }) => {
 
   function checkKeyPressed(e) {
     console.log(`EditForm: handle key presss ${e.key}`);
-    // console.log('131:' + markdown + ', hasChanges ' + hasChanges);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value is taken from the init value
@@ -116,7 +113,7 @@ const EditForm = ({ entry, onSuccess }) => {
       document.getElementById('cancelBtn').click();
     }
   }
-  /* A hook that is called when the component is mounted. */
+
   useEffect(() => {
     console.log('EditForm: useEffect');
 
