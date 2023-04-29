@@ -1,4 +1,3 @@
-/* eslint-disable no-console, no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,7 +17,7 @@ const Media = () => {
     imgUrl: '',
   });
 
-  const [mediaBaseDir, setMediaBaseDir] = useState('');
+  const mediaBaseDir = '';
   const [showMedia, setShowMedia] = useState(true);
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const Media = () => {
     });
     setShowMedia(false);
   }
-  // TODO: convert to customHook
+
   async function xhrCall(url) {
     console.log(`xhrCall ${url}`);
     const token = window.localStorage.getItem(constants.STORAGE_KEY);
@@ -73,11 +72,6 @@ const Media = () => {
     });
   }
 
-  // ?fileName=0FE2E672-995F-481C-8E9F-ABA02BED3DAB.jpeg&filePath=2019-04/
-  // http://localhost/projects/miniblog3/uploads/2019-10/B5BB1508-0AC2-4E85-A63B-22F843EDA3E9.jpeg
-  // let fileName = `0FE2E672-995F-481C-8E9F-ABA02BED3DAB.jpeg`;
-  // let filePath = `2019-04/`;
-  // TODO: convert to customHook
   const resize = async () => {
     console.log(`resize ${post.filePath}:${post.fileName}`);
     const url = `${constants.REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`;
@@ -86,26 +80,12 @@ const Media = () => {
 
   const rotate = async (degrees = 90) => {
     console.log(`ro:${degrees} ${post.filePath}:${post.fileName}`);
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
     let url = `${constants.REST_ENDPOINT}/uploadRotate/?fileName=${post.fileName}&filePath=${post.filePath}`;
     if (degrees !== 90) {
       url += '&left=true';
     }
     await xhrCall(url);
   };
-
-  // rename(newName) {
-  //     console.log('rename');
-  //     console.log(newName);
-
-  //     let oldName = this.props.fileName;
-  //     console.log(oldName);
-  //     let splitVal = oldName.split('.');
-
-  //     let changedName = `${splitVal[0]}.jpg`;
-  //     console.log(newName);
-  //     EntryApi.renameImg(this.props.fileName, this.props.filePath, changedName);
-  // }
 
   function copyToClipboard(content) {
     console.log(`clipboard: ${content}`);
@@ -159,7 +139,7 @@ const Media = () => {
           />
         </>
       )}
-      <button onClick={e => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
+      <button onClick={() => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
       {showMedia && (
         // eslint-disable-next-line react/jsx-no-bind
         <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
