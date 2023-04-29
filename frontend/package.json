@@ -1,6 +1,6 @@
 {
   "name": "miniblog",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "private": true,
   "dependencies": {
     "@react-oauth/google": "^0.8.0",

@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.16.0](https://github.com/rayjlim/miniblog/compare/v2.15.0...v2.16.0) (2023-04-29)
+
+
+### Features
+
+* [#214](https://github.com/rayjlim/miniblog/issues/214) save google profile name ([f859d3a](https://github.com/rayjlim/miniblog/commit/f859d3a0c669db92087353a02fcec1afaba30c13))
+* script to validate setup ([d0fb3e4](https://github.com/rayjlim/miniblog/commit/d0fb3e4f05c783a006e295edd262cfeac920d475))
+
+
+### Bug Fixes
+
+* [#225](https://github.com/rayjlim/miniblog/issues/225) clear out old comments ([a7bf9f0](https://github.com/rayjlim/miniblog/commit/a7bf9f0aa5b45b014333cc238e49c7cb37c5f45e))
+* [#225](https://github.com/rayjlim/miniblog/issues/225) remove todos from backend; reorg some constants ([8e05cc1](https://github.com/rayjlim/miniblog/commit/8e05cc115662f4d2a3a6afb506182fb2011c9074))
+* [#225](https://github.com/rayjlim/miniblog/issues/225) reorg check login ([80dc8a9](https://github.com/rayjlim/miniblog/commit/80dc8a95534ef36534cbcf6b3541c6b7015fd5ab))
+* add check for any errors occurance ([9756caf](https://github.com/rayjlim/miniblog/commit/9756caf02cd692525ba8324833d2518898d0f70e))
+* add check for any errors occurance ([538a0bb](https://github.com/rayjlim/miniblog/commit/538a0bbd5cc1d5d5ef68a69b1639ab280fcbf1f4))
+* deprecated unused ([6a756eb](https://github.com/rayjlim/miniblog/commit/6a756eb872b00b8c21d45669925fb6a5dfa64678))
+* refactor constants usage and API named defs ([34fe2b9](https://github.com/rayjlim/miniblog/commit/34fe2b998cdfb4c7d7fe478426f5eb1dbf2135c4))
+* refactor mediabasedir usage, remove old comments ([c050efd](https://github.com/rayjlim/miniblog/commit/c050efd96740fad9ed3d449fd1f14f7d72e060ae))
+* refactor out inline styles ([41c0d11](https://github.com/rayjlim/miniblog/commit/41c0d115252d63fa96b53d59b8b353ee5b1d5d11))
+* remove inline styles ([6785fa3](https://github.com/rayjlim/miniblog/commit/6785fa3759de6cc94d623829d86f19a3e54a8eaa))
+* update .env example ([45abdf4](https://github.com/rayjlim/miniblog/commit/45abdf45f64bc3729211a49d8d94a39f75fe2ac1))
+
 ## [2.15.0](https://github.com/rayjlim/miniblog/compare/v2.14.0...v2.15.0) (2023-04-26)
 
 
