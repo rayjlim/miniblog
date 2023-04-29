@@ -14,9 +14,8 @@ import './App.css';
 const App = () => {
   useEffect(() => {
     (async () => {
-      // check for token
       const token = window.localStorage.getItem(constants.STORAGE_KEY);
-      console.log('check token', token, token !== null);
+      console.log('check for token: ', token, token !== null);
       if (token !== null && token !== '') {
         console.log('logged in:', token);
       } else {
