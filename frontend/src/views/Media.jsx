@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import format from 'date-fns/format';
-import constants from '../constants';
+import {
+  FULL_DATE_FORMAT,
+  REST_ENDPOINT,
+  STORAGE_KEY,
+  UPLOAD_ROOT,
+} from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
 import pkg from '../../package.json';
@@ -12,7 +17,7 @@ import './Media.css';
 const Media = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState({
-    date: format(new Date(), constants.FULL_DATE_FORMAT),
+    date: format(new Date(), FULL_DATE_FORMAT),
     fileName: '',
     filePath: '',
     prepend: '',
@@ -36,26 +41,27 @@ const Media = () => {
       ...post,
       fileName,
       filePath,
-      prepend: `![](../uploads/${filePath}${fileName})`,
-      imgUrl: `${constants.UPLOAD_ROOT}/${filePath}${fileName}?r=${random}`,
+      prepend: `![](../uploads/${filePath}/${fileName})`,
+      imgUrl: `${UPLOAD_ROOT}/${filePath}/${fileName}?r=${random}`,
     });
   }, []);
 
   function mediaSelect(filePath, fileName) {
+    console.log(filePath, fileName);
     const random = Math.random();
     setPost({
       ...post,
       fileName,
       filePath,
-      prepend: `![](../uploads/${filePath}${fileName})`,
-      imgUrl: `${constants.UPLOAD_ROOT}/${filePath}${fileName}?r=${random}`,
+      prepend: `![](../uploads/${filePath}/${fileName})`,
+      imgUrl: `${UPLOAD_ROOT}/${filePath}/${fileName}?r=${random}`,
     });
     setShowMedia(false);
   }
 
   async function xhrCall(url) {
     console.log(`xhrCall ${url}`);
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY);
     const response = await fetch(
       url,
       {
@@ -70,19 +76,19 @@ const Media = () => {
     const random = Math.random();
     setPost({
       ...post,
-      imgUrl: `${constants.UPLOAD_ROOT}/${post.filePath}${post.fileName}?r=${random}`,
+      imgUrl: `${UPLOAD_ROOT}/${post.filePath}/${post.fileName}?r=${random}`,
     });
   }
 
   const resize = async () => {
     console.log(`resize ${post.filePath}:${post.fileName}`);
-    const url = `${constants.REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`;
+    const url = `${REST_ENDPOINT}/uploadResize/?fileName=${post.fileName}&filePath=${post.filePath}`;
     await xhrCall(url);
   };
 
   const rotate = async (degrees = 90) => {
     console.log(`ro:${degrees} ${post.filePath}:${post.fileName}`);
-    let url = `${constants.REST_ENDPOINT}/uploadRotate/?fileName=${post.fileName}&filePath=${post.filePath}`;
+    let url = `${REST_ENDPOINT}/uploadRotate/?fileName=${post.fileName}&filePath=${post.filePath}`;
     if (degrees !== 90) {
       url += '&left=true';
     }

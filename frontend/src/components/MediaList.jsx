@@ -91,10 +91,10 @@ const MediaList = ({ onMediaSelect }) => {
         <ul className="media-preview">
           { media.map(key => (
             <li key={key}>
-              <button onClick={() => onMediaSelect(`${currentDir}/`, key)} type="button">
+              <button onClick={() => onMediaSelect(`${currentDir}`, key)} type="button">
                 Load
               </button>
-              <button onClick={() => deleteMedia(`${currentDir}/`, key)} type="button" className="delete">
+              <button onClick={() => deleteMedia(`${currentDir}`, key)} type="button" className="delete">
                 Delete
               </button>
               <img

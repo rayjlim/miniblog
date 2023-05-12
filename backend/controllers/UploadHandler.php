@@ -28,11 +28,11 @@ class UploadHandler
 
             DevHelp::debugMsg('upload' . __FILE__);
 
-            // $filePath = $_POST["filePath"] . '/' ?? date(YEAR_MONTH_FORMAT); // not allowing user to specify path
+            // $filePath = $_POST["filePath"] . DIR_SEP ?? date(YEAR_MONTH_FORMAT); // not allowing user to specify path
             $filePath = date(YEAR_MONTH_FORMAT);
-            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
+            $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
             $urlFileName = strtolower(preg_replace('/\s+/', '_', trim(basename($_FILES["fileToUpload"]["name"]))));
-            $targetFileFullPath = $_ENV['UPLOAD_DIR'] . $filePath . $urlFileName;
+            $targetFileFullPath = $targetDir . DIR_SEP . $urlFileName;
 
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
             $validFileExt = array("jpg", "png", "jpeg", "gif");
@@ -92,8 +92,8 @@ class UploadHandler
             $fileName = $_GET["fileName"];
             $filePath = $_GET["filePath"];
 
-            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
-            $fileFullPath = $targetDir . $fileName;
+            $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
+            $fileFullPath = $targetDir . DIR_SEP . $fileName;
 
             $new_width = $_ENV['IMG_RESIZE_WIDTH'];
 
@@ -156,8 +156,8 @@ class UploadHandler
             $filePath = $_GET["filePath"];
 
             // File and rotation
-            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
-            $targetFile = $targetDir . $fileName;
+            $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
+            $targetFile = $targetDir . DIR_SEP . $fileName;
             $info = getimagesize($targetFile);
             $mime = $info['mime'];
             switch ($mime) {
@@ -217,8 +217,8 @@ class UploadHandler
             $filePath = $entry->filePath;
             $newFileName = $entry->newFileName;
 
-            $targetDir = $_ENV['UPLOAD_DIR'] . $filePath;
-            rename($targetDir . $fileName, $targetDir . $newFileName);
+            $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
+            rename($targetDir . DIR_SEP . $fileName, $targetDir . DIR_SEP . $newFileName);
             $data = [];
             $data['fileName'] = $newFileName;
             $data['filePath'] = $filePath;
@@ -234,7 +234,7 @@ class UploadHandler
 
             DevHelp::debugMsg('start listMedia');
             $currentDir = isset($args['currentDir']) ? $args['currentDir'] : '';
-            $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR']));
+            $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR']. DIR_SEP));
 
             DevHelp::debugMsg('currentDir ' . $currentDir);
             DevHelp::debugMsg('end($filelist)' . is_dir($_ENV['UPLOAD_DIR'] . DIR_SEP . end($filelist)));
@@ -245,14 +245,12 @@ class UploadHandler
                 $currentDir = end($filelist);
             }
 
-            $dirContent = '';
-
             DevHelp::debugMsg('$currentDir: ' . $currentDir);
             $dirContent = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir));
             $data = [];
-            $data['uploadDirs'] = $filelist;
             $data['currentDir'] = $currentDir;
-            $data['dirContent'] = $dirContent;
+            $data['uploadDirs'] = $filelist;
+            $data['dirContent'] = $currentDir !== '' ? $dirContent : []; // do not list root dir
 
             echo json_encode($data);
             return $response;
@@ -268,7 +266,7 @@ class UploadHandler
             DevHelp::debugMsg('$fileName' . $fileName);
             DevHelp::debugMsg('$filePath' . $filePath);
 
-            $this->resource->removefile($_ENV['UPLOAD_DIR'] . $filePath . DIR_SEP . $fileName);
+            $this->resource->removefile($_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath . DIR_SEP . $fileName);
             $data = [];
             $data['pageMessage'] = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
             Logger::log('File Removed: ' . $filePath . DIR_SEP . $fileName);
