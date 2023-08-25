@@ -1,10 +1,7 @@
 <?php
 function getValue($array, $key)
 {
-    if (!isset($array[$key])) {
-        return false;
-    }
-    return $array[$key];
+    return $array[$key] ?? false;
 }
 function getExportValues($item)
 {

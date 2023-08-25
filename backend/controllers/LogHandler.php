@@ -27,7 +27,7 @@ class LogHandler
     public function getUrlHandler()
     {
         return function (Request $request, Response $response, $args) {
-            $logFileName = isset($args['logFileName']) ? $args['logFileName'] : '';
+            $logFileName = $args['logFileName'] ?? '';
             \Lpt\DevHelp::debugMsg('start logs list');
             $filelist = $this->readFilelist(LOGS_DIR);
             if ($logFileName == '') {
@@ -57,7 +57,7 @@ class LogHandler
     public function deleteHandler()
     {
         return function (Request $request, Response $response, $args) {
-            $logFileName = isset($args['logFileName']) ? $args['logFileName'] : '';
+            $logFileName = $args['logFileName'] ?? '';
             if ($logFileName !== '') {
                 $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
                 $pageMessage = 'File Removed: ' . $logFileName;
