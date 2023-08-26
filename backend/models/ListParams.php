@@ -18,7 +18,7 @@ class ListParams
 {
     public $userId = null;
     public $searchParam = '';
-    public $tags = array();
+    public $tags = [];
     public $startDate = '';
     public $endDate = '';
     public $filterType = FILTER_ALL;

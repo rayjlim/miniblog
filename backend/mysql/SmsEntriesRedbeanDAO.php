@@ -83,13 +83,13 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      */
     public function getSameDayEntries($date)
     {
-        $whereClause = ' where MONTH(date) = ' . $date->format('m')
-            . ' and Day(date) = ' . $date->format('d')
-            . ' and content not like "#s%"'
-            . ' and content not like "#x%"'
-            . ' and content not like "@w%"'
-            . ' and content not like "#a%"';
-        $posts = R::findAll(POSTS, $whereClause . ' order by date desc ', []);
+        $whereClause = ' WHERE MONTH(date) = ' . $date->format('m')
+            . ' AND DAY(date) = ' . $date->format('d')
+            . ' AND content NOT LIKE "#s%"'
+            . ' AND content NOT LIKE "#x%"'
+            . ' AND content NOT LIKE "@w%"'
+            . ' AND content NOT LIKE "#a%"';
+        $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date DESC', []);
         // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
@@ -107,8 +107,8 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $posts = R::getAll('SELECT DISTINCT YEAR(date) AS "Year", '
             . 'MONTH(date) AS "Month" '
             . 'FROM sms_entries '
-            . 'where user_id = 1 '
-            . 'order by YEAR(date) desc, month(date) desc' );
+            . 'WHERE user_id = 1 '
+            . 'ORDER BY YEAR(date) DESC, MONTH(date) DESC');
         return array_map("dao\groupYearMonth", $posts);
     }
 
@@ -117,43 +117,40 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     {
         $sqlParam = '';
         if ($listParams->searchParam != '') {
-            $sqlParam.= ' and content LIKE \'%' . $listParams->searchParam . '%\'';
+            $sqlParam.= ' AND content LIKE \'%' . $listParams->searchParam . '%\'';
         }
 
         if ($listParams->excludeTags != '') {
-            $sqlParam.= ' and content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
+            $sqlParam.= ' AND content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
         }
 
         // if (count($listParams->tags) != 0) {
-        //     $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
+        //     $sqlParam.= ' AND content LIKE \'%#' . $this->tags[0] . '%\'';
         // }
 
         if ($listParams->startDate != '') {
-            $sqlParam.= ' and date >= \'' . $listParams->startDate . '\'';
+            $sqlParam.= ' AND date >= \'' . $listParams->startDate . '\'';
         }
         if ($listParams->endDate != '') {
-            $sqlParam.= ' and date <= \'' . $listParams->endDate . '\'';
+            $sqlParam.= ' AND date <= \'' . $listParams->endDate . '\'';
         }
 
         if ($listParams->filterType == FILTER_UNTAGGED) {
-            $sqlParam.= ' and content not LIKE \'%#%\'';
-            $sqlParam.= ' and content not LIKE \'@%\'';
+            $sqlParam.= ' AND content NOT LIKE \'%#%\'';
+            $sqlParam.= ' AND content NOT LIKE \'@%\'';
         }
 
         if ($listParams->filterType == FILTER_TAGGED) {
-            $sqlParam.= ' and (content LIKE \'%#%\' or content LIKE \'@%\')'
-                . ' and content NOT LIKE \'%##%\'';
+            $sqlParam.= ' AND (content LIKE \'%#%\' or content LIKE \'@%\')'
+                . ' AND content NOT LIKE \'%##%\'';
         }
         // echo $sqlParam;
         // exit;
         return $sqlParam;
     }
-
 }
 
 function pickDate($n)
 {
     return(substr($n['date'], 0, 7));
 }
-
-

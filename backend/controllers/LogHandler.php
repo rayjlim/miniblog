@@ -24,7 +24,7 @@ class LogHandler
         $this->resource = $resource;
     }
 
-    public function getUrlHandler()
+    public function getUrlHandler(): object
     {
         return function (Request $request, Response $response, $args) {
             $logFileName = $args['logFileName'] ?? '';
@@ -42,19 +42,18 @@ class LogHandler
             }
             $this->resource->echoOut(
                 json_encode(
-                    array(
+                    [
                     'logs'  => array_values($filelist),
                     'logFileName' => $logFileName,
                     'logFile' => $logFile
-                    )
+                    ]
                 )
             );
             return $response;
         };
     }
 
-
-    public function deleteHandler()
+    public function deleteHandler(): object
     {
         return function (Request $request, Response $response, $args) {
             $logFileName = $args['logFileName'] ?? '';
@@ -68,7 +67,7 @@ class LogHandler
         };
     }
 
-    public function readFilelist($targetDir)
+    public function readFilelist(string $targetDir): array
     {
         $filelist = $this->resource->readdir($targetDir);
         for ($i = count($filelist) - 1; $i >= 0; $i--) {

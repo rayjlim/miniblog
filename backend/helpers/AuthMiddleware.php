@@ -54,7 +54,8 @@ class AuthMiddleware
         $this->generateToken();
     }
 
-    private function generateToken(){
+    private function generateToken()
+    {
         $tokenObj = new stdClass();
         $tokenObj->userId = $_ENV['ACCESS_ID'];
         $tokenObj->name = $_ENV['ACCESS_NAME'];
@@ -66,7 +67,8 @@ class AuthMiddleware
         exit;
     }
 
-    private function loginError($message){
+    private function loginError($message)
+    {
         $ipaddress = $this->getRealIpAddr();
         $response = new stdClass();
         $response->status = "fail";

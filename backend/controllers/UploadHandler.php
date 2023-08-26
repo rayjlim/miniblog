@@ -35,7 +35,7 @@ class UploadHandler
             $targetFileFullPath = $targetDir . DIR_SEP . $urlFileName;
 
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
-            $validFileExt = array("jpg", "png", "jpeg", "gif");
+            $validFileExt = ["jpg", "png", "jpeg", "gif"];
             $createdDir = false;
 
             try {
