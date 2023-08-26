@@ -3,6 +3,8 @@ namespace dao;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
+use \models\SmsEntrie;
+use \models\ListParams;
 
 // R::debug(TRUE);
 function groupYearMonth(array $row): string
@@ -11,32 +13,20 @@ function groupYearMonth(array $row): string
 }
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
-    public function load($id)
+    public function load(int $id): array
     {
         $post = R::load(POSTS, $id);
         return $post->export();
     }
 
-    /**
-     * Delete Journal record from table
-     *
-     * @param  id primary key
-     * @LPT_V2
-     */
-    public function delete($id)
+    public function delete(int $id): int
     {
         $postBean = R::load(POSTS, $id);
         R::trash($postBean);
         return 1;
     }
 
-    /**
-     * Insert Journal record
-     *
-     * @param  SmsEntriesMySql smsEntrie
-     * @LPT_V2
-     */
-    public function insert($smsEntrie)
+    public function insert(SmsEntrie $smsEntrie): int
     {
         $postBean = R::xdispense(POSTS);
         $postBean->content = $smsEntrie->content;
@@ -46,13 +36,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $id;
     }
 
-    /**
-     * Update Journal Entry
-     *
-     * @param  SmsEntriesMySql smsEntrie
-     * @LPT_V2
-     */
-    public function update($smsEntrie)
+    public function update(SmsEntrie $smsEntrie): void
     {
         $postBean = R::load(POSTS, $smsEntrie['id']);
         $postBean->content = $smsEntrie['content'];
@@ -66,7 +50,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * @param  listParams search options
      * @LPT_V2
      */
-    public function list($listParams)
+    public function list(ListParams $listParams): array
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
         $posts = R::findAll(POSTS, '1 = 1 ' . $sqlParam . ' order by date desc limit ?', [$listParams->resultsLimit]);
@@ -81,7 +65,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * @param  date Target date
      * @LPT_V2
      */
-    public function getSameDayEntries($date)
+    public function getSameDayEntries(object $date): array
     {
         $whereClause = ' WHERE MONTH(date) = ' . $date->format('m')
             . ' AND DAY(date) = ' . $date->format('d')
@@ -102,7 +86,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * @param  none
      * @LPT_V2
      */
-    public function getYearMonths()
+    public function getYearMonths(): array
     {
         $posts = R::getAll('SELECT DISTINCT YEAR(date) AS "Year", '
             . 'MONTH(date) AS "Month" '

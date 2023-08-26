@@ -85,9 +85,9 @@ class EntryHandler
             DevHelp::debugMsg(__file__);
             $userId = $_ENV['ACCESS_ID'];
             $currentDate = $this->resource->getDateTime();
-            $queries = array();
+            $queries = [];
             parse_str($_SERVER['QUERY_STRING'], $queries);
-            $targetDay = getValue($queries, 'day') != ''
+            $targetDay = getValue($queries, 'day') != false
                 ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($queries, 'day'))
                 : $currentDate;
 

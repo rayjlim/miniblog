@@ -16,37 +16,37 @@ defined('ABSPATH') or exit('No direct script access allowed');
 
 class ListParams
 {
-    public $userId = null;
-    public $searchParam = '';
-    public $tags = [];
-    public $startDate = '';
-    public $endDate = '';
-    public $filterType = FILTER_ALL;
-    public $resultsLimit = RESULT_LIMIT_DEFAULT;
-    public $monthsBackToShow = 3;
-    public $excludeTags = '';
+    public int $userId = -1;
+    public string $searchParam = '';
+    public array $tags = [];
+    public string $startDate = '';
+    public string $endDate = '';
+    public int $filterType = FILTER_ALL;
+    public int $resultsLimit = RESULT_LIMIT_DEFAULT;
+    public int $monthsBackToShow = 3;
+    public string $excludeTags = '';
 
     public function loadParams($request)
     {
         $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType'];
         foreach ($lookingFor as $target) {
-            if (getValue($request, $target) != '') {
+            if (getValue($request, $target) != false) {
                 $this->$target = trim($request[$target]);
             }
         }
 
-        if (getValue($request, 'date') != '') {
+        if (getValue($request, 'date') != false) {
             $this->startDate = $request['date'];
             $this->endDate = $request['date'];
         }
 
-        if (getValue($request, 'month') != '') {
+        if (getValue($request, 'month') != false) {
             $this->startDate = $request['month'] . '-1';
             $this->endDate = $request['month'] . '-31';
         }
 
         if ($this->startDate === '' && $this->searchParam === '') {
-            $this->monthsBackToShow = getValue($request, 'monthsBackToShow') ? $request['monthsBackToShow'] : DEFAULT_MONTHS_TO_SHOW;
+            $this->monthsBackToShow = $request['monthsBackToShow'] ?? DEFAULT_MONTHS_TO_SHOW;
             // echo "this->monthsBackToShow: " . $this->monthsBackToShow . "--";
             $strDescription = '-' . $this->monthsBackToShow . ' months';
             $this->startDate = date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
