@@ -35,7 +35,7 @@ class UploadHandler
             $targetFileFullPath = $targetDir . DIR_SEP . $urlFileName;
 
             $imageFileType = strtolower(pathinfo($targetFileFullPath, PATHINFO_EXTENSION));
-            $validFileExt = array("jpg", "png", "jpeg", "gif");
+            $validFileExt = ["jpg", "png", "jpeg", "gif"];
             $createdDir = false;
 
             try {
@@ -233,7 +233,7 @@ class UploadHandler
         return function (Request $request, Response $response, $args) {
 
             DevHelp::debugMsg('start listMedia');
-            $currentDir = isset($args['currentDir']) ? $args['currentDir'] : '';
+            $currentDir = $args['currentDir'] ?? '';
             $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR']. DIR_SEP));
 
             DevHelp::debugMsg('currentDir ' . $currentDir);

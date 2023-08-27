@@ -40,9 +40,9 @@ class CUDHandler
      *     )
      * )
      */
-    public function addEntry()
+    public function addEntry(): object
     {
-        return function (Request $request, Response $response, $args) {
+        return function (Request $request, Response $response): Response {
             DevHelp::debugMsg('start add' . __FILE__);
 
             $entry = json_decode($request->getBody());
@@ -64,6 +64,7 @@ class CUDHandler
             return $response;
         };
     }
+
     /**
      * @OA\Put(
      *      description="Update Entry",
@@ -92,9 +93,9 @@ class CUDHandler
      *     )
      * )
      */
-    public function updateEntry()
+    public function updateEntry(): object
     {
-        return function (Request $request, Response $response, $args) {
+        return function (Request $request, Response $response, $args): Response {
             DevHelp::debugMsg('start update ' . __FILE__);
 
             $entry = json_decode($request->getBody());
@@ -104,7 +105,7 @@ class CUDHandler
 
 
             $smsEntry = $this->dao->load($args['id']);
-            if($smsEntry["id"] == 0){
+            if ($smsEntry["id"] == 0) {
                 header('HTTP/1.0 404 File Not Found');
                 $metaData = new stdClass();
                 $metaData->message = "Entry not valid";
@@ -144,7 +145,7 @@ class CUDHandler
      *     )
      * )
      */
-    public function deleteEntry()
+    public function deleteEntry(): object
     {
         return function (Request $request, Response $response, $args) {
             DevHelp::debugMsg('start delete' . __FILE__);
