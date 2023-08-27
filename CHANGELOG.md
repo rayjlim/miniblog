@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.17.0](https://github.com/rayjlim/miniblog/compare/v2.16.0...v2.17.0) (2023-08-27)
+
+
+### Features
+
+* FE changes for settings moved to BE ([a9e1101](https://github.com/rayjlim/miniblog/commit/a9e1101f4ae7506879064ae67bdcb9861228eae0))
+* FE env vars backend setup ([7c91dbc](https://github.com/rayjlim/miniblog/commit/7c91dbc2b59a2e6e30b5296c5c1c2850d908a56f))
+
+
+### Bug Fixes
+
+* secrets updates ([790502f](https://github.com/rayjlim/miniblog/commit/790502f16738ce11e0548902ed2bc1117c8487b2))
+* upgrade @react-oauth/google from 0.8.0 to 0.11.0 ([22589e6](https://github.com/rayjlim/miniblog/commit/22589e6c3c3645e9e1ebf3d0627ac283700102f3))
+* upgrade date-fns from 2.29.3 to 2.30.0 ([8a926c4](https://github.com/rayjlim/miniblog/commit/8a926c4e11ee8cd10a91d27cafa3fd54096a8c86))
+* upgrade react-router-dom from 6.8.2 to 6.12.0 ([880c4ed](https://github.com/rayjlim/miniblog/commit/880c4ed7de6c4b63c8c04b62584422d7778f1a84))
+* upgrade react-select from 5.7.2 to 5.7.3 ([0f9c086](https://github.com/rayjlim/miniblog/commit/0f9c0867a92ebf4de96643e6eee3c4f7b982dd9c))
+* upgrade react-toastify from 9.1.2 to 9.1.3 ([4774be7](https://github.com/rayjlim/miniblog/commit/4774be7453dae7894e0918921f9cef074ba777d2))
+* upload folder references ([33b8d0b](https://github.com/rayjlim/miniblog/commit/33b8d0b8f590b8f5e33b224f4b356824da618985))
+
 ## [2.16.0](https://github.com/rayjlim/miniblog/compare/v2.15.0...v2.16.0) (2023-04-29)
 
 
