@@ -29,14 +29,14 @@ class SmsEntrie
       * @var           integer
       * @OA\Property()
       */
-    public $id;
+    public int $id;
          /**
           * The entry content
           *
           * @var           string
           * @OA\Property()
           */
-    public $content;
+    public string $content;
          /**
           * The entry date
           *
@@ -50,7 +50,7 @@ class SmsEntrie
           * @var           integer
           * @OA\Property()
           */
-    public $userId;
+    public int $userId;
 
     public function __construct($date = '', $content = '')
     {
@@ -60,7 +60,7 @@ class SmsEntrie
 
     public static function sanitizeContent($content)
     {
-        $order = array("\r\n", "\n", "\r");
+        $order = ["\r\n", "\n", "\r"];
 
         // Processes \r\n's first so they aren't converted twice.
         $replace = '<br />';

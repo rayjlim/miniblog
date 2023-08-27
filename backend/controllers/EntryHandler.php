@@ -39,9 +39,9 @@ class EntryHandler
      *     )
      * )
      */
-    public function listItemsApi()
+    public function listItemsApi(): object
     {
-        return function (Request $request, Response $response, $args) {
+        return function (Request $request, Response $response) {
             $queries = array();
             parse_str($_SERVER['QUERY_STRING'], $queries);
 
@@ -79,15 +79,15 @@ class EntryHandler
      *     )
      * )
      */
-    public function listItemsSameDay()
+    public function listItemsSameDay(): object
     {
-        return function (Request $request, Response $response, $args) {
+        return function (Request $request, Response $response): Response {
             DevHelp::debugMsg(__file__);
             $userId = $_ENV['ACCESS_ID'];
             $currentDate = $this->resource->getDateTime();
-            $queries = array();
+            $queries = [];
             parse_str($_SERVER['QUERY_STRING'], $queries);
-            $targetDay = getValue($queries, 'day') != ''
+            $targetDay = getValue($queries, 'day') != false
                 ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($queries, 'day'))
                 : $currentDate;
 
@@ -98,9 +98,9 @@ class EntryHandler
         };
     }
 
-    public function detailItemApi()
+    public function detailItemApi(): object
     {
-        return function ($id) {
+        return function (int $id): void {
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->load($id);
@@ -134,20 +134,19 @@ class EntryHandler
      * )
      */
 
-     public function yearMonthsApi()
-     {
-         return function (Request $request, Response $response, $args) {
-             $userId = $_ENV['ACCESS_ID'];
-             DevHelp::debugMsg('start ' . __FILE__);
+    public function yearMonthsApi(): object
+    {
+        return function (Request $request, Response $response): void {
+            $userId = $_ENV['ACCESS_ID'];
+            DevHelp::debugMsg('start ' . __FILE__);
 
-             $entry = $this->dao->getYearMonths($userId);
-             header('Content-Type: application/json');
-             $this->resource->echoOut(json_encode($entry));
-             die();
-             // return $response;
-         };
-     }
-
+            $entry = $this->dao->getYearMonths($userId);
+            header('Content-Type: application/json');
+            $this->resource->echoOut(json_encode($entry));
+            die();
+            // return $response;
+        };
+    }
 }
 /**
  * @OA\Schema(

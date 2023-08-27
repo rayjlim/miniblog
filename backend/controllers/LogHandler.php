@@ -24,10 +24,10 @@ class LogHandler
         $this->resource = $resource;
     }
 
-    public function getUrlHandler()
+    public function getUrlHandler(): object
     {
         return function (Request $request, Response $response, $args) {
-            $logFileName = isset($args['logFileName']) ? $args['logFileName'] : '';
+            $logFileName = $args['logFileName'] ?? '';
             \Lpt\DevHelp::debugMsg('start logs list');
             $filelist = $this->readFilelist(LOGS_DIR);
             if ($logFileName == '') {
@@ -42,22 +42,21 @@ class LogHandler
             }
             $this->resource->echoOut(
                 json_encode(
-                    array(
+                    [
                     'logs'  => array_values($filelist),
                     'logFileName' => $logFileName,
                     'logFile' => $logFile
-                    )
+                    ]
                 )
             );
             return $response;
         };
     }
 
-
-    public function deleteHandler()
+    public function deleteHandler(): object
     {
         return function (Request $request, Response $response, $args) {
-            $logFileName = isset($args['logFileName']) ? $args['logFileName'] : '';
+            $logFileName = $args['logFileName'] ?? '';
             if ($logFileName !== '') {
                 $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
                 $pageMessage = 'File Removed: ' . $logFileName;
@@ -68,7 +67,7 @@ class LogHandler
         };
     }
 
-    public function readFilelist($targetDir)
+    public function readFilelist(string $targetDir): array
     {
         $filelist = $this->resource->readdir($targetDir);
         for ($i = count($filelist) - 1; $i >= 0; $i--) {

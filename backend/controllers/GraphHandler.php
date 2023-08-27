@@ -74,14 +74,14 @@ class GraphHandler extends AbstractController
         };
     }
 
-    public function groupByYearMonth($carry, $item)
+    public function groupByYearMonth(array $carry, array $item): array
     {
         $year = substr($item['date'], 0, 4);
         $month = substr($item['date'], 5, 2);
-        if (!isset($carry[$year . '-' . $month])) {
-            $carry[$year . '-' . $month] = [];
-        }
-        array_push($carry[$year . '-' . $month], $item['weight']);
+        $yearMonth = $year . '-' . $month;
+        $carry[$yearMonth] ??= [];
+
+        array_push($carry[$yearMonth], $item['weight']);
         return $carry;
     }
 
