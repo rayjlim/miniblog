@@ -22,7 +22,7 @@ use Slim\Factory\AppFactory;
 use \dao\DaoFactory;
 use \middleware\AuthMiddleware;
 
-if (!is_file('.env') ) {
+if (!is_file('.env')) {
     echo "Missing Config file";
     exit;
 }

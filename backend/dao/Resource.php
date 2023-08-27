@@ -55,21 +55,21 @@ class Resource implements IResourceDAO
 
     public function readdir($logDirectory)
     {
-        $filelist = array();
+        $filelist = [];
         $handle = opendir($logDirectory);
 
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != ".." && $file != ".svn") {
-                array_push($filelist, $file);
+                $filelist[] = $file;
             }
         }
         closedir($handle);
 
         asort($filelist);
-        $filelist2 = array();
-        foreach ($filelist as $key => $val) {
-            array_push($filelist2, $val);
-        }
+        // $filelist2 = [];
+        // foreach ($filelist as $key => $val) {
+        //     $filelist2[] = $val;
+        // }
         return $filelist;
     }
 
