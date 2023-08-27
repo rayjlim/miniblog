@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import constants from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
+
+import MyContext from './MyContext';
 
 import './MediaList.css';
 
 const MediaList = ({ onMediaSelect }) => {
+  const { UPLOAD_ROOT } = useContext(MyContext);
   const [media, setMedia] = useState([]);
   const [uploadDirs, setUploadDirs] = useState([]);
   const [currentDir, setCurrentDir] = useState('');
 
   function loadDir(dir = '') {
     (async () => {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
-      const response = await fetch(`${constants.REST_ENDPOINT}/media/${dir}`, {
+      const token = window.localStorage.getItem(STORAGE_KEY);
+      const response = await fetch(`${REST_ENDPOINT}/media/${dir}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -40,9 +43,9 @@ const MediaList = ({ onMediaSelect }) => {
       return;
     }
     (async () => {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY);
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
+        `${REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {
           method: 'DELETE',
           headers: {
@@ -98,7 +101,7 @@ const MediaList = ({ onMediaSelect }) => {
                 Delete
               </button>
               <img
-                src={`${constants.UPLOAD_ROOT}/${currentDir}/${key}`}
+                src={`${UPLOAD_ROOT}/${currentDir}/${key}`}
                 alt="main_img"
                 title={key}
               />

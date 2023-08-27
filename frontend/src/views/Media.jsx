@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import format from 'date-fns/format';
+
+import MyContext from '../components/MyContext';
+
 import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
-  UPLOAD_ROOT,
 } from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
@@ -15,6 +17,7 @@ import pkg from '../../package.json';
 import './Media.css';
 
 const Media = () => {
+  const { UPLOAD_ROOT } = useContext(MyContext);
   const navigate = useNavigate();
   const [post, setPost] = useState({
     date: format(new Date(), FULL_DATE_FORMAT),

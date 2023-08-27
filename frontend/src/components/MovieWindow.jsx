@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+
+import MyContext from './MyContext';
 import './MovieWindow.css';
 
-import { MOVIES_POSTERS } from '../constants';
-
 const MovieWindow = ({ movie }) => {
+  const { MOVIES_POSTERS } = useContext(MyContext);
   const { title, imdbImageId, imdbId } = movie;
   const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
   const imdbUrl = `https://www.imdb.com/title/${imdbId}/`;

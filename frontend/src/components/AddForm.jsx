@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import constants from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
 const useFetch = () => {
   const [newId, setId] = useState(null);
@@ -11,9 +11,9 @@ const useFetch = () => {
   useEffect(() => {
     if (formEntry !== null) {
       (async () => {
-        const token = window.localStorage.getItem(constants.STORAGE_KEY);
+        const token = window.localStorage.getItem(STORAGE_KEY);
         try {
-          const response = await fetch(`${constants.REST_ENDPOINT}/api/posts/`, {
+          const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
             method: 'POST',
             body: JSON.stringify(formEntry),
             mode: 'cors',
@@ -42,7 +42,7 @@ const useFetch = () => {
 const AddForm = ({ content, date, onSuccess }) => {
   const [formContent, setFormContent] = useState(content || '');
   const [formDate, setFormDate] = useState(
-    parse(date, constants.FULL_DATE_FORMAT, new Date()),
+    parse(date, FULL_DATE_FORMAT, new Date()),
   );
   const isMounted = useRef(false);
   const [id, setParams] = useFetch();
@@ -93,7 +93,7 @@ const AddForm = ({ content, date, onSuccess }) => {
   function handleAdd() {
     setParams({
       content: formContent.trim(),
-      date: format(formDate, constants.FULL_DATE_FORMAT),
+      date: format(formDate, FULL_DATE_FORMAT),
     });
   }
 

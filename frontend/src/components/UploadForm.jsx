@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
-import constants from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 import pkg from '../../package.json';
 
 const UploadForm = () => {
@@ -23,10 +23,10 @@ const UploadForm = () => {
     );
 
     console.log('send upload');
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY);
 
     try {
-      const response = await fetch(`${constants.REST_ENDPOINT}/uploadImage/`, {
+      const response = await fetch(`${REST_ENDPOINT}/uploadImage/`, {
         method: 'POST',
         body: formData,
         headers: {

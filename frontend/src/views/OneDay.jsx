@@ -1,19 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { format, parse, add } from 'date-fns';
+
+import MyContext from '../components/MyContext';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
 import MovieWindow from '../components/MovieWindow';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import {
   FULL_DATE_FORMAT,
-  INSPIRATION_API,
-  MOVIES_API,
   REST_ENDPOINT,
   STORAGE_KEY,
-  TRACKS_API,
-  QUESTION_API,
 } from '../constants';
 
 import pkg from '../../package.json';
@@ -38,7 +41,7 @@ async function xhrCall(url, apiDescription) {
     throw new Error(apiResponse.status);
   } catch (err) {
     console.error(err);
-    toast(`get ${apiDescription} error : ${err}`);
+    toast(` ${url} get ${apiDescription} error : ${err}`);
   }
   return false;
 }
@@ -51,6 +54,13 @@ async function xhrCall(url, apiDescription) {
  * <Route path="/oneday" component={OneDay} />
  */
 const OneDay = () => {
+  const {
+    INSPIRATION_API,
+    MOVIES_API,
+    QUESTION_API,
+    TRACKS_API,
+  } = useContext(MyContext);
+
   const navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
@@ -73,8 +83,7 @@ const OneDay = () => {
   const usersFullname = window.localStorage.getItem('user-name');
 
   async function getInspiration() {
-    const quoteApi = INSPIRATION_API;
-    const data = await xhrCall(quoteApi, 'inspiration');
+    const data = await xhrCall(INSPIRATION_API, 'inspiration');
     console.log('data.header :>> ', data.header);
     setInspiration(`Inspire: ${data.message} : ${data.author}`);
   }
@@ -166,12 +175,17 @@ const OneDay = () => {
         }
 
         // ---- Call external APIS
-        if (inspiration === null) {
+        if (INSPIRATION_API !== '' && inspiration === null) {
           await getInspiration();
         }
+
         if (state.pageMode === ONEDAY) {
-          await getWeight(loadParams.pageDate);
-          await getMovies(loadParams.pageDate);
+          if (TRACKS_API !== '') {
+            await getWeight(loadParams.pageDate);
+          }
+          if (MOVIES_API !== '') {
+            await getMovies(loadParams.pageDate);
+          }
         }
       } catch (err) {
         console.error(err);
@@ -443,7 +457,7 @@ const OneDay = () => {
             ))}
           </section>
         )}
-      {inspiration && (
+      {inspiration !== '' && (
         <section>
           <div>{inspiration}</div>
           {inspiration !== '' && (

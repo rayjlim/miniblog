@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import constants from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
 import './EditForm.css';
 
 const EditForm = ({ entry, onSuccess }) => {
   const [date, setDate] = useState(
-    parse(entry.date, constants.FULL_DATE_FORMAT, new Date()),
+    parse(entry.date, FULL_DATE_FORMAT, new Date()),
   );
   const escapedContent = entry.content.replace(
     /<br\s*\/>/g,
@@ -36,14 +36,14 @@ const EditForm = ({ entry, onSuccess }) => {
   async function handleSave() {
     console.log('handleSave entry :', content, date);
     try {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY);
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/api/posts/${entry.id}`,
+        `${REST_ENDPOINT}/api/posts/${entry.id}`,
         {
           method: 'PUT',
           body: JSON.stringify({
             content,
-            date: format(date, constants.FULL_DATE_FORMAT),
+            date: format(date, FULL_DATE_FORMAT),
           }),
           mode: 'cors',
           cache: 'no-cache',
@@ -73,9 +73,9 @@ const EditForm = ({ entry, onSuccess }) => {
     const { id } = entry;
     console.log(`handleDelete ${id}`);
     try {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY);
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/api/posts/${id}`,
+        `${REST_ENDPOINT}/api/posts/${id}`,
         {
           method: 'DELETE',
           mode: 'cors',

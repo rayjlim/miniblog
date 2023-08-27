@@ -6,9 +6,15 @@ import Select from 'react-select';
 import {
   format, parse, subMonths, startOfMonth, endOfMonth,
 } from 'date-fns';
+
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
-import constants from '../constants';
+import {
+  DISPLAY_DATE_FORMAT,
+  FULL_DATE_FORMAT,
+  REST_ENDPOINT,
+  STORAGE_KEY,
+} from '../constants';
 import pkg from '../../package.json';
 
 import './Search.css';
@@ -62,20 +68,20 @@ const TextEntry = () => {
     console.log('getEntries#searchText: ', searchText.current.value);
     const searchTextValue = searchText.current.value;
     try {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY);
       let endpoint = `${
-        constants.REST_ENDPOINT
+        REST_ENDPOINT
       }/api/posts/?searchParam=${encodeURIComponent(
         searchTextValue,
       )}&filterType=${searchFilter}`;
       if (startDate.current) {
         endpoint += `&startDate=${format(
           startDate.current,
-          constants.FULL_DATE_FORMAT,
+          FULL_DATE_FORMAT,
         )}`;
       }
       if (endDate.current) {
-        endpoint += `&endDate=${format(endDate.current, constants.FULL_DATE_FORMAT)}`;
+        endpoint += `&endDate=${format(endDate.current, FULL_DATE_FORMAT)}`;
       }
       const response = await fetch(endpoint, {
         method: 'GET',
@@ -99,7 +105,7 @@ const TextEntry = () => {
         if (responseData.params.startDate !== '') {
           startDate.current = parse(
             responseData.params.startDate,
-            constants.FULL_DATE_FORMAT,
+            FULL_DATE_FORMAT,
             new Date(),
           );
         } else {
@@ -109,7 +115,7 @@ const TextEntry = () => {
         if (responseData.params.endDate !== '') {
           endDate.current = parse(
             responseData.params.endDate,
-            constants.FULL_DATE_FORMAT,
+            FULL_DATE_FORMAT,
             new Date(),
           );
         } else {
@@ -147,8 +153,8 @@ const TextEntry = () => {
     console.log('getYearMonths');
 
     try {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
-      const endpoint = `${constants.REST_ENDPOINT}/api/yearMonth`;
+      const token = window.localStorage.getItem(STORAGE_KEY);
+      const endpoint = `${REST_ENDPOINT}/api/yearMonth`;
 
       const response = await fetch(endpoint, {
         method: 'GET',
@@ -205,7 +211,7 @@ const TextEntry = () => {
   }
 
   useEffect(() => {
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY);
     if (!token) {
       navigate('/login');
     }
@@ -376,10 +382,10 @@ const TextEntry = () => {
                   const dateFormated = format(
                     parse(
                       localEntry.date,
-                      constants.FULL_DATE_FORMAT,
+                      FULL_DATE_FORMAT,
                       new Date(),
                     ),
-                    constants.DISPLAY_DATE_FORMAT,
+                    DISPLAY_DATE_FORMAT,
                   );
 
                   return (
