@@ -73,6 +73,7 @@ $app = AppFactory::create();
 
 $app->setBasePath($_ENV['BASE_PATH']);
 // $app->addErrorMiddleware(true, true, true);
+
 $app->add(new AuthMiddleware());
 
 $app->any(
@@ -82,7 +83,10 @@ $app->any(
     }
 );
 
-$entryHandler = \dao\DAOFactory::getEntryHandler();
+$settings = \dao\DAOFactory::getSettings();
+$app->get('/settings/', $settings->get());
+
+$entryHandler = DAOFactory::getEntryHandler();
 $app->get('/api/posts/', $entryHandler->listItemsApi());
 $app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
 $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
