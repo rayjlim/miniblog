@@ -1,8 +1,9 @@
 /* eslint-disable react/no-danger */
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { marked } from 'marked';
-import constants from '../constants';
+
+import MyContext from './MyContext';
 
 const renderer = {
   code(code, infostring, escaped = true) {
@@ -36,13 +37,14 @@ const renderer = {
 marked.use({ renderer });
 
 const MarkdownDisplay = ({ source }) => {
+  const { UPLOAD_ROOT } = useContext(MyContext);
   let output = '';
   try {
     console.log(source);
     let newText = source.replace(/<br \/>/g, '\n');
     newText = newText.replace(
       /..\/uploads/g,
-      `${constants.UPLOAD_ROOT}`,
+      `${UPLOAD_ROOT}`,
     );
 
     output = marked(newText);

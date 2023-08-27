@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
-import constants from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 import pkg from '../../package.json';
 import './Logs.css';
 
@@ -13,8 +13,8 @@ const Logs = () => {
   const [logFile, setLogFile] = useState('');
 
   const getLog = async (log = '') => {
-    const token = window.localStorage.getItem(constants.STORAGE_KEY);
-    const response = await fetch(`${constants.REST_ENDPOINT}/logs/${log}`, {
+    const token = window.localStorage.getItem(STORAGE_KEY);
+    const response = await fetch(`${REST_ENDPOINT}/logs/${log}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -41,9 +41,9 @@ const Logs = () => {
     }
 
     try {
-      const token = window.localStorage.getItem(constants.STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY);
       const response = await fetch(
-        `${constants.REST_ENDPOINT}/logs/${log}`,
+        `${REST_ENDPOINT}/logs/${log}`,
         {
           method: 'DELETE',
           mode: 'cors',

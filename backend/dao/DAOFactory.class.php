@@ -8,6 +8,7 @@ use \controllers\EntryHandler;
 use \controllers\GraphHandler;
 use \controllers\LogHandler;
 use \controllers\UploadHandler;
+use \controllers\Settings;
 
 use \dao\SmsEntriesRedbeanDAO;
 use \dao\SmsUsersRedbeanDAO;
@@ -69,5 +70,10 @@ class DAOFactory
     public static function getUploadHandler()
     {
         return new UploadHandler(DAOFactory::getResourceDAO());
+    }
+
+    public static function getSettings()
+    {
+        return new Settings();
     }
 }
