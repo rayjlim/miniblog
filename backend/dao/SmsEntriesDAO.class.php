@@ -33,10 +33,15 @@ interface SmsEntriesDAO
     /**
      * Update record in table
      *
-     * @param SmsEntries smsEntrie
+     * @param array smsEntrie
      */
-    public function update(SmsEntrie $smsEntrie): void;
+    public function update(array $smsEntrie): void;
 
+    /**
+     * List Journal Entries
+     *
+     * @param  listParams search options
+     */
     public function list(ListParams $listParams): array;
 
     public function getSameDayEntries(object $date): array;
