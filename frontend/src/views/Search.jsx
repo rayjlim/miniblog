@@ -69,22 +69,21 @@ const TextEntry = () => {
     const searchTextValue = searchText.current.value;
     try {
       const token = window.localStorage.getItem(STORAGE_KEY);
+      const encodedSearchText = encodeURIComponent(searchTextValue);
       let endpoint = `${
         REST_ENDPOINT
-      }/api/posts/?searchParam=${encodeURIComponent(
-        searchTextValue,
-      )}&filterType=${searchFilter}`;
+      }/api/posts/?searchParam=${encodedSearchText}&filterType=${searchFilter}`;
       if (startDate.current) {
-        endpoint += `&startDate=${format(
-          startDate.current,
-          FULL_DATE_FORMAT,
-        )}`;
+        const formattedDate = format(startDate.current, FULL_DATE_FORMAT);
+        endpoint += `&startDate=${formattedDate}`;
       }
       if (endDate.current) {
-        endpoint += `&endDate=${format(endDate.current, FULL_DATE_FORMAT)}`;
+        const formattedEndDate = format(endDate.current, FULL_DATE_FORMAT);
+        endpoint += `&endDate=${formattedEndDate}`;
       }
       const response = await fetch(endpoint, {
         method: 'GET',
+        cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
           'X-App-Token': token,
@@ -93,11 +92,10 @@ const TextEntry = () => {
       });
 
       if (!response.ok) {
-        console.log('response.status :', response.status);
+        console.log('response.status : ', response.status);
         throw new Error(`loading error : ${response.status}`);
       } else {
         const responseData = await response.json();
-
         console.log('result.responseData :>> ', responseData);
 
         setSearchParams(responseData.params);
