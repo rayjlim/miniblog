@@ -1,6 +1,6 @@
 // - use -f for only frontend, -b for only backend, like in publish.sh
 
-import requirements from "./requirements.json" assert { type: "json", integrity: "sha384-ABC123" };
+import requirements from "./requirements.json";
 import fs from "fs";
 console.log("validate project setup");
 

@@ -3,12 +3,12 @@
   "name": "Lilplaytime Miniblog",
   "icons": [
     {
-      "src": "./assets/lpt-logo_sm.png",
+      "src": "./assets/goat-icon-32.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "./assets/logo192.png",
+      "src": "./assets/goat_lobl2-icon.png",
       "type": "image/png",
       "sizes": "192x192 512x512",
       "purpose": "any maskable"
