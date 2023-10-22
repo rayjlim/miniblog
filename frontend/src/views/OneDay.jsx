@@ -33,7 +33,7 @@ const SAMEDAY = 1;
 async function xhrCall(url, apiDescription) {
   console.log(`xhrCall ${url}`);
   try {
-    const apiResponse = await fetch(url, {});
+    const apiResponse = await fetch(url, { cache: 'no-cache' });
     if (apiResponse.ok) {
       const data = await apiResponse.json();
       return data;
