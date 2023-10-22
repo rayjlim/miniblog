@@ -36,7 +36,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $id;
     }
 
-    public function update(SmsEntrie $smsEntrie): void
+    public function update(array $smsEntrie): void
     {
         $postBean = R::load(POSTS, $smsEntrie['id']);
         $postBean->content = $smsEntrie['content'];
@@ -44,16 +44,10 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         R::store($postBean);
     }
 
-    /**
-     * List Journal Entries
-     *
-     * @param  listParams search options
-     * @LPT_V2
-     */
     public function list(ListParams $listParams): array
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
-        $posts = R::findAll(POSTS, '1 = 1 ' . $sqlParam . ' order by date desc limit ?', [$listParams->resultsLimit]);
+        $posts = R::findAll(POSTS, '1 = 1 ' . $sqlParam . ' ORDER BY date DESC LIMIT ?', [$listParams->resultsLimit]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
         return $sequencedArray;
