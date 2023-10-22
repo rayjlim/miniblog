@@ -64,7 +64,7 @@ const App = () => {
       {globalContext !== null
         && (
         <MyContext.Provider value={globalContext}>
-          <GoogleOAuthProvider clientId={globalContext.GOOGLE_CLIENTID}>
+          <GoogleOAuthProvider clientId={globalContext.GOOGLE_OAUTH_CLIENTID}>
             <React.StrictMode>
               {/* {showGHCorner && <GithubCorner />} */}
               {showDevRibbon && <a className="github-fork-ribbon" href="#dev" data-ribbon="Development" title="Development">Development</a>}

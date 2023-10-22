@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.17.2](https://github.com/rayjlim/miniblog/compare/v2.17.1...v2.17.2) (2023-10-12)
+
+
+### Bug Fixes
+
+* google auth var name typo ([8625de1](https://github.com/rayjlim/miniblog/commit/8625de1af361353aa20c2e8bd1789f2f23acdc99))
+* input type for update was wrong ([1e58cf6](https://github.com/rayjlim/miniblog/commit/1e58cf612b9ab20dfc1524d107e0e01ddbdc4521))
+
+### [2.17.1](https://github.com/rayjlim/miniblog/compare/v2.17.0...v2.17.1) (2023-08-29)
+
 ## [2.17.0](https://github.com/rayjlim/miniblog/compare/v2.16.0...v2.17.0) (2023-08-27)
 
 
