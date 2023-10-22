@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.18.0](https://github.com/rayjlim/miniblog/compare/v2.17.2...v2.18.0) (2023-10-22)
+
+
+### Features
+
+* [#211](https://github.com/rayjlim/miniblog/issues/211) no-cache on getEntries for search ([5d083b2](https://github.com/rayjlim/miniblog/commit/5d083b2ef30e341f26eda6741443d16aa30cf32c))
+* for xhr calls, use no-cache ([25f3728](https://github.com/rayjlim/miniblog/commit/25f3728ac793383954ae22e6a4bf2ed9b1f72315))
+
+
+### Bug Fixes
+
+* upgrade @react-oauth/google from 0.11.0 to 0.11.1 ([ed0e850](https://github.com/rayjlim/miniblog/commit/ed0e850d73feac964e7481c5d534c098a34cce7d))
+* upgrade react-router-dom from 6.12.0 to 6.14.2 ([36c9bc6](https://github.com/rayjlim/miniblog/commit/36c9bc6f1f1d3a56d2b07f593b80c2b56e12f3a5))
+* upgrade react-select from 5.7.3 to 5.7.4 ([1632d1b](https://github.com/rayjlim/miniblog/commit/1632d1baab946cd8249568ac52bd18d67e0cf003))
+
 ### [2.17.2](https://github.com/rayjlim/miniblog/compare/v2.17.1...v2.17.2) (2023-10-12)
 
 
