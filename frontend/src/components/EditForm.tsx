@@ -4,6 +4,7 @@ import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
 import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import 'react-date-picker/dist/DatePicker.css';
 
 import './EditForm.css';
 

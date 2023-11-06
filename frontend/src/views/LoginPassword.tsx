@@ -78,26 +78,29 @@ const LoginPassword = () => {
   };
 
   useEffect(
-    async () => {
-      if (user) {
-        try {
-          const endpoint = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`;
-          const response = await fetch(endpoint);
-          const results = await response.json();
-          console.log(results);
-          setProfile(results);
-          window.localStorage.setItem('user-name', results.name);
-          if (user.access_token) {
-            doLogin(results.id);
+    () => {
+      async function ueFunc(){
+        if (user) {
+          try {
+            const endpoint = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`;
+            const response = await fetch(endpoint);
+            const results = await response.json();
+            console.log(results);
+            setProfile(results);
+            window.localStorage.setItem('user-name', results.name);
+            if (user.access_token) {
+              doLogin(results.id);
+            }
+          } catch (err) {
+            console.error(err);
           }
-        } catch (err) {
-          console.error(err);
+        } else {
+          logOut();
         }
-      } else {
-        logOut();
       }
+      ueFunc();
     },
-    [user],
+    [doLogin, user],
   );
   return (
     <div className="App">

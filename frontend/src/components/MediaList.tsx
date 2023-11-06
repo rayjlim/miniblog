@@ -6,7 +6,7 @@ import MyContext from './MyContext';
 
 import './MediaList.css';
 
-const MediaList = ({ onMediaSelect }) => {
+const MediaList = (onMediaSelect) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   const [media, setMedia] = useState([]);
   const [uploadDirs, setUploadDirs] = useState([]);

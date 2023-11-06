@@ -4,6 +4,7 @@ import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
 import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import 'react-date-picker/dist/DatePicker.css';
 
 const useFetch = () => {
   const [newId, setId] = useState(null);
@@ -69,9 +70,9 @@ const AddForm = ({ content, date, onSuccess }) => {
       isMounted.current = true;
 
       setFormContent(content || '');
+      document.addEventListener('keydown', checkKeyPressed);
+      return () => document.removeEventListener('keydown', checkKeyPressed);
     }
-    document.addEventListener('keydown', checkKeyPressed);
-    return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [id, date, content, onSuccess]);
 
   function textChange() {
@@ -95,6 +96,8 @@ const AddForm = ({ content, date, onSuccess }) => {
       content: formContent.trim(),
       date: format(formDate, FULL_DATE_FORMAT),
     });
+
+
   }
 
   return (
@@ -132,7 +135,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </div>
 
       <div className="form-group">
-        <DatePicker onChange={dateParam => dateChange(dateParam)} value={formDate} />
+        <DatePicker onChange={newDate => dateChange(newDate)} value={formDate} />
       </div>
 
       <button

@@ -27,7 +27,6 @@ const Media = () => {
     imgUrl: '',
   });
 
-  const mediaBaseDir = '';
   const [showMedia, setShowMedia] = useState(true);
 
   useEffect(() => {
@@ -44,12 +43,12 @@ const Media = () => {
       ...post,
       fileName,
       filePath,
-      prepend: `![](../uploads/${filePath}/${fileName})`,
+      prepend: `![](../uploads/${filePath}/${fileName}?)`,
       imgUrl: `${UPLOAD_ROOT}/${filePath}/${fileName}?r=${random}`,
     });
-  }, []);
+  }, [UPLOAD_ROOT]);
 
-  function mediaSelect(filePath, fileName) {
+  function mediaSelect(filePath: string, fileName: string) {
     console.log(filePath, fileName);
     const random = Math.random();
     setPost({
@@ -62,7 +61,7 @@ const Media = () => {
     setShowMedia(false);
   }
 
-  async function xhrCall(url) {
+  async function xhrCall(url: string) {
     console.log(`xhrCall ${url}`);
     const token = window.localStorage.getItem(STORAGE_KEY);
     const response = await fetch(
@@ -98,7 +97,7 @@ const Media = () => {
     await xhrCall(url);
   };
 
-  function copyToClipboard(content) {
+  function copyToClipboard(content: string) {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
@@ -152,8 +151,7 @@ const Media = () => {
       )}
       <button onClick={() => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
       {showMedia && (
-        // eslint-disable-next-line react/jsx-no-bind
-        <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
+        <MediaList onMediaSelect={mediaSelect} />
       )}
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/upload" className="btn navbar-btn">

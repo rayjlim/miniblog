@@ -304,34 +304,37 @@ const OneDay = () => {
   }
 
   useEffect(() => {
-    const token = window.localStorage.getItem(STORAGE_KEY);
-    if (!token) {
-      navigate('/login');
+    async function ueFunc(){
+      const token = window.localStorage.getItem(STORAGE_KEY);
+      if (!token) {
+        navigate('/login');
+      }
+
+      console.log('OndeDay: useEffect');
+      const loc = `${window.location}`;
+      const param = loc.substring(loc.indexOf('?'));
+      console.log('param :', param);
+      const urlParams = new URLSearchParams(param);
+
+      const pageDate = urlParams.has('date')
+        ? urlParams.get('date')
+        : format(new Date(), FULL_DATE_FORMAT);
+
+      setState({ ...state, pageDate });
+
+      const pageMode = urlParams.has('pageMode')
+        ? parseInt(urlParams.get('pageMode'), 10)
+        : ONEDAY;
+
+      console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
+      const localDate = format(new Date(), FULL_DATE_FORMAT);
+
+      console.log('setting pageDate :>> ', localDate);
+      loadDay({ pageDate, pageMode });
     }
-
-    console.log('OndeDay: useEffect');
-    const loc = `${window.location}`;
-    const param = loc.substring(loc.indexOf('?'));
-    console.log('param :', param);
-    const urlParams = new URLSearchParams(param);
-
-    const pageDate = urlParams.has('date')
-      ? urlParams.get('date')
-      : format(new Date(), FULL_DATE_FORMAT);
-
-    setState({ ...state, pageDate });
-
-    const pageMode = urlParams.has('pageMode')
-      ? parseInt(urlParams.get('pageMode'), 10)
-      : ONEDAY;
-
-    console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
-    const localDate = format(new Date(), FULL_DATE_FORMAT);
-
-    console.log('setting pageDate :>> ', localDate);
-    loadDay({ pageDate, pageMode });
-
+    ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
+
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
 
@@ -361,11 +364,6 @@ const OneDay = () => {
             <span>Home</span>
           </button>
         )}
-        <RouterNavLink to="/search">
-          <i className="fa fa-search" />
-          {' '}
-          <span className="nav-text">Search</span>
-        </RouterNavLink>
       </nav>
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}

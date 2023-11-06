@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-const MyContext = createContext();
+const MyContext = createContext({UPLOAD_ROOT: ''});
 
 export default MyContext;
