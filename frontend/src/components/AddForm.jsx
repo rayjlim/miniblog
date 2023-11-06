@@ -60,20 +60,19 @@ const AddForm = ({ content, date, onSuccess }) => {
   }
 
   useEffect(() => {
-    console.log('AddForm: useEffect');
-    if (isMounted.current) {
+    console.log(`AddForm: useEffect ${isMounted.current}`);
+    if (isMounted.current && id !== null) {
       // This makes it so this is not called on the first render
       // but when the Id is set
-      onSuccess('Add Done');
+      onSuccess(`Add Done : New Id: ${id}`);
     } else {
       isMounted.current = true;
 
       setFormContent(content || '');
-      document.addEventListener('keydown', checkKeyPressed);
-      return () => document.removeEventListener('keydown', checkKeyPressed);
     }
-    return true;
-  }, [id]);
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
+  }, [id, date, content, onSuccess]);
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
@@ -91,6 +90,7 @@ const AddForm = ({ content, date, onSuccess }) => {
   }
 
   function handleAdd() {
+    console.log('handleAdd');
     setParams({
       content: formContent.trim(),
       date: format(formDate, FULL_DATE_FORMAT),
@@ -123,7 +123,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       <div className="form-group">
         <textarea
           ref={textareaInput}
-          rows="6"
+          rows={6}
           onChange={() => textChange()}
           className="form-control"
           placeholder="Add ..."
