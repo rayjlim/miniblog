@@ -34,7 +34,7 @@ const Logs = () => {
     toast.error(`loading error : ${response.status}`);
   };
 
-  async function handleDelete(log) {
+  async function handleDelete(log: any) {
     const go = window.confirm('You sure?');
     if (!go) {
       return;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -30,7 +30,7 @@ const FILTER_MODE_ALL = 0;
 // const FILTER_MODE_UNTAGGED = 2;
 
 let timeout;
-function debounce(func, wait, immediate) {
+function debounce(func, wait, immediate=false) {
   console.log('debouncing');
   return () => {
     const context = this;
@@ -53,11 +53,11 @@ const TextEntry = () => {
   const [yearMonths, setYearMonths] = useState([]);
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
-  const [entry, setEntry] = useState({});
-  const [searchParams, setSearchParams] = useState(null);
+  const [entry, setEntry] = useState({id: 1, content: '', date: ''});
+  const [searchParams, setSearchParams] = useState({startDate:'', endDate:''});
   const [viewState, setViewState] = useState({ showStartDate: false, showEndDate: false });
-  const searchText = useRef({ value: '' });
-  const startDate = useRef(subMonths(new Date(), 3));
+  const searchText = useRef<{ value: string }| null>({ value: '' });
+  const startDate = useRef<Date | null>(subMonths(new Date(), 3));
   const endDate = useRef();
 
   /**
@@ -131,7 +131,7 @@ const TextEntry = () => {
           const foundHighlights = responseData.entries.map(entryLocal => {
             const highlighted = entryLocal.content.replace(
               reg,
-              str => `<b>${str}</b>`,
+              (str: any) => `<b>${str}</b>`,
             );
             return { ...entryLocal, highlighted };
           });
@@ -141,7 +141,7 @@ const TextEntry = () => {
           setPosts(responseData.entries);
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       toast.error(err);
     }
@@ -169,9 +169,9 @@ const TextEntry = () => {
       } else {
         const responseData = await response.json();
 
-        setYearMonths(responseData.map(row => ({ label: row, value: row })));
+        setYearMonths(responseData.map((row: string) => ({ label: row, value: row })));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       toast.error(err);
     }
@@ -186,7 +186,7 @@ const TextEntry = () => {
     setEntry(entryLocal);
   }
 
-  function resetEntryForm(showToast) {
+  function resetEntryForm(showToast: boolean) {
     if (showToast) {
       toast('Edit Done');
     }
@@ -194,7 +194,7 @@ const TextEntry = () => {
     getEntries();
   }
 
-  function changeDate(date, type) {
+  function changeDate(date: Date, type: string) {
     console.log('change date called', date, type);
     if (type === 'start') {
       const showStartDate = date !== null;
@@ -218,7 +218,7 @@ const TextEntry = () => {
     debouncedSearch();
 
     getYearMonths();
-  }, [searchText.current.value, searchFilter]);
+  }, [searchText.current?.value, searchFilter]);
 
   return (
     <>
@@ -327,9 +327,9 @@ const TextEntry = () => {
           </button>
           <Select
             options={yearMonths}
-            onChange={chosen => {
+            onChange={(chosen: any) => {
               console.log(chosen);
-              const parts = chosen.value.split('-');
+              const parts = chosen?.value.split('-');
               changeDate(startOfMonth(new Date(parts[0], parts[1] - 1)), 'start');
               changeDate(endOfMonth(new Date(parts[0], parts[1] - 1)), 'end');
             }}
@@ -371,7 +371,7 @@ const TextEntry = () => {
           posts.length
             ? (
               <ul className="entriesList">
-                {posts.map(localEntry => {
+                {posts.map((localEntry: any) => {
                   const content = searchText.current.value.length
                     && localEntry.highlighted
                     ? localEntry.highlighted

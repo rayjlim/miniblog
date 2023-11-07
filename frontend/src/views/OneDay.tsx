@@ -30,7 +30,7 @@ const EDIT = 2;
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
-async function xhrCall(url, apiDescription) {
+async function xhrCall(url: string, apiDescription: string) {
   console.log(`xhrCall ${url}`);
   try {
     const apiResponse = await fetch(url, { cache: 'no-cache' });
@@ -38,7 +38,7 @@ async function xhrCall(url, apiDescription) {
       const data = await apiResponse.json();
       return data;
     }
-    throw new Error(apiResponse.status);
+    throw new Error(`${apiResponse.status}`);
   } catch (err) {
     console.error(err);
     toast(` ${url} get ${apiDescription} error : ${err}`);
@@ -64,7 +64,7 @@ const OneDay = () => {
   const navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
-    pageDate: null,
+    pageDate: '',
     searchParam: '',
     formEntry: {},
     autohide: 'true',
@@ -74,9 +74,9 @@ const OneDay = () => {
     refForm: React.createRef(),
     refs: [],
   });
-  const [inspiration, setInspiration] = useState(null);
-  const [weight, setWeight] = useState(null);
-  const [movies, setMovies] = useState([]);
+  const [inspiration, setInspiration] = useState<string>('');
+  const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
+  const [movies, setMovies] = useState<any[]>([]);
 
   const dateInput = useRef();
 
@@ -88,7 +88,7 @@ const OneDay = () => {
     setInspiration(`Inspire: ${data.message} : ${data.author}`);
   }
 
-  async function getWeight(date) {
+  async function getWeight(date: string) {
     const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
     const data = await xhrCall(weightApi, 'weight');
     if (data && data.data && data.data[0] && data.data[0].count) {
@@ -98,7 +98,7 @@ const OneDay = () => {
     }
   }
 
-  async function getMovies(date) {
+  async function getMovies(date: string) {
     const weightApi = `${MOVIES_API}&advanced_search=true&dt_viewed=${date}`;
     const data = await xhrCall(weightApi, 'movie');
     if (data && data.movies) {
@@ -113,7 +113,7 @@ const OneDay = () => {
     setInspiration(`Question: ${data.prompt} : ${data.category}`);
   }
 
-  function loadDay(loadParams) {
+  function loadDay(loadParams: any) {
     console.log(
       'loadDay :',
       loadParams.pageDate,
@@ -154,7 +154,7 @@ const OneDay = () => {
         if (response.ok) {
           const { entries } = await response.json();
           console.log('response.data :>> ', entries);
-          const refs = entries.reduce((acc, value) => {
+          const refs = entries.reduce((acc: any, value: any) => {
             acc[value.id] = React.createRef();
             return acc;
           }, {});
@@ -250,18 +250,18 @@ const OneDay = () => {
     }
   }
 
-  function changePageMode(pageMode) {
+  function changePageMode(pageMode: number) {
     console.log('new pageMode :>> ', pageMode);
     loadDay({ ...state, pageMode });
   }
 
-  function showAddEditForm(mode) {
+  function showAddEditForm(mode: number) {
     // console.log('formmode :', mode);
     let returnValue = null;
     if (!mode || mode === CLOSED) {
       returnValue = (
         <button
-          onClick={e => showAddForm(e)}
+          onClick={() => showAddForm()}
           className="btn btn-default"
           id="addFormBtn"
           type="button"
@@ -293,13 +293,13 @@ const OneDay = () => {
     // the content value is taken from the init value
     if (e.altKey && e.key === ',') {
       console.log('alt comma keybinding');
-      document.getElementById('prevBtn').click();
+      document.getElementById('prevBtn')?.click();
     } else if (e.altKey && e.key === '.') {
       console.log('alt period keybinding');
-      document.getElementById('nextBtn').click();
+      document.getElementById('nextBtn')?.click();
     } else if (e.altKey && e.key === 'a') {
       console.log('alt period keybinding');
-      document.getElementById('addFormBtn').click();
+      document.getElementById('addFormBtn')?.click();
     }
   }
 
@@ -338,7 +338,7 @@ const OneDay = () => {
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
 
-  function copyToClipboard(content) {
+  function copyToClipboard(content: string) {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
@@ -464,12 +464,12 @@ const OneDay = () => {
             </button>
           )}
           {QUESTION_API !== '' && (
-            <button onClick={e => getPrompt(e)} className="plainLink" type="button">
+            <button onClick={() => getPrompt()} className="plainLink" type="button">
               [Get Prompt]
             </button>
           )}
           {INSPIRATION_API !== '' && (
-            <button onClick={e => getInspiration(e)} className="plainLink" type="button">
+            <button onClick={() => getInspiration()} className="plainLink" type="button">
               [Get Inspiration]
             </button>
           )}

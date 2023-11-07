@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -106,14 +106,14 @@ const EditForm = ({ entry, onSuccess }) => {
     }
   }
 
-  function checkKeyPressed(e) {
+  function checkKeyPressed(e: any) {
     console.log(`EditForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value is taken from the init value
-      document.getElementById('saveBtn').click();
+      document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
-      document.getElementById('cancelBtn').click();
+      document.getElementById('cancelBtn')?.click();
     }
   }
 
@@ -159,7 +159,7 @@ const EditForm = ({ entry, onSuccess }) => {
           onChange={() => textChange()}
           className="form-control"
           placeholder="Add ..."
-          rows="8"
+          rows={8}
           defaultValue={content}
         />
       </div>
