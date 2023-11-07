@@ -30,6 +30,21 @@ const FILTER_MODE_ALL = 0;
 // const FILTER_MODE_UNTAGGED = 2;
 
 let timeout;
+/**
+ * The debounce function is used to limit the frequency of function calls by
+ * delaying the execution until a certain amount of time has passed without any
+ * further function calls.
+ * @param func - The `func` parameter is the function that you want to debounce. It
+ * is the function that will be called after the debounce period has passed.
+ * @param wait - The `wait` parameter is the amount of time in milliseconds that
+ * the function should wait before executing.
+ * @param [immediate=false] - The `immediate` parameter is a boolean value that
+ * determines whether the function should be called immediately or after the
+ * specified `wait` time has passed. If `immediate` is set to `true`, the function
+ * will be called immediately and then debounced. If `immediate` is set to
+ * @returns The debounce function is returning a new function that will be executed
+ * when called.
+ */
 function debounce(func, wait, immediate=false) {
   console.log('debouncing');
   return () => {
@@ -54,21 +69,22 @@ const TextEntry = () => {
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
   const [entry, setEntry] = useState({id: 1, content: '', date: ''});
-  const [searchParams, setSearchParams] = useState({startDate:'', endDate:''});
+  const [searchParams, setSearchParams] = useState<any>({startDate:'', endDate:''});
   const [viewState, setViewState] = useState({ showStartDate: false, showEndDate: false });
-  const searchText = useRef<{ value: string }| null>({ value: '' });
+  const searchText = useRef<HTMLInputElement>(null);
   const startDate = useRef<Date | null>(subMonths(new Date(), 3));
   const endDate = useRef();
 
   /**
-   * Get blog entries for text search
-   * @param  {string} text text to search for
-   */
+   * The function `getEntries` is an asynchronous function that retrieves entries
+   * from an API based on search parameters and updates the state with the results.
+  * Get blog entries for text search
+  */
   async function getEntries() {
-    console.log('getEntries#searchText: ', searchText.current.value);
-    const searchTextValue = searchText.current.value;
+    console.log('getEntries#searchText: ', searchText.current?.value);
+    const searchTextValue = searchText.current?.value || '';
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const encodedSearchText = encodeURIComponent(searchTextValue);
       let endpoint = `${
         REST_ENDPOINT
@@ -81,13 +97,13 @@ const TextEntry = () => {
         const formattedEndDate = format(endDate.current, FULL_DATE_FORMAT);
         endpoint += `&endDate=${formattedEndDate}`;
       }
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set('X-App-Token', token);
       const response = await fetch(endpoint, {
         method: 'GET',
         cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
         referrerPolicy: 'no-referrer',
       });
 
@@ -128,7 +144,7 @@ const TextEntry = () => {
         if (searchTextValue.length) {
           const reg = new RegExp(searchTextValue, 'gi');
 
-          const foundHighlights = responseData.entries.map(entryLocal => {
+          const foundHighlights = responseData.entries.map((entryLocal: any) => {
             const highlighted = entryLocal.content.replace(
               reg,
               (str: any) => `<b>${str}</b>`,
@@ -151,15 +167,15 @@ const TextEntry = () => {
     console.log('getYearMonths');
 
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const endpoint = `${REST_ENDPOINT}/api/yearMonth`;
 
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set('X-App-Token', token);
       const response = await fetch(endpoint, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
         referrerPolicy: 'no-referrer',
       });
 
@@ -179,7 +195,7 @@ const TextEntry = () => {
 
   const debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
 
-  function showEditForm(e, entryLocal) {
+  function showEditForm(e: any, entryLocal: any) {
     e.preventDefault();
     console.log('id :', entryLocal.id);
     setFormMode(SHOW_EDIT_FORM);
@@ -243,7 +259,7 @@ const TextEntry = () => {
           className="form-control"
           ref={searchText}
           placeholder="Search term"
-          onChange={() => debouncedSearch(searchText.current.value)}
+          onChange={() => debouncedSearch()}
         />
         Filter:
         <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
@@ -252,14 +268,14 @@ const TextEntry = () => {
           className="form-control filterType"
           value={searchFilter}
           placeholder="Search term"
-          onChange={e => setSearchFilter(e.target.value)}
+          onChange={e => setSearchFilter(parseInt(e.target.value))}
         />
         <div className="search-date-container">
           <div className="search-date-field">
             Start Date:
             {' '}
             {viewState.showStartDate ? (
-              <DatePicker onChange={x => changeDate(x, 'start')} value={startDate.current} />
+              <DatePicker onChange={x => changeDate(x as Date, 'start')} value={startDate.current} />
             ) : (
               <>
                 None
@@ -278,7 +294,7 @@ const TextEntry = () => {
             End Date:
             {' '}
             {viewState.showEndDate ? (
-              <DatePicker onChange={x => changeDate(x, 'end')} value={endDate.current} />
+              <DatePicker onChange={x => changeDate(x as Date, 'end')} value={endDate.current} />
             ) : (
               <>
                 None
@@ -372,7 +388,7 @@ const TextEntry = () => {
             ? (
               <ul className="entriesList">
                 {posts.map((localEntry: any) => {
-                  const content = searchText.current.value.length
+                  const content = searchText.current?.value.length
                     && localEntry.highlighted
                     ? localEntry.highlighted
                     : localEntry.content;

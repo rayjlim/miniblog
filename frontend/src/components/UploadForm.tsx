@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
 import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
@@ -6,9 +6,9 @@ import pkg from '../../package.json';
 
 const UploadForm = () => {
   const navigate = useNavigate();
-  const [selectFile, setSelectedFile] = useState(null);
+  const [selectFile, setSelectedFile] = useState<string | Blob>('');
 
-  function onChangeHandler(event) {
+  function onChangeHandler(event: any) {
     console.log(event.target.files[0]);
     setSelectedFile(event.target.files[0]);
   }
@@ -16,22 +16,22 @@ const UploadForm = () => {
   async function upload() {
     const formData = new FormData();
     formData.append('fileToUpload', selectFile);
-    const filePath = document.getElementById('filePath').value;
+    const filePath = (document.getElementById('filePath') as HTMLInputElement).value;
     formData.append(
       'filePath',
       filePath.length ? filePath : format(new Date(), 'yyyy-MM'),
     );
 
     console.log('send upload');
-    const token = window.localStorage.getItem(STORAGE_KEY);
-
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set('X-App-Token', token);
     try {
       const response = await fetch(`${REST_ENDPOINT}/uploadImage/`, {
         method: 'POST',
         body: formData,
-        headers: {
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
       });
 
       console.log(response);
@@ -39,7 +39,7 @@ const UploadForm = () => {
       navigate(`/media?fileName=${data.fileName}&filePath=${data.filePath}`);
     } catch (error) {
       console.log(error);
-      alert('Error uploading file ', error);
+      alert(`Error uploading file ${error}`);
     }
   }
 

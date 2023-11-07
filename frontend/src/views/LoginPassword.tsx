@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
@@ -8,10 +8,10 @@ import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
 const LoginPassword = () => {
   const navigate = useNavigate();
-  const username = useRef();
-  const password = useRef();
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
+  const username = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
 
   const login = useGoogleLogin({
     onSuccess: codeResponse => setUser(codeResponse),
@@ -52,12 +52,12 @@ const LoginPassword = () => {
     return false;
   };
 
-  const doLogin = async id => {
+  const doLogin = async (id: any) => {
     console.log('doLogin', id);
-    console.log(username.current.value, password.current.value);
+    console.log(username.current?.value, password.current?.value);
     const loginParam = id
       ? { id, formUser: 'n/a', formPass: 'n/a' }
-      : { formUser: username.current.value, formPass: password.current.value };
+      : { formUser: username.current?.value, formPass: password.current?.value };
     console.log('loginParam', loginParam);
     const token = await checkLogin(loginParam);
     if (!token) {

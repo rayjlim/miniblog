@@ -1,5 +1,3 @@
-import React from 'react';
-
 const GithubCorner = () => {
   const svgStyle = {
     fill: '#70B7FD',

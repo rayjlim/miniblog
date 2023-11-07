@@ -78,7 +78,7 @@ const OneDay = () => {
   const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
   const [movies, setMovies] = useState<any[]>([]);
 
-  const dateInput = useRef();
+  const dateInput = useRef<HTMLInputElement>(null);
 
   const usersFullname = window.localStorage.getItem('user-name');
 
@@ -91,10 +91,10 @@ const OneDay = () => {
   async function getWeight(date: string) {
     const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
     const data = await xhrCall(weightApi, 'weight');
-    if (data && data.data && data.data[0] && data.data[0].count) {
+    if (data?.data[0]?.count) {
       setWeight(data.data[0]);
     } else {
-      setWeight('?');
+      setWeight({count: 0, comment: ''});
     }
   }
 
@@ -137,17 +137,17 @@ const OneDay = () => {
     }
 
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set('X-App-Token', token);
       try {
         const response = await fetch(endPointURL, {
           method: 'GET',
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
+          headers: requestHeaders,
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
         });
@@ -199,7 +199,7 @@ const OneDay = () => {
    * @function
    * @param  {Object} e Event of Button click
    */
-  function handleButtonDirection(e) {
+  function handleButtonDirection(e: any) {
     let localDate = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
     if (e.target.value === 'today') {
       localDate = new Date();
@@ -228,7 +228,7 @@ const OneDay = () => {
     setState({ ...state, formMode: ADD });
   }
 
-  function showEditForm(entry) {
+  function showEditForm(entry: any) {
     console.log('id :', entry.id);
 
     setState({
@@ -243,7 +243,7 @@ const OneDay = () => {
     });
   }
 
-  function updateDate(e) {
+  function updateDate(e: any) {
     const dateRegex = /^\d{4}[./-]\d{2}[./-]\d{2}$/;
     if (e.target.value.match(dateRegex)) {
       loadDay({ ...state, pageDate: e.target.value });
@@ -286,7 +286,7 @@ const OneDay = () => {
     navigate('/login');
   };
 
-  function checkKeyPressed(e) {
+  function checkKeyPressed(e: any) {
     console.log(`OneDay: handle key presss ${e.key}`);
 
     // Note: getting element by id is a hack because
@@ -323,7 +323,7 @@ const OneDay = () => {
       setState({ ...state, pageDate });
 
       const pageMode = urlParams.has('pageMode')
-        ? parseInt(urlParams.get('pageMode'), 10)
+        ? parseInt(urlParams.get('pageMode') || '', 10)
         : ONEDAY;
 
       console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
@@ -424,7 +424,7 @@ const OneDay = () => {
 
       <section className="container">
         <ul className="entriesList">
-          {state.entries.map(entry => (
+          {state.entries.map((entry: any) => (
             <li
               key={entry.id}
               ref={state.refs[entry.id]}

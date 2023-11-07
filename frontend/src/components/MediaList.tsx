@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
@@ -6,21 +6,21 @@ import MyContext from './MyContext';
 
 import './MediaList.css';
 
-const MediaList = (onMediaSelect) => {
+const MediaList = (onMediaSelect: any) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
-  const [media, setMedia] = useState([]);
-  const [uploadDirs, setUploadDirs] = useState([]);
+  const [media, setMedia] = useState<any[]>([]);
+  const [uploadDirs, setUploadDirs] = useState<any[]>([]);
   const [currentDir, setCurrentDir] = useState('');
 
   function loadDir(dir = '') {
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set('X-App-Token', token);
       const response = await fetch(`${REST_ENDPOINT}/media/${dir}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
       });
       console.log('response :', response);
       if (!response.ok) {
@@ -37,21 +37,21 @@ const MediaList = (onMediaSelect) => {
       }
     })();
   }
-  function deleteMedia(filePath, fileName) {
+  function deleteMedia(filePath: string, fileName: string) {
     const go = window.confirm('You sure?');
     if (!go) {
       return;
     }
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set('X-App-Token', token);
       const response = await fetch(
         `${REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {
           method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
+          headers: requestHeaders,
         },
       );
       console.log('response :', response);

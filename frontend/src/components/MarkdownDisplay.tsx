@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { marked } from 'marked';
 
@@ -23,12 +23,12 @@ const renderer = {
       }
     }
 
-    const output = escapeCheck ? outputCode : escape(outputCode, true);
+    const output = escapeCheck ? outputCode : escape(outputCode);
     if (!lang) {
       return `<pre><code>${output}</code></pre>\n`;
     }
 
-    const escapedLang = escape(lang, true);
+    const escapedLang = escape(lang);
     return `<pre><code class="
       ${this.options.langPrefix}${escapedLang}">${output}</code></pre>\n`;
   },
