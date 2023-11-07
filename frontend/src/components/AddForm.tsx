@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -8,7 +8,10 @@ import 'react-date-picker/dist/DatePicker.css';
 
 const useFetch = () => {
   const [newId, setId] = useState(null);
-  const [formEntry, setFormEntry] = useState(null);
+  const [formEntry, setFormEntry] = useState<{
+    content: string,
+    date: string,
+  } | null>(null);
   useEffect(() => {
     if (formEntry !== null) {
       (async () => {
@@ -49,14 +52,14 @@ const AddForm = ({ content, date, onSuccess }) => {
   const [id, setParams] = useFetch();
   const textareaInput = useRef();
 
-  function checkKeyPressed(e) {
+  function checkKeyPressed(e: any) {
     console.log(`AddForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value was taken from the init value
-      document.getElementById('saveBtn').click();
+      document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
-      document.getElementById('cancelBtn').click();
+      document.getElementById('cancelBtn')?.click();
     }
   }
 

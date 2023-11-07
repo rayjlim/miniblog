@@ -17,7 +17,7 @@ import './App.css';
 const showDevRibbon = ENVIRONMENT === 'development';
 
 const App = () => {
-  const [globalContext, setGlobalContext] = useState(null);
+  const [globalContext, setGlobalContext] = useState<any|null>(null);
 
   useEffect(() => {
     (async () => {

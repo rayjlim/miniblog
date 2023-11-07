@@ -19,7 +19,13 @@ import './Media.css';
 const Media = () => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   const navigate = useNavigate();
-  const [post, setPost] = useState({
+  const [post, setPost] = useState<{
+    date: string,
+    fileName: string | null,
+    filePath: string | null,
+    prepend: string,
+    imgUrl: string,
+  }>({
     date: format(new Date(), FULL_DATE_FORMAT),
     fileName: '',
     filePath: '',

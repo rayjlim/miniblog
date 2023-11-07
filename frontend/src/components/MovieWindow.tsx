@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import MyContext from './MyContext';
 import './MovieWindow.css';
 
-const MovieWindow = ({ movie }) => {
+const MovieWindow = ({ movie }: any) => {
   const { MOVIES_POSTERS } = useContext(MyContext);
   const { title, imdbImageId, imdbId } = movie;
   const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
