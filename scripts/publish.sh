@@ -61,7 +61,7 @@ if [ -z "$NOFRONTENDBUILD" ]; then
     echo "REACT Build Fail"
     exit 1
   fi
-  rsync -avz  ".htaccess.production"          ./build/.htaccess
+  rsync -avz  ".htaccess.production"          ./dist/.htaccess
   cd ..
 fi
 
@@ -91,7 +91,7 @@ fi
 
 if [ -z "$NOFRONTENDBUILD" ]; then
   echo "start upload UI"
-  cd ./frontend/build/
+  cd ./frontend/dist
   pwd
   echo $FTP_TARGETFOLDER_UI
   rsync -rave  'ssh -oHostKeyAlgorithms=+ssh-dss' \
