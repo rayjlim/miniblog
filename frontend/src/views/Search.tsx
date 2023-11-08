@@ -43,7 +43,6 @@ const TextEntry = () => {
   const searchText = useRef<HTMLInputElement>(null);
   const startDate = useRef<Date | null>(subMonths(new Date(), 3));
   const endDate = useRef<Date | null>(null);
-
   /**
    * The function `getEntries` is an asynchronous function that retrieves entries
    * from an API based on search parameters and updates the state with the results.
@@ -358,6 +357,7 @@ const TextEntry = () => {
               <ul className="entriesList">
                 {posts.map((localEntry: any) => {
                   const content = searchText.current?.value.length
+
                     && localEntry.highlighted
                     ? localEntry.highlighted
                     : localEntry.content;
