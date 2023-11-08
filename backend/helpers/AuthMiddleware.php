@@ -105,6 +105,11 @@ class AuthMiddleware
         $headers = getallheaders();
         $tokenName = $_ENV['AUTH_TOKEN'];
         DevHelp::debugMsg('isset app tokenName? ' . $tokenName . isset($headers[$tokenName]));
+        DevHelp::debugMsg('token value: ' . $headers[$tokenName]);
+        // $headers =  getallheaders();
+        // foreach($headers as $key=>$val){
+        //     echo $key . ': ' . $val . '<br>';
+        // }
         if (isset($headers[$tokenName])) {
             $headerStringValue = $headers[$tokenName];
             $decryptedString = decrypt($headerStringValue);

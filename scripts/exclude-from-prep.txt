@@ -9,5 +9,6 @@ _logs/
 
 .env*
 .htaccess
+.htaccess.production
 codeception.yml
 cron_script.php
