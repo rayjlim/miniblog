@@ -14,6 +14,7 @@ import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
+  AUTH_HEADER
 } from '../constants';
 import pkg from '../../package.json';
 
@@ -29,7 +30,7 @@ const FILTER_MODE_ALL = 0;
 // const FILTER_MODE_TAGGED = 1;
 // const FILTER_MODE_UNTAGGED = 2;
 
-let timeout;
+let timeout: any;
 /**
  * The debounce function is used to limit the frequency of function calls by
  * delaying the execution until a certain amount of time has passed without any
@@ -45,7 +46,7 @@ let timeout;
  * @returns The debounce function is returning a new function that will be executed
  * when called.
  */
-function debounce(func, wait, immediate=false) {
+function debounce(func: any, wait: any, immediate=false) {
   console.log('debouncing');
   return () => {
     const context = this;
@@ -99,7 +100,7 @@ const TextEntry = () => {
       }
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set('X-App-Token', token);
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(endpoint, {
         method: 'GET',
         cache: 'no-cache',
@@ -172,7 +173,7 @@ const TextEntry = () => {
 
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set('X-App-Token', token);
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: requestHeaders,

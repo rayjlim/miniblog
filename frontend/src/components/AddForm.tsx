@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 import 'react-date-picker/dist/DatePicker.css';
 
 const useFetch = () => {
@@ -15,7 +15,10 @@ const useFetch = () => {
   useEffect(() => {
     if (formEntry !== null) {
       (async () => {
-        const token = window.localStorage.getItem(STORAGE_KEY);
+        const token = window.localStorage.getItem(STORAGE_KEY) || '';
+        const requestHeaders: HeadersInit = new Headers();
+        requestHeaders.set('Content-Type', 'application/json');
+        requestHeaders.set(AUTH_HEADER, token);
         try {
           const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
             method: 'POST',
@@ -23,10 +26,7 @@ const useFetch = () => {
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-App-Token': token,
-            },
+            headers: requestHeaders,
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
           });

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import format from 'date-fns/format';
@@ -9,6 +9,7 @@ import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
+  AUTH_HEADER
 } from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
@@ -69,15 +70,15 @@ const Media = () => {
 
   async function xhrCall(url: string) {
     console.log(`xhrCall ${url}`);
-    const token = window.localStorage.getItem(STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(AUTH_HEADER, token);
     const response = await fetch(
       url,
       {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
       },
     );
     console.log('response :>> ', response);

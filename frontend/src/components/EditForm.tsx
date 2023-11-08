@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 import 'react-date-picker/dist/DatePicker.css';
 
 import './EditForm.css';
@@ -37,7 +37,10 @@ const EditForm = ({ entry, onSuccess }) => {
   async function handleSave() {
     console.log('handleSave entry :', content, date);
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY)|| '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${entry.id}`,
         {
@@ -49,10 +52,7 @@ const EditForm = ({ entry, onSuccess }) => {
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
+          headers: requestHeaders,
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
         },
@@ -74,7 +74,10 @@ const EditForm = ({ entry, onSuccess }) => {
     const { id } = entry;
     console.log(`handleDelete ${id}`);
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${id}`,
         {
@@ -82,10 +85,7 @@ const EditForm = ({ entry, onSuccess }) => {
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
+          headers: requestHeaders,
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
         },

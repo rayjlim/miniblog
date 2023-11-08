@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 
 import MyContext from './MyContext';
 
@@ -17,7 +17,7 @@ const MediaList = (onMediaSelect: any) => {
       const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set('X-App-Token', token);
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(`${REST_ENDPOINT}/media/${dir}`, {
         method: 'GET',
         headers: requestHeaders,
@@ -46,7 +46,7 @@ const MediaList = (onMediaSelect: any) => {
       const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set('X-App-Token', token);
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(
         `${REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {

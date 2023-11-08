@@ -17,6 +17,7 @@ import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
+  AUTH_HEADER
 } from '../constants';
 
 import pkg from '../../package.json';
@@ -58,7 +59,7 @@ const OneDay = () => {
     INSPIRATION_API,
     MOVIES_API,
     QUESTION_API,
-    TRACKS_API,
+    TRACKS_API
   } = useContext(MyContext);
 
   const navigate = useNavigate();
@@ -66,13 +67,11 @@ const OneDay = () => {
     entries: [],
     pageDate: '',
     searchParam: '',
-    formEntry: {},
+    formEntry: {id: '0', content: '', date: ''},
     autohide: 'true',
     pageMode: ONEDAY,
     formMode: CLOSED,
     scrollToLast: null,
-    refForm: React.createRef(),
-    refs: [],
   });
   const [inspiration, setInspiration] = useState<string>('');
   const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
@@ -140,7 +139,7 @@ const OneDay = () => {
       const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set('X-App-Token', token);
+      requestHeaders.set(AUTH_HEADER, token);
       try {
         const response = await fetch(endPointURL, {
           method: 'GET',
@@ -154,10 +153,6 @@ const OneDay = () => {
         if (response.ok) {
           const { entries } = await response.json();
           console.log('response.data :>> ', entries);
-          const refs = entries.reduce((acc: any, value: any) => {
-            acc[value.id] = React.createRef();
-            return acc;
-          }, {});
           console.log('entries :>> ', entries);
           console.log('state :>> ', state);
           setState({
@@ -166,7 +161,6 @@ const OneDay = () => {
             entries,
             auth:
             true,
-            refs,
           });
           console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
         } else {
@@ -208,7 +202,8 @@ const OneDay = () => {
     }
 
     const newDate = add(localDate, { days: e.target.value });
-    dateInput.current.value = format(newDate, FULL_DATE_FORMAT);
+    let refInput = dateInput.current || {value: ''};
+    refInput.value = format(newDate, FULL_DATE_FORMAT);
     loadDay({
       ...state,
       pageDate: format(newDate, FULL_DATE_FORMAT),
@@ -236,10 +231,6 @@ const OneDay = () => {
       formMode: EDIT,
       formEntry: entry,
       scrollToLast: entry.id,
-    });
-    state.refForm.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
     });
   }
 
@@ -320,7 +311,7 @@ const OneDay = () => {
         ? urlParams.get('date')
         : format(new Date(), FULL_DATE_FORMAT);
 
-      setState({ ...state, pageDate });
+      setState({ ...state, pageDate: pageDate || '' });
 
       const pageMode = urlParams.has('pageMode')
         ? parseInt(urlParams.get('pageMode') || '', 10)
@@ -409,7 +400,7 @@ const OneDay = () => {
         </button>
       </div>
 
-      <section className="container" ref={state.refForm}>
+      <section className="container">
         {state.pageMode === ONEDAY
           && weight
           && (
@@ -427,7 +418,6 @@ const OneDay = () => {
           {state.entries.map((entry: any) => (
             <li
               key={entry.id}
-              ref={state.refs[entry.id]}
             >
               <button
                 onClick={() => showEditForm(entry)}

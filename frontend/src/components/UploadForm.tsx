@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
-import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 import pkg from '../../package.json';
 
 const UploadForm = () => {
@@ -26,7 +26,7 @@ const UploadForm = () => {
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
-    requestHeaders.set('X-App-Token', token);
+    requestHeaders.set(AUTH_HEADER, token);
     try {
       const response = await fetch(`${REST_ENDPOINT}/uploadImage/`, {
         method: 'POST',
