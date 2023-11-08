@@ -1,42 +1,45 @@
 /* eslint-disable react/no-danger */
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
+//@ts-ignore
 import { marked } from 'marked';
 
 import MyContext from './MyContext';
 
 const renderer = {
-  code(code, infostring, escaped = true) {
-    const lang = (infostring || '').match(/\S*/)[0];
+
+  code(code: string, escaped = true): string {
+    // const lang = (infostring || '').match(/\S*/)[0];
     // TODO: document the meaning of the each variable
     // console.log(code);
-    // console.log(this.options);
+    // console.table(`options: ${this.options.highlight}`);
     // console.log(lang);
     // console.log(infostring);
     let escapeCheck = escaped;
     let outputCode = code;
-    if (this.options.highlight) {
-      const out = this.options.highlight(outputCode, lang);
-      if (out != null && out !== outputCode) {
-        escapeCheck = true;
-        outputCode = out;
-      }
-    }
+    // if (this.options.highlight) {
+    //   const out = this.options.highlight(outputCode, lang);
+    //   if (out != null && out !== outputCode) {
+    //     escapeCheck = true;
+    //     outputCode = out;
+    //   }
+    // }
 
     const output = escapeCheck ? outputCode : escape(outputCode);
-    if (!lang) {
-      return `<pre><code>${output}</code></pre>\n`;
-    }
+    return `<pre><code>${output}</code></pre>\n`;
+    // if (!lang) {
+    //   return `<pre><code>${output}</code></pre>\n`;
+    // }
 
-    const escapedLang = escape(lang);
-    return `<pre><code class="
-      ${this.options.langPrefix}${escapedLang}">${output}</code></pre>\n`;
+    // const escapedLang = escape(lang);
+    // return `<pre><code class="
+    //   ${this.options.langPrefix}${escapedLang}">${output}</code></pre>\n`;
   },
 };
 
 marked.use({ renderer });
 
-const MarkdownDisplay = ({ source }) => {
+const MarkdownDisplay = ({ source }: {source: string}) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   let output = '';
   try {

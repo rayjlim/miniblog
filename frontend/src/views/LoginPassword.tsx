@@ -61,8 +61,10 @@ const LoginPassword = () => {
     console.log('loginParam', loginParam);
     const token = await checkLogin(loginParam);
     if (!token) {
-      username.current.value = '';
-      password.current.value = '';
+      let refUsername = username.current || { value: ''};
+      refUsername.value = '';
+      let refPassword = password.current || { value: ''};
+      refPassword.value = '';
       toast.error('Bad Login');
     } else {
       console.log(token);

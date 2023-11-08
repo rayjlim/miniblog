@@ -8,7 +8,7 @@ import 'react-date-picker/dist/DatePicker.css';
 
 import './EditForm.css';
 
-const EditForm = ({ entry, onSuccess }) => {
+const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
   const [date, setDate] = useState(
     parse(entry.date, FULL_DATE_FORMAT, new Date()),
   );
@@ -18,15 +18,16 @@ const EditForm = ({ entry, onSuccess }) => {
 `,
   );
   const [content, setContent] = useState(escapedContent);
-  const textareaInput = useRef();
+  const textareaInput = useRef<HTMLTextAreaElement>(null);
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
-    console.log('textarea.value :>> ', textareaInput.current.value);
-    textareaInput.current.value = textareaInput.current.value.replace(pattern, replacement);
+    const refTextarea = textareaInput.current || {value: ''};
+    console.log('textarea.value :>> ', refTextarea.value);
+    refTextarea.value = refTextarea.value.replace(pattern, replacement);
 
-    setContent(textareaInput.current.value);
+    setContent(refTextarea.value);
   }
 
   /**
@@ -174,7 +175,7 @@ const EditForm = ({ entry, onSuccess }) => {
           {' '}
           Save
         </button>
-        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
+        <DatePicker onChange={dateParam => dateChange(dateParam as Date)} value={date} />
         <button
           onClick={() => onSuccess('')}
           className="btn btn-warning pull-right"

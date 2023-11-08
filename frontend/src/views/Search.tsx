@@ -17,7 +17,7 @@ import {
   AUTH_HEADER
 } from '../constants';
 import pkg from '../../package.json';
-
+import debounce from '../utils/debounce';
 import './Search.css';
 
 const DEBOUNCE_TIME = 350;
@@ -30,38 +30,6 @@ const FILTER_MODE_ALL = 0;
 // const FILTER_MODE_TAGGED = 1;
 // const FILTER_MODE_UNTAGGED = 2;
 
-let timeout: any;
-/**
- * The debounce function is used to limit the frequency of function calls by
- * delaying the execution until a certain amount of time has passed without any
- * further function calls.
- * @param func - The `func` parameter is the function that you want to debounce. It
- * is the function that will be called after the debounce period has passed.
- * @param wait - The `wait` parameter is the amount of time in milliseconds that
- * the function should wait before executing.
- * @param [immediate=false] - The `immediate` parameter is a boolean value that
- * determines whether the function should be called immediately or after the
- * specified `wait` time has passed. If `immediate` is set to `true`, the function
- * will be called immediately and then debounced. If `immediate` is set to
- * @returns The debounce function is returning a new function that will be executed
- * when called.
- */
-function debounce(func: any, wait: any, immediate=false) {
-  console.log('debouncing');
-  return () => {
-    const context = this;
-    const args = arguments;
-    const later = () => {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
-
 const TextEntry = () => {
   const navigate = useNavigate();
 
@@ -69,12 +37,12 @@ const TextEntry = () => {
   const [yearMonths, setYearMonths] = useState([]);
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
-  const [entry, setEntry] = useState({id: 1, content: '', date: ''});
+  const [entry, setEntry] = useState({id: '0', content: '', date: ''});
   const [searchParams, setSearchParams] = useState<any>({startDate:'', endDate:''});
   const [viewState, setViewState] = useState({ showStartDate: false, showEndDate: false });
   const searchText = useRef<HTMLInputElement>(null);
   const startDate = useRef<Date | null>(subMonths(new Date(), 3));
-  const endDate = useRef();
+  const endDate = useRef<Date | null>(null);
 
   /**
    * The function `getEntries` is an asynchronous function that retrieves entries
@@ -417,7 +385,7 @@ const TextEntry = () => {
                         <i className="fa fa-calendar-check" title="Same Day" />
                       </RouterNavLink>
                       <div className="markdownDisplay">
-                        <MarkdownDisplay source={content} escapeHtml={false} />
+                        <MarkdownDisplay source={content} />
                       </div>
                     </li>
                   );

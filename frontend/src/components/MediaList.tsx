@@ -10,7 +10,7 @@ const MediaList = (onMediaSelect: any) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   const [media, setMedia] = useState<any[]>([]);
   const [uploadDirs, setUploadDirs] = useState<any[]>([]);
-  const [currentDir, setCurrentDir] = useState('');
+  const [currentDir, setCurrentDir] = useState<string>('');
 
   function loadDir(dir = '') {
     (async () => {
