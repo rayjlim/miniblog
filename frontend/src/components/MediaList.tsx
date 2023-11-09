@@ -8,11 +8,11 @@ import './MediaList.css';
 
 const MediaList = (onMediaSelect: any) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
-  const [media, setMedia] = useState<any[]>([]);
-  const [uploadDirs, setUploadDirs] = useState<any[]>([]);
+  const [media, setMedia] = useState<any[string]>([]);
+  const [uploadDirs, setUploadDirs] = useState<any[string]>([]);
   const [currentDir, setCurrentDir] = useState<string>('');
 
-  function loadDir(dir = '') {
+  function loadDir(dir: string = '') {
     (async () => {
       const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const requestHeaders: HeadersInit = new Headers();
@@ -37,6 +37,7 @@ const MediaList = (onMediaSelect: any) => {
       }
     })();
   }
+
   function deleteMedia(filePath: string, fileName: string) {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -82,7 +83,7 @@ const MediaList = (onMediaSelect: any) => {
         )
       </h2>
       {uploadDirs.length
-        && uploadDirs.map(dir => (
+        && uploadDirs.map((dir: string) => (
           <button onClick={() => loadDir(dir)} type="button" key={dir}>{dir}</button>
         ))}
       <h2>
@@ -92,7 +93,7 @@ const MediaList = (onMediaSelect: any) => {
       </h2>
       {media.length && (
         <ul className="media-preview">
-          { media.map(key => (
+          { media.map((key: string) => (
             <li key={key}>
               <button onClick={() => onMediaSelect(`${currentDir}`, key)} type="button">
                 Load
