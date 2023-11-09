@@ -7,14 +7,14 @@ import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../co
 import 'react-date-picker/dist/DatePicker.css';
 
 const useFetch = (): any => {
-  const [newId, setId] = useState(null);
+  const [newId, setId] = useState<number|null>(null);
   const [formEntry, setFormEntry] = useState<{
     content: string,
     date: string,
   }>({content: '', date: ''});
 
   useEffect(() => {
-    if (formEntry !== null) {
+    if (formEntry.content !== '') {
       (async () => {
         const token = window.localStorage.getItem(STORAGE_KEY) || '';
         const requestHeaders: HeadersInit = new Headers();
