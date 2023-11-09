@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -44,7 +44,15 @@ const useFetch = (): any => {
   return [newId, setFormEntry];
 };
 
-const AddForm = ({ content, date, onSuccess }: {content: string, date: string, onSuccess: any}) => {
+const propTypes = {
+  content: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+};
+
+type AddFormProps = PropTypes.InferProps<typeof propTypes>;
+
+const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: {content: string, date: string, onSuccess: any}) => {
   const [formContent, setFormContent] = useState<string>(content || '');
   const [formDate, setFormDate] = useState<Date>(
     parse(date, FULL_DATE_FORMAT, new Date()),
@@ -101,8 +109,6 @@ const AddForm = ({ content, date, onSuccess }: {content: string, date: string, o
       content: formContent.trim(),
       date: format(formDate, FULL_DATE_FORMAT),
     });
-
-
   }
 
   return (
@@ -170,8 +176,4 @@ const AddForm = ({ content, date, onSuccess }: {content: string, date: string, o
 
 export default AddForm;
 
-AddForm.propTypes = {
-  content: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  onSuccess: PropTypes.func.isRequired,
-};
+AddForm.propTypes = propTypes;

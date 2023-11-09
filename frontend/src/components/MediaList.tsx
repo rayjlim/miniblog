@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 
@@ -6,7 +6,13 @@ import MyContext from './MyContext';
 
 import './MediaList.css';
 
-const MediaList = (onMediaSelect: any) => {
+const propTypes = {
+  onMediaSelect: PropTypes.func.isRequired,
+};
+
+type MediaListProps = PropTypes.InferProps<typeof propTypes>;
+
+const MediaList: FunctionComponent<MediaListProps> = (onMediaSelect: any) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   const [media, setMedia] = useState<any[string]>([]);
   const [uploadDirs, setUploadDirs] = useState<any[string]>([]);
@@ -116,6 +122,4 @@ const MediaList = (onMediaSelect: any) => {
 
 export default MediaList;
 
-MediaList.propTypes = {
-  onMediaSelect: PropTypes.func.isRequired,
-};
+MediaList.propTypes = propTypes;

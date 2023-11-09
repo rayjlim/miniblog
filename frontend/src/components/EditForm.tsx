@@ -48,6 +48,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
    */
   async function handleSave() {
     console.log('handleSave entry :', content, date);
+
     try {
       const token = window.localStorage.getItem(STORAGE_KEY)|| '';
       const requestHeaders: HeadersInit = new Headers();
@@ -69,11 +70,14 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
       );
 
       console.log(response);
+
       onSuccess('Edit Done');
     } catch (error) {
       console.log(error);
       alert(error);
+      onSuccess('Edit fail' + error);
     }
+
   }
 
   /**
@@ -117,11 +121,6 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
     }
   }
 
-  function cancelClick() {
-    console.log('cancel click');
-    onSuccess('cancel');
-  }
-
   function checkKeyPressed(e: any) {
     console.log(`EditForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
@@ -142,11 +141,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
 
   return (
     <div className="well">
-      {/* <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
-                    fa-template
-                </button> */}
       <h2>Edit Entry</h2>
-
       <div className="entry-bar">
         <div>
           <p className="small">use `@@fa-tag@@` for quick font-awesome icon</p>
@@ -183,7 +178,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
         <button
           onClick={() => handleSave()}
           className="btn btn-primary"
-          id="saveBtn"
+          data-testid="saveBtn"
           type="button"
         >
           <i className="fa fa-save" />
@@ -192,9 +187,8 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
         </button>
         <DatePicker onChange={dateParam => dateChange(dateParam as Date)} value={date} />
         <button
-          onClick={() => cancelClick()}
+          onClick={() => onSuccess('cancel')}
           className="btn btn-warning pull-right"
-          id="cancelBtn"
           data-testid="cancelBtn"
           type="button"
         >
