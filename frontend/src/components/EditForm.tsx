@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
@@ -8,16 +8,27 @@ import 'react-date-picker/dist/DatePicker.css';
 
 import './EditForm.css';
 
-const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
-  const [date, setDate] = useState(
-    parse(entry.date, FULL_DATE_FORMAT, new Date()),
-  );
+const propTypes = {
+  entry: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+  }).isRequired,
+  onSuccess: PropTypes.func.isRequired,
+};
+
+type EditFormProps = PropTypes.InferProps<typeof propTypes>;
+
+const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
   const escapedContent = entry.content.replace(
     /<br\s*\/>/g,
     `
 `,
   );
-  const [content, setContent] = useState(escapedContent);
+  const [content, setContent] = useState<string>(escapedContent);
+  const [date, setDate] = useState<Date>(
+    parse(entry.date, FULL_DATE_FORMAT, new Date()),
+  );
   const textareaInput = useRef<HTMLTextAreaElement>(null);
 
   function textChange() {
@@ -31,10 +42,10 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
   }
 
   /**
-  * It takes the content and date from the form, and sends a PUT
-  * request to the server with the updated
-  * entry
-  */
+   * The function `handleSave` is an asynchronous function that sends a PUT request
+   * to update a post with the provided content and date, and logs the response or
+   * displays an error message.
+   */
   async function handleSave() {
     console.log('handleSave entry :', content, date);
     try {
@@ -52,10 +63,8 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
           }),
           mode: 'cors',
           cache: 'no-cache',
-          credentials: 'same-origin',
           headers: requestHeaders,
           redirect: 'follow',
-          referrerPolicy: 'no-referrer',
         },
       );
 
@@ -67,6 +76,11 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
     }
   }
 
+  /**
+   * The above function handles the deletion of a post by sending a DELETE request to
+   * the server and displaying a success message or an error message.
+   * @returns The function `handleDelete` returns nothing (`undefined`).
+   */
   async function handleDelete() {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -84,11 +98,7 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
         {
           method: 'DELETE',
           mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: requestHeaders,
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
+          headers: requestHeaders
         },
       );
 
@@ -105,6 +115,11 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
     if (value) {
       setDate(value);
     }
+  }
+
+  function cancelClick() {
+    console.log('cancel click');
+    onSuccess('cancel');
   }
 
   function checkKeyPressed(e: any) {
@@ -177,9 +192,10 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
         </button>
         <DatePicker onChange={dateParam => dateChange(dateParam as Date)} value={date} />
         <button
-          onClick={() => onSuccess('')}
+          onClick={() => cancelClick()}
           className="btn btn-warning pull-right"
           id="cancelBtn"
+          data-testid="cancelBtn"
           type="button"
         >
           <i className="fa fa-ban" />
@@ -196,11 +212,4 @@ const EditForm = ({ entry, onSuccess }: {entry: any, onSuccess: any}) => {
 
 export default EditForm;
 
-EditForm.propTypes = {
-  entry: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-  }).isRequired,
-  onSuccess: PropTypes.func.isRequired,
-};
+EditForm.propTypes = propTypes;
