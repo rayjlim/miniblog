@@ -10,6 +10,7 @@ import {
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import {
+  DEFAULT_SEARCH_MONTHS_BACK,
   DISPLAY_DATE_FORMAT,
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
@@ -38,10 +39,12 @@ const TextEntry = () => {
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
   const [entry, setEntry] = useState({id: '0', content: '', date: ''});
-  const [searchParams, setSearchParams] = useState<any>({startDate:'', endDate:''});
-  const [viewState, setViewState] = useState({ showStartDate: false, showEndDate: false });
+  const [searchParams, setSearchParams] = useState<{startDate: string,
+    endDate: string, resultsLimit?: number}>({startDate: '', endDate: ''});
+  const [viewState, setViewState] = useState({ showStartDate: false,
+    showEndDate: false });
   const searchText = useRef<HTMLInputElement>(null);
-  const startDate = useRef<Date | null>(subMonths(new Date(), 3));
+  const startDate = useRef<Date | null>(subMonths(new Date(), DEFAULT_SEARCH_MONTHS_BACK));
   const endDate = useRef<Date | null>(null);
   /**
    * The function `getEntries` is an asynchronous function that retrieves entries
