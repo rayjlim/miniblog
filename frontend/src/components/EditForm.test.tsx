@@ -9,6 +9,7 @@ global.fetch = jest.fn(() =>
 );
 
 window.alert = () => {};
+window.confirm = () => true;
 console.log = () => {};
 
 
@@ -47,11 +48,33 @@ describe("EditForm component", () => {
     fireEvent.click(btn)
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/1")
+    expect(fetch.mock.calls[0][1].method).toBe("PUT")
     expect(fetch.mock.calls[0][1].body).toBe("{\"content\":\"entry text\",\"date\":\"2000-01-01\"}")
 
     expect(mockSuccessCb).toHaveBeenCalledTimes(1);
     expect(mockSuccessCb.mock.calls[0][0]).toBe('Edit Done');
 
   });
+
+  it("should Delete call and respond", () => {
+    const mockSuccessCb = jest.fn();
+
+    render(<EditForm entry={{id: '2', content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
+    const btn = screen.getByTestId('deleteBtn');
+    expect(btn).toBeInTheDocument();
+    fireEvent.click(btn)
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/2")
+    expect(fetch.mock.calls[0][1].method).toBe("DELETE")
+
+    expect(mockSuccessCb).toHaveBeenCalledTimes(1);
+    expect(mockSuccessCb.mock.calls[0][0]).toBe('Delete Done');
+
+  });
+
+  // test edit content
+  // test edit date
+  // test shortcut keys
+  // test keychange font-awesome insert
 
 });

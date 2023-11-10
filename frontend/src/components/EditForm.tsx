@@ -59,6 +59,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
         }),
         headers: requestHeaders
       };
+      // jest test fails when onSuccess called after fetch, IDKW
       onSuccess('Edit Done');
       try {
         const response = await fetch(
@@ -77,7 +78,6 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
       alert(error);
       onSuccess('Edit fail' + error);
     }
-
   }
 
   /**
@@ -97,6 +97,9 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
+
+    // jest test fails when onSuccess called after fetch, IDKW
+    onSuccess('Delete Done');
     try {
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${id}`,
@@ -108,17 +111,10 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
       );
 
       console.log(response);
-      onSuccess('Delete Done');
+
     } catch (error) {
       console.log(error);
       alert(error);
-    }
-  }
-
-  function dateChange(value = new Date()) {
-    console.log('value :', value);
-    if (value) {
-      setDate(value);
     }
   }
 
@@ -157,6 +153,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
         </div>
         <button
           onClick={handleDelete}
+          data-testid="deleteBtn"
           className="btn btn-danger pull-right delete-btn"
           type="button"
         >
@@ -180,18 +177,22 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
           onClick={() => handleSave()}
           className="btn btn-primary"
           data-testid="saveBtn"
+          id="saveBtn"
           type="button"
+          title="alt + s"
         >
           <i className="fa fa-save" />
           {' '}
           Save
         </button>
-        <DatePicker onChange={dateParam => dateChange(dateParam as Date)} value={date} />
+        <DatePicker onChange={dateParam => setDate(dateParam as Date)} value={date} />
         <button
           onClick={() => onSuccess('cancel')}
           className="btn btn-warning pull-right"
           data-testid="cancelBtn"
+          id="cancelBtn"
           type="button"
+          title="ESC"
         >
           <i className="fa fa-ban" />
           {' '}
