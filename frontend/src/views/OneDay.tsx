@@ -1,4 +1,4 @@
-import React, {
+import {
   useContext,
   useState,
   useRef,
@@ -17,6 +17,7 @@ import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
+  AUTH_HEADER
 } from '../constants';
 
 import pkg from '../../package.json';
@@ -30,7 +31,7 @@ const EDIT = 2;
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
-async function xhrCall(url, apiDescription) {
+async function xhrCall(url: string, apiDescription: string) {
   console.log(`xhrCall ${url}`);
   try {
     const apiResponse = await fetch(url, { cache: 'no-cache' });
@@ -38,7 +39,7 @@ async function xhrCall(url, apiDescription) {
       const data = await apiResponse.json();
       return data;
     }
-    throw new Error(apiResponse.status);
+    throw new Error(`${apiResponse.status}`);
   } catch (err) {
     console.error(err);
     toast(` ${url} get ${apiDescription} error : ${err}`);
@@ -58,27 +59,25 @@ const OneDay = () => {
     INSPIRATION_API,
     MOVIES_API,
     QUESTION_API,
-    TRACKS_API,
+    TRACKS_API
   } = useContext(MyContext);
 
   const navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
-    pageDate: null,
+    pageDate: '',
     searchParam: '',
-    formEntry: {},
+    formEntry: {id: '0', content: '', date: ''},
     autohide: 'true',
     pageMode: ONEDAY,
     formMode: CLOSED,
     scrollToLast: null,
-    refForm: React.createRef(),
-    refs: [],
   });
-  const [inspiration, setInspiration] = useState(null);
-  const [weight, setWeight] = useState(null);
-  const [movies, setMovies] = useState([]);
+  const [inspiration, setInspiration] = useState<string>('');
+  const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
+  const [movies, setMovies] = useState<any[]>([]);
 
-  const dateInput = useRef();
+  const dateInput = useRef<HTMLInputElement>(null);
 
   const usersFullname = window.localStorage.getItem('user-name');
 
@@ -88,17 +87,17 @@ const OneDay = () => {
     setInspiration(`Inspire: ${data.message} : ${data.author}`);
   }
 
-  async function getWeight(date) {
+  async function getWeight(date: string) {
     const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
     const data = await xhrCall(weightApi, 'weight');
-    if (data && data.data && data.data[0] && data.data[0].count) {
+    if (data?.data[0]?.count) {
       setWeight(data.data[0]);
     } else {
-      setWeight('?');
+      setWeight({count: 0, comment: ''});
     }
   }
 
-  async function getMovies(date) {
+  async function getMovies(date: string) {
     const weightApi = `${MOVIES_API}&advanced_search=true&dt_viewed=${date}`;
     const data = await xhrCall(weightApi, 'movie');
     if (data && data.movies) {
@@ -113,7 +112,7 @@ const OneDay = () => {
     setInspiration(`Question: ${data.prompt} : ${data.category}`);
   }
 
-  function loadDay(loadParams) {
+  function loadDay(loadParams: any) {
     console.log(
       'loadDay :',
       loadParams.pageDate,
@@ -137,27 +136,23 @@ const OneDay = () => {
     }
 
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
       try {
         const response = await fetch(endPointURL, {
           method: 'GET',
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
+          headers: requestHeaders,
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
         });
         if (response.ok) {
           const { entries } = await response.json();
           console.log('response.data :>> ', entries);
-          const refs = entries.reduce((acc, value) => {
-            acc[value.id] = React.createRef();
-            return acc;
-          }, {});
           console.log('entries :>> ', entries);
           console.log('state :>> ', state);
           setState({
@@ -166,7 +161,6 @@ const OneDay = () => {
             entries,
             auth:
             true,
-            refs,
           });
           console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
         } else {
@@ -199,7 +193,7 @@ const OneDay = () => {
    * @function
    * @param  {Object} e Event of Button click
    */
-  function handleButtonDirection(e) {
+  function handleButtonDirection(e: any) {
     let localDate = parse(state.pageDate, FULL_DATE_FORMAT, new Date());
     if (e.target.value === 'today') {
       localDate = new Date();
@@ -208,7 +202,8 @@ const OneDay = () => {
     }
 
     const newDate = add(localDate, { days: e.target.value });
-    dateInput.current.value = format(newDate, FULL_DATE_FORMAT);
+    let refInput = dateInput.current || {value: ''};
+    refInput.value = format(newDate, FULL_DATE_FORMAT);
     loadDay({
       ...state,
       pageDate: format(newDate, FULL_DATE_FORMAT),
@@ -228,7 +223,7 @@ const OneDay = () => {
     setState({ ...state, formMode: ADD });
   }
 
-  function showEditForm(entry) {
+  function showEditForm(entry: any) {
     console.log('id :', entry.id);
 
     setState({
@@ -237,31 +232,27 @@ const OneDay = () => {
       formEntry: entry,
       scrollToLast: entry.id,
     });
-    state.refForm.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
   }
 
-  function updateDate(e) {
+  function updateDate(e: any) {
     const dateRegex = /^\d{4}[./-]\d{2}[./-]\d{2}$/;
     if (e.target.value.match(dateRegex)) {
       loadDay({ ...state, pageDate: e.target.value });
     }
   }
 
-  function changePageMode(pageMode) {
+  function changePageMode(pageMode: number) {
     console.log('new pageMode :>> ', pageMode);
     loadDay({ ...state, pageMode });
   }
 
-  function showAddEditForm(mode) {
+  function showAddEditForm(mode: number) {
     // console.log('formmode :', mode);
     let returnValue = null;
     if (!mode || mode === CLOSED) {
       returnValue = (
         <button
-          onClick={e => showAddForm(e)}
+          onClick={() => showAddForm()}
           className="btn btn-default"
           id="addFormBtn"
           type="button"
@@ -286,56 +277,59 @@ const OneDay = () => {
     navigate('/login');
   };
 
-  function checkKeyPressed(e) {
+  function checkKeyPressed(e: any) {
     console.log(`OneDay: handle key presss ${e.key}`);
 
     // Note: getting element by id is a hack because
     // the content value is taken from the init value
     if (e.altKey && e.key === ',') {
       console.log('alt comma keybinding');
-      document.getElementById('prevBtn').click();
+      document.getElementById('prevBtn')?.click();
     } else if (e.altKey && e.key === '.') {
       console.log('alt period keybinding');
-      document.getElementById('nextBtn').click();
+      document.getElementById('nextBtn')?.click();
     } else if (e.altKey && e.key === 'a') {
       console.log('alt period keybinding');
-      document.getElementById('addFormBtn').click();
+      document.getElementById('addFormBtn')?.click();
     }
   }
 
   useEffect(() => {
-    const token = window.localStorage.getItem(STORAGE_KEY);
-    if (!token) {
-      navigate('/login');
+    async function ueFunc(){
+      const token = window.localStorage.getItem(STORAGE_KEY);
+      if (!token) {
+        navigate('/login');
+      }
+
+      console.log('OndeDay: useEffect');
+      const loc = `${window.location}`;
+      const param = loc.substring(loc.indexOf('?'));
+      console.log('param :', param);
+      const urlParams = new URLSearchParams(param);
+
+      const pageDate = urlParams.has('date')
+        ? urlParams.get('date')
+        : format(new Date(), FULL_DATE_FORMAT);
+
+      setState({ ...state, pageDate: pageDate || '' });
+
+      const pageMode = urlParams.has('pageMode')
+        ? parseInt(urlParams.get('pageMode') || '', 10)
+        : ONEDAY;
+
+      console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
+      const localDate = format(new Date(), FULL_DATE_FORMAT);
+
+      console.log('setting pageDate :>> ', localDate);
+      loadDay({ pageDate, pageMode });
     }
-
-    console.log('OndeDay: useEffect');
-    const loc = `${window.location}`;
-    const param = loc.substring(loc.indexOf('?'));
-    console.log('param :', param);
-    const urlParams = new URLSearchParams(param);
-
-    const pageDate = urlParams.has('date')
-      ? urlParams.get('date')
-      : format(new Date(), FULL_DATE_FORMAT);
-
-    setState({ ...state, pageDate });
-
-    const pageMode = urlParams.has('pageMode')
-      ? parseInt(urlParams.get('pageMode'), 10)
-      : ONEDAY;
-
-    console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
-    const localDate = format(new Date(), FULL_DATE_FORMAT);
-
-    console.log('setting pageDate :>> ', localDate);
-    loadDay({ pageDate, pageMode });
-
+    ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
+
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
 
-  function copyToClipboard(content) {
+  function copyToClipboard(content: string) {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
@@ -361,11 +355,6 @@ const OneDay = () => {
             <span>Home</span>
           </button>
         )}
-        <RouterNavLink to="/search">
-          <i className="fa fa-search" />
-          {' '}
-          <span className="nav-text">Search</span>
-        </RouterNavLink>
       </nav>
       {state.pageMode === ONEDAY && <h1>One Day</h1>}
       {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
@@ -377,8 +366,9 @@ const OneDay = () => {
           value="-1"
           id="prevBtn"
           type="button"
+          title="alt + comma"
         >
-          <i className="fa fa-chevron-left" />
+          <i className="fa fa-chevron-left"/>
           Prev
         </button>
         <div>
@@ -397,6 +387,7 @@ const OneDay = () => {
           value="1"
           id="nextBtn"
           type="button"
+          title="alt + period"
         >
           Next
           <i className="fa fa-chevron-right" />
@@ -411,7 +402,7 @@ const OneDay = () => {
         </button>
       </div>
 
-      <section className="container" ref={state.refForm}>
+      <section className="container">
         {state.pageMode === ONEDAY
           && weight
           && (
@@ -426,10 +417,9 @@ const OneDay = () => {
 
       <section className="container">
         <ul className="entriesList">
-          {state.entries.map(entry => (
+          {state.entries.map((entry: any) => (
             <li
               key={entry.id}
-              ref={state.refs[entry.id]}
             >
               <button
                 onClick={() => showEditForm(entry)}
@@ -466,12 +456,12 @@ const OneDay = () => {
             </button>
           )}
           {QUESTION_API !== '' && (
-            <button onClick={e => getPrompt(e)} className="plainLink" type="button">
+            <button onClick={() => getPrompt()} className="plainLink" type="button">
               [Get Prompt]
             </button>
           )}
           {INSPIRATION_API !== '' && (
-            <button onClick={e => getInspiration(e)} className="plainLink" type="button">
+            <button onClick={() => getInspiration()} className="plainLink" type="button">
               [Get Inspiration]
             </button>
           )}

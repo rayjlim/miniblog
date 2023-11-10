@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,13 +10,15 @@ import {
 import EditForm from '../components/EditForm';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import {
+  DEFAULT_SEARCH_MONTHS_BACK,
   DISPLAY_DATE_FORMAT,
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
+  AUTH_HEADER
 } from '../constants';
 import pkg from '../../package.json';
-
+import debounce from '../utils/debounce';
 import './Search.css';
 
 const DEBOUNCE_TIME = 350;
@@ -29,23 +31,6 @@ const FILTER_MODE_ALL = 0;
 // const FILTER_MODE_TAGGED = 1;
 // const FILTER_MODE_UNTAGGED = 2;
 
-let timeout;
-function debounce(func, wait, immediate) {
-  console.log('debouncing');
-  return () => {
-    const context = this;
-    const args = arguments;
-    const later = () => {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
-
 const TextEntry = () => {
   const navigate = useNavigate();
 
@@ -53,22 +38,24 @@ const TextEntry = () => {
   const [yearMonths, setYearMonths] = useState([]);
   const [searchFilter, setSearchFilter] = useState(FILTER_MODE_ALL);
   const [formMode, setFormMode] = useState(HIDE_EDIT_FORM);
-  const [entry, setEntry] = useState({});
-  const [searchParams, setSearchParams] = useState(null);
-  const [viewState, setViewState] = useState({ showStartDate: false, showEndDate: false });
-  const searchText = useRef({ value: '' });
-  const startDate = useRef(subMonths(new Date(), 3));
-  const endDate = useRef();
-
+  const [entry, setEntry] = useState({id: '0', content: '', date: ''});
+  const [searchParams, setSearchParams] = useState<{startDate: string,
+    endDate: string, resultsLimit?: number}>({startDate: '', endDate: ''});
+  const [viewState, setViewState] = useState({ showStartDate: false,
+    showEndDate: false });
+  const searchText = useRef<HTMLInputElement>(null);
+  const startDate = useRef<Date | null>(subMonths(new Date(), DEFAULT_SEARCH_MONTHS_BACK));
+  const endDate = useRef<Date | null>(null);
   /**
-   * Get blog entries for text search
-   * @param  {string} text text to search for
-   */
+   * The function `getEntries` is an asynchronous function that retrieves entries
+   * from an API based on search parameters and updates the state with the results.
+  * Get blog entries for text search
+  */
   async function getEntries() {
-    console.log('getEntries#searchText: ', searchText.current.value);
-    const searchTextValue = searchText.current.value;
+    console.log('getEntries#searchText: ', searchText.current?.value);
+    const searchTextValue = searchText.current?.value || '';
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const encodedSearchText = encodeURIComponent(searchTextValue);
       let endpoint = `${
         REST_ENDPOINT
@@ -81,13 +68,13 @@ const TextEntry = () => {
         const formattedEndDate = format(endDate.current, FULL_DATE_FORMAT);
         endpoint += `&endDate=${formattedEndDate}`;
       }
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(endpoint, {
         method: 'GET',
         cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
         referrerPolicy: 'no-referrer',
       });
 
@@ -128,10 +115,10 @@ const TextEntry = () => {
         if (searchTextValue.length) {
           const reg = new RegExp(searchTextValue, 'gi');
 
-          const foundHighlights = responseData.entries.map(entryLocal => {
+          const foundHighlights = responseData.entries.map((entryLocal: any) => {
             const highlighted = entryLocal.content.replace(
               reg,
-              str => `<b>${str}</b>`,
+              (str: any) => `<b>${str}</b>`,
             );
             return { ...entryLocal, highlighted };
           });
@@ -141,7 +128,7 @@ const TextEntry = () => {
           setPosts(responseData.entries);
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       toast.error(err);
     }
@@ -151,15 +138,15 @@ const TextEntry = () => {
     console.log('getYearMonths');
 
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const endpoint = `${REST_ENDPOINT}/api/yearMonth`;
 
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(endpoint, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
         referrerPolicy: 'no-referrer',
       });
 
@@ -169,9 +156,9 @@ const TextEntry = () => {
       } else {
         const responseData = await response.json();
 
-        setYearMonths(responseData.map(row => ({ label: row, value: row })));
+        setYearMonths(responseData.map((row: string) => ({ label: row, value: row })));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       toast.error(err);
     }
@@ -179,14 +166,14 @@ const TextEntry = () => {
 
   const debouncedSearch = debounce(getEntries, DEBOUNCE_TIME);
 
-  function showEditForm(e, entryLocal) {
+  function showEditForm(e: any, entryLocal: any) {
     e.preventDefault();
     console.log('id :', entryLocal.id);
     setFormMode(SHOW_EDIT_FORM);
     setEntry(entryLocal);
   }
 
-  function resetEntryForm(showToast) {
+  function resetEntryForm(showToast: boolean) {
     if (showToast) {
       toast('Edit Done');
     }
@@ -194,7 +181,7 @@ const TextEntry = () => {
     getEntries();
   }
 
-  function changeDate(date, type) {
+  function changeDate(date: Date, type: string) {
     console.log('change date called', date, type);
     if (type === 'start') {
       const showStartDate = date !== null;
@@ -218,7 +205,7 @@ const TextEntry = () => {
     debouncedSearch();
 
     getYearMonths();
-  }, [searchText.current.value, searchFilter]);
+  }, [searchText.current?.value, searchFilter]);
 
   return (
     <>
@@ -243,7 +230,7 @@ const TextEntry = () => {
           className="form-control"
           ref={searchText}
           placeholder="Search term"
-          onChange={() => debouncedSearch(searchText.current.value)}
+          onChange={() => debouncedSearch()}
         />
         Filter:
         <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
@@ -252,14 +239,14 @@ const TextEntry = () => {
           className="form-control filterType"
           value={searchFilter}
           placeholder="Search term"
-          onChange={e => setSearchFilter(e.target.value)}
+          onChange={e => setSearchFilter(parseInt(e.target.value))}
         />
         <div className="search-date-container">
           <div className="search-date-field">
             Start Date:
             {' '}
             {viewState.showStartDate ? (
-              <DatePicker onChange={x => changeDate(x, 'start')} value={startDate.current} />
+              <DatePicker onChange={x => changeDate(x as Date, 'start')} value={startDate.current} />
             ) : (
               <>
                 None
@@ -278,7 +265,7 @@ const TextEntry = () => {
             End Date:
             {' '}
             {viewState.showEndDate ? (
-              <DatePicker onChange={x => changeDate(x, 'end')} value={endDate.current} />
+              <DatePicker onChange={x => changeDate(x as Date, 'end')} value={endDate.current} />
             ) : (
               <>
                 None
@@ -327,9 +314,9 @@ const TextEntry = () => {
           </button>
           <Select
             options={yearMonths}
-            onChange={chosen => {
+            onChange={(chosen: any) => {
               console.log(chosen);
-              const parts = chosen.value.split('-');
+              const parts = chosen?.value.split('-');
               changeDate(startOfMonth(new Date(parts[0], parts[1] - 1)), 'start');
               changeDate(endOfMonth(new Date(parts[0], parts[1] - 1)), 'end');
             }}
@@ -371,8 +358,9 @@ const TextEntry = () => {
           posts.length
             ? (
               <ul className="entriesList">
-                {posts.map(localEntry => {
-                  const content = searchText.current.value.length
+                {posts.map((localEntry: any) => {
+                  const content = searchText.current?.value.length
+
                     && localEntry.highlighted
                     ? localEntry.highlighted
                     : localEntry.content;
@@ -400,7 +388,7 @@ const TextEntry = () => {
                         <i className="fa fa-calendar-check" title="Same Day" />
                       </RouterNavLink>
                       <div className="markdownDisplay">
-                        <MarkdownDisplay source={content} escapeHtml={false} />
+                        <MarkdownDisplay source={content} />
                       </div>
                     </li>
                   );

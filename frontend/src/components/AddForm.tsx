@@ -1,17 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import 'react-date-picker/dist/DatePicker.css';
 
-const useFetch = () => {
-  const [newId, setId] = useState(null);
-  const [formEntry, setFormEntry] = useState(null);
+const useFetch = (): any => {
+  const [newId, setId] = useState<number|null>(null);
+  const [formEntry, setFormEntry] = useState<{
+    content: string,
+    date: string,
+  }>({content: '', date: ''});
+
   useEffect(() => {
-    if (formEntry !== null) {
+    if (formEntry.content !== '') {
       (async () => {
-        const token = window.localStorage.getItem(STORAGE_KEY);
+        const token = window.localStorage.getItem(STORAGE_KEY) || '';
+        const requestHeaders: HeadersInit = new Headers();
+        requestHeaders.set('Content-Type', 'application/json');
+        requestHeaders.set(AUTH_HEADER, token);
         try {
           const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
             method: 'POST',
@@ -19,10 +27,7 @@ const useFetch = () => {
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-App-Token': token,
-            },
+            headers: requestHeaders,
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
           });
@@ -39,23 +44,31 @@ const useFetch = () => {
   return [newId, setFormEntry];
 };
 
-const AddForm = ({ content, date, onSuccess }) => {
-  const [formContent, setFormContent] = useState(content || '');
-  const [formDate, setFormDate] = useState(
+const propTypes = {
+  content: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+};
+
+type AddFormProps = PropTypes.InferProps<typeof propTypes>;
+
+const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: {content: string, date: string, onSuccess: any}) => {
+  const [formContent, setFormContent] = useState<string>(content || '');
+  const [formDate, setFormDate] = useState<Date>(
     parse(date, FULL_DATE_FORMAT, new Date()),
   );
   const isMounted = useRef(false);
   const [id, setParams] = useFetch();
-  const textareaInput = useRef();
+  const textareaInput = useRef<HTMLTextAreaElement>(null);
 
-  function checkKeyPressed(e) {
+  function checkKeyPressed(e: any) {
     console.log(`AddForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value was taken from the init value
-      document.getElementById('saveBtn').click();
+      document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
-      document.getElementById('cancelBtn').click();
+      document.getElementById('cancelBtn')?.click();
     }
   }
 
@@ -69,17 +82,18 @@ const AddForm = ({ content, date, onSuccess }) => {
       isMounted.current = true;
 
       setFormContent(content || '');
+      document.addEventListener('keydown', checkKeyPressed);
+      return () => document.removeEventListener('keydown', checkKeyPressed);
     }
-    document.addEventListener('keydown', checkKeyPressed);
-    return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [id, date, content, onSuccess]);
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
-    textareaInput.current.value = textareaInput.current.value.replace(pattern, replacement);
+    let refTextareaInput = textareaInput.current || {value:''};
+    refTextareaInput.value = refTextareaInput.value.replace(pattern, replacement);
 
-    setFormContent(textareaInput.current.value);
+    setFormContent(refTextareaInput.value);
   }
 
   function dateChange(value = new Date()) {
@@ -132,7 +146,7 @@ const AddForm = ({ content, date, onSuccess }) => {
       </div>
 
       <div className="form-group">
-        <DatePicker onChange={dateParam => dateChange(dateParam)} value={formDate} />
+        <DatePicker onChange={newDate => dateChange(newDate as Date)} value={formDate} />
       </div>
 
       <button
@@ -162,8 +176,4 @@ const AddForm = ({ content, date, onSuccess }) => {
 
 export default AddForm;
 
-AddForm.propTypes = {
-  content: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  onSuccess: PropTypes.func.isRequired,
-};
+AddForm.propTypes = propTypes;

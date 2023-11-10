@@ -1,4 +1,5 @@
 composer.json
 composer.lock
-exclulde-from-prod.txt
+exclude-from-prod.txt
 _logs/
+

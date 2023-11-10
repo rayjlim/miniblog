@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import format from 'date-fns/format';
@@ -9,6 +9,7 @@ import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
+  AUTH_HEADER
 } from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
@@ -19,7 +20,13 @@ import './Media.css';
 const Media = () => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   const navigate = useNavigate();
-  const [post, setPost] = useState({
+  const [post, setPost] = useState<{
+    date: string,
+    fileName: string | null,
+    filePath: string | null,
+    prepend: string,
+    imgUrl: string,
+  }>({
     date: format(new Date(), FULL_DATE_FORMAT),
     fileName: '',
     filePath: '',
@@ -27,7 +34,6 @@ const Media = () => {
     imgUrl: '',
   });
 
-  const mediaBaseDir = '';
   const [showMedia, setShowMedia] = useState(true);
 
   useEffect(() => {
@@ -44,12 +50,12 @@ const Media = () => {
       ...post,
       fileName,
       filePath,
-      prepend: `![](../uploads/${filePath}/${fileName})`,
+      prepend: `![](../uploads/${filePath}/${fileName}?)`,
       imgUrl: `${UPLOAD_ROOT}/${filePath}/${fileName}?r=${random}`,
     });
-  }, []);
+  }, [UPLOAD_ROOT]);
 
-  function mediaSelect(filePath, fileName) {
+  function mediaSelect(filePath: string, fileName: string) {
     console.log(filePath, fileName);
     const random = Math.random();
     setPost({
@@ -62,17 +68,17 @@ const Media = () => {
     setShowMedia(false);
   }
 
-  async function xhrCall(url) {
+  async function xhrCall(url: string) {
     console.log(`xhrCall ${url}`);
-    const token = window.localStorage.getItem(STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(AUTH_HEADER, token);
     const response = await fetch(
       url,
       {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-Token': token,
-        },
+        headers: requestHeaders,
       },
     );
     console.log('response :>> ', response);
@@ -98,7 +104,7 @@ const Media = () => {
     await xhrCall(url);
   };
 
-  function copyToClipboard(content) {
+  function copyToClipboard(content: string) {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
@@ -152,8 +158,7 @@ const Media = () => {
       )}
       <button onClick={() => setShowMedia(!showMedia)} type="button">Toggle Show Media</button>
       {showMedia && (
-        // eslint-disable-next-line react/jsx-no-bind
-        <MediaList baseDir={mediaBaseDir} onMediaSelect={mediaSelect} />
+        <MediaList onMediaSelect={mediaSelect} />
       )}
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <RouterNavLink to="/upload" className="btn navbar-btn">

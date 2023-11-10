@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 import pkg from '../../package.json';
 import './Logs.css';
 
@@ -13,13 +13,13 @@ const Logs = () => {
   const [logFile, setLogFile] = useState('');
 
   const getLog = async (log = '') => {
-    const token = window.localStorage.getItem(STORAGE_KEY);
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(AUTH_HEADER, token);
     const response = await fetch(`${REST_ENDPOINT}/logs/${log}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-App-Token': token,
-      },
+      headers: requestHeaders,
     });
     console.log('response :', response);
     if (response.ok) {
@@ -34,14 +34,17 @@ const Logs = () => {
     toast.error(`loading error : ${response.status}`);
   };
 
-  async function handleDelete(log) {
+  async function handleDelete(log: any) {
     const go = window.confirm('You sure?');
     if (!go) {
       return;
     }
 
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
+      const token = window.localStorage.getItem(STORAGE_KEY) || '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(
         `${REST_ENDPOINT}/logs/${log}`,
         {
@@ -49,10 +52,7 @@ const Logs = () => {
           mode: 'cors',
           cache: 'no-cache',
           credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
+          headers: requestHeaders,
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
         },

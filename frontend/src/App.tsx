@@ -17,7 +17,7 @@ import './App.css';
 const showDevRibbon = ENVIRONMENT === 'development';
 
 const App = () => {
-  const [globalContext, setGlobalContext] = useState(null);
+  const [globalContext, setGlobalContext] = useState<any|null>(null);
 
   useEffect(() => {
     (async () => {
@@ -74,7 +74,7 @@ const App = () => {
                   <Routes>
                     <Route path="/upload" element={<Upload />} />
                     <Route path="/media" element={<Media />} />
-                    <Route path="/search" exact element={<Search />} />
+                    <Route path="/search" element={<Search />} />
                     <Route path="/oneday" element={<OneDay />} />
                     <Route path="/logs" element={<Logs />} />
                     <Route path="/login" element={<LoginPassword />} />

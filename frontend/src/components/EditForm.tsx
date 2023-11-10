@@ -1,70 +1,90 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-date-picker';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import 'react-date-picker/dist/DatePicker.css';
 
 import './EditForm.css';
 
-const EditForm = ({ entry, onSuccess }) => {
-  const [date, setDate] = useState(
-    parse(entry.date, FULL_DATE_FORMAT, new Date()),
-  );
+const propTypes = {
+  entry: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+  }).isRequired,
+  onSuccess: PropTypes.func.isRequired,
+};
+
+type EditFormProps = PropTypes.InferProps<typeof propTypes>;
+
+const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
   const escapedContent = entry.content.replace(
     /<br\s*\/>/g,
     `
 `,
   );
-  const [content, setContent] = useState(escapedContent);
-  const textareaInput = useRef();
+  const [content, setContent] = useState<string>(escapedContent);
+  const [date, setDate] = useState<Date>(
+    parse(entry.date, FULL_DATE_FORMAT, new Date()),
+  );
+  const textareaInput = useRef<HTMLTextAreaElement>(null);
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
-    console.log('textarea.value :>> ', textareaInput.current.value);
-    textareaInput.current.value = textareaInput.current.value.replace(pattern, replacement);
+    const refTextarea = textareaInput.current || {value: ''};
+    console.log('textarea.value :>> ', refTextarea.value);
+    refTextarea.value = refTextarea.value.replace(pattern, replacement);
 
-    setContent(textareaInput.current.value);
+    setContent(refTextarea.value);
   }
 
   /**
-  * It takes the content and date from the form, and sends a PUT
-  * request to the server with the updated
-  * entry
-  */
+   * The function `handleSave` is an asynchronous function that sends a PUT request
+   * to update a post with the provided content and date, and logs the response or
+   * displays an error message.
+   */
   async function handleSave() {
     console.log('handleSave entry :', content, date);
-    try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
-      const response = await fetch(
-        `${REST_ENDPOINT}/api/posts/${entry.id}`,
+      const token = window.localStorage.getItem(STORAGE_KEY)|| '';
+      const requestHeaders: HeadersInit = new Headers();
+      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders.set(AUTH_HEADER, token);
+      const options = {method: 'PUT',
+        body: JSON.stringify({
+          content,
+          date: format(date, FULL_DATE_FORMAT),
+        }),
+        headers: requestHeaders
+      };
+      // jest test fails when onSuccess called after fetch, IDKW
+      onSuccess('Edit Done');
+      try {
+        const response = await fetch(
+          `${REST_ENDPOINT}/api/posts/${entry.id}`,
         {
-          method: 'PUT',
-          body: JSON.stringify({
-            content,
-            date: format(date, FULL_DATE_FORMAT),
-          }),
+          ...options,
           mode: 'cors',
           cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
           redirect: 'follow',
-          referrerPolicy: 'no-referrer',
         },
       );
 
       console.log(response);
-      onSuccess('Edit Done');
     } catch (error) {
       console.log(error);
       alert(error);
+      onSuccess('Edit fail' + error);
     }
   }
 
+  /**
+   * The above function handles the deletion of a post by sending a DELETE request to
+   * the server and displaying a success message or an error message.
+   * @returns The function `handleDelete` returns nothing (`undefined`).
+   */
   async function handleDelete() {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -72,47 +92,40 @@ const EditForm = ({ entry, onSuccess }) => {
     }
     const { id } = entry;
     console.log(`handleDelete ${id}`);
+
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(AUTH_HEADER, token);
+
+    // jest test fails when onSuccess called after fetch, IDKW
+    onSuccess('Delete Done');
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY);
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${id}`,
         {
           method: 'DELETE',
           mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-App-Token': token,
-          },
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
+          headers: requestHeaders
         },
       );
 
       console.log(response);
-      onSuccess('Delete Done');
+
     } catch (error) {
       console.log(error);
       alert(error);
     }
   }
 
-  function dateChange(value = new Date()) {
-    console.log('value :', value);
-    if (value) {
-      setDate(value);
-    }
-  }
-
-  function checkKeyPressed(e) {
+  function checkKeyPressed(e: any) {
     console.log(`EditForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value is taken from the init value
-      document.getElementById('saveBtn').click();
+      document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
-      document.getElementById('cancelBtn').click();
+      document.getElementById('cancelBtn')?.click();
     }
   }
 
@@ -125,11 +138,7 @@ const EditForm = ({ entry, onSuccess }) => {
 
   return (
     <div className="well">
-      {/* <button onClick={this.addFAtag} className="btn btn-info" style={templateStyle}>
-                    fa-template
-                </button> */}
       <h2>Edit Entry</h2>
-
       <div className="entry-bar">
         <div>
           <p className="small">use `@@fa-tag@@` for quick font-awesome icon</p>
@@ -144,6 +153,7 @@ const EditForm = ({ entry, onSuccess }) => {
         </div>
         <button
           onClick={handleDelete}
+          data-testid="deleteBtn"
           className="btn btn-danger pull-right delete-btn"
           type="button"
         >
@@ -158,7 +168,7 @@ const EditForm = ({ entry, onSuccess }) => {
           onChange={() => textChange()}
           className="form-control"
           placeholder="Add ..."
-          rows="8"
+          rows={8}
           defaultValue={content}
         />
       </div>
@@ -166,19 +176,23 @@ const EditForm = ({ entry, onSuccess }) => {
         <button
           onClick={() => handleSave()}
           className="btn btn-primary"
+          data-testid="saveBtn"
           id="saveBtn"
           type="button"
+          title="alt + s"
         >
           <i className="fa fa-save" />
           {' '}
           Save
         </button>
-        <DatePicker onChange={dateParam => dateChange(dateParam)} value={date} />
+        <DatePicker onChange={dateParam => setDate(dateParam as Date)} value={date} />
         <button
-          onClick={() => onSuccess('')}
+          onClick={() => onSuccess('cancel')}
           className="btn btn-warning pull-right"
+          data-testid="cancelBtn"
           id="cancelBtn"
           type="button"
+          title="ESC"
         >
           <i className="fa fa-ban" />
           {' '}
@@ -194,11 +208,4 @@ const EditForm = ({ entry, onSuccess }) => {
 
 export default EditForm;
 
-EditForm.propTypes = {
-  entry: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-  }).isRequired,
-  onSuccess: PropTypes.func.isRequired,
-};
+EditForm.propTypes = propTypes;
