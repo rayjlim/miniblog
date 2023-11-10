@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.19.0](https://github.com/rayjlim/miniblog/compare/v2.18.0...v2.19.0) (2023-11-10)
+
+
+### Features
+
+* add shortcut key titles ([29092e4](https://github.com/rayjlim/miniblog/commit/29092e4e3c75473e3e2e0f54d979b6dab5e9e30e))
+* add shortcut key titles ([2f48c6f](https://github.com/rayjlim/miniblog/commit/2f48c6feece17493604388e29005927802b00385))
+
+
+### Bug Fixes
+
+* 👷 updates to build script exclude ([239faa6](https://github.com/rayjlim/miniblog/commit/239faa6c4bca31e8fcedb6b1a97d94a82c874bb0))
+* 🔐 update .env vars ([e4c4170](https://github.com/rayjlim/miniblog/commit/e4c41705e9c229587e3a82cedeb2017cc04c08fe))
+* 🚨 typescript errors ([3426455](https://github.com/rayjlim/miniblog/commit/34264551e1efca072e486d89d2d40ec26a7ff58e))
+* add form auto create ([ae14b2f](https://github.com/rayjlim/miniblog/commit/ae14b2f2d2dd272fbde7e7e29eb651635b92204a))
+* add jest-dom to types ([f520f2c](https://github.com/rayjlim/miniblog/commit/f520f2cd7f9275e47e30366acebaf3a023372267))
+* add types ([be53818](https://github.com/rayjlim/miniblog/commit/be538184dcb7c78854654d0391dbbf9fd029fb85))
+* auth header as constant ([f7b6ee1](https://github.com/rayjlim/miniblog/commit/f7b6ee1007754229a4d8029103a0b063700d57cb))
+* default months number to constants ([4d164e7](https://github.com/rayjlim/miniblog/commit/4d164e74c7a97bd1f4008303b3cbfd68fb1149d4))
+* editform test delete call ([8e44a8d](https://github.com/rayjlim/miniblog/commit/8e44a8d033bc03c4847e5c35c709709ec455328c))
+* infer proptypes for typescript ([f01c4c0](https://github.com/rayjlim/miniblog/commit/f01c4c0ddb5c3d4256f37094dba58e2de4088aba))
+* move proptypes to infer for typescript ([09e4078](https://github.com/rayjlim/miniblog/commit/09e40787e8e8f9ebc2d36ecf6e754e283ee986fa))
+* test script for editform ([4dbfca8](https://github.com/rayjlim/miniblog/commit/4dbfca85cb816df0d6fe8a0eff1b2373dd3c520c))
+* typescript lint issues ([69493d1](https://github.com/rayjlim/miniblog/commit/69493d172b2c2e24069cef4c5acade31425f93ed))
+
 ## [2.18.0](https://github.com/rayjlim/miniblog/compare/v2.17.2...v2.18.0) (2023-10-22)
 
 
