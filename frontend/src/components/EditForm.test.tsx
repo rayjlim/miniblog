@@ -12,7 +12,6 @@ window.alert = () => {};
 window.confirm = () => true;
 console.log = () => {};
 
-
 describe("EditForm component", () => {
   beforeEach(() => {
     HTMLCanvasElement.prototype.getContext = jest.fn();

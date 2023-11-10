@@ -366,8 +366,9 @@ const OneDay = () => {
           value="-1"
           id="prevBtn"
           type="button"
+          title="alt + comma"
         >
-          <i className="fa fa-chevron-left" />
+          <i className="fa fa-chevron-left"/>
           Prev
         </button>
         <div>
@@ -386,6 +387,7 @@ const OneDay = () => {
           value="1"
           id="nextBtn"
           type="button"
+          title="alt + period"
         >
           Next
           <i className="fa fa-chevron-right" />
