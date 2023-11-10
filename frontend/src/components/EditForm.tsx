@@ -48,30 +48,30 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
    */
   async function handleSave() {
     console.log('handleSave entry :', content, date);
-
-    try {
       const token = window.localStorage.getItem(STORAGE_KEY)|| '';
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
       requestHeaders.set(AUTH_HEADER, token);
-      const response = await fetch(
-        `${REST_ENDPOINT}/api/posts/${entry.id}`,
+      const options = {method: 'PUT',
+        body: JSON.stringify({
+          content,
+          date: format(date, FULL_DATE_FORMAT),
+        }),
+        headers: requestHeaders
+      };
+      onSuccess('Edit Done');
+      try {
+        const response = await fetch(
+          `${REST_ENDPOINT}/api/posts/${entry.id}`,
         {
-          method: 'PUT',
-          body: JSON.stringify({
-            content,
-            date: format(date, FULL_DATE_FORMAT),
-          }),
+          ...options,
           mode: 'cors',
           cache: 'no-cache',
-          headers: requestHeaders,
           redirect: 'follow',
         },
       );
 
       console.log(response);
-
-      onSuccess('Edit Done');
     } catch (error) {
       console.log(error);
       alert(error);
@@ -92,11 +92,12 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
     }
     const { id } = entry;
     console.log(`handleDelete ${id}`);
+
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(AUTH_HEADER, token);
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${id}`,
         {
