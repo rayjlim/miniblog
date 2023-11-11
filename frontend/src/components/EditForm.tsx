@@ -59,8 +59,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
         }),
         headers: requestHeaders
       };
-      // jest test fails when onSuccess called after fetch, IDKW
-      onSuccess('Edit Done');
+
       try {
         const response = await fetch(
           `${REST_ENDPOINT}/api/posts/${entry.id}`,
@@ -78,6 +77,8 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
       alert(error);
       onSuccess('Edit fail' + error);
     }
+
+    onSuccess('Edit Done');
   }
 
   /**
@@ -98,8 +99,6 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
 
-    // jest test fails when onSuccess called after fetch, IDKW
-    onSuccess('Delete Done');
     try {
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${id}`,
@@ -116,6 +115,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
       console.log(error);
       alert(error);
     }
+    onSuccess('Delete Done');
   }
 
   function checkKeyPressed(e: any) {
@@ -187,7 +187,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
         </button>
         <DatePicker onChange={dateParam => setDate(dateParam as Date)} value={date} />
         <button
-          onClick={() => onSuccess('cancel')}
+          onClick={() => onSuccess('')}
           className="btn btn-warning pull-right"
           data-testid="cancelBtn"
           id="cancelBtn"

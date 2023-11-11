@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { format } from 'date-fns';
 
-import AddForm from '../components/AddForm';
-import EditForm from '../components/EditForm';
 import DateNav from '../components/DateNav';
+import AddEditForm from '../components/AddEditForm';
 import EntryList from '../components/EntryList';
 import MovieList from '../components/MovieList';
 import Inspiration from '../components/Inspiration';
@@ -23,10 +22,6 @@ import {
 
 import './OneDay.css';
 
-const CLOSED = 0;
-const ADD = 1;
-const EDIT = 2;
-
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
@@ -35,11 +30,9 @@ const OneDay = ({ pageMode }: { pageMode: number } = { pageMode: 0 }) => {
   const [state, setState] = useState({
     entries: [],
     pageDate: '',
-    formEntry: { id: '0', content: '', date: '' },
-    autohide: 'true',
-    formMode: CLOSED,
-    scrollToLast: null,
+    scrollToLast: 0,
   });
+  const [editEntry, setEditEntry] = useState < EntryType | null > (null);
 
   function loadDay(loadParams: any) {
     console.log(`loadDay : ${loadParams.pageDate} pagemode: ${pageMode}`);
@@ -58,7 +51,7 @@ const OneDay = ({ pageMode }: { pageMode: number } = { pageMode: 0 }) => {
         break;
       }
     }
-
+    setEditEntry(null);
     (async () => {
       const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const requestHeaders: HeadersInit = new Headers();
@@ -101,60 +94,12 @@ const OneDay = ({ pageMode }: { pageMode: number } = { pageMode: 0 }) => {
     loadDay({ ...state, pageDate: date });
   }
 
-  function resetEntryForm(msg = '') {
+  function resetAddEdit(msg: string) {
+    console.log('resetAddEdit');
     if (msg !== '') {
       toast(msg);
     }
-    loadDay({ ...state, formMode: CLOSED });
-  }
-
-  function showAddForm() {
-    console.log('showAddForm#state.date :', state.pageDate);
-    setState({ ...state, formMode: ADD });
-  }
-
-  function showEditForm(entry: any) {
-    console.log('id :', entry.id);
-
-    setState({
-      ...state,
-      formMode: EDIT,
-      formEntry: entry,
-      scrollToLast: entry.id,
-    });
-  }
-
-  function showAddEditForm(mode: number) {
-    // console.log('formmode :', mode);
-    let returnValue = null;
-    if (!mode || mode === CLOSED) {
-      returnValue = (
-        <button
-          onClick={() => showAddForm()}
-          className="btn btn-default"
-          id="addFormBtn"
-          type="button"
-        >
-          Show Add Form
-        </button>
-      );
-    } else if (mode === ADD) {
-      returnValue = (
-        <AddForm
-          date={state.pageDate}
-          onSuccess={msg => resetEntryForm(msg)}
-          content=""
-        />
-      );
-    } else if (mode === EDIT) {
-      returnValue = (
-        <EditForm
-          entry={state.formEntry}
-          onSuccess={msg => resetEntryForm(msg)}
-        />
-      );
-    }
-    return returnValue;
+    loadDay({ ...state });
   }
 
   function checkKeyPressed(e: any) {
@@ -221,12 +166,15 @@ const OneDay = ({ pageMode }: { pageMode: number } = { pageMode: 0 }) => {
 
       <section className="container">
         {pageMode === ONEDAY && <WeightInfo date={state.pageDate} />}
-        {showAddEditForm(state.formMode)}
+        <AddEditForm
+          date={state.pageDate}
+          entry={editEntry}
+          onSuccess={resetAddEdit}
+        />
       </section>
 
-      <EntryList entries={state.entries} showEditForm={showEditForm} />
+      <EntryList entries={state.entries} showEditForm={setEditEntry} />
 
-      {/* movies */}
       {pageMode === ONEDAY && <MovieList date={state.pageDate} />}
       {pageMode === ONEDAY && <Inspiration />}
       <Footer />
