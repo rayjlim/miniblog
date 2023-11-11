@@ -1,5 +1,4 @@
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import useLoginPassword from '../hooks/useLoginPassword';
 const LoginPassword = () => {

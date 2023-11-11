@@ -1,4 +1,4 @@
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import DateNav from '../components/DateNav';
 import AddEditForm from '../components/AddEditForm';
