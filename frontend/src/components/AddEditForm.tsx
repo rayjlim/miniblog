@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
 import '../Types';
@@ -14,7 +15,7 @@ const AddEditForm = ({
 }: {
   date: string,
   entry: any,
-  onSuccess: (msg: string) => void,
+  onSuccess: () => void,
 }) => {
   const [componentMode, setComponentMode] = useState(CLOSED);
 
@@ -25,7 +26,8 @@ const AddEditForm = ({
 
   function editDone(msg: string) {
     setComponentMode(CLOSED);
-    onSuccess(msg);
+    msg !== '' && toast(msg);
+    onSuccess();
   }
 
   useEffect(() => {

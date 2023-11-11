@@ -15,22 +15,14 @@ import useOneDay from '../hooks/useOneDay';
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
-const OneDay = ({ pageMode }: { pageMode: number } = { pageMode: 0 }) => {
+const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
-  const {editEntry, setEditEntry, pageDate, setPageDate, entries, loadDay} = useOneDay(pageMode);
-
-  function resetAddEdit(msg: string) {
-    console.log('resetAddEdit');
-    if (msg !== '') {
-      toast(msg);
-    }
-    loadDay(pageDate);
-  }
+  const {editEntry, setEditEntry, pageDate, setPageDate, entries, loadDay} = useOneDay(pageMode || ONEDAY);
 
   const headerLinks = {
     search: true,
-    oneday: pageMode !== ONEDAY,
-    sameday: pageMode === ONEDAY,
+    oneday: pageMode === SAMEDAY,
+    sameday: !pageMode || pageMode === ONEDAY,
   };
   return (
     <>
@@ -47,7 +39,7 @@ const OneDay = ({ pageMode }: { pageMode: number } = { pageMode: 0 }) => {
         <AddEditForm
           date={pageDate}
           entry={editEntry}
-          onSuccess={resetAddEdit}
+          onSuccess={loadDay}
         />
       </section>
 

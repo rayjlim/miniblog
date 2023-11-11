@@ -11,7 +11,7 @@ import {
 
 const SAMEDAY = 1;
 
-const useOneDay = (pageMode: number) => {
+const useOneDay = (pageMode?: number) => {
   const navigate = useNavigate();
   const [entries, setEntries] = useState<EntryType[]>([]);
   const [editEntry, setEditEntry] = useState<EntryType | null>(null);
@@ -19,7 +19,7 @@ const useOneDay = (pageMode: number) => {
   const isMounted = useRef<boolean>(false);
   // scrollToLast: 0,
 
-  function loadDay(targetDate: string) {
+  function loadDay(targetDate?: string) {
     console.log(`loadDay : ${pageDate} pagemode: ${pageMode}`);
 
     if (!pageDate) {

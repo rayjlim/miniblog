@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter, Route, Routes, Navigate,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import MyContext from './components/MyContext';
@@ -15,10 +13,10 @@ import { REST_ENDPOINT, ENVIRONMENT, STORAGE_KEY } from './constants';
 import './App.css';
 
 const showDevRibbon = ENVIRONMENT === 'development';
+const SAMEDAY = 1;
 
 const App = () => {
-  const [globalContext, setGlobalContext] = useState<any|null>(null);
-
+  const [globalContext, setGlobalContext] = useState < any | null > (null);
   useEffect(() => {
     (async () => {
       const token = window.localStorage.getItem(STORAGE_KEY);
@@ -31,17 +29,14 @@ const App = () => {
 
       if (!globalContext) {
         try {
-          const response = await fetch(
-            `${REST_ENDPOINT}/settings/`,
-            {
-              method: 'GET',
-              mode: 'cors',
-              credentials: 'same-origin',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+          const response = await fetch(`${REST_ENDPOINT}/settings/`, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+          });
 
           if (response.ok) {
             const results = await response.json();
@@ -61,13 +56,21 @@ const App = () => {
 
   return (
     <>
-      {globalContext !== null
-        && (
+      {globalContext !== null && (
         <MyContext.Provider value={globalContext}>
           <GoogleOAuthProvider clientId={globalContext.GOOGLE_OAUTH_CLIENTID}>
             <React.StrictMode>
               {/* {showGHCorner && <GithubCorner />} */}
-              {showDevRibbon && <a className="github-fork-ribbon" href="#dev" data-ribbon="Development" title="Development">Development</a>}
+              {showDevRibbon && (
+                <a
+                  className="github-fork-ribbon"
+                  href="#dev"
+                  data-ribbon="Development"
+                  title="Development"
+                >
+                  Development
+                </a>
+              )}
 
               <div id="app" className="App d-flex flex-column h-100">
                 <BrowserRouter>
@@ -75,11 +78,14 @@ const App = () => {
                     <Route path="/upload" element={<Upload />} />
                     <Route path="/media" element={<Media />} />
                     <Route path="/search" element={<Search />} />
-                    <Route path="/oneday" element={<OneDay pageMode={0} />} />
-                    <Route path="/sameday" element={<OneDay pageMode={1}/>} />
+                    <Route path="/oneday" element={<OneDay />} />
+                    <Route
+                      path="/sameday"
+                      element={<OneDay pageMode={SAMEDAY} />}
+                    />
                     <Route path="/logs" element={<Logs />} />
                     <Route path="/login" element={<LoginPassword />} />
-                    <Route path="/" element={<OneDay  pageMode={0}/>} />
+                    <Route path="/" element={<OneDay />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </BrowserRouter>
@@ -87,7 +93,7 @@ const App = () => {
             </React.StrictMode>
           </GoogleOAuthProvider>
         </MyContext.Provider>
-        )}
+      )}
       <span>_</span>
     </>
   );
