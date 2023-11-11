@@ -1,19 +1,14 @@
-import {
-  useContext,
-  useState,
-  useRef,
-  useEffect,
-} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { format, parse, add } from 'date-fns';
 
-import MyContext from '../components/MyContext';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
 import EntryList from '../components/EntryList';
 import MovieList from '../components/MovieList';
 import Inspiration from '../components/Inspiration';
+import WeightInfo from '../components/WeightInfo';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -34,27 +29,7 @@ const EDIT = 2;
 const ONEDAY = 0;
 const SAMEDAY = 1;
 
-async function xhrCall(url: string, apiDescription: string) {
-  console.log(`xhrCall ${url}`);
-  try {
-    const apiResponse = await fetch(url, { cache: 'no-cache' });
-    if (apiResponse.ok) {
-      const data = await apiResponse.json();
-      return data;
-    }
-    throw new Error(`${apiResponse.status}`);
-  } catch (err) {
-    console.error(err);
-    toast(` ${url} get ${apiDescription} error : ${err}`);
-  }
-  return false;
-}
-
 const OneDay = ({pageMode}: {pageMode: number} = {pageMode: 0}) => {
-  const {
-    TRACKS_API
-  } = useContext(MyContext);
-
   const navigate = useNavigate();
   const [state, setState] = useState({
     entries: [],
@@ -65,23 +40,11 @@ const OneDay = ({pageMode}: {pageMode: number} = {pageMode: 0}) => {
     scrollToLast: null,
   });
 
-  const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
-
   const dateInput = useRef<HTMLInputElement>(null);
-
-  async function getWeight(date: string) {
-    const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
-    const data = await xhrCall(weightApi, 'weight');
-    if (data?.data[0]?.count) {
-      setWeight(data.data[0]);
-    } else {
-      setWeight({count: 0, comment: ''});
-    }
-  }
 
   function loadDay(loadParams: any) {
     console.log(
-      `loadDay : ${loadParams.pageDate} pagemode${loadParams.pageMode}`
+      `loadDay : ${loadParams.pageDate} pagemode: ${pageMode}`
     );
 
     if (!loadParams.pageDate) {
@@ -132,12 +95,6 @@ const OneDay = ({pageMode}: {pageMode: number} = {pageMode: 0}) => {
           toast.error(`loading error : ${response.status}`);
         }
 
-        // ---- Call external APIS
-        if (pageMode === ONEDAY) {
-          if (TRACKS_API !== '') {
-            await getWeight(loadParams.pageDate);
-          }
-        }
       } catch (err) {
         console.error(err);
         toast.error(`loading error : ${err}`);
@@ -260,20 +217,16 @@ const OneDay = ({pageMode}: {pageMode: number} = {pageMode: 0}) => {
 
       setState({ ...state, pageDate: pageDate || '' });
 
-      console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
-      console.log('pageMode: ', pageMode);
       const localDate = format(new Date(), FULL_DATE_FORMAT);
 
       console.log('setting pageDate :>> ', localDate);
-      loadDay({ pageDate, pageMode });
+      loadDay({ pageDate });
     }
     ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
 
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [pageMode]);
-
-
 
   const headerLinks = {
     search: true,
@@ -333,14 +286,7 @@ const OneDay = ({pageMode}: {pageMode: number} = {pageMode: 0}) => {
 
       <section className="container">
         {pageMode === ONEDAY
-          && weight
-          && (
-          <span className="weight">
-            Weight :
-            {weight.count}
-            {weight.comment && weight.comment !== '' && <span title={weight.comment}>...</span>}
-          </span>
-          )}
+          && <WeightInfo date={state.pageDate}/>}
         {showAddEditForm(state.formMode)}
       </section>
       <EntryList entries={state.entries} showEditForm={showEditForm} />
