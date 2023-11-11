@@ -1,0 +1,10 @@
+.footer{
+  display: flex;
+  flex-direction: row;
+  padding: 1 1rem;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.footer span{
+  margin-left: auto;
+}

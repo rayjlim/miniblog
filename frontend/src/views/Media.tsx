@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import format from 'date-fns/format';
 
 import MyContext from '../components/MyContext';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 import {
   FULL_DATE_FORMAT,
@@ -13,7 +15,6 @@ import {
 } from '../constants';
 import AddForm from '../components/AddForm';
 import MediaList from '../components/MediaList';
-import pkg from '../../package.json';
 
 import './Media.css';
 
@@ -108,21 +109,17 @@ const Media = () => {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
+  const headerLinks = {
+    search: false,
+    oneday: true,
+    sameday: true
+  };
+  const footerLinks = {upload: true, media: false, logs: false, oneday: false};
 
   return (
     <>
       <ToastContainer />
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/oneday">
-          <i className="fa fa-home" />
-          <span>Home</span>
-        </RouterNavLink>
-        <RouterNavLink to="/oneday?pageMode=1">
-          {' '}
-          <i className="fa fa-calendar-check" />
-          <span>Same Day</span>
-        </RouterNavLink>
-      </nav>
+      <Header links={headerLinks}/>
       {post.fileName !== '' && (
         <>
           <p className="lead">Prepare the image for use</p>
@@ -160,16 +157,8 @@ const Media = () => {
       {showMedia && (
         <MediaList onMediaSelect={mediaSelect} />
       )}
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/upload" className="btn navbar-btn">
-          <i className="fa fa-file-upload" />
-          Upload Pix
-        </RouterNavLink>
-        <span className="footer-version">
-          v
-          {pkg.version}
-        </span>
-      </nav>
+      <Footer links={footerLinks}/>
+
     </>
   );
 };

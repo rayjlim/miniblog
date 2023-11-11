@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import pkg from '../../package.json';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
 import './Logs.css';
 
 const Logs = () => {
@@ -59,7 +61,7 @@ const Logs = () => {
       );
 
       console.log(response);
-      navigate('/logs');
+      navigate('/logs');  // code smell, should update state only
     } catch (error) {
       console.log(error);
       alert(error);
@@ -70,9 +72,11 @@ const Logs = () => {
     getLog();
   }, []);
 
+  const footerLinks = {upload: false, media: false, logs: false, oneday: true};
   return (
     <>
       <ToastContainer />
+      <Header />
       <h1>Logs</h1>
       <ul>
         {logs.length
@@ -96,20 +100,7 @@ const Logs = () => {
         {logFileName}
       </h2>
       <pre>{logFile}</pre>
-
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <div className="col-md-5 text-left">
-          <RouterNavLink to="/oneday" className="btn navbar-btn">
-            <i className="fa fa-file-home" />
-            One Day
-          </RouterNavLink>
-
-          <span className="footer-version">
-            v
-            {pkg.version}
-          </span>
-        </div>
-      </nav>
+      <Footer links={footerLinks}/>
     </>
   );
 };

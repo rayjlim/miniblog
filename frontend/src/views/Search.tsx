@@ -17,7 +17,8 @@ import {
   STORAGE_KEY,
   AUTH_HEADER
 } from '../constants';
-import pkg from '../../package.json';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import debounce from '../utils/debounce';
 import './Search.css';
 
@@ -206,21 +207,16 @@ const TextEntry = () => {
 
     getYearMonths();
   }, [searchText.current?.value, searchFilter]);
-
+  const headerLinks = {
+    search: false,
+    oneday: true,
+    sameday: true
+  };
   return (
     <>
       <ToastContainer />
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/oneday">
-          <i className="fa fa-home" />
-          <span>Home</span>
-        </RouterNavLink>
-        <RouterNavLink to="/oneday?pageMode=1">
-          {' '}
-          <i className="fa fa-calendar-check" />
-          <span>Same Day</span>
-        </RouterNavLink>
-      </nav>
+      <Header links={headerLinks}/>
+
       <h1>Text Searchs</h1>
 
       <section className="container">
@@ -400,29 +396,7 @@ const TextEntry = () => {
             ))}
       </section>
 
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/upload">
-          <i className="fa fa-file-upload" />
-          {' '}
-          <span className="nav-text">Upload Pix</span>
-        </RouterNavLink>
-        <RouterNavLink to="/media">
-          <i className="fa fa-portrait" />
-          {' '}
-          <span className="nav-text">Media</span>
-          {' '}
-        </RouterNavLink>
-        <RouterNavLink to="/logs">
-          <i className="fa fa-clipboard-list" />
-          {' '}
-          <span className="nav-text">Logs</span>
-          {' '}
-        </RouterNavLink>
-        <span className="footer-version">
-          v
-          {pkg.version}
-        </span>
-      </nav>
+      <Footer />
     </>
   );
 };
