@@ -4,23 +4,26 @@ import {
   useRef,
   useEffect,
 } from 'react';
-import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { format, parse, add } from 'date-fns';
 
 import MyContext from '../components/MyContext';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
-import MovieWindow from '../components/MovieWindow';
-import MarkdownDisplay from '../components/MarkdownDisplay';
+import EntryList from '../components/EntryList';
+import MovieList from '../components/MovieList';
+import Inspiration from '../components/Inspiration';
+
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
 import {
   FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
   AUTH_HEADER
 } from '../constants';
-
-import pkg from '../../package.json';
 
 import './OneDay.css';
 
@@ -47,18 +50,8 @@ async function xhrCall(url: string, apiDescription: string) {
   return false;
 }
 
-/**
- * Component to Display of One Day style
- *
- * @component
- * @example
- * <Route path="/oneday" component={OneDay} />
- */
-const OneDay = () => {
+const OneDay = ({pageMode}: {pageMode: number} = {pageMode: 0}) => {
   const {
-    INSPIRATION_API,
-    MOVIES_API,
-    QUESTION_API,
     TRACKS_API
   } = useContext(MyContext);
 
@@ -66,26 +59,15 @@ const OneDay = () => {
   const [state, setState] = useState({
     entries: [],
     pageDate: '',
-    searchParam: '',
     formEntry: {id: '0', content: '', date: ''},
     autohide: 'true',
-    pageMode: ONEDAY,
     formMode: CLOSED,
     scrollToLast: null,
   });
-  const [inspiration, setInspiration] = useState<string>('');
+
   const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
-  const [movies, setMovies] = useState<any[]>([]);
 
   const dateInput = useRef<HTMLInputElement>(null);
-
-  const usersFullname = window.localStorage.getItem('user-name');
-
-  async function getInspiration() {
-    const data = await xhrCall(INSPIRATION_API, 'inspiration');
-    console.log('data.header :>> ', data.header);
-    setInspiration(`Inspire: ${data.message} : ${data.author}`);
-  }
 
   async function getWeight(date: string) {
     const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
@@ -97,34 +79,16 @@ const OneDay = () => {
     }
   }
 
-  async function getMovies(date: string) {
-    const weightApi = `${MOVIES_API}&advanced_search=true&dt_viewed=${date}`;
-    const data = await xhrCall(weightApi, 'movie');
-    if (data && data.movies) {
-      setMovies(data.movies);
-    } else {
-      setMovies([]);
-    }
-  }
-
-  async function getPrompt() {
-    const data = await xhrCall(QUESTION_API, 'prompt');
-    setInspiration(`Question: ${data.prompt} : ${data.category}`);
-  }
-
   function loadDay(loadParams: any) {
     console.log(
-      'loadDay :',
-      loadParams.pageDate,
-      'pagemode',
-      loadParams.pageMode,
+      `loadDay : ${loadParams.pageDate} pagemode${loadParams.pageMode}`
     );
 
     if (!loadParams.pageDate) {
       return;
     }
     let endPointURL = '';
-    switch (loadParams.pageMode) {
+    switch (pageMode) {
       case SAMEDAY: {
         endPointURL = `${REST_ENDPOINT}/api/sameDayEntries/?day=${loadParams.pageDate}`;
         break;
@@ -169,16 +133,9 @@ const OneDay = () => {
         }
 
         // ---- Call external APIS
-        if (INSPIRATION_API !== '' && inspiration === null) {
-          await getInspiration();
-        }
-
-        if (state.pageMode === ONEDAY) {
+        if (pageMode === ONEDAY) {
           if (TRACKS_API !== '') {
             await getWeight(loadParams.pageDate);
-          }
-          if (MOVIES_API !== '') {
-            await getMovies(loadParams.pageDate);
           }
         }
       } catch (err) {
@@ -241,11 +198,6 @@ const OneDay = () => {
     }
   }
 
-  function changePageMode(pageMode: number) {
-    console.log('new pageMode :>> ', pageMode);
-    loadDay({ ...state, pageMode });
-  }
-
   function showAddEditForm(mode: number) {
     // console.log('formmode :', mode);
     let returnValue = null;
@@ -271,11 +223,6 @@ const OneDay = () => {
     }
     return returnValue;
   }
-
-  const doLogout = () => {
-    window.localStorage.removeItem(STORAGE_KEY);
-    navigate('/login');
-  };
 
   function checkKeyPressed(e: any) {
     console.log(`OneDay: handle key presss ${e.key}`);
@@ -313,11 +260,8 @@ const OneDay = () => {
 
       setState({ ...state, pageDate: pageDate || '' });
 
-      const pageMode = urlParams.has('pageMode')
-        ? parseInt(urlParams.get('pageMode') || '', 10)
-        : ONEDAY;
-
       console.log('urlParams.has(pageMode) :', urlParams.has('pageMode'));
+      console.log('pageMode: ', pageMode);
       const localDate = format(new Date(), FULL_DATE_FORMAT);
 
       console.log('setting pageDate :>> ', localDate);
@@ -327,37 +271,22 @@ const OneDay = () => {
     document.addEventListener('keydown', checkKeyPressed);
 
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, []);
+  }, [pageMode]);
 
-  function copyToClipboard(content: string) {
-    console.log(`clipboard: ${content}`);
-    navigator.clipboard.writeText(content);
-  }
 
+
+  const headerLinks = {
+    search: true,
+    oneday: pageMode !== ONEDAY,
+    sameday: pageMode === ONEDAY
+  };
   return (
     <>
       <ToastContainer />
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <RouterNavLink to="/search">
-          <i className="fa fa-search" />
-          {' '}
-          <span className="nav-text">Search</span>
-        </RouterNavLink>
-        {state.pageMode === ONEDAY ? (
-          <button onClick={() => changePageMode(SAMEDAY)} type="button">
-            <i className="fa fa-calendar-check" />
-            {' '}
-            <span className="nav-text">Same Day</span>
-          </button>
-        ) : (
-          <button onClick={() => changePageMode(ONEDAY)} type="button">
-            <i className="fa fa-home" />
-            <span>Home</span>
-          </button>
-        )}
-      </nav>
-      {state.pageMode === ONEDAY && <h1>One Day</h1>}
-      {state.pageMode === SAMEDAY && <h1>Same Day</h1>}
+      <Header links={headerLinks}/>
+
+      {pageMode === ONEDAY && <h1>One Day</h1>}
+      {pageMode === SAMEDAY && <h1>Same Day</h1>}
 
       <div className="grid-3mw container">
         <button
@@ -403,7 +332,7 @@ const OneDay = () => {
       </div>
 
       <section className="container">
-        {state.pageMode === ONEDAY
+        {pageMode === ONEDAY
           && weight
           && (
           <span className="weight">
@@ -414,89 +343,14 @@ const OneDay = () => {
           )}
         {showAddEditForm(state.formMode)}
       </section>
+      <EntryList entries={state.entries} showEditForm={showEditForm} />
 
-      <section className="container">
-        <ul className="entriesList">
-          {state.entries.map((entry: any) => (
-            <li
-              key={entry.id}
-            >
-              <button
-                onClick={() => showEditForm(entry)}
-                className="plainLink"
-                type="button"
-              >
-                { format(
-                  parse(entry.date, FULL_DATE_FORMAT, new Date()),
-                  'EEE MM, dd yyyy',
-                )}
-              </button>
-              <div className="markdownDisplay">
-                <MarkdownDisplay source={entry.content} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-      {state.pageMode === ONEDAY
-        && movies.length > 0
-        && (
-          <section className="movieList">
-            {movies.map(movie => (
-              <MovieWindow movie={movie} key={movie.id} />
-            ))}
-          </section>
-        )}
-      {inspiration !== '' && (
-        <section>
-          <div>{inspiration}</div>
-          {inspiration !== '' && (
-            <button onClick={() => copyToClipboard(inspiration)} type="button" className="copy-btn">
-              /clip
-            </button>
-          )}
-          {QUESTION_API !== '' && (
-            <button onClick={() => getPrompt()} className="plainLink" type="button">
-              [Get Prompt]
-            </button>
-          )}
-          {INSPIRATION_API !== '' && (
-            <button onClick={() => getInspiration()} className="plainLink" type="button">
-              [Get Inspiration]
-            </button>
-          )}
-        </section>
-      )}
-      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left">
-        <RouterNavLink to="/upload">
-          <i className="fa fa-file-upload" />
-          {' '}
-          <span className="nav-text">Upload Pix</span>
-        </RouterNavLink>
-        <RouterNavLink to="/media">
-          <i className="fa fa-portrait" />
-          {' '}
-          <span className="nav-text">Media</span>
-          {' '}
-        </RouterNavLink>
-        <RouterNavLink to="/logs">
-          <i className="fa fa-clipboard-list" />
-          {' '}
-          <span className="nav-text">Logs</span>
-          {' '}
-        </RouterNavLink>
-        <button onClick={() => doLogout()} className="btn-margin plainLink" type="button">
-          <i className="fa fa-sign-out" />
-          <span className="nav-text">Log Out</span>
-        </button>
-        <span className="footer-version">
-          v
-          {pkg.version}
-        </span>
-      </nav>
-      <div>
-        {usersFullname}
-      </div>
+      {/* movies */}
+      {pageMode === ONEDAY
+        && <MovieList date={state.pageDate}/>}
+      {pageMode === ONEDAY
+        && <Inspiration/>}
+      <Footer />
     </>
   );
 };

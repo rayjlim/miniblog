@@ -75,10 +75,11 @@ const App = () => {
                     <Route path="/upload" element={<Upload />} />
                     <Route path="/media" element={<Media />} />
                     <Route path="/search" element={<Search />} />
-                    <Route path="/oneday" element={<OneDay />} />
+                    <Route path="/oneday" element={<OneDay pageMode={0} />} />
+                    <Route path="/sameday" element={<OneDay pageMode={1}/>} />
                     <Route path="/logs" element={<Logs />} />
                     <Route path="/login" element={<LoginPassword />} />
-                    <Route path="/" element={<OneDay />} />
+                    <Route path="/" element={<OneDay  pageMode={0}/>} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </BrowserRouter>
