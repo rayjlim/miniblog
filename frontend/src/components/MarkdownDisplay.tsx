@@ -43,7 +43,7 @@ const MarkdownDisplay = ({ source }: {source: string}) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   let output = '';
   try {
-    console.log(source);
+    // console.log(source);
     let newText = source.replace(/<br \/>/g, '\n');
     newText = newText.replace(
       /..\/uploads/g,

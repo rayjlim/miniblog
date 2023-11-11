@@ -29,7 +29,7 @@ const AddEditForm = ({
   }
 
   useEffect(() => {
-    console.log(entry?.id, entry?.date, entry);
+    // console.log(entry?.id, entry?.date, entry);
     setComponentMode(entry ? EDIT : CLOSED);
   }, [entry]);
 
