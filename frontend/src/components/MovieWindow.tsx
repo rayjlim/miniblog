@@ -2,9 +2,10 @@ import { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import MyContext from './MyContext';
+import '../Types';
 import './MovieWindow.css';
 
-const MovieWindow = ({ movie }: any) => {
+const MovieWindow = ({ movie }: {movie: MovieType}) => {
   const { MOVIES_POSTERS } = useContext(MyContext);
   const { title, imdbImageId, imdbId } = movie;
   const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
@@ -13,9 +14,9 @@ const MovieWindow = ({ movie }: any) => {
   return (
     <div className="movie">
       <a href={imdbUrl} target="_blank" rel="noreferrer">
-        <img src={imageUrl} height="100px" alt="movie" />
+        <img src={imageUrl} height="100px" alt="movie" title={title}/>
       </a>
-      <div>{title}</div>
+      {/* <div>{title}</div> */}
     </div>
   );
 };
