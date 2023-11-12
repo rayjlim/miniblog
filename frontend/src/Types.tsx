@@ -10,3 +10,10 @@ type MovieType = {
   imdbImageId: string,
   imdbId: string,
 };
+
+type MediaType = {
+  fileName: string,
+  filePath: string,
+  prepend: string,
+  imgUrl: string,
+}

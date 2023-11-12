@@ -7,7 +7,8 @@ const useMediaList = () => {
   const [uploadDirs, setUploadDirs] = useState<string[]>([]);
   const [currentDir, setCurrentDir] = useState<string>('');
 
-  function loadDir(dir: string = '') {
+  function loadDir(dir: string) {
+    console.log(dir);
     (async () => {
       const token = window.localStorage.getItem(STORAGE_KEY) || '';
       const requestHeaders: HeadersInit = new Headers();
@@ -23,20 +24,20 @@ const useMediaList = () => {
         alert(`loading error : ${response.status}`);
       } else {
         const data = await response.json();
+
         const dirs = Object.values(data.uploadDirs);
         setUploadDirs(dirs as string[]);
 
         const media = Object.values(data.dirContent);
         setMedias(media);
-        setCurrentDir(data.currentDir);
       }
     })();
   }
 
   useEffect(() => {
-    loadDir('');
-  }, []);
+    loadDir(currentDir);
+  }, [currentDir]);
 
-  return { medias, uploadDirs, currentDir, loadDir };
+  return { medias, uploadDirs, currentDir, setCurrentDir };
 };
 export default useMediaList;

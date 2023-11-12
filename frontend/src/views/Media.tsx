@@ -1,4 +1,6 @@
 import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -13,6 +15,17 @@ import './Media.css';
 const Media = () => {
   const { media, selectMedia } = useMedia();
 
+  const navigate = useNavigate();
+  const mediaClosed = (msg: string) => {
+    if (msg !== '') {
+      toast(msg);
+      setTimeout((() => { navigate('/oneday'); }), 1500);
+    } else {
+      selectMedia('','');
+    }
+  }
+
+
   const headerLinks = {
     search: false,
     oneday: true,
@@ -25,7 +38,7 @@ const Media = () => {
       <ToastContainer />
       <Header links={headerLinks} />
       {media && (
-        <MediaSelect media={media as any} />
+        <MediaSelect media={media as any} onClose={mediaClosed}/>
       )}
       {!media && (
         <MediaList onMediaSelect={selectMedia} />
