@@ -24,7 +24,6 @@ const DateNav = ({ updateDate, date }: { updateDate: (date: string) => void, dat
           onChange={e => updateDateInput(e)}
           ref={inputDate}
         />
-        {date}
       </div>
 
       <button
