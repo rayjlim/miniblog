@@ -1,5 +1,5 @@
 import { ToastContainer } from 'react-toastify';
-
+import 'react-toastify/dist/ReactToastify.css';
 import DateNav from '../components/DateNav';
 import AddEditForm from '../components/AddEditForm';
 import EntryList from '../components/EntryList';
@@ -25,18 +25,19 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
     oneday: pageMode === SAMEDAY,
     sameday: !pageMode || pageMode === ONEDAY,
   };
+  const isOneDay = (!pageMode || pageMode === ONEDAY);
   return (
     <>
       <ToastContainer />
       <Header links={headerLinks} />
 
-      {pageMode === ONEDAY && <h1>One Day</h1>}
+      {isOneDay && <h1>One Day</h1>}
       {pageMode === SAMEDAY && <h1>Same Day</h1>}
 
       <DateNav updateDate={setPageDate} date={pageDate} />
 
       <section className="container">
-        {pageMode === ONEDAY && <WeightInfo date={pageDate} />}
+        {isOneDay && <WeightInfo date={pageDate} />}
         <AddEditForm
           date={pageDate}
           entry={editEntry}
@@ -46,8 +47,8 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
       <EntryList entries={entries} showEditForm={setEditEntry} />
 
-      {pageMode === ONEDAY && <MovieList date={pageDate} />}
-      {pageMode === ONEDAY && <Inspiration />}
+      {isOneDay && <MovieList date={pageDate} />}
+      {isOneDay && <Inspiration />}
       <Footer />
     </>
   );

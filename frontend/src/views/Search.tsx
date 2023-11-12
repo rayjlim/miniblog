@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
 import {
   format, parse, subMonths, startOfMonth, endOfMonth,
