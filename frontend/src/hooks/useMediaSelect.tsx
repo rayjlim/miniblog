@@ -8,7 +8,7 @@ import {
   AUTH_HEADER
 } from '../constants';
 
-const useMediaSelect = (mediaDefault: MediaType) =>{
+const useMediaSelect = (mediaDefault: MediaType) => {
 
   const { UPLOAD_ROOT } = useContext(MyContext);
 

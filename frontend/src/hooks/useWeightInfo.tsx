@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from 'react';
 import MyContext from '../components/MyContext';
 
 const useWeightInfo = (date: string) => {
-  const [weight, setWeight] = useState<{count: number, comment: string}>({count: 0, comment: ''});
+  const [weight, setWeight] = useState<{ count: number, comment: string }>({ count: 0, comment: '' });
   const {
     TRACKS_API
   } = useContext(MyContext);
@@ -29,20 +29,20 @@ const useWeightInfo = (date: string) => {
     if (data?.data[0]?.count) {
       setWeight(data.data[0]);
     } else {
-      setWeight({count: 0, comment: ''});
+      setWeight({ count: 0, comment: '' });
     }
   }
 
-  useEffect(()=> {
-    const ueFunc = async ()=>{
-    if (TRACKS_API !== '') {
-      await getWeight(date);
-    }
-  };
+  useEffect(() => {
+    const ueFunc = async () => {
+      if (TRACKS_API !== '') {
+        await getWeight(date);
+      }
+    };
     ueFunc();
   }, [date]);
 
-  return {weight}
+  return { weight }
 };
 
 export default useWeightInfo;

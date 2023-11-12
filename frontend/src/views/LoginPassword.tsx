@@ -2,7 +2,7 @@ import { ToastContainer } from 'react-toastify';
 
 import useLoginPassword from '../hooks/useLoginPassword';
 const LoginPassword = () => {
-  const {username, password, doLogin, logOut, login, profile} = useLoginPassword();
+  const { username, password, doLogin, logOut, login, profile } = useLoginPassword();
 
   return (
     <div className="App">

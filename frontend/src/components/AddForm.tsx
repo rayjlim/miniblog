@@ -7,11 +7,11 @@ import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../co
 import 'react-date-picker/dist/DatePicker.css';
 
 const useFetch = (): any => {
-  const [newId, setId] = useState<number|null>(null);
+  const [newId, setId] = useState<number | null>(null);
   const [formEntry, setFormEntry] = useState<{
     content: string,
     date: string,
-  }>({content: '', date: ''});
+  }>({ content: '', date: '' });
 
   useEffect(() => {
     if (formEntry.content !== '') {
@@ -52,7 +52,7 @@ const propTypes = {
 
 type AddFormProps = PropTypes.InferProps<typeof propTypes>;
 
-const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: {content: string, date: string, onSuccess: any}) => {
+const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: any }) => {
   const [formContent, setFormContent] = useState<string>(content || '');
   const [formDate, setFormDate] = useState<Date>(
     parse(date, FULL_DATE_FORMAT, new Date()),
@@ -90,7 +90,7 @@ const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
-    let refTextareaInput = textareaInput.current || {value:''};
+    let refTextareaInput = textareaInput.current || { value: '' };
     refTextareaInput.value = refTextareaInput.value.replace(pattern, replacement);
 
     setFormContent(refTextareaInput.value);

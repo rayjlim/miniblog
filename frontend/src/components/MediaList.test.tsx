@@ -7,7 +7,7 @@ import MediaList from "./MediaList";
 
 describe("MediaList component", () => {
   it("should render MediaList component correctly", () => {
-    render(<MediaList onMediaSelect={()=>{}}/>);
+    render(<MediaList onMediaSelect={() => { }} />);
     const element = screen.getByText(/Dirs/);
     expect(element).not.toBeNull();
     // expect(element).toBeInTheDocument();

@@ -4,7 +4,7 @@ import {
   FULL_DATE_FORMAT
 } from '../constants';
 
-const useDateNav = (updateDate: (date: string)=>void, date: string) => {
+const useDateNav = (updateDate: (date: string) => void, date: string) => {
   const inputDate = useRef<HTMLInputElement>(null);
   /**
    * Handle change in day Previous | Next
@@ -12,16 +12,16 @@ const useDateNav = (updateDate: (date: string)=>void, date: string) => {
    * @param  {Object} e Event of Button click
    */
   function handleButtonDirection(e: MouseEvent<HTMLElement>) {
-    let localDate = parse(date||'', FULL_DATE_FORMAT, new Date());
+    let localDate = parse(date || '', FULL_DATE_FORMAT, new Date());
     const button = e.target as HTMLButtonElement;
     if (button.value === 'today') {
       localDate = new Date();
     } else {
-      localDate = parse(date||'', FULL_DATE_FORMAT, new Date());
+      localDate = parse(date || '', FULL_DATE_FORMAT, new Date());
     }
 
     const newDate = add(localDate, { days: parseInt(button.value) });
-    const ref = inputDate.current || {value: ''};
+    const ref = inputDate.current || { value: '' };
     ref.value = format(newDate, FULL_DATE_FORMAT);
     updateDate(format(newDate, FULL_DATE_FORMAT));
   }
@@ -34,13 +34,13 @@ const useDateNav = (updateDate: (date: string)=>void, date: string) => {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log('DateNave useEffect');
-    const ref = inputDate.current || {value: ''};
+    const ref = inputDate.current || { value: '' };
     ref.value = date;
   });
 
-  return {inputDate, handleButtonDirection, updateDateInput};
+  return { inputDate, handleButtonDirection, updateDateInput };
 };
 
 export default useDateNav;

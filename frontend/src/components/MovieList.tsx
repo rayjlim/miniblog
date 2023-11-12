@@ -5,15 +5,15 @@ import useMovies from '../hooks/useMovies';
 import './MovieWindow.css';
 import '../Types';
 
-const MovieList = ({ date }: {date: string}) => {
-  const {movies} = useMovies(date);
+const MovieList = ({ date }: { date: string }) => {
+  const { movies } = useMovies(date);
 
   return (
     <section className="movieList">
-    {movies.map((movie: MovieType) => (
-      <MovieWindow movie={movie} key={movie.id} />
-    ))}
-  </section>
+      {movies.map((movie: MovieType) => (
+        <MovieWindow movie={movie} key={movie.id} />
+      ))}
+    </section>
   );
 };
 

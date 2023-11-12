@@ -4,7 +4,7 @@ import MyContext from '../components/MyContext';
 import useInspiration from '../hooks/useInspiration';
 
 const Inspiration = () => {
-  const {inspiration, getInspiration, getPrompt} = useInspiration();
+  const { inspiration, getInspiration, getPrompt } = useInspiration();
   const {
     INSPIRATION_API,
     QUESTION_API,

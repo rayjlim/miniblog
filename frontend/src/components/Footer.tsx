@@ -10,9 +10,9 @@ type LinksPropType = {
   media: boolean,
   logs: boolean,
   oneday: boolean
-
 }
-const Footer = ({links}: {links?: LinksPropType}) => {
+
+const Footer = ({ links }: { links?: LinksPropType }) => {
   const usersFullname = window.localStorage.getItem('user-name') || '';
   const navigate = useNavigate();
   const doLogout = () => {
@@ -39,9 +39,9 @@ const Footer = ({links}: {links?: LinksPropType}) => {
         </RouterNavLink>
         }
         {links?.oneday && <RouterNavLink to="/oneday">
-            <i className="fa fa-home" />{' '}
-            <span className="nav-text">One Day</span>
-          </RouterNavLink>
+          <i className="fa fa-home" />{' '}
+          <span className="nav-text">One Day</span>
+        </RouterNavLink>
         }
         <button
           onClick={() => doLogout()}

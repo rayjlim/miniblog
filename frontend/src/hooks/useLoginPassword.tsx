@@ -5,7 +5,7 @@ import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
-const useLoginPassword = ()=>{
+const useLoginPassword = () => {
   const navigate = useNavigate();
   const username = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
@@ -33,9 +33,9 @@ const useLoginPassword = ()=>{
       });
 
       if (!response.ok) {
-        if(response.status === 403){
+        if (response.status === 403) {
           return false;
-        } else{
+        } else {
           throw new Error('Network response was not ok.');
         }
       } else {
@@ -64,9 +64,9 @@ const useLoginPassword = ()=>{
     console.log('loginParam', loginParam);
     const token = await checkLogin(loginParam);
     if (!token) {
-      let refUsername = username.current || { value: ''};
+      let refUsername = username.current || { value: '' };
       refUsername.value = '';
-      let refPassword = password.current || { value: ''};
+      let refPassword = password.current || { value: '' };
       refPassword.value = '';
       toast.error('Bad Login');
     } else {
@@ -84,7 +84,7 @@ const useLoginPassword = ()=>{
 
   useEffect(
     () => {
-      async function ueFunc(){
+      async function ueFunc() {
         if (user) {
           try {
             const endpoint = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`;
@@ -108,7 +108,7 @@ const useLoginPassword = ()=>{
     [doLogin, user],
   );
 
-  return {username, password, doLogin, logOut, login, profile};
+  return { username, password, doLogin, logOut, login, profile };
 };
 
 export default useLoginPassword;

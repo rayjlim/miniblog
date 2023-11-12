@@ -21,24 +21,23 @@ const Media = () => {
       toast(msg);
       setTimeout((() => { navigate('/oneday'); }), 1500);
     } else {
-      selectMedia('','');
+      selectMedia('', '');
     }
   }
 
-
   const headerLinks = {
-    search: false,
-    oneday: true,
-    sameday: true
+    search: false, oneday: true, sameday: true
   };
-  const footerLinks = { upload: true, media: false, logs: false, oneday: false };
+  const footerLinks = {
+    upload: true, media: false, logs: false, oneday: false
+  };
 
   return (
     <>
       <ToastContainer />
       <Header links={headerLinks} />
       {media && (
-        <MediaSelect media={media as any} onClose={mediaClosed}/>
+        <MediaSelect media={media as any} onClose={mediaClosed} />
       )}
       {!media && (
         <MediaList onMediaSelect={selectMedia} />

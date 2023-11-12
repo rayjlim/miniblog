@@ -1,12 +1,14 @@
 const GithubCorner = () => {
-  const svgStyle = { container: {
-    fill: '#70B7FD',
-    color: '#fff',
-    position: 'absolute',
-    top: 0,
-    border: 0,
-    right: 0,
-  },} as const;
+  const svgStyle = {
+    container: {
+      fill: '#70B7FD',
+      color: '#fff',
+      position: 'absolute',
+      top: 0,
+      border: 0,
+      right: 0,
+    },
+  } as const;
   return (
     <a
       href="https://github.com/rayjlim/miniblog"

@@ -2,8 +2,10 @@ import { useContext } from 'react';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 import MyContext from './MyContext';
 
-const MediaItem = ({media, currentDir, selectMedia}: {media: string, currentDir: string,
-  selectMedia: (filePath: string, fileName: string)=>void}) => {
+const MediaItem = ({ media, currentDir, selectMedia }: {
+  media: string, currentDir: string,
+  selectMedia: (filePath: string, fileName: string) => void
+}) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
 
   function deleteMedia(filePath: string, fileName: string) {
@@ -31,7 +33,7 @@ const MediaItem = ({media, currentDir, selectMedia}: {media: string, currentDir:
         // Do anything with the metadata return after delete?
         // const data = await response.json();
 
-        // TODO: send reload to parent
+        // TODO: how to send reload to parent?
         // loadDir(filePath);
       }
     })();

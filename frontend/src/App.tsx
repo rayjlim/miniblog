@@ -16,7 +16,7 @@ const showDevRibbon = ENVIRONMENT === 'development';
 const SAMEDAY = 1;
 
 const App = () => {
-  const [globalContext, setGlobalContext] = useState < any | null > (null);
+  const [globalContext, setGlobalContext] = useState<any | null>(null);
   useEffect(() => {
     (async () => {
       const token = window.localStorage.getItem(STORAGE_KEY);

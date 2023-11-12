@@ -1,8 +1,4 @@
-const LogRow = ({
-  log,
-  handleDelete,
-  getLog,
-}: {
+const LogRow = ({ log, handleDelete, getLog }: {
   log: string,
   handleDelete: (log: string) => void,
   getLog: (log: string) => void,

@@ -5,18 +5,18 @@ import '../Types';
 const useMedia = () => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   const isMounted = useRef<boolean>(false);
-  const [media, setMedia] = useState<MediaType|null>(null);
+  const [media, setMedia] = useState<MediaType | null>(null);
 
   useEffect(() => {
     console.log('Media: useEffect');
-    if(!isMounted.current){
+    if (!isMounted.current) {
 
       const loc = `${window.location}`;
       const param = loc.substring(loc.indexOf('?'));
       console.log('param :', param);
       const urlParams = new URLSearchParams(param);
       console.log('urlParams :', urlParams);
-      if(urlParams.has('fileName') && urlParams.has('filePath')){
+      if (urlParams.has('fileName') && urlParams.has('filePath')) {
         const fileName = urlParams.get('fileName') || '';
         const filePath = urlParams.get('filePath') || '';
         const random = Math.random();
@@ -33,7 +33,7 @@ const useMedia = () => {
 
   function selectMedia(filePath: string, fileName: string) {
     console.log(filePath, fileName);
-    if(filePath === '' && fileName === ''){
+    if (filePath === '' && fileName === '') {
       setMedia(null);
       return;
     }

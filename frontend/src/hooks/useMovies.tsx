@@ -32,15 +32,15 @@ const useMovies = (date: string) => {
     }
   }
 
-  useEffect(()=> {
-    const ueFunc = async ()=>{
-    if (MOVIES_API !== '' && date !== '') {
-      await getMovies(date);
-    }
-  };
+  useEffect(() => {
+    const ueFunc = async () => {
+      if (MOVIES_API !== '' && date !== '') {
+        await getMovies(date);
+      }
+    };
     ueFunc();
   }, [date]);
-  return {movies}
+  return { movies }
 }
 
 export default useMovies;

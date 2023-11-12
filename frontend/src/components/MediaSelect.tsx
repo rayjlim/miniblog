@@ -16,34 +16,34 @@ const propTypes = {
 
 type MediaSelectProps = PropTypes.InferProps<typeof propTypes>;
 
-const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: {media: any, onClose: (msg: string) =>void}) => {
-  const { mediaSelect, rotate, resize, copyToClipboard} = useMediaSelect(media);
+const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
+  const { mediaSelect, rotate, resize, copyToClipboard } = useMediaSelect(media);
 
   return (
     <>
-    <p className="lead">Prepare the image for use</p>
-    <div className="grid-3mw">
-      <button onClick={() => rotate(-90)} type="button">Left</button>
-      <button onClick={() => resize()} type="button">Resize</button>
-      <button onClick={() => rotate(90)} type="button">Right</button>
-    </div>
-    {/* rename={this.rename} */}
-    <section className="container">
-      {mediaSelect.imgUrl}
-      <button onClick={() => copyToClipboard(mediaSelect.prepend)} type="button">
-        [clip]
-      </button>
-      <div className="preview-img-container">
-        <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
+      <p className="lead">Prepare the image for use</p>
+      <div className="grid-3mw">
+        <button onClick={() => rotate(-90)} type="button">Left</button>
+        <button onClick={() => resize()} type="button">Resize</button>
+        <button onClick={() => rotate(90)} type="button">Right</button>
       </div>
-    </section>
-    <span className="footnote">Image is automatically prepended on submit</span>
-    <AddForm
-      date={format(new Date(), FULL_DATE_FORMAT)}
-      content={mediaSelect.prepend}
-      onSuccess={onClose}
-    />
-  </>
+      {/* rename={this.rename} */}
+      <section className="container">
+        {mediaSelect.imgUrl}
+        <button onClick={() => copyToClipboard(mediaSelect.prepend)} type="button">
+          [clip]
+        </button>
+        <div className="preview-img-container">
+          <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
+        </div>
+      </section>
+      <span className="footnote">Image is automatically prepended on submit</span>
+      <AddForm
+        date={format(new Date(), FULL_DATE_FORMAT)}
+        content={mediaSelect.prepend}
+        onSuccess={onClose}
+      />
+    </>
   );
 };
 
