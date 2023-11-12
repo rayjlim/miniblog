@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.19.1](https://github.com/rayjlim/miniblog/compare/v2.19.0...v2.19.1) (2023-11-12)
+
+
+### Bug Fixes
+
+* ♻️ extract AddEditForm ([b0db116](https://github.com/rayjlim/miniblog/commit/b0db11653086cced34dd38001df7f212252c0621))
+* ♻️ MediaSelect to subcomp, handle select cancel ([ee12534](https://github.com/rayjlim/miniblog/commit/ee125343f93bd9fc5fe3acde22484fcc727780dc))
+* ♻️ refactor DateNav to component ([13021df](https://github.com/rayjlim/miniblog/commit/13021df3873cc7389477d52188acf19f8a7ca858))
+* ♻️ refactor entrylist and inspiration out of oneday ([420bafe](https://github.com/rayjlim/miniblog/commit/420bafe901bf839b8d9e66fbb6ccb93047309621))
+* ♻️ refactor Header/Footer ([568d3eb](https://github.com/rayjlim/miniblog/commit/568d3eb58f2386f7818838c54d4b2ae0c8f3ae20))
+* ♻️ refactor weightinfo to component ([ca2b190](https://github.com/rayjlim/miniblog/commit/ca2b1906e3ba0d459ab01d49f218863a34f29f6e))
+* call toast in AddEditForm, make pageMode optional ♻️ ([0a6129b](https://github.com/rayjlim/miniblog/commit/0a6129b2ae9a82217e379bb232d3f9ed11eb7a9e))
+* DateNav and OneDay to custom hooks♻️ ([c4a1327](https://github.com/rayjlim/miniblog/commit/c4a1327ae87919ee4902e2d9fa99ea71d359aad0))
+* format code🎨 ([61d8807](https://github.com/rayjlim/miniblog/commit/61d88072d816423250f3952531638b6d7361d10b))
+* refactor logs view♻️ ([e118cba](https://github.com/rayjlim/miniblog/commit/e118cbacbdb3ed39c8d9723933c20f9fac32d51b))
+* refactor media view♻️ ([4adea61](https://github.com/rayjlim/miniblog/commit/4adea613d28addab2459a8a6810a6ec6fe103e85))
+* typescript linter 🎨 ([ee3e7cf](https://github.com/rayjlim/miniblog/commit/ee3e7cf44ad645f4ede8603b7accd316db1f67d4))
+
 ## [2.19.0](https://github.com/rayjlim/miniblog/compare/v2.18.0...v2.19.0) (2023-11-10)
 
 
