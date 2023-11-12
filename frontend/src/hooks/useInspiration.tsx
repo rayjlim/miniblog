@@ -26,23 +26,23 @@ const useInspiration = () => {
   async function getInspiration() {
     const apiUrl = `${INSPIRATION_API}`;
     const data = await xhrCall(apiUrl, 'inspiration');
-      setInspiration(`Inspire: ${data.message} : ${data.author}`);
+    setInspiration(`Inspire: ${data.message} : ${data.author}`);
   }
   async function getPrompt() {
     const data = await xhrCall(QUESTION_API, 'prompt');
     setInspiration(`Question: ${data.prompt} : ${data.category}`);
   }
 
-  useEffect(()=> {
-    const ueFunc = async ()=>{
-    if (INSPIRATION_API !== '') {
-      await getInspiration();
-    }
-  };
+  useEffect(() => {
+    const ueFunc = async () => {
+      if (INSPIRATION_API !== '') {
+        await getInspiration();
+      }
+    };
     ueFunc();
   }, []);
 
-  return {inspiration, getInspiration, getPrompt};
+  return { inspiration, getInspiration, getPrompt };
 };
 
 export default useInspiration;

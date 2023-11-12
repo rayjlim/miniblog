@@ -93,7 +93,7 @@ const useOneDay = (pageMode?: number) => {
       }
 
       console.log('OndeDay: useEffect' + pageDate);
-      if(!isMounted.current){
+      if (!isMounted.current) {
         const loc = `${window.location}`;
         const param = loc.substring(loc.indexOf('?'));
         console.log('param :', param);
@@ -101,9 +101,9 @@ const useOneDay = (pageMode?: number) => {
 
         const pageDateParam = urlParams.get('date') || format(new Date(), FULL_DATE_FORMAT);
         setPageDate(pageDateParam);
-        loadDay(pageDateParam||'');
+        loadDay(pageDateParam || '');
         isMounted.current = true;
-      }else {
+      } else {
         loadDay('');
       }
 

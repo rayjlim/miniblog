@@ -39,7 +39,7 @@ const renderer = {
 
 marked.use({ renderer });
 
-const MarkdownDisplay = ({ source }: {source: string}) => {
+const MarkdownDisplay = ({ source }: { source: string }) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
   let output = '';
   try {

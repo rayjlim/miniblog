@@ -34,7 +34,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
-    const refTextarea = textareaInput.current || {value: ''};
+    const refTextarea = textareaInput.current || { value: '' };
     console.log('textarea.value :>> ', refTextarea.value);
     refTextarea.value = refTextarea.value.replace(pattern, replacement);
 
@@ -48,21 +48,22 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
    */
   async function handleSave() {
     console.log('handleSave entry :', content, date);
-      const token = window.localStorage.getItem(STORAGE_KEY)|| '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set('Content-Type', 'application/json');
-      requestHeaders.set(AUTH_HEADER, token);
-      const options = {method: 'PUT',
-        body: JSON.stringify({
-          content,
-          date: format(date, FULL_DATE_FORMAT),
-        }),
-        headers: requestHeaders
-      };
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(AUTH_HEADER, token);
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        content,
+        date: format(date, FULL_DATE_FORMAT),
+      }),
+      headers: requestHeaders
+    };
 
-      try {
-        const response = await fetch(
-          `${REST_ENDPOINT}/api/posts/${entry.id}`,
+    try {
+      const response = await fetch(
+        `${REST_ENDPOINT}/api/posts/${entry.id}`,
         {
           ...options,
           mode: 'cors',
