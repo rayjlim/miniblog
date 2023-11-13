@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import jest from 'jest-mock';
 import EditForm from "./EditForm";
@@ -25,7 +25,7 @@ describe("EditForm component", () => {
     expect(element).toBeInTheDocument();
   });
 
-  it('Test click Cancel event', () => {
+  it('should Cancel and responde', () => {
 
     const mockCallBack = jest.fn();
 
@@ -38,7 +38,7 @@ describe("EditForm component", () => {
     expect(mockCallBack.mock.calls[0][0]).toBe('');
   });
 
-  it("should Save content on submit", () => {
+  it("should Save content on submit", async () => {
     const mockSuccessCb = jest.fn();
 
     render(<EditForm entry={{id: '1', content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
@@ -50,13 +50,12 @@ describe("EditForm component", () => {
     expect(fetch.mock.calls[0][1].method).toBe("PUT")
     expect(fetch.mock.calls[0][1].body).toBe("{\"content\":\"entry text\",\"date\":\"2000-01-01\"}")
 
-    // jest test fails when onSuccess called after fetch, IDKW
-    // expect(mockSuccessCb).toHaveBeenCalledTimes(1);
-    // expect(mockSuccessCb.mock.calls[0][0]).toBe('Edit Done');
+    await waitFor(()=> expect(mockSuccessCb).toHaveBeenCalledTimes(1));
+    expect(mockSuccessCb.mock.calls[0][0]).toBe('Edit Done');
 
   });
 
-  it("should Delete call and respond", () => {
+  it("should Delete call and respond", async () => {
     const mockSuccessCb = jest.fn();
 
     render(<EditForm entry={{id: '2', content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
@@ -67,9 +66,8 @@ describe("EditForm component", () => {
     expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/2")
     expect(fetch.mock.calls[0][1].method).toBe("DELETE")
 
-    // jest test fails when onSuccess called after fetch, IDKW
-    // expect(mockSuccessCb).toHaveBeenCalledTimes(1);
-    // expect(mockSuccessCb.mock.calls[0][0]).toBe('Delete Done');
+    await waitFor(()=> expect(mockSuccessCb).toHaveBeenCalledTimes(1));
+    expect(mockSuccessCb.mock.calls[0][0]).toBe('Delete Done');
 
   });
 
