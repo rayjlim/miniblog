@@ -2,6 +2,7 @@ type EntryType = {
   id: number,
   content: string,
   date: string,
+  highlighted?: string
 }
 
 type MovieType = {
