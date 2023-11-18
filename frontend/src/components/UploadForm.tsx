@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 
 const UploadForm = () => {
   const navigate = useNavigate();
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File>();
   const [status, setStatus] = useState<
     "initial" | "uploading" | "success" | "fail"
   >("initial");
@@ -17,7 +17,11 @@ const UploadForm = () => {
 
   async function upload() {
     const formData = new FormData();
-    formData.append('fileToUpload', file as any);
+    if(!file){
+      alert('no file');
+      return;
+    }
+    formData.append('fileToUpload', file);
     const filePath = (document.getElementById('filePath') as HTMLInputElement).value;
     formData.append(
       'filePath',
@@ -27,10 +31,9 @@ const UploadForm = () => {
     console.log('send upload');
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
     const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
     try {
-      const response = await fetch(`${REST_ENDPOINT}/uploadImage/`, {
+      const response = await fetch(`${REST_ENDPOINT}/uploadImage/?a=1`, {
         method: 'POST',
         body: formData,
         headers: requestHeaders,
@@ -102,6 +105,7 @@ const UploadForm = () => {
             type="button"
             className="btn btn-success btn-block"
             onClick={() => upload()}
+            disabled={!file}
           >
             Upload
           </button>
