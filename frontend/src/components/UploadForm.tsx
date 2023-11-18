@@ -1,21 +1,23 @@
 import { useState } from 'react';
-import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import pkg from '../../package.json';
+import Footer from '../components/Footer';
 
 const UploadForm = () => {
   const navigate = useNavigate();
-  const [selectFile, setSelectedFile] = useState<string | Blob>('');
-
+  const [file, setFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<
+    "initial" | "uploading" | "success" | "fail"
+  >("initial");
   function onChangeHandler(event: any) {
     console.log(event.target.files[0]);
-    setSelectedFile(event.target.files[0]);
+    setFile(event.target.files[0]);
   }
 
   async function upload() {
     const formData = new FormData();
-    formData.append('fileToUpload', selectFile);
+    formData.append('fileToUpload', file as any);
     const filePath = (document.getElementById('filePath') as HTMLInputElement).value;
     formData.append(
       'filePath',
@@ -36,13 +38,33 @@ const UploadForm = () => {
 
       console.log(response);
       const data = await response.json();
+      setStatus("success")
       navigate(`/media?fileName=${data.fileName}&filePath=${data.filePath}`);
     } catch (error) {
       console.log(error);
       alert(`Error uploading file ${error}`);
+      setStatus("fail")
     }
   }
 
+  const Result = ({ status }: { status: string }) => {
+    if (status === "success") {
+      return <p>✅ File uploaded successfully!</p>;
+    } else if (status === "fail") {
+      return <p>❌ File upload failed!</p>;
+    } else if (status === "uploading") {
+      return <p>⏳ Uploading selected file...</p>;
+    } else {
+      return null;
+    }
+  };
+
+  const footerLinks = {
+    upload: false,
+    media: true,
+    logs: true,
+    oneday: false,
+  };
   return (
     <>
       <div className="container">
@@ -65,6 +87,16 @@ const UploadForm = () => {
                 id="fileToUpload"
               />
             </label>
+            {file && (
+              <section>
+                File details:
+                <ul>
+                  <li>Name: {file.name}</li>
+                  <li>Type: {file.type}</li>
+                  <li>Size: {file.size} bytes</li>
+                </ul>
+              </section>
+            )}
           </div>
           <button
             type="button"
@@ -74,30 +106,10 @@ const UploadForm = () => {
             Upload
           </button>
         </form>
+        <Result status={status}/>
       </div>
-      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left">
-        <RouterNavLink to="/upload">
-          <i className="fa fa-file-upload" />
-          {' '}
-          <span className="nav-text">Upload Pix</span>
-        </RouterNavLink>
-        <RouterNavLink to="/media">
-          <i className="fa fa-portrait" />
-          {' '}
-          <span className="nav-text">Media</span>
-          {' '}
-        </RouterNavLink>
-        <RouterNavLink to="/logs">
-          <i className="fa fa-clipboard-list" />
-          {' '}
-          <span className="nav-text">Logs</span>
-          {' '}
-        </RouterNavLink>
-        <span className="footer-version">
-          v
-          {pkg.version}
-        </span>
-      </nav>
+      <Footer links={footerLinks} />
+
     </>
   );
 };

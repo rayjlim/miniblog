@@ -31,6 +31,8 @@ class UploadHandler
             // $filePath = $_POST["filePath"] . DIR_SEP ?? date(YEAR_MONTH_FORMAT); // not allowing user to specify path
             $filePath = date(YEAR_MONTH_FORMAT);
             $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
+
+            // TODO: validate file upload exists
             $urlFileName = strtolower(preg_replace('/\s+/', '_', trim(basename($_FILES["fileToUpload"]["name"]))));
             $targetFileFullPath = $targetDir . DIR_SEP . $urlFileName;
 
