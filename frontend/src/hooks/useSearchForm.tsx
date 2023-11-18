@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { format, parse, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { format, parse, subMonths } from 'date-fns';
 
 import {
   DEFAULT_SEARCH_MONTHS_BACK,
