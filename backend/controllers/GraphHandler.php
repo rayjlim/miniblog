@@ -1,8 +1,11 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
+use \DateTime;
 
 class GraphHandler extends AbstractController
 {
@@ -31,7 +34,7 @@ class GraphHandler extends AbstractController
             $userId = $this->app->userId;
             $targetDay = $date;
 
-            $entries = $this->dao->getSameDayEntries($userId, $targetDay);
+            $entries = $this->dao->getSameDayEntries($targetDay);
 
             $printedNonWeight = array_reduce($entries, "printEntrys");
 
@@ -50,7 +53,7 @@ class GraphHandler extends AbstractController
             $qLength = sizeof($this->QUESTIONOTDAY);
             $modulo = $dayNumber % $qLength;
             $text = $this->QUESTIONOTDAY[$modulo];
-            $link = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['ROOT_URL'] . "/oneDay?pretext=#qod";
+            $link = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['BASE_PATH'] . "oneDay?pretext=#qod";
             $additions .= "<strong><a href=\"" . $link . "\">Question of the Day:</a></strong>"
                 . $text . "<br><br>";
 
@@ -71,14 +74,14 @@ class GraphHandler extends AbstractController
         };
     }
 
-    public function groupByYearMonth($carry, $item)
+    public function groupByYearMonth(array $carry, array $item): array
     {
         $year = substr($item['date'], 0, 4);
         $month = substr($item['date'], 5, 2);
-        if (!isset($carry[$year . '-' . $month])) {
-            $carry[$year . '-' . $month] = [];
-        }
-        array_push($carry[$year . '-' . $month], $item['weight']);
+        $yearMonth = $year . '-' . $month;
+        $carry[$yearMonth] ??= [];
+
+        array_push($carry[$yearMonth], $item['weight']);
         return $carry;
     }
 
@@ -99,7 +102,8 @@ class GraphHandler extends AbstractController
     );
 
     public $MANTRAS =  array(
-        'Determination - “In the heart of the strong shines a relentless ray of resolve... It cannot be stopped, it cannot be controlled, and it will not fail.”',
+        'Determination - “In the heart of the strong shines a relentless ray of resolve... '
+        . 'It cannot be stopped, it cannot be controlled, and it will not fail.”',
         'Don\'t be afraid of your dreams',
         'Be more optimistic for more productivity',
         'Love should be authentic. Real, unconditional',
@@ -201,7 +205,7 @@ class GraphHandler extends AbstractController
 function printEntrys($carry, $item)
 {
     $entryDay = new DateTime($item['date']);
-    $urlPrefix = "https://" . $_ENV['DOMAIN'] . "/" . $_ENV['ROOT_URL'];
+    $urlPrefix = "https://" . $_ENV['DOMAIN'] . $_ENV['BASE_PATH'];
     $link = "{$urlPrefix}/index.html?date={$entryDay->format(YEAR_MONTH_DAY_FORMAT)}";
     $pattern = '/(!\[[\w\ ]*\]\(\.\.\/uploads)(\/[\w\-\/\.]*)\)/';
     $replacement = "<img src=\"{$urlPrefix}uploads" . '${2}' . "\">";
@@ -212,6 +216,7 @@ function printEntrys($carry, $item)
     $replacement = '&lt;${1}&gt; :';
     $preparedContent = preg_replace($pattern, $replacement, $preparedContent);
 
-    $message =  "<li><strong><a href=\"" . $link . "\">" . $entryDay->format('Y-D') . '</a>:</strong> ' . $preparedContent . "</li>";
+    $message =  "<li><strong><a href=\"" . $link . "\">" . $entryDay->format('Y-D')
+        . '</a>:</strong> ' . $preparedContent . "</li>";
     return $carry .= $message;
 }

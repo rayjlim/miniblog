@@ -1,3 +1,17 @@
 .footer-version {
   margin: 0 3em;
 }
+.movieList {
+  margin: 0 1em;
+}
+.movieList li {
+  list-style-type: none;
+}
+.weight {
+  margin: 0 3em;
+}
+
+.copy-btn {
+  margin: 0 1em;
+  line-height: 1em;
+}

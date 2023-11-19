@@ -1,11 +1,15 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class LogHandler
 {
-    var $resource = null;
+    private $resource = null;
     /**
      * Constructor
      *
@@ -15,14 +19,15 @@ class LogHandler
      *
      * @return array of page params
      */
-    function __construct($resource)
+    public function __construct($resource)
     {
         $this->resource = $resource;
     }
 
-    public function getUrlHandler()
+    public function getUrlHandler(): object
     {
-        return function ($logFileName = '') {
+        return function (Request $request, Response $response, $args) {
+            $logFileName = $args['logFileName'] ?? '';
             \Lpt\DevHelp::debugMsg('start logs list');
             $filelist = $this->readFilelist(LOGS_DIR);
             if ($logFileName == '') {
@@ -30,41 +35,46 @@ class LogHandler
                 $logFileName = end($filelist);
             }
 
-            $this->readFileAndRender($logFileName, $filelist);        };
-    }
-
-    public function delete()
-    {
-        return function ($logFileName) {
-            $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
-            $data['pageMessage'] = 'File Removed: ' . $logFileName;
-            DevHelp::debugMsg($data['pageMessage']);
-            echo json_encode($data);
+            $logFile = '';
+            if ($logFileName != '' && in_array($logFileName, $filelist)) {
+                \Lpt\DevHelp::debugMsg('$logFileName: ' . $logFileName);
+                $logFile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logFileName);
+            }
+            $this->resource->echoOut(
+                json_encode(
+                    [
+                    'logs'  => array_values($filelist),
+                    'logFileName' => $logFileName,
+                    'logFile' => $logFile
+                    ]
+                )
+            );
+            return $response;
         };
     }
 
-    public function readFilelist($targetDir)
+    public function deleteHandler(): object
+    {
+        return function (Request $request, Response $response, $args) {
+            $logFileName = $args['logFileName'] ?? '';
+            if ($logFileName !== '') {
+                $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
+                $pageMessage = 'File Removed: ' . $logFileName;
+                DevHelp::debugMsg($pageMessage);
+                $this->resource->echoOut(json_encode($pageMessage));
+            }
+            return $response;
+        };
+    }
+
+    public function readFilelist(string $targetDir): array
     {
         $filelist = $this->resource->readdir($targetDir);
         for ($i = count($filelist) - 1; $i >= 0; $i--) {
-            if (strpos($filelist[$i], LOG_PREFIX) === FALSE) {
+            if (strpos($filelist[$i], LOG_PREFIX) === false) {
                 unset($filelist[$i]);
             }
         }
         return array_values($filelist);
-    }
-
-    public function readFileAndRender($logFileName, $filelist)
-    {
-        $logFile = '';
-        if ($logFileName != '' && in_array($logFileName, $filelist)) {
-            \Lpt\DevHelp::debugMsg('$logFileName: ' . $logFileName);
-            $logFile = $this->resource->readfile(LOGS_DIR . DIR_SEP . $logFileName);
-        }
-        echo json_encode(array(
-            'logs'  => array_values($filelist),
-            'logFileName' => $logFileName,
-            'logFile' => $logFile
-        ));
     }
 }

@@ -1,137 +1,150 @@
 <?php
+namespace controllers;
+
 defined('ABSPATH') or exit('No direct script access allowed');
 use \Lpt\DevHelp;
+use \models\ListParams;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use \DateTime;
+use \stdClass;
 
 /**
  * @OA\Info(title="Miniblog Api", version="0.1",
- *   @OA\Contact(
- *     email= "rayjlim1@gmail.com"
+ * @OA\Contact(
+ *     email= "rayjlim@yahoo.com"
  *   )
  * )
  */
-
-class EntryHandler extends AbstractController
+class EntryHandler
 {
     public $dao = null;
     public $resource = null;
-    public function __construct($app, $_smsEntriesDAO, $_resource)
+    public function __construct($_smsEntriesDAO, $_resource)
     {
         $this->dao = $_smsEntriesDAO;
         $this->resource = $_resource;
-        parent::__construct($app);
     }
 
     /**
-    * @OA\Get(
-    *     path="/api/posts/",
-    *     @OA\Response(
-    *       response="200",
-    *       description="Retrieve entries limit 50",
-    *       @OA\MediaType(
-    *         mediaType="application/json",
-    *         @OA\Schema(ref="#/components/schemas/SmsEntrie"),
-    *       )
-    *     )
-    * )
-    */
-    public function listItemsApi()
+     * @OA\Get(
+     *     path="/api/posts/",
+     * @OA\Response(
+     *       response="200",
+     *       description="Retrieve entries limit 50",
+     * @OA\MediaType(
+     *         mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SmsEntrie"),
+     *       )
+     *     )
+     * )
+     */
+    public function listItemsApi(): object
     {
-        return function () {
-            $request = $this->app->request();
-            $requestParams = $request->params();
+        return function (Request $request, Response $response) {
+            $queries = array();
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+
             $listObj = new ListParams();
-            $listObj->loadParams($requestParams);
-            $userId = $this->app->userId;
-            $entries = $this->dao->queryBlogList($userId, $listObj);
-            $this->app->response()->header('Content-Type', 'application/json');
+            $listObj->loadParams($queries);
+            $userId = $_ENV['ACCESS_ID'];
+            $listObj->userId = $userId;
+            $entries = $this->dao->list($listObj);
+            // $this->app->response()->header('Content-Type', 'application/json');
 
             $metaData = new stdClass();
             $metaData->entries = $entries;
             $metaData->params = $listObj;
 
             $this->resource->echoOut(json_encode($metaData));
+            return $response;
         };
     }
 
     /**
-    * @OA\Get(
-    *     description="Retrieve entries on same day of year",
-    *     path="/api/sameDayEntries",
-   *     @OA\Response(
-   *         response=200,
-   *         description="success",
-   *         @OA\MediaType(
-   *           mediaType="application/json",
-   *           @OA\Schema(ref="#/components/schemas/SearchResults"),
-   *         )
-   *     ),
-   *     @OA\Response(
-   *         response=404,
-   *         description="Could Not Find Resource"
-   *     )
-    * )
-    */
-    public function sameDayEntries()
+     * @OA\Get(
+     *     description="Retrieve entries on same day of year",
+     *     path="/api/sameDayEntries",
+     * @OA\Response(
+     *         response=200,
+     *         description="success",
+     * @OA\MediaType(
+     *           mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response=404,
+     *         description="Could Not Find Resource"
+     *     )
+     * )
+     */
+    public function listItemsSameDay(): object
     {
-        return function () {
+        return function (Request $request, Response $response): Response {
             DevHelp::debugMsg(__file__);
-            $userId = $this->app->userId;
+            $userId = $_ENV['ACCESS_ID'];
             $currentDate = $this->resource->getDateTime();
-            $request = $this->app->request();
-            $requestParams = $request->params();
-            $targetDay = getValue($requestParams, 'day') != '' ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($requestParams, 'day')) : $currentDate;
+            $queries = [];
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+            $targetDay = getValue($queries, 'day') != false
+                ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, getValue($queries, 'day'))
+                : $currentDate;
 
-            $entries = $this->dao->getSameDayEntries($userId, $targetDay);
-            $this->app->response()->header('Content-Type', 'application/json');
+            $entries = $this->dao->getSameDayEntries($targetDay);
+            // $this->app->response()->header('Content-Type', 'application/json');
             $this->resource->echoOut('{"user": '. $userId .', "entries": ' . json_encode($entries) . '}');
+            return $response;
         };
     }
 
-    public function itemDetailsApi()
+    public function detailItemApi(): object
     {
-        return function ($id) {
+        return function (int $id): void {
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->load($id);
-            $this->app->response()->header('Content-Type', 'application/json');
+            // $this->app->response()->header('Content-Type', 'application/json'); // TODO: fix
             $this->resource->echoOut('{"entry": ' . json_encode($entry) . '}');
         };
     }
-   /**
-   * @OA\Get(
-   *     description="Retrieve entries limit 50",
-   *     path="/api/yearMonth",
-   *     @OA\RequestBody(
-   *         description="Client side search object",
-   *         required=true,
-   *         @OA\MediaType(
-   *             mediaType="application/json",
-   *         )
-   *     ),
-   *     @OA\Response(
-   *         response=200,
-   *         description="success",
-   *         @OA\MediaType(
-   *           mediaType="application/json",
-   *           @OA\Schema(ref="#/components/schemas/SearchResults"),
-   *         )
-   *     ),
-   *     @OA\Response(
-   *         response=404,
-   *         description="Could Not Find Resource"
-   *     )
-    * )
-    */
+    /**
+     * @OA\Get(
+     *     description="Retrieve entries limit 50",
+     *     path="/api/yearMonth",
+     * @OA\RequestBody(
+     *         description="Client side search object",
+     *         required=true,
+     * @OA\MediaType(
+     *             mediaType="application/json",
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response=200,
+     *         description="success",
+     * @OA\MediaType(
+     *           mediaType="application/json",
+     * @OA\Schema(ref="#/components/schemas/SearchResults"),
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response=404,
+     *         description="Could Not Find Resource"
+     *     )
+     * )
+     */
 
-    public function yearMonthsApi()
+    public function yearMonthsApi(): object
     {
-        return function () {
-            $userId = $this->app->userId;
+        return function (Request $request, Response $response): void {
+            $userId = $_ENV['ACCESS_ID'];
             DevHelp::debugMsg('start ' . __FILE__);
 
             $entry = $this->dao->getYearMonths($userId);
-            $this->app->response()->header('Content-Type', 'application/json');
-            $this->resource->echoOut('{"data": ' . json_encode($entry) . '}');
+            header('Content-Type: application/json');
+            $this->resource->echoOut(json_encode($entry));
+            die();
+            // return $response;
         };
     }
 }

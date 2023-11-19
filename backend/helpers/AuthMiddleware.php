@@ -1,61 +1,61 @@
 <?php
+namespace middleware;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \Lpt\Logger;
+use \stdClass;
 
-class AuthMiddleware extends \Slim\Middleware
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Nyholm\Psr7\Response;
+
+class AuthMiddleware
 {
-    /**
-     * Check if the user is logged in
-     * @return boolean
-     */
-    private function isLogged()
+    public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $headers = getallheaders();
-        // print_r($headers);
+        DevHelp::debugMsg(__FILE__);
+        $response = $handler->handle($request);
+        $response = new Response();
 
-        $token = $_ENV['AUTH_TOKEN'];
-        DevHelp::debugMsg('isset app token? ' . $token . isset($headers[$token]));
-        if (isset($headers[$token])) {
-            $headerStringValue = isset($headers[$token]) ? $headers[$token] : '';
+        if ($request->getMethod() == "OPTIONS") {
+            header('HTTP/1.0 200 Ok');
+            echo "Options METHOD check";
+            exit(0);
+        }
 
-            $decryptedString = decrypt($headerStringValue);
-            DevHelp::debugMsg('decryptedString:' . $decryptedString);
-            $userObj = json_decode($decryptedString);
+        if ($this->isLoggedIn()) {
+            return $response;
+        }
 
-            $this->app->userId = $userObj->userId;
-            if (is_numeric($userObj->userId)) {
-                return $userObj->userId;
+        $reqBody = $request->getBody();
+        DevHelp::debugMsg('reqBody:' . $reqBody);
+        $loginParams = json_decode($reqBody);
+
+        if (isset($loginParams->id) && $loginParams->id !== '') {
+            if ($loginParams->id == $_ENV['GOOGLE_ID']) {
+                $this->generateToken();
             }
+            $this->loginError('Wrong id');
         }
 
-        if (isset($_GET["cron_pass"]) && $_GET["cron_pass"] == $_ENV['CRON_PW']) {
-            $ipaddress = getenv("REMOTE_ADDR");
-            Logger::log("Cron called from IP Address: " . $ipaddress);
-            return 1;
+        $username = isset($loginParams->username) ? htmlspecialchars($loginParams->username) : null;
+        $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
+
+        if (!isset($loginParams->login)) {
+            $this->loginError('Invalid payload' . $_SERVER['REQUEST_URI']);
+        } elseif (!$username || !$password) {
+            $this->loginError('Missing Fields');
+        } elseif (!$this->isValidUsernamePassword($username, $password)) {
+            $this->loginError('Wrong username/password');
         }
 
-        return false;
+        $this->generateToken();
     }
 
-    /**
-     * Do the login
-     * @param  string $ip       IP address
-     * @param  string $username Username
-     * @param  string $password Password
-     * @return boolean
-     */
-    private function doLogin($username, $password)
+    private function generateToken()
     {
-        // Check the access to this function, using logs and ip
-        $ipaddress = getenv("REMOTE_ADDR");
-        Logger::log('doLogin:' . $username . 'from IP Address: ' . $ipaddress);
-        if ($username !== $_ENV['ACCESS_USER'] || $password !== $_ENV['ACCESS_PASSWORD']) {
-            return false;
-        }
-
         $tokenObj = new stdClass();
         $tokenObj->userId = $_ENV['ACCESS_ID'];
         $tokenObj->name = $_ENV['ACCESS_NAME'];
@@ -67,66 +67,88 @@ class AuthMiddleware extends \Slim\Middleware
         exit;
     }
 
-    public function call()
+    private function loginError($message)
     {
-        DevHelp::debugMsg(__FILE__);
-        $ipaddress = getenv("REMOTE_ADDR");
-        $app = $this->app;
-        $req = $app->request;
+        $ipaddress = $this->getRealIpAddr();
+        $response = new stdClass();
+        $response->status = "fail";
+        $response->message = $message;
 
-        if ($req->isOptions()) {
-            header('HTTP/1.0 200 Ok');
-            echo "Options METHOD check";
-            exit(0);
-        }
-
-        $error = '';
-        $userId = $this->isLogged();
-
-        if (!empty($userId)) {
-            $this->app->userId = $userId;
-            $this->next->call();
-            return;
-        } else {
-            $error = "Not Logged In";
-        }
-
-        $reqBody = $req->getBody();
-        DevHelp::debugMsg('reqBody:' . $reqBody);
-        $loginParams = json_decode($reqBody);
-
-        $username = isset($loginParams->username) ? htmlspecialchars($loginParams->username) : null;
-        $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
-        // DevHelp::debugMsg('$loginParams->login:' . $loginParams->login);
-
-
-        if (!isset($loginParams->login)) {
-            $error = "{\"status\": \"fail\", \"message\":\"Invalid payload\"}";
-            Logger::log('User Login fail: ' . $error . 'from IP Address: ' . $ipaddress);
-        } elseif (!$username || !$password) {
-            $error = "{\"status\": \"fail\", \"message\":\"Missing Fields\"}";
-            Logger::log('User Login fail: ' . $error. 'from IP Address: ' . $ipaddress);
-        } elseif (!$this->doLogin($username, $password)) {
-            $error = "{\"status\": \"fail\", \"message\":\"Wrong password\"}";
-            Logger::log('User Login fail: Wrong password: ' . $username . ":" . $password . 'from IP Address: ' . $ipaddress);
-        }
-
+        Logger::log('User Login: '.$message.' from IP Address: ' . $ipaddress);
         header('HTTP/1.0 403 Forbidden');
-        echo $error;
+        echo json_encode($response);
         exit(0);
+    }
+    /**
+     * Get the IP address of the visitor
+     * @return string
+     */
+    private function getRealIpAddr()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+            return $_SERVER['HTTP_CLIENT_IP'];
+        }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
+        return $_SERVER['REMOTE_ADDR'];
+    }
+
+    /**
+     * Check if the user is logged in
+     *
+     * @return boolean
+     */
+    private function isLoggedIn()
+    {
+        $headers = getallheaders();
+        $tokenName = $_ENV['AUTH_TOKEN'];
+        DevHelp::debugMsg('isset app tokenName? ' . $tokenName . isset($headers[$tokenName]));
+        // DevHelp::debugMsg('token value: ' . $headers[$tokenName]);
+        // $headers =  getallheaders();
+        // foreach($headers as $key=>$val){
+        //     echo $key . ': ' . $val . '<br>';
+        // }
+        if (isset($headers[$tokenName])) {
+            $headerStringValue = $headers[$tokenName];
+            $decryptedString = decrypt($headerStringValue);
+
+            $userObj = json_decode($decryptedString);
+            return ($userObj
+                && $userObj->userId == $_ENV['ACCESS_ID']);
+        }
+
+        if (isset($_GET["cron_pass"]) && $_GET["cron_pass"] == $_ENV['CRON_PW']) {
+            $ipaddress = getenv("REMOTE_ADDR");
+            Logger::log("Cron called from IP Address: " . $ipaddress);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check Username and Password
+     *
+     * @param  string $username Username
+     * @param  string $password Password
+     * @return boolean
+     */
+    private function isValidUsernamePassword($username, $password)
+    {
+        $ipaddress = getenv("REMOTE_ADDR");
+        Logger::log('isValidUsernamePassword:' . $username . 'from IP Address: ' . $ipaddress);
+        return $username === $_ENV['ACCESS_USER'] && $password === $_ENV['ACCESS_PASSWORD'];
     }
 }
 
 function encrypt($simple_string)
 {
-    // Display the original string
-    // echo "Original String: " . $simple_string;
-
-    // Store the cipher method
-    $ciphering = "AES-128-CTR";
+    $ciphering = "AES-128-CTR"; // the cipher method
 
     // Use OpenSSl Encryption method
-    $iv_length = openssl_cipher_iv_length($ciphering);
+    openssl_cipher_iv_length($ciphering);
     $options = 0;
 
     // Non-NULL Initialization Vector for encryption
@@ -145,10 +167,9 @@ function encrypt($simple_string)
 
 function decrypt($encryption)
 {
-    // Store the cipher method
-    $ciphering = "AES-128-CTR";
+    $ciphering = "AES-128-CTR"; // the cipher method
     // Non-NULL Initialization Vector for decryption
-    $decryption_iv = '1234567891011121';
+    $encryption_iv = '1234567891011121';
     $options = 0;
 
     // Use openssl_decrypt() function to decrypt the data
@@ -157,9 +178,8 @@ function decrypt($encryption)
         $ciphering,
         $_ENV['ENCRYPTION_KEY'],
         $options,
-        $decryption_iv
+        $encryption_iv
     );
 
-    // Display the decrypted string
     return $decryption;
 }

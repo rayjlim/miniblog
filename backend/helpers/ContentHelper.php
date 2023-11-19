@@ -1,7 +1,9 @@
 <?php
+namespace helpers;
 
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 use \Lpt\DevHelp;
+use \models\SmsEntrie;
 
 /**
  * EntryHelper Class Doc Comment
@@ -19,7 +21,7 @@ class ContentHelper implements ContentHelperInterface
      *
      * Initialize dependancies
      *
-     * @param object $_iDao Connection to database
+     * @param object $_iDao      Connection to database
      * @param object $_iResource Connection to database
      *
      * @return array of page params
@@ -35,5 +37,4 @@ class ContentHelper implements ContentHelperInterface
         $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
         return $smsEntry;
     }
-
 }

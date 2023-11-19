@@ -2,12 +2,17 @@ backend/build/*
 backend/config/.htaccess
 backend/config/feature_ideas/*
 backend/vendor
+backend/.env.production
 
-uploads/*
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*/*.jpg
+uploads/*/*.JPG
+uploads/*/*.jpeg
+uploads/*/*.png
+uploads/*/*.PNG
 
 cron_script.php
-.env
-.env.production
 
 frontend/build/*
 frontend/node_modules/*
@@ -17,3 +22,13 @@ frontend/styleguide/*
 scripts/passfile.txt
 doc/reference files/*
 backend/_logs/*
+backend/error_log
+feature_ideas/*
+frontend/.env
+frontend/.env.production
+frontend/.htaccess.production
+
+backend/.env
+scripts/.env
+
+uploads/*/*.PNG

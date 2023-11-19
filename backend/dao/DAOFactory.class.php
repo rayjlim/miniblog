@@ -1,5 +1,18 @@
 <?php
+namespace dao;
+
 defined('ABSPATH') or exit('No direct script access allowed');
+
+use \controllers\CUDHandler;
+use \controllers\EntryHandler;
+use \controllers\GraphHandler;
+use \controllers\LogHandler;
+use \controllers\UploadHandler;
+use \controllers\Settings;
+
+use \dao\SmsEntriesRedbeanDAO;
+use \dao\SmsUsersRedbeanDAO;
+use \helpers\ContentHelper;
 
 class DAOFactory
 {
@@ -20,28 +33,27 @@ class DAOFactory
     }
 
     //helpers
-    public static function ContentHelper()
+    public static function getContentHelper()
     {
         return new ContentHelper(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
     // controllers
-    public static function CUDHandler($app)
+    public static function getCUDHandler()
     {
         return new CUDHandler(
-            $app,
             DAOFactory::getSmsEntriesDAO(),
             DAOFactory::getResourceDAO(),
-            DAOFactory::ContentHelper()
+            DAOFactory::getContentHelper()
         );
     }
 
-    public static function EntryHandler($app)
+    public static function getEntryHandler()
     {
-        return new EntryHandler($app, DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
+        return new EntryHandler(DAOFactory::getSmsEntriesDAO(), DAOFactory::getResourceDAO());
     }
 
-    public static function GraphHandler($app)
+    public static function getGraphHandler($app)
     {
         return new GraphHandler(
             $app,
@@ -50,13 +62,18 @@ class DAOFactory
         );
     }
 
-    public static function LogHandler()
+    public static function getLogHandler()
     {
         return new LogHandler(DAOFactory::getResourceDAO());
     }
 
-    public static function UploadHandler($app)
+    public static function getUploadHandler()
     {
-        return new UploadHandler($app, DAOFactory::getResourceDAO());
+        return new UploadHandler(DAOFactory::getResourceDAO());
+    }
+
+    public static function getSettings()
+    {
+        return new Settings();
     }
 }

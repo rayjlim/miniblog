@@ -1,3 +1,27 @@
 .filterType {
-  width: 3em;
+  display: 'inline';
+  margin: '0 1em';
+  width: 1.12em;
+  padding: 0;
+  text-align: center;
 }
+.rangeBtn {
+  margin: 0 .25em;
+}
+.margin-rt-1 {
+  margin-right: 1em;
+}
+.search-date-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.search-date-field {
+  padding: 0 0.5em;
+}
+.search-param-description {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+

@@ -1,36 +1,32 @@
 <?php
+namespace dao;
 
-defined('ABSPATH') OR exit('No direct script access allowed');
+defined('ABSPATH') or exit('No direct script access allowed');
 use \RedBeanPHP\R as R;
+use \models\SmsEntrie;
+use \models\ListParams;
+
 // R::debug(TRUE);
+function groupYearMonth(array $row): string
+{
+    return $row["Year"] . "-" . $row["Month"];
+}
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
-    public function load($id)
+    public function load(int $id): array
     {
         $post = R::load(POSTS, $id);
         return $post->export();
     }
 
-    /**
-     * Delete record from table
-     *
-     * @param smsEntrie primary key
-     * @LPT_V2
-     */
-    public function delete($id)
+    public function delete(int $id): int
     {
         $postBean = R::load(POSTS, $id);
         R::trash($postBean);
         return 1;
     }
 
-    /**
-     * Insert record to table
-     *
-     * @param SmsEntriesMySql smsEntrie
-     * @LPT_V2
-     */
-    public function insert($smsEntrie)
+    public function insert(SmsEntrie $smsEntrie): int
     {
         $postBean = R::xdispense(POSTS);
         $postBean->content = $smsEntrie->content;
@@ -40,13 +36,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $id;
     }
 
-    /**
-     * Update record in table
-     *
-     * @param SmsEntriesMySql smsEntrie
-     * @LPT_V2
-     */
-    public function update($smsEntrie)
+    public function update(array $smsEntrie): void
     {
         $postBean = R::load(POSTS, $smsEntrie['id']);
         $postBean->content = $smsEntrie['content'];
@@ -54,103 +44,87 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         R::store($postBean);
     }
 
-    /**
-     * Get records that have specific label
-     * @LPT_V2
-     */
-    public function queryGraphData($userId, $graphParams)
-    {
-        $sqlParam = '';
-        if ($graphParams->startDate != '') {
-            $sqlParam.= ' and date > \'' . $graphParams->startDate . '\'';
-        }
-        if ($graphParams->endDate != '') {
-            $sqlParam.= ' and date <= \'' . $graphParams->endDate . '\'';
-        }
-
-        $tagParam = "'%" . $graphParams->label . "%'";
-        $posts = R::findAll(POSTS, ' user_id = ? and content like ' . $tagParam . ' ' . $sqlParam . ' order by date desc limit  ' . $graphParams->resultLimit, [$userId]);
-
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-
-        return $sequencedArray;
-    }
-
-    public function queryBlogList($userId, $listParams)
+    public function list(ListParams $listParams): array
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
-        $posts = R::findAll(POSTS, ' user_id = ?  ' . $sqlParam . ' order by date desc limit ?', [$userId, $listParams->resultsLimit]);
+        $posts = R::findAll(POSTS, '1 = 1 ' . $sqlParam . ' ORDER BY date DESC LIMIT ?', [$listParams->resultsLimit]);
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
         return $sequencedArray;
     }
 
-    public function getSameDayEntries($userId, $date)
+    /**
+     * Get Entries that are from the same day of the year
+     *
+     * @param  date Target date
+     * @LPT_V2
+     */
+    public function getSameDayEntries(object $date): array
     {
-        $whereClause = ' where user_id = ? and MONTH(date) = ' . $date->format('m') . ' and Day(date) = ' . $date->format('d')
-            . ' and content not like "#s%"'
-            . ' and content not like "#x%"'
-            . ' and content not like "@w%"'
-            . ' and content not like "#a%"';
-        $posts = R::findAll(POSTS, $whereClause . ' order by date desc ', [$userId]);
+        $whereClause = ' WHERE MONTH(date) = ' . $date->format('m')
+            . ' AND DAY(date) = ' . $date->format('d')
+            . ' AND content NOT LIKE "#s%"'
+            . ' AND content NOT LIKE "#x%"'
+            . ' AND content NOT LIKE "@w%"'
+            . ' AND content NOT LIKE "#a%"';
+        $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date DESC', []);
         // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
         $sequencedArray = array_values(array_map("getExportValues", $posts));
 
         return $sequencedArray;
     }
 
-    public function getYearMonths($userId)
+    /**
+     * Get Year and Months list of all entries
+     *
+     * @param  none
+     * @LPT_V2
+     */
+    public function getYearMonths(): array
     {
-        $whereClause = ' where user_id = ? GROUP BY Year(sms_entries.date), Month(sms_entries.date), id';
-        $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date desc ', [$userId]);
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-
-        $onlyDate = array_map("pickDate", $sequencedArray);
-        $filtered = array_unique($onlyDate);
-        return $filtered;
+        $posts = R::getAll('SELECT DISTINCT YEAR(date) AS "Year", '
+            . 'MONTH(date) AS "Month" '
+            . 'FROM sms_entries '
+            . 'WHERE user_id = 1 '
+            . 'ORDER BY YEAR(date) DESC, MONTH(date) DESC');
+        return array_map("dao\groupYearMonth", $posts);
     }
 
+    // ;
     public function listParamsToSqlParam($listParams)
     {
         $sqlParam = '';
         if ($listParams->searchParam != '') {
-            $sqlParam.= ' and content LIKE \'%' . $listParams->searchParam . '%\'';
+            $sqlParam.= ' AND content LIKE \'%' . $listParams->searchParam . '%\'';
         }
 
         if ($listParams->excludeTags != '') {
-            $sqlParam.= ' and content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
+            $sqlParam.= ' AND content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
         }
 
-        if (count($listParams->tags) != 0) {
-            $sqlParam.= ' and content LIKE \'%#' . $this->tags[0] . '%\'';
-        }
+        // if (count($listParams->tags) != 0) {
+        //     $sqlParam.= ' AND content LIKE \'%#' . $this->tags[0] . '%\'';
+        // }
 
         if ($listParams->startDate != '') {
-            $sqlParam.= ' and date >= \'' . $listParams->startDate . '\'';
+            $sqlParam.= ' AND date >= \'' . $listParams->startDate . '\'';
         }
         if ($listParams->endDate != '') {
-            $sqlParam.= ' and date <= \'' . $listParams->endDate . '\'';
+            $sqlParam.= ' AND date <= \'' . $listParams->endDate . '\'';
         }
 
         if ($listParams->filterType == FILTER_UNTAGGED) {
-            $sqlParam.= ' and content not LIKE \'%#%\'';
-            $sqlParam.= ' and content not LIKE \'@%\'';
+            $sqlParam.= ' AND content NOT LIKE \'%#%\'';
+            $sqlParam.= ' AND content NOT LIKE \'@%\'';
         }
 
         if ($listParams->filterType == FILTER_TAGGED) {
-            $sqlParam.= ' and (content LIKE \'%#%\' or content LIKE \'@%\')' . ' and content NOT LIKE \'%##%\'';
+            $sqlParam.= ' AND (content LIKE \'%#%\' or content LIKE \'@%\')'
+                . ' AND content NOT LIKE \'%##%\'';
         }
         // echo $sqlParam;
         // exit;
         return $sqlParam;
-    }
-
-    public function queryLastTagEntry($userId, $label)
-    {
-        $posts = R::findAll(POSTS, ' user_id = ? and content like \'%' . $label . '%\' order by date desc limit 1', [$userId]);
-
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
-        return $sequencedArray[0];
     }
 }
 
