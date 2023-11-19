@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.19.2](https://github.com/rayjlim/miniblog/compare/v2.19.1...v2.19.2) (2023-11-19)
+
+
+### Bug Fixes
+
+* ♻️ AddForm to custom hook ([fdaeafc](https://github.com/rayjlim/miniblog/commit/fdaeafc287eae75c207ecc5c3d294e838eff491c))
+* code formatting🚨 ([bb0f35b](https://github.com/rayjlim/miniblog/commit/bb0f35b70e91ca01154826385d459f401686596d))
+* custom hook for EditForm ([08dc324](https://github.com/rayjlim/miniblog/commit/08dc324f552806e162ff9879150cf4c2c3045d3a))
+* debugging upload issue ([7fbe6ec](https://github.com/rayjlim/miniblog/commit/7fbe6ecbd3dc0325cb60bbe2f1988e3de95fa88b))
+* missing toastify css 🐛 ([a7a9920](https://github.com/rayjlim/miniblog/commit/a7a9920211afed8cf568b0430f24682bfdf7db7f))
+* remove debug value ([1eb1590](https://github.com/rayjlim/miniblog/commit/1eb15908d4780214b130d6b175db81eeefc902cc))
+* remove unused date fns ([ab545fa](https://github.com/rayjlim/miniblog/commit/ab545fa1d8fb9003ed0e159eb74a3320633e9077))
+* search to custom hooks♻️ ([199b41c](https://github.com/rayjlim/miniblog/commit/199b41c514ddb9b610e061656fb7ae9a052d1c09))
+* upload form to use Header ([42b3af1](https://github.com/rayjlim/miniblog/commit/42b3af1828183aa80e6e955131671ee6fc0ebe29))
+* upload issue ([202a4ce](https://github.com/rayjlim/miniblog/commit/202a4ce8473c027a9a21329d8edac131f89e8414))
+
 ### [2.19.1](https://github.com/rayjlim/miniblog/compare/v2.19.0...v2.19.1) (2023-11-12)
 
 
