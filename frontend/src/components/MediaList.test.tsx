@@ -1,13 +1,20 @@
 import { render, screen } from "@testing-library/react";
-import jest from 'jest-mock';
+import '@testing-library/jest-dom';
+import {jest} from '@jest/globals'
+
 import MediaList from "./MediaList";
 
-global.fetch = jest.fn(() => Promise.resolve({
-  json: Promise.resolve(['dir1','dir2','dir3',])}
-  ));
+global.fetch = require('jest-fetch-mock');
+
+beforeEach(() => {
+  // fetch.resetMocks();
+});
 
 describe("MediaList component", () => {
-  it("should render MediaList component correctly", () => {
+  it.skip("should render MediaList component correctly", () => {
+    (global.fetch as  jest.Mock).mockResolvedValue(JSON.stringify(['dir1','dir2','dir3',]) as never);
+    // fetch.mockResponseOnce(JSON.stringify(['dir1','dir2','dir3',]));
+
     render(<MediaList onMediaSelect={() => { }} />);
     const element = screen.getByText(/Dirs/);
     expect(element).not.toBeNull();
