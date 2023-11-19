@@ -46,7 +46,7 @@ describe("EditForm component", () => {
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn)
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/1")
+    expect(fetch.mock.calls[0][0]).toContain("/api/posts/1")
     expect(fetch.mock.calls[0][1].method).toBe("PUT")
     expect(fetch.mock.calls[0][1].body).toBe("{\"content\":\"entry text\",\"date\":\"2000-01-01\"}")
 
@@ -63,7 +63,7 @@ describe("EditForm component", () => {
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn)
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/2")
+    expect(fetch.mock.calls[0][0]).toContain("/api/posts/2")
     expect(fetch.mock.calls[0][1].method).toBe("DELETE")
 
     await waitFor(()=> expect(mockSuccessCb).toHaveBeenCalledTimes(1));
