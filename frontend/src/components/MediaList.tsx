@@ -11,7 +11,8 @@ const propTypes = {
 
 type MediaListProps = PropTypes.InferProps<typeof propTypes>;
 
-const MediaList: FunctionComponent<MediaListProps> = ({ onMediaSelect }: { onMediaSelect: (path: string, file: string) => void }) => {
+const MediaList: FunctionComponent<MediaListProps> = ({ onMediaSelect }:
+  { onMediaSelect: (path: string, file: string) => void }) => {
 
   const { medias, uploadDirs, currentDir, setCurrentDir } = useMediaList();
 
