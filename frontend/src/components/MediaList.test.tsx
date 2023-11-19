@@ -1,9 +1,10 @@
 import { render, screen } from "@testing-library/react";
+import jest from 'jest-mock';
 import MediaList from "./MediaList";
 
-// const MediaList = ({ content}: { content: string}) => {
-//   return <>{content}</>;
-// };
+global.fetch = jest.fn(() => Promise.resolve({
+  json: Promise.resolve(['dir1','dir2','dir3',])}
+  ));
 
 describe("MediaList component", () => {
   it("should render MediaList component correctly", () => {
