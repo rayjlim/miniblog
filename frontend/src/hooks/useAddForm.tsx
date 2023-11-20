@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { format, parse } from 'date-fns';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 
 const useFetch = (): any => {
   const [newId, setId] = useState<number | null>(null);
