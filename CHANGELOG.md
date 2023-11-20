@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.20.0](https://github.com/rayjlim/miniblog/compare/v2.19.3...v2.20.0) (2023-11-20)
+
+
+### Features
+
+* change to input type date from datepicker ✨ ([2fa3282](https://github.com/rayjlim/miniblog/commit/2fa32825e4485cc66c3c7b8a1bffd8f47063cd51))
+
+
+### Bug Fixes
+
+* edit form test should not check whole url✅ ([f694e84](https://github.com/rayjlim/miniblog/commit/f694e84a3a11e345cc5f0b90cf3f34f2977811eb))
+* unused imports ➖ ([85d5f35](https://github.com/rayjlim/miniblog/commit/85d5f352253efd13c09034a02df94a9ef44c0954))
+* update react-router-dom ([c1a1538](https://github.com/rayjlim/miniblog/commit/c1a1538a82a9ded98622bcc99db45fc88ed5ef30))
+
 ### [2.19.3](https://github.com/rayjlim/miniblog/compare/v2.19.2...v2.19.3) (2023-11-20)
 
 ### [2.19.2](https://github.com/rayjlim/miniblog/compare/v2.19.1...v2.19.2) (2023-11-19)
