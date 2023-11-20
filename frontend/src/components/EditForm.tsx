@@ -1,8 +1,6 @@
 import { FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
-import { format, parse } from 'date-fns';
 import MarkdownDisplay from './MarkdownDisplay';
-import { FULL_DATE_FORMAT } from '../constants';
 import '../Types';
 import useEditForm from '../hooks/useEditForm';
 
