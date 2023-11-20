@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { format, parse } from 'date-fns';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 
 const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
 
@@ -10,9 +9,7 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
 `,
   );
   const [content, setContent] = useState<string>(escapedContent);
-  const [date, setDate] = useState<Date>(
-    parse(entry.date, FULL_DATE_FORMAT, new Date()),
-  );
+  const [date, setDate] = useState<string>(entry.date);
   const textareaInput = useRef<HTMLTextAreaElement>(null);
 
   function textChange() {
@@ -25,11 +22,6 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
     setContent(refTextarea.value);
   }
 
-  /**
-   * The function `handleSave` is an asynchronous function that sends a PUT request
-   * to update a post with the provided content and date, and logs the response or
-   * displays an error message.
-   */
   async function handleSave() {
     console.log('handleSave entry :', content, date);
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
@@ -40,7 +32,7 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
       method: 'PUT',
       body: JSON.stringify({
         content,
-        date: format(date, FULL_DATE_FORMAT),
+        date,
       }),
       headers: requestHeaders
     };

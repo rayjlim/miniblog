@@ -1,7 +1,7 @@
-import { subMonths, startOfMonth, endOfMonth } from 'date-fns';
-import DatePicker from 'react-date-picker';
+import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import Select from 'react-select';
 
+import { FULL_DATE_FORMAT } from '../constants';
 import useSearchForm from '../hooks/useSearchForm';
 
 const SearchForm = ({ setPosts, setSearchParams }: {
@@ -36,14 +36,14 @@ const SearchForm = ({ setPosts, setSearchParams }: {
           Start Date:
           {' '}
           {startDateValue !== '' ? (
-            <DatePicker onChange={x => changeDate(x as Date, 'start')} value={startDate.current} />
+            <input type="date" value={startDate.current || ''} onChange={e => changeDate(e.target.value, 'start')} />
           ) : (
             <>
               None
               {' '}
               <button
                 type="button"
-                onClick={() => changeDate(new Date(), 'start')}
+                onClick={() => changeDate('', 'start')}
                 className="plainLink"
               >
                 Edit
@@ -55,14 +55,13 @@ const SearchForm = ({ setPosts, setSearchParams }: {
           End Date:
           {' '}
           {endDateValue !== '' ? (
-            <DatePicker onChange={x => changeDate(x as Date, 'end')} value={endDate.current} />
+            <input type="date" onChange={e => changeDate(e.target.value, 'end')} value={endDate.current || ''} />
           ) : (
             <>
-              None
-              {' '}
+              {`None `}
               <button
                 type="button"
-                onClick={() => changeDate(new Date(), 'end')}
+                onClick={() => changeDate(format(new Date(), FULL_DATE_FORMAT), 'end')}
                 className="plainLink"
               >
                 Edit
@@ -75,8 +74,8 @@ const SearchForm = ({ setPosts, setSearchParams }: {
         <button
           type="button"
           onClick={() => {
-            changeDate(subMonths(new Date(), 3), 'start');
-            changeDate(new Date(), 'end');
+            changeDate(format(subMonths(new Date(), 3), FULL_DATE_FORMAT), 'start');
+            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
           }}
           className="plainLink rangeBtn"
         >
@@ -85,8 +84,8 @@ const SearchForm = ({ setPosts, setSearchParams }: {
         <button
           type="button"
           onClick={() => {
-            changeDate(subMonths(new Date(), 6), 'start');
-            changeDate(new Date(), 'end');
+            changeDate(format(subMonths(new Date(), 6), FULL_DATE_FORMAT), 'start');
+            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
           }}
           className="plainLink rangeBtn"
         >
@@ -95,8 +94,8 @@ const SearchForm = ({ setPosts, setSearchParams }: {
         <button
           type="button"
           onClick={() => {
-            changeDate(subMonths(new Date(), 12), 'start');
-            changeDate(new Date(), 'end');
+            changeDate(format(subMonths(new Date(), 12), FULL_DATE_FORMAT), 'start');
+            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
           }}
           className="plainLink rangeBtn"
         >
@@ -106,8 +105,8 @@ const SearchForm = ({ setPosts, setSearchParams }: {
           options={yearMonths}
           onChange={(chosen: any) => {
             const parts = chosen?.value.split('-');
-            changeDate(startOfMonth(new Date(parts[0], parts[1] - 1)), 'start');
-            changeDate(endOfMonth(new Date(parts[0], parts[1] - 1)), 'end');
+            changeDate(format(startOfMonth(new Date(parts[0], parts[1] - 1)), FULL_DATE_FORMAT), 'start');
+            changeDate(format(endOfMonth(new Date(parts[0], parts[1] - 1)), FULL_DATE_FORMAT), 'end');
           }}
         />
       </div>
