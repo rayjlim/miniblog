@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { format, parse } from 'date-fns';
-import { FULL_DATE_FORMAT, REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 
 const useFetch = (): any => {
   const [newId, setId] = useState<number | null>(null);
@@ -39,9 +38,7 @@ const useFetch = (): any => {
 
 const useAddForm = (content: string, date: string, onSuccess: (msg: string) => void) => {
   const [formContent, setFormContent] = useState<string>(content || '');
-  const [formDate, setFormDate] = useState<Date>(
-    parse(date, FULL_DATE_FORMAT, new Date()),
-  );
+  const [formDate, setFormDate] = useState<string>(date);
   const isMounted = useRef(false);
   const [id, setNewEntry] = useFetch();
   const textareaInput = useRef<HTMLTextAreaElement>(null);
@@ -55,7 +52,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string) => v
     setFormContent(refTextareaInput.value);
   }
 
-  function dateChange(value = new Date()) {
+  function dateChange(value: string) {
     console.log('value :', value);
     if (value) {
       setFormDate(value);
@@ -66,7 +63,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string) => v
     console.log('handleAdd');
     setNewEntry({
       content: formContent.trim(),
-      date: format(formDate, FULL_DATE_FORMAT),
+      date: formDate,
     });
   }
 
@@ -94,7 +91,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string) => v
       document.addEventListener('keydown', checkKeyPressed);
       return () => document.removeEventListener('keydown', checkKeyPressed);
     }
-  }, [id, date, content, onSuccess]);
+  }, [id]);
 
   return { handleAdd, textChange, dateChange, formContent, formDate, textareaInput };
 };

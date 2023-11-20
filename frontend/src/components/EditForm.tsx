@@ -1,10 +1,9 @@
 import { FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
-import DatePicker from 'react-date-picker';
 import MarkdownDisplay from './MarkdownDisplay';
-
+import '../Types';
 import useEditForm from '../hooks/useEditForm';
-import 'react-date-picker/dist/DatePicker.css';
+
 import './EditForm.css';
 
 const propTypes = {
@@ -18,7 +17,7 @@ const propTypes = {
 
 type EditFormProps = PropTypes.InferProps<typeof propTypes>;
 
-const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
+const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: {entry: any, onSuccess: (msg: string)=>void}) => {
 
   const { handleDelete,
     textareaInput,
@@ -76,7 +75,11 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }) => {
           {' '}
           Save
         </button>
-        <DatePicker onChange={dateParam => setDate(dateParam as Date)} value={date} />
+        <input
+          type="date"
+          value={date}
+          onChange={e => setDate(e.target.value)}
+        />
         <button
           onClick={() => onSuccess('')}
           className="btn btn-warning pull-right"

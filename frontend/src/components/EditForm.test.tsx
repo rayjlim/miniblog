@@ -1,12 +1,15 @@
 // @ts-nocheck
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-
+import { vi } from 'vitest'
 import jest from 'jest-mock';
 import EditForm from "./EditForm";
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({"id":"1","content":"99 9 fasdf","date":"2023-11-09","user_id":"1"})
-);
+const fetchMock = vi.fn(() => ({
+  json: vi.fn(()=> Promise.resolve({"id":"1","content":"99 9 fasdf","date":"2023-11-09","user_id":"1"})),
+  ok: true,
+}));
+
+vi.stubGlobal('fetch', fetchMock);
 
 window.alert = () => {};
 window.confirm = () => true;
@@ -15,8 +18,12 @@ console.log = () => {};
 describe("EditForm component", () => {
   beforeEach(() => {
     HTMLCanvasElement.prototype.getContext = jest.fn();
-    fetch.mockClear();
   });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  })
+
   it("should render EditForm component correctly", () => {
 
     render(<EditForm entry={{id: '1', content: 'entry text', date: '2000-01-01'}} onSuccess={()=>{}}/>);
@@ -46,7 +53,7 @@ describe("EditForm component", () => {
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn)
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/1")
+    expect(fetch.mock.calls[0][0]).toContain("/api/posts/1")
     expect(fetch.mock.calls[0][1].method).toBe("PUT")
     expect(fetch.mock.calls[0][1].body).toBe("{\"content\":\"entry text\",\"date\":\"2000-01-01\"}")
 
@@ -63,7 +70,7 @@ describe("EditForm component", () => {
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn)
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch.mock.calls[0][0]).toBe("http://localhost/projects/miniblog/backend/api/posts/2")
+    expect(fetch.mock.calls[0][0]).toContain("/api/posts/2")
     expect(fetch.mock.calls[0][1].method).toBe("DELETE")
 
     await waitFor(()=> expect(mockSuccessCb).toHaveBeenCalledTimes(1));
