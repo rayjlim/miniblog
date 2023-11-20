@@ -1,9 +1,7 @@
 import { FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
-import DatePicker from 'react-date-picker';
 import MarkdownDisplay from './MarkdownDisplay';
 import useAddForm from '../hooks/useAddForm';
-import 'react-date-picker/dist/DatePicker.css';
 
 const propTypes = {
   content: PropTypes.string.isRequired,
@@ -47,7 +45,7 @@ const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: 
       </div>
 
       <div className="form-group">
-        <DatePicker onChange={newDate => dateChange(newDate as Date)} value={formDate} />
+        <input type="date" onChange={e => dateChange(e.target.value)} value={formDate} />
       </div>
 
       <button

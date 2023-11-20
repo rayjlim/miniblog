@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { format, parse, subMonths } from 'date-fns';
+import { format, subMonths } from 'date-fns';
 
 import {
   DEFAULT_SEARCH_MONTHS_BACK,
@@ -27,8 +27,8 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
   const searchText = useRef<HTMLInputElement>(null);
   const [startDateValue, setStartDateValue] = useState<string>('');
   const [endDateValue, setEndDateValue] = useState<string>('');
-  const startDate = useRef<Date | null>(subMonths(new Date(), DEFAULT_SEARCH_MONTHS_BACK));
-  const endDate = useRef<Date | null>(null);
+  const startDate = useRef<string | null>(format(subMonths(new Date(), DEFAULT_SEARCH_MONTHS_BACK), FULL_DATE_FORMAT));
+  const endDate = useRef<string | null>(null);
 
   async function getYearMonths() {
     console.log('getYearMonths');
@@ -74,11 +74,11 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
       let endpoint = `${REST_ENDPOINT
         }/api/posts/?searchParam=${encodedSearchText}&filterType=${searchFilter}`;
       if (startDate.current) {
-        const formattedDate = format(startDate.current, FULL_DATE_FORMAT);
+        const formattedDate = startDate.current;
         endpoint += `&startDate=${formattedDate}`;
       }
       if (endDate.current) {
-        const formattedEndDate = format(endDate.current, FULL_DATE_FORMAT);
+        const formattedEndDate = endDate.current;
         endpoint += `&endDate=${formattedEndDate}`;
       }
       const requestHeaders: HeadersInit = new Headers();
@@ -101,21 +101,13 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
         setSearchParams({ ...responseData.params, postsCount: responseData.entries.length });
 
         if (responseData.params.startDate !== '') {
-          startDate.current = parse(
-            responseData.params.startDate,
-            FULL_DATE_FORMAT,
-            new Date(),
-          );
+          startDate.current = responseData.params.startDate;
         } else {
           startDate.current = null;
         }
 
         if (responseData.params.endDate !== '') {
-          endDate.current = parse(
-            responseData.params.endDate,
-            FULL_DATE_FORMAT,
-            new Date(),
-          );
+          endDate.current = responseData.params.endDate;
         } else {
           endDate.current = null;
         }
@@ -130,10 +122,10 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
     }
   }
 
-  function changeDate(date: Date, type: string) {
+  function changeDate(date: string, type: string) {
     console.log('change date called', date, type);
     if (type === 'start') {
-      startDate.current = date === null ? new Date('2000-01-01') : date;
+      startDate.current = date === '' ? '2000-01-01' : date;
     } else {
       endDate.current = date;
     }
