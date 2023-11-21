@@ -14,22 +14,15 @@ type MediaListProps = PropTypes.InferProps<typeof propTypes>;
 const MediaList: FunctionComponent<MediaListProps> = ({ onMediaSelect }:
   { onMediaSelect: (path: string, file: string) => void }) => {
 
-  const { medias, uploadDirs, currentDir, setCurrentDir } = useMediaList();
+  const { medias, uploadDirs, currentDir, setCurrentDir, mediaDelete } = useMediaList();
 
   return (
     <div>
-      <h2>
-        Dirs
-        {' '}
-        {currentDir}
-        {' '}
-        (
-        {uploadDirs.length}
-        )
-      </h2>
+      <h2>{`Dirs ${currentDir} (${uploadDirs.length})`}</h2>
       {uploadDirs.length
         && uploadDirs.map((dir: string) => (
-          <button onClick={() => setCurrentDir(dir)} type="button" key={dir}>{dir}</button>
+          <button onClick={() => setCurrentDir(dir)} type="button" key={dir}
+          className={dir === currentDir ? 'highlight-dir' : ''}>{dir}</button>
         ))}
       <h2>
         Media (
@@ -39,7 +32,8 @@ const MediaList: FunctionComponent<MediaListProps> = ({ onMediaSelect }:
       {medias.length && currentDir !== '' && (
         <ul className="media-preview">
           {medias.map((key: string) => (
-            <MediaItem media={key} currentDir={currentDir} selectMedia={onMediaSelect} />
+            <MediaItem media={key} currentDir={currentDir} selectMedia={onMediaSelect}
+            onChange={mediaDelete}/>
           ))}
         </ul>
       )}
