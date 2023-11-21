@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.21.0](https://github.com/rayjlim/miniblog/compare/v2.20.0...v2.21.0) (2023-11-21)
+
+
+### Features
+
+* [#250](https://github.com/rayjlim/miniblog/issues/250) validate image size before upload ([83d2776](https://github.com/rayjlim/miniblog/commit/83d2776e1f0030f5684b0a8d1711c74352251262))
+* [#251](https://github.com/rayjlim/miniblog/issues/251) highlight media dir selected, refresh view after delete ([aec64e0](https://github.com/rayjlim/miniblog/commit/aec64e019b7f048b1ae1057f8b373f574d014597))
+* [#252](https://github.com/rayjlim/miniblog/issues/252) front end changes ([4053870](https://github.com/rayjlim/miniblog/commit/40538701be58d798af3e64b8e23d893677be2b8e))
+* Clipper sub comp ([19e0be8](https://github.com/rayjlim/miniblog/commit/19e0be8f987ebecb392eb37b8d5f223f6bb94f5c))
+* move QuickAdd to subcomp ([7f8f8bc](https://github.com/rayjlim/miniblog/commit/7f8f8bc165300aa4c42317ea4588b9557f7e6721))
+* upsert on Add ✨ ([55de891](https://github.com/rayjlim/miniblog/commit/55de8912f4ade54afc7f0f27e7c6edecda189110))
+
+
+### Bug Fixes
+
+* add filter enum to constants ([6a9dc3c](https://github.com/rayjlim/miniblog/commit/6a9dc3cae525ae0ad59a9688aa1e122bc0b75288))
+* app.tsx split out devribbon, custom hook ♻️ ([041c860](https://github.com/rayjlim/miniblog/commit/041c8600b737d9a268ea58c4eab1a8d5d07ab391))
+
 ## [2.20.0](https://github.com/rayjlim/miniblog/compare/v2.19.3...v2.20.0) (2023-11-20)
 
 
