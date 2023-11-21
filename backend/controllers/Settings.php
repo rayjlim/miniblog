@@ -40,6 +40,7 @@ class Settings
             $data->MOVIES_POSTERS = $_ENV['FE_MOVIES_POSTERS'] ?? '';
 
             $data->SHOW_GH_CORNER = false;
+            $data->UPLOAD_SIZE_LIMIT = UPLOAD_SIZE_LIMIT;
 
             echo json_encode($data);
             die();

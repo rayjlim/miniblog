@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
+import MyContext from '../components/MyContext';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import Footer from '../components/Footer';
 
 const UploadForm = () => {
   const navigate = useNavigate();
+  const { UPLOAD_SIZE_LIMIT } = useContext(MyContext);
   const [file, setFile] = useState<File>();
   const [status, setStatus] = useState<
     "initial" | "uploading" | "success" | "fail"
   >("initial");
+
   function onChangeHandler(event: any) {
     console.log(event.target.files[0]);
+    if(event.target.files[0].size > UPLOAD_SIZE_LIMIT){
+      alert('File Size too large');
+      setFile(undefined);
+      return;
+    }
     setFile(event.target.files[0]);
   }
 
@@ -62,12 +69,6 @@ const UploadForm = () => {
     }
   };
 
-  const footerLinks = {
-    upload: false,
-    media: true,
-    logs: true,
-    oneday: false,
-  };
   return (
     <>
       <div className="container">
@@ -112,7 +113,7 @@ const UploadForm = () => {
         </form>
         <Result status={status}/>
       </div>
-      <Footer links={footerLinks} />
+
 
     </>
   );

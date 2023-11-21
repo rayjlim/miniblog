@@ -1,4 +1,5 @@
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import UploadForm from '../components/UploadForm';
 
 const Upload = () => (
@@ -9,7 +10,14 @@ const Upload = () => (
       sameday: false,
     }} />
     <UploadForm />
+    <Footer links={
+      {
+        upload: false,
+        media: true,
+        logs: true,
+        oneday: false,
+      }
+    } />
   </>
 );
-
 export default Upload;
