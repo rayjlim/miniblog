@@ -36,7 +36,7 @@ const Media = () => {
       <ToastContainer />
       <Header links={headerLinks} />
       {media && (
-        <MediaSelect media={media as any} onClose={mediaClosed} />
+        <MediaSelect media={media} onClose={mediaClosed} />
       )}
       {!media && (
         <MediaList onMediaSelect={selectMedia} />

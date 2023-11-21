@@ -9,16 +9,17 @@ import useMediaSelect from '../hooks/useMediaSelect';
 import '../Types';
 
 import AddForm from '../components/AddForm';
+import QuickAdd from './QuickAdd';
 
 const propTypes = {
-  media: PropTypes.func.isRequired,
+  media: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
 type MediaSelectProps = PropTypes.InferProps<typeof propTypes>;
 
 const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
-  const { mediaSelect, rotate, resize, quickDate, dateChange, quickCreate } = useMediaSelect(media);
+  const { mediaSelect, rotate, resize } = useMediaSelect(media);
 
   return (
     <>
@@ -31,9 +32,7 @@ const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { 
       <section className="container">
         {mediaSelect.imgUrl}
         <Clipper media={mediaSelect} />
-        <input type="date" onChange={e => dateChange(e.target.value)}
-          value={quickDate} />
-        <button type="button" onClick={() => quickCreate()}>Quick Append</button>
+        <QuickAdd onSuccess={onClose} />
         <div className="preview-img-container">
           <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
         </div>

@@ -4,7 +4,6 @@ import MyContext from '../components/MyContext';
 import '../Types';
 import {
   AUTH_HEADER,
-  FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
 } from '../constants';
@@ -14,7 +13,6 @@ const useMediaSelect = (mediaDefault: MediaType) => {
   const { UPLOAD_ROOT } = useContext(MyContext);
 
   const [mediaSelect, setMedia] = useState<MediaType>(mediaDefault);
-  const [quickDate, setQuickDate] = useState(format(new Date(), FULL_DATE_FORMAT));
 
   async function xhrCall(url: string) {
     console.log(`xhrCall ${url}`);
@@ -52,12 +50,7 @@ const useMediaSelect = (mediaDefault: MediaType) => {
     await xhrCall(url);
   };
 
-  const dateChange = (value: string) => setQuickDate(value || format(new Date(), FULL_DATE_FORMAT));
-
-  // TODO: impl api backend
-  const quickCreate = () => { console.log(`quick: ${quickDate}`) };
-
-  return { mediaSelect, rotate, resize, quickDate, dateChange, quickCreate };
+  return { mediaSelect, rotate, resize };
 }
 
 export default useMediaSelect;
