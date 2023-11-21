@@ -3,6 +3,7 @@ import format from 'date-fns/format';
 
 import PropTypes from 'prop-types';
 import { FULL_DATE_FORMAT } from '../constants';
+import Clipper from './Clipper';
 import useMediaSelect from '../hooks/useMediaSelect';
 
 import '../Types';
@@ -17,7 +18,7 @@ const propTypes = {
 type MediaSelectProps = PropTypes.InferProps<typeof propTypes>;
 
 const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
-  const { mediaSelect, rotate, resize, copyToClipboard, quickDate, dateChange, quickCreate } = useMediaSelect(media);
+  const { mediaSelect, rotate, resize, quickDate, dateChange, quickCreate } = useMediaSelect(media);
 
   return (
     <>
@@ -29,9 +30,7 @@ const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { 
       </div>
       <section className="container">
         {mediaSelect.imgUrl}
-        <button onClick={() => copyToClipboard(mediaSelect.prepend)} type="button">
-          [clip]
-        </button>
+        <Clipper media={mediaSelect} />
         <input type="date" onChange={e => dateChange(e.target.value)}
           value={quickDate} />
         <button type="button" onClick={() => quickCreate()}>Quick Append</button>

@@ -52,16 +52,12 @@ const useMediaSelect = (mediaDefault: MediaType) => {
     await xhrCall(url);
   };
 
-  function copyToClipboard(content: string) {
-    console.log(`clipboard: ${content}`);
-    navigator.clipboard.writeText(content);
-  }
   const dateChange = (value: string) => setQuickDate(value || format(new Date(), FULL_DATE_FORMAT));
 
   // TODO: impl api backend
   const quickCreate = () => { console.log(`quick: ${quickDate}`) };
 
-  return { mediaSelect, rotate, resize, copyToClipboard, quickDate, dateChange, quickCreate };
+  return { mediaSelect, rotate, resize, quickDate, dateChange, quickCreate };
 }
 
 export default useMediaSelect;
