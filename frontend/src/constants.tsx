@@ -5,3 +5,8 @@ export const REST_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 export const STORAGE_KEY = 'MINIBLOG_TOKEN';
 export const AUTH_HEADER = 'x-app-token';
 export const DEFAULT_SEARCH_MONTHS_BACK = 3;
+export const FILTER = {
+  all: 0,
+  tagged: 1,
+  untagged: 2
+}
