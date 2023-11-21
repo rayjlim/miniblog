@@ -31,4 +31,4 @@ define("FULL_DATETIME_FORMAT", "Y-m-d G:i:s");
 define("YEAR_MONTH_FORMAT", "Y-m");
 define("YEAR_MONTH_DAY_FORMAT", "Y-m-d");
 
-define("UPLOAD_SIZE_LIMIT", 7000000);
+define("UPLOAD_SIZE_LIMIT", 6000000);

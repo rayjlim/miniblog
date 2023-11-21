@@ -3,6 +3,7 @@ import format from 'date-fns/format';
 
 import PropTypes from 'prop-types';
 import { FULL_DATE_FORMAT } from '../constants';
+import Clipper from './Clipper';
 import useMediaSelect from '../hooks/useMediaSelect';
 
 import '../Types';
@@ -10,14 +11,14 @@ import '../Types';
 import AddForm from '../components/AddForm';
 
 const propTypes = {
-  media: PropTypes.func.isRequired,
+  media: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
 type MediaSelectProps = PropTypes.InferProps<typeof propTypes>;
 
 const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
-  const { mediaSelect, rotate, resize, copyToClipboard } = useMediaSelect(media);
+  const { mediaSelect, rotate, resize } = useMediaSelect(media);
 
   return (
     <>
@@ -27,12 +28,9 @@ const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { 
         <button onClick={() => resize()} type="button">Resize</button>
         <button onClick={() => rotate(90)} type="button">Right</button>
       </div>
-      {/* rename={this.rename} */}
       <section className="container">
         {mediaSelect.imgUrl}
-        <button onClick={() => copyToClipboard(mediaSelect.prepend)} type="button">
-          [clip]
-        </button>
+        <Clipper media={mediaSelect} />
         <div className="preview-img-container">
           <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
         </div>

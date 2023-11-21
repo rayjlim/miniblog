@@ -7,7 +7,8 @@ const MyContext = createContext({
   INSPIRATION_API: '',
   QUESTION_API: '',
   TRACKS_API: '',
-  GOOGLE_OAUTH_CLIENTID: ''
+  GOOGLE_OAUTH_CLIENTID: '',
+  UPLOAD_SIZE_LIMIT: 0
 });
 
 export default MyContext;

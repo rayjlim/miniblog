@@ -7,6 +7,9 @@ const useMediaList = () => {
   const [uploadDirs, setUploadDirs] = useState<string[]>([]);
   const [currentDir, setCurrentDir] = useState<string>('');
 
+  function mediaDelete(dir: string){
+    loadDir(dir);
+  }
   function loadDir(dir: string) {
     console.log(dir);
     (async () => {
@@ -27,6 +30,9 @@ const useMediaList = () => {
 
         const dirs = Object.values(data.uploadDirs);
         setUploadDirs(dirs as string[]);
+        if(currentDir === ''){
+          setCurrentDir(dirs[dirs.length-1] as string);
+        }
 
         const media = Object.values(data.dirContent);
         setMedias(media);
@@ -38,6 +44,6 @@ const useMediaList = () => {
     loadDir(currentDir);
   }, [currentDir]);
 
-  return { medias, uploadDirs, currentDir, setCurrentDir };
+  return { medias, uploadDirs, currentDir, setCurrentDir, mediaDelete };
 };
 export default useMediaList;

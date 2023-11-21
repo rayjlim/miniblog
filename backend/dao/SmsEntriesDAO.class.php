@@ -33,9 +33,9 @@ interface SmsEntriesDAO
     /**
      * Update record in table
      *
-     * @param array smsEntrie
+     * @param SmsEntrie smsEntrie
      */
-    public function update(array $smsEntrie): void;
+    public function update(SmsEntrie $smsEntrie): void;
 
     /**
      * List Journal Entries

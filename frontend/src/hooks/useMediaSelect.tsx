@@ -1,15 +1,15 @@
 import { useContext, useState } from 'react';
-
+import format from 'date-fns/format';
 import MyContext from '../components/MyContext';
 import '../Types';
 import {
+  AUTH_HEADER,
   REST_ENDPOINT,
   STORAGE_KEY,
-  AUTH_HEADER
 } from '../constants';
 
 const useMediaSelect = (mediaDefault: MediaType) => {
-
+  //type safe the media
   const { UPLOAD_ROOT } = useContext(MyContext);
 
   const [mediaSelect, setMedia] = useState<MediaType>(mediaDefault);
@@ -50,12 +50,7 @@ const useMediaSelect = (mediaDefault: MediaType) => {
     await xhrCall(url);
   };
 
-  function copyToClipboard(content: string) {
-    console.log(`clipboard: ${content}`);
-    navigator.clipboard.writeText(content);
-  }
-
-  return { mediaSelect, rotate, resize, copyToClipboard };
+  return { mediaSelect, rotate, resize };
 }
 
 export default useMediaSelect;
