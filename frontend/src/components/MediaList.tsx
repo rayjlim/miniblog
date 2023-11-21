@@ -15,7 +15,7 @@ const MediaList: FunctionComponent<MediaListProps> = ({ onMediaSelect }:
   { onMediaSelect: (path: string, file: string) => void }) => {
 
   const { medias, uploadDirs, currentDir, setCurrentDir, mediaDelete } = useMediaList();
-
+    console.log(medias);
   return (
     <div>
       <h2>{`Dirs ${currentDir} (${uploadDirs.length})`}</h2>
@@ -32,7 +32,7 @@ const MediaList: FunctionComponent<MediaListProps> = ({ onMediaSelect }:
       {medias.length && currentDir !== '' && (
         <ul className="media-preview">
           {medias.map((key: string) => (
-            <MediaItem media={key} currentDir={currentDir} selectMedia={onMediaSelect}
+            <MediaItem key={key} media={key} currentDir={currentDir} selectMedia={onMediaSelect}
             onChange={mediaDelete}/>
           ))}
         </ul>

@@ -17,7 +17,7 @@ const propTypes = {
 type MediaSelectProps = PropTypes.InferProps<typeof propTypes>;
 
 const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
-  const { mediaSelect, rotate, resize, copyToClipboard } = useMediaSelect(media);
+  const { mediaSelect, rotate, resize, copyToClipboard, quickDate, dateChange, quickCreate } = useMediaSelect(media);
 
   return (
     <>
@@ -27,12 +27,14 @@ const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { 
         <button onClick={() => resize()} type="button">Resize</button>
         <button onClick={() => rotate(90)} type="button">Right</button>
       </div>
-      {/* rename={this.rename} */}
       <section className="container">
         {mediaSelect.imgUrl}
         <button onClick={() => copyToClipboard(mediaSelect.prepend)} type="button">
           [clip]
         </button>
+        <input type="date" onChange={e => dateChange(e.target.value)}
+          value={quickDate} />
+        <button type="button" onClick={() => quickCreate()}>Quick Append</button>
         <div className="preview-img-container">
           <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
         </div>

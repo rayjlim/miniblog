@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
-
 import MediaList from '../components/MediaList';
 import MediaSelect from '../components/MediaSelect';
 import useMedia from '../hooks/useMedia';

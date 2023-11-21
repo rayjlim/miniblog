@@ -1,18 +1,20 @@
 import { useContext, useState } from 'react';
-
+import format from 'date-fns/format';
 import MyContext from '../components/MyContext';
 import '../Types';
 import {
+  AUTH_HEADER,
+  FULL_DATE_FORMAT,
   REST_ENDPOINT,
   STORAGE_KEY,
-  AUTH_HEADER
 } from '../constants';
 
 const useMediaSelect = (mediaDefault: MediaType) => {
-
+  //type safe the media
   const { UPLOAD_ROOT } = useContext(MyContext);
 
   const [mediaSelect, setMedia] = useState<MediaType>(mediaDefault);
+  const [quickDate, setQuickDate] = useState(format(new Date(), FULL_DATE_FORMAT));
 
   async function xhrCall(url: string) {
     console.log(`xhrCall ${url}`);
@@ -54,8 +56,12 @@ const useMediaSelect = (mediaDefault: MediaType) => {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
+  const dateChange = (value: string) => setQuickDate(value || format(new Date(), FULL_DATE_FORMAT));
 
-  return { mediaSelect, rotate, resize, copyToClipboard };
+  // TODO: impl api backend
+  const quickCreate = () => { console.log(`quick: ${quickDate}`) };
+
+  return { mediaSelect, rotate, resize, copyToClipboard, quickDate, dateChange, quickCreate };
 }
 
 export default useMediaSelect;
