@@ -36,11 +36,11 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         return $id;
     }
 
-    public function update(array $smsEntrie): void
+    public function update(SmsEntrie $smsEntrie): void
     {
-        $postBean = R::load(POSTS, $smsEntrie['id']);
-        $postBean->content = $smsEntrie['content'];
-        $postBean->date = $smsEntrie['date'];
+        $postBean = R::load(POSTS, $smsEntrie->id);
+        $postBean->content = $smsEntrie->content;
+        $postBean->date = $smsEntrie->date;
         R::store($postBean);
     }
 

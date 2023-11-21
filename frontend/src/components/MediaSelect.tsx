@@ -9,7 +9,6 @@ import useMediaSelect from '../hooks/useMediaSelect';
 import '../Types';
 
 import AddForm from '../components/AddForm';
-import QuickAdd from './QuickAdd';
 
 const propTypes = {
   media: PropTypes.object.isRequired,
@@ -32,7 +31,6 @@ const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { 
       <section className="container">
         {mediaSelect.imgUrl}
         <Clipper media={mediaSelect} />
-        <QuickAdd onSuccess={onClose} />
         <div className="preview-img-container">
           <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
         </div>

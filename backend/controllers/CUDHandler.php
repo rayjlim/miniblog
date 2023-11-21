@@ -1,10 +1,12 @@
 <?php
+
 namespace controllers;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \Lpt\DevHelp;
 use \models\SmsEntrie;
+use \models\ListParams;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use \stdClass;
@@ -40,6 +42,10 @@ class CUDHandler
      *     )
      * )
      */
+    // case 1 : no entries on the date
+    // case 2 : 1 entry on that date; append to this one
+    // case 3 : multi entry on date; append to latest one
+
     public function addEntry(): object
     {
         return function (Request $request, Response $response): Response {
@@ -55,10 +61,29 @@ class CUDHandler
             $smsEntry->date = (!isset($entry->date) || $entry->date == '')
                 ? $currentDateTime->format(FULL_DATETIME_FORMAT)
                 : $entry->date;
-            $smsEntry->content = trim(urldecode($entry->content));
-            $smsEntry = $this->contentHelper->processEntry($smsEntry);
 
-            $smsEntry->id = $this->dao->insert($smsEntry);
+            //check for exisiting by date
+            $listObj = new ListParams();
+            $listObj->startDate = $smsEntry->date;
+            $listObj->endDate = $smsEntry->date;
+            $entries = $this->dao->list($listObj);
+
+            // if no entries, dao insert
+            if (count($entries)) {
+                $found = $entries[count($entries) - 1];
+                $smsEntry = new SmsEntrie();
+                $smsEntry->id = $found['id'];
+                $smsEntry->date = $found['date'];
+                $smsEntry->content = $found['content'] . "  \n" . trim(urldecode($entry->content));
+                $this->dao->update($smsEntry);
+            } else {
+                $smsEntry->content = trim(urldecode($entry->content));
+                $smsEntry = $this->contentHelper->processEntry($smsEntry);
+                $smsEntry->id = $this->dao->insert($smsEntry);
+            }
+
+            // else, update last entry in array
+
             \Lpt\Logger::log("New Entry: \t" . $smsEntry->id . "\t" . $smsEntry->date);
             $this->resource->echoOut(json_encode($smsEntry));
             return $response;
@@ -103,9 +128,8 @@ class CUDHandler
                 throw new Exception('Invalid json' . $request->getBody());
             }
 
-
-            $smsEntry = $this->dao->load($args['id']);
-            if ($smsEntry["id"] == 0) {
+            $found = $this->dao->load($args['id']);
+            if ($found["id"] == 0) {
                 header('HTTP/1.0 404 File Not Found');
                 $metaData = new stdClass();
                 $metaData->message = "Entry not valid";
@@ -114,7 +138,7 @@ class CUDHandler
                 $this->resource->echoOut(json_encode($metaData));
                 die();
             }
-            if ($_ENV['ACCESS_ID'] != $smsEntry['user_id']) {
+            if ($_ENV['ACCESS_ID'] != $found['user_id']) {
                 header('HTTP/1.0 403 Forbidden');
                 $metaData = new stdClass();
                 $metaData->message = "Unauthorized User";
@@ -123,9 +147,10 @@ class CUDHandler
                 $this->resource->echoOut(json_encode($metaData));
                 die();
             }
-
-            $smsEntry['content'] = SmsEntrie::sanitizeContent($entry->content);
-            $smsEntry['date'] = $entry->date;
+            $smsEntry = new SmsEntrie();
+            $smsEntry->id = $found['id'];
+            $smsEntry->content = SmsEntrie::sanitizeContent($entry->content);
+            $smsEntry->date = $entry->date;
             $this->dao->update($smsEntry);
             $this->resource->echoOut(json_encode($smsEntry));
             return $response;
