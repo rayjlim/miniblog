@@ -37,6 +37,7 @@
     "up": "./upload-go.sh",
     "release": "npx standard-version",
     "test": "vendor/bin/codecept run --steps",
+    "test:watch": "npm run test:watch",
     "test:acceptance": "vendor/bin/codecept run acceptance",
     "test:api": "vendor/bin/codecept run api",
     "cs": "vendor/bin/phpcs --standard=PSR2 --warning-severity=8 --ignore=*/vendor/*,*/build/* ./",

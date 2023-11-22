@@ -32,3 +32,4 @@ backend/.env
 scripts/.env
 
 uploads/*/*.PNG
+backend/node_modules/*
