@@ -42,11 +42,20 @@ const Search = () => {
     // TODO: call reload Entries in Search Form to show changes
   }
 
+  function checkKeyPressed(e: KeyboardEvent) {
+     if (e.altKey && e.key === 'o') {
+      navigate('/oneday');
+      e.preventDefault();
+    }
+  }
+
   useEffect(() => {
     const token = window.localStorage.getItem(STORAGE_KEY);
     if (!token) {
       navigate('/login');
     }
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
   });
 
   return (
@@ -58,7 +67,7 @@ const Search = () => {
         sameday: true
       }} />
 
-      <h1>Text Searchs</h1>
+      <h1>Find Entries</h1>
 
       <section className="container">
         {/*

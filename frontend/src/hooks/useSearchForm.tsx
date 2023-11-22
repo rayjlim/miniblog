@@ -140,6 +140,7 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
       isMounted.current = true;
       getYearMonths();
     }
+    searchText.current?.focus();
   }, [searchFilter]);
 
   return { searchText, yearMonths, startDateValue, startDate, endDateValue,

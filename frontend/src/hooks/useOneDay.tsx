@@ -79,9 +79,15 @@ const useOneDay = (pageMode?: number) => {
     } else if (e.altKey && e.key === '.') {
       console.log('alt period keybinding');
       document.getElementById('nextBtn')?.click();
-    } else if (e.altKey && e.key === 'a') {
-      console.log('alt period keybinding');
-      document.getElementById('addFormBtn')?.click();
+
+      // NOT working?? gets cached entry from somewhere else
+      // } else if (e.altKey && e.key === 'e' && entries) {
+      //   console.table(entries);
+      //   setEditEntry(entries[0]);
+      //   e.preventDefault();
+    } else if (e.altKey && e.key === 'f') {
+      navigate('/search');
+      e.preventDefault();
     }
   }
 
@@ -111,7 +117,6 @@ const useOneDay = (pageMode?: number) => {
     }
     ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
-
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [pageMode, pageDate]);
   return { editEntry, setEditEntry, pageDate, setPageDate, entries, loadDay }
