@@ -87,7 +87,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string) => v
     } else {
       isMounted.current = true;
 
-      // setFormContent(content || '');
+      textareaInput.current?.focus();
       document.addEventListener('keydown', checkKeyPressed);
       return () => document.removeEventListener('keydown', checkKeyPressed);
     }
