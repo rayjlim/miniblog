@@ -5,11 +5,12 @@
   "license": "proprietary",
   "require": {
     "php": "8.*.*",
-    "slim/slim": "4.*",
+    "slim/slim": "^4",
     "gabordemooij/redbean": "dev-master",
     "vlucas/phpdotenv": "^5.4",
     "nyholm/psr7": "^1.5",
-    "nyholm/psr7-server": "^1.0"
+    "nyholm/psr7-server": "^1.0",
+    "php-di/php-di": "^7.0"
   },
   "require-dev": {
     "codeception/codeception": "^5",
@@ -19,18 +20,11 @@
     "phpmd/phpmd": "^2.13"
   },
   "autoload": {
-    "classmap": [
-      "./controllers",
-      "./models",
-      "./helpers",
-      "./dao",
-      "./mysql"
-    ],
+    "psr-4":{
+      "App\\": "src/"
+    },
     "files": [
-      "./core/_app-constants.php",
-      "./core/Logger.php",
-      "./core/DevHelp.php",
-      "./core/common_functions.php"
+      "./src/core/_app-constants.php"
     ]
   },
   "scripts": {

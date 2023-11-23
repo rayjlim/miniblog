@@ -18,9 +18,13 @@
 // ini_set('error_log', './');
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Factory\AppFactory;
-use \dao\DaoFactory;
-use \middleware\AuthMiddleware;
+use App\dao\DAOFactory;
+use App\helpers\AuthMiddleware;
+use Slim\App;
+use \RedBeanPHP\R as R;
+
 
 if (!is_file('.env')) {
     echo "Missing Config file";
@@ -53,8 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-use \RedBeanPHP\R as R;
-
 R::setup(
     'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'],
     $_ENV['DB_USER'],
@@ -69,12 +71,35 @@ R::ext(
 );
 // R::debug( TRUE );
 
-$app = AppFactory::create();
+// $app = AppFactory::create();
+$app = (require __DIR__ . '/config/bootstrap.php');
 
 $app->setBasePath($_ENV['BASE_PATH']);
 // $app->addErrorMiddleware(true, true, true);
 
 $app->add(new AuthMiddleware());
+
+// $beforeMiddleware = function (Request $request, RequestHandler $handler) {
+//     $response = $handler->handle($request);
+//     $existingContent = (string) $response->getBody();
+
+//     $response = new Nyholm\Psr7\Response();
+//     $response->getBody()->write('BEFORE' . $existingContent);
+
+//     return $response;
+// };
+
+// $afterMiddleware = function ($request, $handler) {
+//     $response = $handler->handle($request);
+//     $existingContent = (string) $response->getBody();
+
+//     $response = new Nyholm\Psr7\Response();
+//     $response->getBody()->write($existingContent);
+//     $response->getBody()->write('AFTER');
+//     return $response;
+// };
+// $app->add($beforeMiddleware);
+// $app->add($afterMiddleware);
 
 $app->any(
     '/security',
@@ -83,41 +108,62 @@ $app->any(
     }
 );
 
-$settings = \dao\DAOFactory::getSettings();
-$app->get('/settings/', $settings->get());
+$app->get('/', function (Request $request, Response $response) {
+    $response->getBody()->write('Hello, World!');
 
-$entryHandler = DAOFactory::getEntryHandler();
-$app->get('/api/posts/', $entryHandler->listItemsApi());
-$app->get('/api/sameDayEntries/', $entryHandler->listItemsSameDay());
-$app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
+    return $response;
+});
 
-$cudHandler = DAOFactory::getCUDHandler();
-$app->post('/api/posts/', $cudHandler->addEntry());
-$app->put('/api/posts/{id}', $cudHandler->updateEntry());
-$app->delete('/api/posts/{id}', $cudHandler->deleteEntry());
+$app->get('/asdf', \App\controllers\EntryDelete::class . ":deleteIt");
 
-$uploadHandler = DAOFactory::getUploadHandler();
-$app->post('/uploadImage/', $uploadHandler->upload());
-$app->get('/uploadRotate/', $uploadHandler->rotate());
-$app->get('/uploadResize/', $uploadHandler->resize());
-$app->post('/uploadRename/', $uploadHandler->rename());
+$app->get('/settings/', \App\controllers\Settings::class);
 
-$app->get('/media/', $uploadHandler->listMedia());
-$app->get('/media/{currentDir}', $uploadHandler->listMedia());
-$app->delete('/media/', $uploadHandler->deleteMedia());
+// $app->get('/api/', function (Request $request, Response $response) {
+//     $response->getBody()->write('Hello, World!');
+//     $data = array('name' => 'Bob', 'age' => 40);
 
-$app->get(
-    '/ping',
-    function (Request $request, Response $response, $args) {
-        echo "{\"pong\":\"true\"}";
-        // $response->getBody()->write("{\"pong\":\"true\"}");
-        return $response;
-    }
-);
+//     $response->getBody()->write(json_encode($data));
+//     return $response
+//               ->withHeader('Content-Type', 'application/json');
+//     return $response;
+// });
 
-$logHandler = DAOFactory::getLogHandler();
-$app->get('/logs/', $logHandler->getUrlHandler());
-$app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
-$app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
+
+$app->get('/api/posts/', \App\controllers\EntryHandler::class.":list");
+$app->get('/api/sameDayEntries/', \App\controllers\EntryHandler::class.":listSameDay");
+// $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
+
+// $cudHandler = DAOFactory::getCUDHandler();
+// $app->post('/api/posts/', $cudHandler->addEntry());
+// $app->put('/api/posts/{id}', $cudHandler->updateEntry());
+// $app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
+
+// // $app->get('/', \App\Action\EntryDelete::class . '::deleteIt');
+
+
+
+// $uploadHandler = DAOFactory::getUploadHandler();
+// $app->post('/uploadImage/', $uploadHandler->upload());
+// $app->get('/uploadRotate/', $uploadHandler->rotate());
+// $app->get('/uploadResize/', $uploadHandler->resize());
+// $app->post('/uploadRename/', $uploadHandler->rename());
+
+// $app->get('/media/', $uploadHandler->listMedia());
+// $app->get('/media/{currentDir}', $uploadHandler->listMedia());
+// $app->delete('/media/', $uploadHandler->deleteMedia());
+
+// $app->get(
+//     '/ping',
+//     function (Request $request, Response $response, $args) {
+//         echo "{\"pong\":\"true\"}";
+//         // $response->getBody()->write("{\"pong\":\"true\"}");
+//         return $response;
+//     }
+// );
+
+// $logHandler = DAOFactory::getLogHandler();
+// $app->get('/logs/', $logHandler->getUrlHandler());
+// $app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
+// $app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
 
 $app->run();

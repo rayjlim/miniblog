@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "vendor\\bin\\codecept run --steps",
-    "test:watch": "watch \"npm run --silent test\" tests\\functional"
+    "test:watch": "watch \"npm run --silent test\" src\\"
   },
   "devDependencies": {
     "watch": "^1.0.2"
