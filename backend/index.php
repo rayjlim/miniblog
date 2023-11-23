@@ -37,7 +37,8 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 // TODO: MOVE to Middleware
-if (array_key_exists('HTTP_ORIGIN', $_SERVER)
+if (
+    array_key_exists('HTTP_ORIGIN', $_SERVER)
     && strpos($_SERVER['HTTP_ORIGIN'], $_ENV['ORIGIN']) !== false
 ) {
     header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
@@ -79,27 +80,6 @@ $app->setBasePath($_ENV['BASE_PATH']);
 
 $app->add(new AuthMiddleware());
 
-// $beforeMiddleware = function (Request $request, RequestHandler $handler) {
-//     $response = $handler->handle($request);
-//     $existingContent = (string) $response->getBody();
-
-//     $response = new Nyholm\Psr7\Response();
-//     $response->getBody()->write('BEFORE' . $existingContent);
-
-//     return $response;
-// };
-
-// $afterMiddleware = function ($request, $handler) {
-//     $response = $handler->handle($request);
-//     $existingContent = (string) $response->getBody();
-
-//     $response = new Nyholm\Psr7\Response();
-//     $response->getBody()->write($existingContent);
-//     $response->getBody()->write('AFTER');
-//     return $response;
-// };
-// $app->add($beforeMiddleware);
-// $app->add($afterMiddleware);
 
 $app->any(
     '/security',
@@ -128,38 +108,37 @@ $app->get('/settings/', \App\controllers\Settings::class);
 //     return $response;
 // });
 
+use App\controllers\EntryHandler;
 
-$app->get('/api/posts/', \App\controllers\EntryHandler::class.":list");
-$app->get('/api/sameDayEntries/', \App\controllers\EntryHandler::class.":listSameDay");
-// $app->get('/api/yearMonth', $entryHandler->yearMonthsApi());
-
-// $cudHandler = DAOFactory::getCUDHandler();
-// $app->post('/api/posts/', $cudHandler->addEntry());
-// $app->put('/api/posts/{id}', $cudHandler->updateEntry());
-// $app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
-
-// // $app->get('/', \App\Action\EntryDelete::class . '::deleteIt');
+$app->get('/api/posts/', EntryHandler::class . ":list");
+$app->get('/api/sameDayEntries/', EntryHandler::class . ":listSameDay");
+$app->get('/api/yearMonth', EntryHandler::class . ":yearMonths");
 
 
+use App\controllers\CUDHandler;
+$app->post('/api/posts/', CUDHandler::class . ":addEntry");
+$app->put('/api/posts/{id}', CUDHandler::class . ":updateEntry");
+$app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
 
 // $uploadHandler = DAOFactory::getUploadHandler();
+use App\controllers\MediaHandler;
+$app->get('/media/', MediaHandler::class . ":listMedia");
+$app->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
+$app->delete('/media/', MediaHandler::class . ":deleteMedia");
+
 // $app->post('/uploadImage/', $uploadHandler->upload());
 // $app->get('/uploadRotate/', $uploadHandler->rotate());
 // $app->get('/uploadResize/', $uploadHandler->resize());
 // $app->post('/uploadRename/', $uploadHandler->rename());
 
-// $app->get('/media/', $uploadHandler->listMedia());
-// $app->get('/media/{currentDir}', $uploadHandler->listMedia());
-// $app->delete('/media/', $uploadHandler->deleteMedia());
 
-// $app->get(
-//     '/ping',
-//     function (Request $request, Response $response, $args) {
-//         echo "{\"pong\":\"true\"}";
-//         // $response->getBody()->write("{\"pong\":\"true\"}");
-//         return $response;
-//     }
-// );
+$app->get(
+    '/ping',
+    function (Request $request, Response $response, $args) {
+        $response->getBody()->write("{\"pong\":\"true\"}");
+        return $response;
+    }
+);
 
 // $logHandler = DAOFactory::getLogHandler();
 // $app->get('/logs/', $logHandler->getUrlHandler());

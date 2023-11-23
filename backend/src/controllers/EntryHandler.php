@@ -73,7 +73,7 @@ class EntryHandler
         $reply->params = $listObj;
 
         $response->getBody()->write(json_encode($reply));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     /**
@@ -116,65 +116,19 @@ class EntryHandler
         $reply->user = $userId;
         $reply->entries = $entries;
         $response->getBody()->write(json_encode($reply));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function detailItemApi(): object
+    public function yearMonths(Request $request, Response $response): Response
     {
-        return function (int $id): void {
-            DevHelp::debugMsg('start ' . __FILE__);
+        $factory = $this->container->get('Objfactory');
+        $this->dao = $factory->makeSmsEntriesDAO();
+        $userId = $_ENV['ACCESS_ID'];
+        DevHelp::debugMsg('start ' . __FILE__);
 
-            $entry = $this->dao->load($id);
-            // $this->app->response()->header('Content-Type', 'application/json'); // TODO: fix
-            $this->resource->echoOut('{"entry": ' . json_encode($entry) . '}');
-        };
-    }
-    /**
-     * @OA\Get(
-     *     description="Retrieve entries limit 50",
-     *     path="/api/yearMonth",
-     * @OA\RequestBody(
-     *         description="Client side search object",
-     *         required=true,
-     * @OA\MediaType(
-     *             mediaType="application/json",
-     *         )
-     *     ),
-     * @OA\Response(
-     *         response=200,
-     *         description="success",
-     * @OA\MediaType(
-     *           mediaType="application/json",
-     * @OA\Schema(ref="#/components/schemas/SearchResults"),
-     *         )
-     *     ),
-     * @OA\Response(
-     *         response=404,
-     *         description="Could Not Find Resource"
-     *     )
-     * )
-     */
-
-    public function yearMonthsApi(): object
-    {
-        return function (Request $request, Response $response): void {
-            $userId = $_ENV['ACCESS_ID'];
-            DevHelp::debugMsg('start ' . __FILE__);
-
-            $entry = $this->dao->getYearMonths($userId);
-            header('Content-Type: application/json');
-            $this->resource->echoOut(json_encode($entry));
-            die();
-            // return $response;
-        };
+        $entry = $this->dao->getYearMonths($userId);
+        header('Content-Type: application/json');
+        $response->getBody()->write(json_encode($entry));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
-/**
- * @OA\Schema(
- *   schema="SearchResults",
- *   type="array",
- *    @OA\Items(
- *         ref="#/components/schemas/SmsEntrie"
- *      ),
- * )
- */

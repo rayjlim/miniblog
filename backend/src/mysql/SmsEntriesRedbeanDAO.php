@@ -5,61 +5,12 @@ namespace App\mysql;
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use \RedBeanPHP\R as R;
-// use App\dao\SmsEntriesDao;
+use App\dao\SmsEntriesDao;
 use App\models\SmsEntrie;
 use App\models\ListParams;
 
-
-
 // R::debug(TRUE);
-interface SmsEntriesDao
-{
-    /**
-     * Get Domain object by primry key
-     *
-     * @param  string $id primary key
-     * @return array[SmsEntries]
-     */
-    public function load(int $id): array;
 
-    /**
-     * Delete record from table
-     *
-     * @param int Id of smsEntrie
-     */
-    public function delete(int $id): int;
-
-    /**
-     * Insert record to table
-     *
-     * @param SmsEntrie Data for insertion
-     * @return int Id of new entry
-     */
-    public function insert(SmsEntrie $smsEntrie): int;
-
-    /**
-     * Update record in table
-     *
-     * @param SmsEntrie smsEntrie
-     */
-    public function update(SmsEntrie $smsEntrie): void;
-
-    /**
-     * List Journal Entries
-     *
-     * @param  listParams search options
-     */
-    public function list(ListParams $listParams): array;
-
-    public function getSameDayEntries(object $date): array;
-
-    public function getYearMonths(): array;
-}
-
-function groupYearMonth(array $row): string
-{
-    return $row["Year"] . "-" . $row["Month"];
-}
 
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
@@ -139,7 +90,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             . 'FROM sms_entries '
             . 'WHERE user_id = 1 '
             . 'ORDER BY YEAR(date) DESC, MONTH(date) DESC');
-        return array_map("dao\groupYearMonth", $posts);
+        return array_map(function (array $row): string {
+            return $row["Year"] . "-" . $row["Month"];
+        }, $posts);
     }
 
     // ;

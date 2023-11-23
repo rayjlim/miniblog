@@ -58,7 +58,7 @@ class SmsEntrie
         $this->content = $content;
     }
 
-    public static function sanitizeContent($content)
+    public static function sanitizeContent(string $content)
     {
         $order = ["\r\n", "\n", "\r"];
 

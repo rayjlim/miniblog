@@ -9,6 +9,7 @@ use App\core\DevHelp;
 use App\models\SmsEntrie;
 use App\models\ListParams;
 use App\core\Logger;
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use \stdClass;
@@ -22,7 +23,7 @@ class CUDHandler
 {
     public $dao = null;
     public $resource = null;
-    public $contentHelper = null;
+
     private $container;
 
     public function __construct(ContainerInterface $container)
@@ -47,48 +48,51 @@ class CUDHandler
     // case 2 : 1 entry on that date; append to this one
     // case 3 : multi entry on date; append to latest one
 
-    public function addEntry(): object
+    public function addEntry(Request $request, Response $response): Response
     {
-        return function (Request $request, Response $response): Response {
-            DevHelp::debugMsg('start add' . __FILE__);
+        $factory = $this->container->get('Objfactory');
+        $this->dao = $factory->makeSmsEntriesDAO();
+        $this->resource = $factory->makeResource();
 
-            $entry = json_decode($request->getBody());
-            if (!$entry) {
-                throw new Exception('Invalid json' . $request->getBody());
-            }
-            $currentDateTime = $this->resource->getDateTime();
+        DevHelp::debugMsg('start add' . __FILE__);
+
+        $entry = json_decode($request->getBody());
+        if (!$entry) {
+            throw new Exception('Invalid json' . $request->getBody());
+        }
+        $currentDateTime = $this->resource->getDateTime();
+        $smsEntry = new SmsEntrie();
+        $smsEntry->userId = $_ENV['ACCESS_ID'];
+        $smsEntry->date = (!isset($entry->date) || $entry->date == '')
+            ? $currentDateTime->format(FULL_DATETIME_FORMAT)
+            : $entry->date;
+
+        //check for exisiting by date
+        $listObj = new ListParams();
+        $listObj->startDate = $smsEntry->date;
+        $listObj->endDate = $smsEntry->date;
+        $entries = $this->dao->list($listObj);
+
+        // if no entries, dao insert
+        // else, update last entry in array
+        if (count($entries)) {
+            $found = $entries[count($entries) - 1];
             $smsEntry = new SmsEntrie();
-            $smsEntry->userId = $_ENV['ACCESS_ID'];
-            $smsEntry->date = (!isset($entry->date) || $entry->date == '')
-                ? $currentDateTime->format(FULL_DATETIME_FORMAT)
-                : $entry->date;
+            $smsEntry->id = $found['id'];
+            $smsEntry->date = $found['date'];
+            $smsEntry->content = $found['content'] . "  \n" . trim(urldecode($entry->content));
+            $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
+            $this->dao->update($smsEntry);
+        } else {
+            $smsEntry->content = trim(urldecode($entry->content));
+            $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
+            $smsEntry->id = $this->dao->insert($smsEntry);
+        }
 
-            //check for exisiting by date
-            $listObj = new ListParams();
-            $listObj->startDate = $smsEntry->date;
-            $listObj->endDate = $smsEntry->date;
-            $entries = $this->dao->list($listObj);
-
-            // if no entries, dao insert
-            if (count($entries)) {
-                $found = $entries[count($entries) - 1];
-                $smsEntry = new SmsEntrie();
-                $smsEntry->id = $found['id'];
-                $smsEntry->date = $found['date'];
-                $smsEntry->content = $found['content'] . "  \n" . trim(urldecode($entry->content));
-                $this->dao->update($smsEntry);
-            } else {
-                $smsEntry->content = trim(urldecode($entry->content));
-                $smsEntry = $this->contentHelper->processEntry($smsEntry);
-                $smsEntry->id = $this->dao->insert($smsEntry);
-            }
-
-            // else, update last entry in array
-
-            Logger::log("New Entry: \t" . $smsEntry->id . "\t" . $smsEntry->date);
-            $this->resource->echoOut(json_encode($smsEntry));
-            return $response;
-        };
+        $response->getBody()->write(json_encode($smsEntry));
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
     }
 
     /**
@@ -119,44 +123,51 @@ class CUDHandler
      *     )
      * )
      */
-    public function updateEntry(): object
+    public function updateEntry(Request $request, Response $response, $args): Response
     {
-        return function (Request $request, Response $response, $args): Response {
-            DevHelp::debugMsg('start update ' . __FILE__);
+        $factory = $this->container->get('Objfactory');
+        $this->dao = $factory->makeSmsEntriesDAO();
+        $this->resource = $factory->makeResource();
+        DevHelp::debugMsg('start update ' . __FILE__);
 
-            $entry = json_decode($request->getBody());
-            if (!$entry) {
-                throw new Exception('Invalid json' . $request->getBody());
-            }
+        $entry = json_decode($request->getBody());
+        if (!$entry) {
+            throw new Exception('Invalid json' . $request->getBody());
+        }
 
-            $found = $this->dao->load($args['id']);
-            if ($found["id"] == 0) {
-                header('HTTP/1.0 404 File Not Found');
-                $metaData = new stdClass();
-                $metaData->message = "Entry not valid";
-                $metaData->status = "fail";
+        $found = $this->dao->load($args['id']);
+        if ($found["id"] == 0) {
+            header('HTTP/1.0 404 File Not Found');
+            $metaData = new stdClass();
+            $metaData->message = "Entry not valid";
+            $metaData->status = "fail";
 
-                $this->resource->echoOut(json_encode($metaData));
-                die();
-            }
-            if ($found['user_id'] !== $_ENV['ACCESS_ID']) {
-                header('HTTP/1.0 403 Forbidden');
-                $metaData = new stdClass();
-                $metaData->message = "Unauthorized User";
-                $metaData->status = "fail";
+            $response->getBody()->write(json_encode($metaData));
+            return $response
+                ->withStatus(403);
+        }
+        if ($found['user_id'] !== $_ENV['ACCESS_ID']) {
 
-                $this->resource->echoOut(json_encode($metaData));
-                die();
-            }
-            $smsEntry = new SmsEntrie();
-            $smsEntry->id = $found['id'];
-            $smsEntry->content = SmsEntrie::sanitizeContent($entry->content);
-            $smsEntry->date = $entry->date;
-            $this->dao->update($smsEntry);
-            $this->resource->echoOut(json_encode($smsEntry));
-            return $response;
-        };
+            $metaData = new stdClass();
+            $metaData->message = "Unauthorized User";
+            $metaData->status = "fail";
+
+            $response->getBody()->write(json_encode($metaData));
+            return $response
+                ->withStatus(403);
+        }
+        $smsEntry = new SmsEntrie();
+        $smsEntry->id = $found['id'];
+        $smsEntry->content = SmsEntrie::sanitizeContent($entry->content);
+        $smsEntry->date = $entry->date;
+        $this->dao->update($smsEntry);
+
+        $response->getBody()->write(json_encode($smsEntry));
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
     }
+
     /**
      * @OA\Delete(
      *     description="Remove Entry",
@@ -173,8 +184,8 @@ class CUDHandler
      */
     public function deleteEntry(Request $request, Response $response, $args): object
     {
-        $daoFactory = $this->container->get('daofactory');
-        $this->dao = $daoFactory->makeSmsEntriesDAO();
+        $factory = $this->container->get('Objfactory');
+        $this->dao = $factory->makeSmsEntriesDAO();
 
         DevHelp::debugMsg('start delete' . __FILE__);
         $smsEntry = $this->dao->load($args['id']);
@@ -185,11 +196,12 @@ class CUDHandler
         $rows_affected = $this->dao->delete($smsEntry['id']);
         Logger::log("Delete: \t" . $smsEntry['id'] . "\t" . $smsEntry['date']);
 
-        $payload = json_encode('{"rows_affected": ' . $rows_affected . '}');
+        $metaData = new stdClass();
+        $metaData->rowsAffected = $rows_affected;
 
-        $response->getBody()->write($payload);
+        $response->getBody()->write(json_encode($metaData));
         return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus(201);
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
     }
 }
