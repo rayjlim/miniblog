@@ -126,11 +126,17 @@ $app->get('/media/', MediaHandler::class . ":listMedia");
 $app->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
 $app->delete('/media/', MediaHandler::class . ":deleteMedia");
 
-// $app->post('/uploadImage/', $uploadHandler->upload());
-// $app->get('/uploadRotate/', $uploadHandler->rotate());
-// $app->get('/uploadResize/', $uploadHandler->resize());
-// $app->post('/uploadRename/', $uploadHandler->rename());
+use App\controllers\UploadHandler;
 
+$app->post('/uploadImage/', UploadHandler::class. ":upload");
+$app->get('/uploadRotate/', UploadHandler::class. ":rotate");
+$app->get('/uploadResize/', UploadHandler::class. ":resize");
+$app->post('/uploadRename/', UploadHandler::class. ":rename");
+
+// $logHandler = DAOFactory::getLogHandler();
+// $app->get('/logs/', $logHandler->getUrlHandler());
+// $app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
+// $app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
 
 $app->get(
     '/ping',
@@ -139,10 +145,5 @@ $app->get(
         return $response;
     }
 );
-
-// $logHandler = DAOFactory::getLogHandler();
-// $app->get('/logs/', $logHandler->getUrlHandler());
-// $app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
-// $app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
 
 $app->run();
