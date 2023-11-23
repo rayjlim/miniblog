@@ -68,7 +68,7 @@ class EntryHandler
         $entries = $this->dao->list($listObj);
         // $this->app->response()->header('Content-Type', 'application/json');
 
-        $reply = new stdClass();
+        $reply = new \stdClass();
         $reply->entries = $entries;
         $reply->params = $listObj;
 
@@ -112,7 +112,7 @@ class EntryHandler
 
         $entries = $this->dao->getSameDayEntries($targetDay);
 
-        $reply = new stdClass();
+        $reply = new \stdClass();
         $reply->user = $userId;
         $reply->entries = $entries;
         $response->getBody()->write(json_encode($reply));

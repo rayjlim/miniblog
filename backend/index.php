@@ -116,27 +116,30 @@ $app->get('/api/yearMonth', EntryHandler::class . ":yearMonths");
 
 
 use App\controllers\CUDHandler;
+
 $app->post('/api/posts/', CUDHandler::class . ":addEntry");
 $app->put('/api/posts/{id}', CUDHandler::class . ":updateEntry");
 $app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
 
 // $uploadHandler = DAOFactory::getUploadHandler();
 use App\controllers\MediaHandler;
+
 $app->get('/media/', MediaHandler::class . ":listMedia");
 $app->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
 $app->delete('/media/', MediaHandler::class . ":deleteMedia");
 
 use App\controllers\UploadHandler;
 
-$app->post('/uploadImage/', UploadHandler::class. ":upload");
-$app->get('/uploadRotate/', UploadHandler::class. ":rotate");
-$app->get('/uploadResize/', UploadHandler::class. ":resize");
-$app->post('/uploadRename/', UploadHandler::class. ":rename");
+$app->post('/uploadImage/', UploadHandler::class . ":upload");
+$app->get('/uploadRotate/', UploadHandler::class . ":rotate");
+$app->get('/uploadResize/', UploadHandler::class . ":resize");
+$app->post('/uploadRename/', UploadHandler::class . ":rename");
 
-// $logHandler = DAOFactory::getLogHandler();
-// $app->get('/logs/', $logHandler->getUrlHandler());
-// $app->get('/logs/{logFileName}', $logHandler->getUrlHandler());
-// $app->delete('/logs/{logFileName}', $logHandler->deleteHandler());
+use App\controllers\LogHandler;
+
+$app->get('/logs/', LogHandler::class . ":getLog");
+$app->get('/logs/{logFileName}', LogHandler::class . ":getLog");
+$app->delete('/logs/{logFileName}', LogHandler::class . ":deleteLog");
 
 $app->get(
     '/ping',
