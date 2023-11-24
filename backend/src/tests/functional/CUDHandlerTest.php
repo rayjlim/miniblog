@@ -1,7 +1,11 @@
 <?php
-use DI\Container;
 
-class CUDHandlerTest extends App\Tests\TestCase
+namespace App\tests\functional;
+
+use DI\Container;
+use App\tests\functional\TestCase;
+
+class CUDHandlerTest extends TestCase
 {
   // $resourceMock = $this->createMock('App\dao\Resource');
   // $creator->expects($this->once())->method('makeResource')->willReturn($resourceMock);
@@ -53,7 +57,7 @@ class CUDHandlerTest extends App\Tests\TestCase
     $request = $this->createRequest('PUT', '/api/posts/1', ['name' => 'Sally']);
     try {
       $app->handle($request);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->assertEquals('Invalid json', $e->getMessage());
     }
   }

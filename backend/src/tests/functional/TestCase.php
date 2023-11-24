@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\tests\functional;
 
 use DI\ContainerBuilder;
 use Exception;
@@ -53,7 +53,7 @@ class TestCase extends PHPUnit_TestCase
         // $middleware($app);
 
         // Register routes
-        $routes = require __DIR__ . '/../../routes.php';
+        $routes = require __DIR__ . '/../../../routes.php';
         $routes($app);
 
         return $app;
