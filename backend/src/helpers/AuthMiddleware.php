@@ -13,10 +13,10 @@ use Nyholm\Psr7\Response;
 
 class AuthMiddleware
 {
-    public function __invoke($request, $handler): Response
+    public function __invoke(Request $request, RequestHandler $handler): Response
     {
-
         DevHelp::debugMsg(__FILE__);
+
         $response = $handler->handle($request);
         $existingContent = (string) $response->getBody();
         $response = new Response();
@@ -47,7 +47,7 @@ class AuthMiddleware
         $password = isset($loginParams->password) ? htmlspecialchars($loginParams->password) : null;
 
         if (!isset($loginParams->login)) {
-            $this->loginError('Invalid payload' . $_SERVER['REQUEST_URI']);
+            $this->loginError('Invalid payload ' . $_SERVER['REQUEST_URI']);
         } elseif (!$username || !$password) {
             $this->loginError('Missing Fields');
         } elseif (!$this->isValidUsernamePassword($username, $password)) {
