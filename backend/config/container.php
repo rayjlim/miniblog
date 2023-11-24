@@ -17,14 +17,14 @@ return [
         $app = AppFactory::createFromContainer($container);
 
         // Register routes
-        // (require __DIR__ . '/routes.php')($app);
+        (require __DIR__ . '/../routes.php')($app);
 
         // Register middleware
         // (require __DIR__ . '/middleware.php')($app);
 
         $container->set('Objfactory', function () {
-          return new \App\helpers\DependFactory();
-      });
+            return new \App\helpers\DependFactory();
+        });
 
         return $app;
     },

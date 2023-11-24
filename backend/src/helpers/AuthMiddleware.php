@@ -105,7 +105,6 @@ class AuthMiddleware
      */
     private function isLoggedIn()
     {
-        return true;
         $headers = getallheaders();
         $tokenName = $_ENV['AUTH_TOKEN'];
         DevHelp::debugMsg('isset app tokenName? ' . $tokenName . isset($headers[$tokenName]));

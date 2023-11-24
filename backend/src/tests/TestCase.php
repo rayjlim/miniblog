@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace App\Tests;
 
 use DI\ContainerBuilder;
 use Exception;
@@ -30,16 +30,16 @@ class TestCase extends PHPUnit_TestCase
         // Container intentionally not compiled for tests.
 
         // Set up settings
-        $settings = require __DIR__ . '/../app/settings.php';
-        $settings($containerBuilder);
+        // $settings = require __DIR__ . '/../app/settings.php';
+        // $settings($containerBuilder);
 
         // Set up dependencies
-        $dependencies = require __DIR__ . '/../app/dependencies.php';
-        $dependencies($containerBuilder);
+        // $dependencies = require __DIR__ . '/../app/dependencies.php';
+        // $dependencies($containerBuilder);
 
         // Set up repositories
-        $repositories = require __DIR__ . '/../app/repositories.php';
-        $repositories($containerBuilder);
+        // $repositories = require __DIR__ . '/../app/repositories.php';
+        // $repositories($containerBuilder);
 
         // Build PHP-DI Container instance
         $container = $containerBuilder->build();
@@ -49,11 +49,11 @@ class TestCase extends PHPUnit_TestCase
         $app = AppFactory::create();
 
         // Register middleware
-        $middleware = require __DIR__ . '/../app/middleware.php';
-        $middleware($app);
+        // $middleware = require __DIR__ . '/../app/middleware.php';
+        // $middleware($app);
 
         // Register routes
-        $routes = require __DIR__ . '/../app/routes.php';
+        $routes = require __DIR__ . '/../../routes.php';
         $routes($app);
 
         return $app;
