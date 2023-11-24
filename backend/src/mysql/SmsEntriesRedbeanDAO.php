@@ -1,16 +1,17 @@
 <?php
-namespace dao;
+
+namespace App\mysql;
 
 defined('ABSPATH') or exit('No direct script access allowed');
+
 use \RedBeanPHP\R as R;
-use \models\SmsEntrie;
-use \models\ListParams;
+use App\dao\SmsEntriesDao;
+use App\models\SmsEntrie;
+use App\models\ListParams;
 
 // R::debug(TRUE);
-function groupYearMonth(array $row): string
-{
-    return $row["Year"] . "-" . $row["Month"];
-}
+
+
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
     public function load(int $id): array
@@ -48,7 +49,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     {
         $sqlParam = $this->listParamsToSqlParam($listParams);
         $posts = R::findAll(POSTS, '1 = 1 ' . $sqlParam . ' ORDER BY date DESC LIMIT ?', [$listParams->resultsLimit]);
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
+        $sequencedArray = array_values(array_map(function ($item) {
+            return $item->export();
+        }, $posts));
 
         return $sequencedArray;
     }
@@ -57,7 +60,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * Get Entries that are from the same day of the year
      *
      * @param  date Target date
-     * @LPT_V2
      */
     public function getSameDayEntries(object $date): array
     {
@@ -69,7 +71,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             . ' AND content NOT LIKE "#a%"';
         $posts = R::findAll(POSTS, $whereClause . ' ORDER BY date DESC', []);
         // $posts = R::findAll(POSTS, ' where user_id = 0 and MONTH(date) =   1 and DAY(date) =   25 order by date desc ');
-        $sequencedArray = array_values(array_map("getExportValues", $posts));
+        $sequencedArray = array_values(array_map(function ($item) {
+            return $item->export();
+        }, $posts));
 
         return $sequencedArray;
     }
@@ -78,7 +82,6 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
      * Get Year and Months list of all entries
      *
      * @param  none
-     * @LPT_V2
      */
     public function getYearMonths(): array
     {
@@ -87,7 +90,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
             . 'FROM sms_entries '
             . 'WHERE user_id = 1 '
             . 'ORDER BY YEAR(date) DESC, MONTH(date) DESC');
-        return array_map("dao\groupYearMonth", $posts);
+        return array_map(function (array $row): string {
+            return $row["Year"] . "-" . $row["Month"];
+        }, $posts);
     }
 
     // ;
@@ -95,11 +100,11 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     {
         $sqlParam = '';
         if ($listParams->searchParam != '') {
-            $sqlParam.= ' AND content LIKE \'%' . $listParams->searchParam . '%\'';
+            $sqlParam .= ' AND content LIKE \'%' . $listParams->searchParam . '%\'';
         }
 
         if ($listParams->excludeTags != '') {
-            $sqlParam.= ' AND content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
+            $sqlParam .= ' AND content NOT LIKE \'%' . $listParams->excludeTags . '%\'';
         }
 
         // if (count($listParams->tags) != 0) {
@@ -107,19 +112,19 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         // }
 
         if ($listParams->startDate != '') {
-            $sqlParam.= ' AND date >= \'' . $listParams->startDate . '\'';
+            $sqlParam .= ' AND date >= \'' . $listParams->startDate . '\'';
         }
         if ($listParams->endDate != '') {
-            $sqlParam.= ' AND date <= \'' . $listParams->endDate . '\'';
+            $sqlParam .= ' AND date <= \'' . $listParams->endDate . '\'';
         }
 
         if ($listParams->filterType == FILTER_UNTAGGED) {
-            $sqlParam.= ' AND content NOT LIKE \'%#%\'';
-            $sqlParam.= ' AND content NOT LIKE \'@%\'';
+            $sqlParam .= ' AND content NOT LIKE \'%#%\'';
+            $sqlParam .= ' AND content NOT LIKE \'@%\'';
         }
 
         if ($listParams->filterType == FILTER_TAGGED) {
-            $sqlParam.= ' AND (content LIKE \'%#%\' or content LIKE \'@%\')'
+            $sqlParam .= ' AND (content LIKE \'%#%\' or content LIKE \'@%\')'
                 . ' AND content NOT LIKE \'%##%\'';
         }
         // echo $sqlParam;
@@ -130,5 +135,5 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 
 function pickDate($n)
 {
-    return(substr($n['date'], 0, 7));
+    return (substr($n['date'], 0, 7));
 }

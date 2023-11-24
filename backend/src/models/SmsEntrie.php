@@ -10,10 +10,10 @@
  * @license  MIT License
  * @link     https://github.com/rayjlim/miniblog/
  */
-namespace models;
+namespace App\models;
 
 defined('ABSPATH') or exit('No direct script access allowed');
-use \Lpt\DevHelp;
+use App\core\DevHelp;
 
 /**
  * @OA\Schema(
@@ -58,7 +58,7 @@ class SmsEntrie
         $this->content = $content;
     }
 
-    public static function sanitizeContent($content)
+    public static function sanitizeContent(string $content)
     {
         $order = ["\r\n", "\n", "\r"];
 

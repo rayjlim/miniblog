@@ -1,5 +1,5 @@
 <?php
-namespace Lpt;
+namespace App\core;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 

@@ -1,10 +1,10 @@
 <?php
-namespace middleware;
+namespace App\helpers;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
-use \Lpt\DevHelp;
-use \Lpt\Logger;
+use App\core\DevHelp;
+use App\core\Logger;
 use \stdClass;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,11 +13,14 @@ use Nyholm\Psr7\Response;
 
 class AuthMiddleware
 {
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function __invoke($request, $handler): Response
     {
+
         DevHelp::debugMsg(__FILE__);
         $response = $handler->handle($request);
+        $existingContent = (string) $response->getBody();
         $response = new Response();
+        $response->getBody()->write($existingContent);
 
         if ($request->getMethod() == "OPTIONS") {
             header('HTTP/1.0 200 Ok');

@@ -1,11 +1,12 @@
 <?php
-namespace dao;
+namespace App\dao;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
-use \models\SmsEntrie;
-use \models\ListParams;
-interface SmsEntriesDAO
+use App\models\SmsEntrie;
+use App\models\ListParams;
+
+interface SmsEntriesDao
 {
     /**
      * Get Domain object by primry key

@@ -1,5 +1,5 @@
 <?php
-namespace controllers;
+namespace App\controllers;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
@@ -24,9 +24,8 @@ class Settings
      *     )
      * )
      */
-    public function get(): object
+    public function __invoke(Request $request, Response $response): Response
     {
-        return function (Request $request, Response $response): void {
             $data = new stdClass();
             $data->UPLOAD_ROOT = $_ENV['FE_UPLOAD_ROOT'];
             $data->GOOGLE_OAUTH_CLIENTID = $_ENV['FE_GOOGLE_OAUTH_CLIENTID'] ?? '';
@@ -42,9 +41,9 @@ class Settings
             $data->SHOW_GH_CORNER = false;
             $data->UPLOAD_SIZE_LIMIT = UPLOAD_SIZE_LIMIT;
 
-            echo json_encode($data);
-            die();
-        };
+
+            $response->getBody()->write(json_encode($data));
+            return $response;
     }
 
 }

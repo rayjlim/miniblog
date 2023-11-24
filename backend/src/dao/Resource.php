@@ -1,5 +1,5 @@
 <?php
-namespace dao;
+namespace App\dao;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 use \DateTime;

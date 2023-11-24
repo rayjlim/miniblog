@@ -10,9 +10,13 @@
  * @license  MIT License
  * @link     https://github.com/rayjlim/miniblog/
  */
-namespace models;
+namespace App\models;
 
 defined('ABSPATH') or exit('No direct script access allowed');
+function getValue($array, $key)
+{
+    return $array[$key] ?? false;
+}
 
 class ListParams
 {
