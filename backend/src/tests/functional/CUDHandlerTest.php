@@ -1,10 +1,4 @@
 <?php
-
-use App\controllers\CUDHandler;
-use App\dao\SmsEntriesRedbeanDao;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use GuzzleHttp\Psr7\Stream;
 use DI\Container;
 
 class CUDHandlerTest extends \App\Tests\TestCase
