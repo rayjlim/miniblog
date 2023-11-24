@@ -1,4 +1,5 @@
 <?php
+
 namespace App\controllers;
 
 defined('ABSPATH') or exit('No direct script access allowed');
@@ -127,7 +128,7 @@ class CUDHandler
     {
         $factory = $this->container->get('Objfactory');
         $this->dao = $factory->makeSmsEntriesDAO();
-        $this->resource = $factory->makeResource();
+
         DevHelp::debugMsg('start update ' . __FILE__);
 
         $entry = json_decode($request->getBody());
@@ -136,16 +137,6 @@ class CUDHandler
         }
 
         $found = $this->dao->load($args['id']);
-        if ($found["id"] == 0) {
-            header('HTTP/1.0 404 File Not Found');
-            $metaData = new stdClass();
-            $metaData->message = "Entry not valid";
-            $metaData->status = "fail";
-
-            $response->getBody()->write(json_encode($metaData));
-            return $response
-                ->withStatus(403);
-        }
         if ($found['user_id'] !== $_ENV['ACCESS_ID']) {
 
             $metaData = new stdClass();
@@ -191,8 +182,15 @@ class CUDHandler
         $smsEntry = $this->dao->load($args['id']);
 
         if ($_ENV['ACCESS_ID'] != $smsEntry['user_id']) {
-            throw new Exception('Invalid User');
+            $metaData = new stdClass();
+            $metaData->message = "Entry not valid";
+            $metaData->status = "fail";
+
+            $response->getBody()->write(json_encode($metaData));
+            return $response
+                ->withStatus(403);
         }
+
         $rows_affected = $this->dao->delete($smsEntry['id']);
         Logger::log("Delete: \t" . $smsEntry['id'] . "\t" . $smsEntry['date']);
 

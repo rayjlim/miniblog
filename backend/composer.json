@@ -41,5 +41,8 @@
     "doc": "composer run doc:yaml && composer run doc:html",
     "doc:yaml": "./vendor/bin/openapi --output doc/openapi.yaml ./",
     "doc:html": "python yaml2html.py < doc/openapi.yaml > doc/doc.html"
+  },
+  "config": {
+    "process-timeout":0
   }
 }
