@@ -1,7 +1,7 @@
 <?php
 use DI\Container;
 
-class CUDHandlerTest extends \App\Tests\TestCase
+class CUDHandlerTest extends App\Tests\TestCase
 {
   // $resourceMock = $this->createMock('App\dao\Resource');
   // $creator->expects($this->once())->method('makeResource')->willReturn($resourceMock);
