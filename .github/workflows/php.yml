@@ -22,7 +22,7 @@ jobs:
       run: composer validate
       
     - name: Install dependencies
-      # if: steps.composer-cache.outputs.cache-hit != 'true'
+      if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --ignore-platform-reqs
       
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
