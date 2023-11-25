@@ -1,7 +1,7 @@
 {
   "name": "lilplaytime/miniblog",
   "description": "Blog Web application. Backend for headless CMS, front end in Create-React-App",
-  "version": "2.21.0",
+  "version": "2.22.0",
   "license": "proprietary",
   "require": {
     "php": "8.*.*",
@@ -21,7 +21,7 @@
     "phpmd/phpmd": "^2.13"
   },
   "autoload": {
-    "psr-4":{
+    "psr-4": {
       "App\\": "src/"
     },
     "files": [
@@ -43,6 +43,6 @@
     "doc:html": "python yaml2html.py < doc/openapi.yaml > doc/doc.html"
   },
   "config": {
-    "process-timeout":0
+    "process-timeout": 0
   }
 }

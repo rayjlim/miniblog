@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.22.0](https://github.com/rayjlim/miniblog/compare/v2.21.0...v2.22.0) (2023-11-25)
+
+
+### Features
+
+* [#254](https://github.com/rayjlim/miniblog/issues/254) shortcut keys for one day, search, add ([80a9371](https://github.com/rayjlim/miniblog/commit/80a937156a9d14dbd65bdd5238bbbe8e08f383c3))
+* CUD handler tests update and delete ([15e48e3](https://github.com/rayjlim/miniblog/commit/15e48e382b50d6eceec865cea56971c7b875f895))
+* functional tests for DateNav, move tests to new folder ([31f4bb5](https://github.com/rayjlim/miniblog/commit/31f4bb5b0ffd88348e4f26173f7d8e0da178490e))
+* LogHandler upgrade ([fd23775](https://github.com/rayjlim/miniblog/commit/fd2377573d047971782124743d6b2a1784023358))
+* remove dead code, test code working ([4918014](https://github.com/rayjlim/miniblog/commit/4918014d8b141f609c826685720feefdf7b246b4))
+* test support files ([2a5807c](https://github.com/rayjlim/miniblog/commit/2a5807c0ee79b627d85de75e79d0ce19efcd9316))
+* WIP BE code to src folder, remove old ([f3c60c1](https://github.com/rayjlim/miniblog/commit/f3c60c174151d00511b6234cf6f0a7caba116d8c))
+* WIP Handlers Entry, CUD, Media working ([d16e14b](https://github.com/rayjlim/miniblog/commit/d16e14b8f16501581bef13ca93cd32ff89fa9da7))
+* WIP reorg BE to src folder; add first working batch ([c222ad4](https://github.com/rayjlim/miniblog/commit/c222ad4d69b5cbe42a5631288e6a1fb5947b24e2))
+* WIP Upload handler converted🚧 ([cd86357](https://github.com/rayjlim/miniblog/commit/cd863577efa52c3fd2c202e4429411bd6c076ea5))
+
+
+### Bug Fixes
+
+*  case sensitive path, breaks in linux💚 ([c041802](https://github.com/rayjlim/miniblog/commit/c041802af28d48ee6e6cc252df6fb6e2658f74ff))
+* add auth middle to all routes, except settings ([8cd3b8a](https://github.com/rayjlim/miniblog/commit/8cd3b8ae579a9c13015fa219093bda222d1dd0d6))
+* build break due to unused import💚 ([0eadb36](https://github.com/rayjlim/miniblog/commit/0eadb36a5473f63d2144c12071a2aa84f422170d))
+* bypass auth in testing ([852eee7](https://github.com/rayjlim/miniblog/commit/852eee724dc912a26c1bafbb93955232aafe764b))
+* clean up middleware usage, add session middleware ♻️ ([af0b2c5](https://github.com/rayjlim/miniblog/commit/af0b2c5256ece0c1228406ce078253512681ff01))
+* entryhandler test  for list ([332e00f](https://github.com/rayjlim/miniblog/commit/332e00fe8a14f4748f337ab0c340ab2c6acfb863))
+* entryhandler test cases ([4bda9ad](https://github.com/rayjlim/miniblog/commit/4bda9ad0aac6a6d810d80cabda9f0e592fc3c6b7))
+* entryhanlder test base case ([40932c5](https://github.com/rayjlim/miniblog/commit/40932c58a876f852ce15a8f123efb84bbf263a45))
+* getDateByDescription ([ba305a7](https://github.com/rayjlim/miniblog/commit/ba305a7cab473b73ef92a3e0113ebe858b74a782))
+* got BE testing going; cudhandler delete ✅ ([8a7b640](https://github.com/rayjlim/miniblog/commit/8a7b640852b24121ba16c4e9ad1df7b5af1069aa))
+* group routes for auth middleware ([31aee68](https://github.com/rayjlim/miniblog/commit/31aee684c5534a63be7e7d22801e052e33ace3a6))
+* remove dependency on date function ([3715e7d](https://github.com/rayjlim/miniblog/commit/3715e7d2a565f504be848c63217fdfc0be5039b4))
+* remove unused imports ([6a7c61e](https://github.com/rayjlim/miniblog/commit/6a7c61e44a0018341351f34cfedd170fc2255308))
+* settings test case, placeholders for TODO tests✅ ([bbe2dbe](https://github.com/rayjlim/miniblog/commit/bbe2dbe8e8024d2378928b40190409decb443c1f))
+* test extend TestCase ([499245c](https://github.com/rayjlim/miniblog/commit/499245cb4d06519b3fcd9ec5bb16cb4fac9df242))
+* test list default search✅ ([502a89a](https://github.com/rayjlim/miniblog/commit/502a89aa042bbf282527d20f05193a711b87ee62))
+
 ## [2.21.0](https://github.com/rayjlim/miniblog/compare/v2.20.0...v2.21.0) (2023-11-21)
 
 
