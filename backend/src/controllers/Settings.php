@@ -27,7 +27,7 @@ class Settings
     public function __invoke(Request $request, Response $response): Response
     {
             $data = new stdClass();
-            $data->UPLOAD_ROOT = $_ENV['FE_UPLOAD_ROOT'];
+            $data->UPLOAD_ROOT = $_ENV['FE_UPLOAD_ROOT'] ?? '';
             $data->GOOGLE_OAUTH_CLIENTID = $_ENV['FE_GOOGLE_OAUTH_CLIENTID'] ?? '';
 
 

@@ -98,6 +98,15 @@ class EntryHandlerTest extends TestCase
     $this->assertEquals($expectedParams, json_encode(json_decode($payload)->params));
   }
 
-  // TODO: test for same day - has day param
+
+  function test_sameday_has_param()
+  {
+    // TODO: test for same day - has day param
+    $this->markTestSkipped('Need to write test.');
+  }
   // TODO: test for same day - has no day param
+  function test_sameday_has_no_param()
+  {
+    $this->markTestSkipped('Need to write test.');
+  }
 }
