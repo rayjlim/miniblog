@@ -25,8 +25,8 @@ function getValue($array, $key)
  */
 class EntryHandler
 {
-    public $dao = null;
-    public $resource = null;
+    private $dao = null;
+    private $resource = null;
     private $container;
 
     // constructor receives container instance
@@ -57,18 +57,23 @@ class EntryHandler
     {
         $factory = $this->container->get('Objfactory');
         $this->dao = $factory->makeSmsEntriesDAO();
-
-        $queries = array();
-        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $this->resource = $factory->makeResource();
+        $reply = new \stdClass();
 
         $listObj = new ListParams();
-        $listObj->loadParams($queries);
+        $listObj->loadParams($request->getQueryParams());
+
+        if ($listObj->startDate === '' && $listObj->searchParam === '') {
+            $strDescription = printf("-%u months", DEFAULT_MONTHS_TO_SHOW);
+            $newStartDate = $this->resource->getDateByDescription($strDescription);
+            $listObj->startDate = $newStartDate;
+        }
+
         $userId = $_ENV['ACCESS_ID'];
         $listObj->userId = $userId;
         $entries = $this->dao->list($listObj);
-        // $this->app->response()->header('Content-Type', 'application/json');
 
-        $reply = new \stdClass();
+
         $reply->entries = $entries;
         $reply->params = $listObj;
 
@@ -102,13 +107,12 @@ class EntryHandler
 
         DevHelp::debugMsg(__file__);
         $userId = $_ENV['ACCESS_ID'];
-        $currentDate = $this->resource->getDateTime();
-        $queries = [];
-        parse_str($_SERVER['QUERY_STRING'], $queries);
-        $dayValue = getValue($queries, 'day');
+
+        $dayValue = getValue($request->getQueryParams(), 'day');
+
         $targetDay = $dayValue != false
             ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, $dayValue)
-            : $currentDate;
+            : $this->resource->getDateTime(); //current date
 
         $entries = $this->dao->getSameDayEntries($targetDay);
 

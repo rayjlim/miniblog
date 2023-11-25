@@ -15,6 +15,7 @@ interface IResourceDAO
     public function readfile($logfile);
     public function removefile($logfile);
     public function getDateTime();
+    public function getDateByDescription(string $strDescription);
 
     public function load($url);
     public function sendEmail($email, $subject, $message);

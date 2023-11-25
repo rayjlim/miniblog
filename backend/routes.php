@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteCollectorProxy;
 use Slim\App;
 
 use \App\controllers\Settings;
@@ -25,36 +26,36 @@ return function (App $app) {
     function (Request $request, Response $response, $args) {
       return $response;
     }
-  )->add(new AuthMiddleware());;
-
-  $app->get('/settings/', Settings::class);
-
-  $app->get('/api/posts/', EntryHandler::class . ":list")->add(new AuthMiddleware());
-  $app->get('/api/sameDayEntries/', EntryHandler::class . ":listSameDay");
-  $app->get('/api/yearMonth', EntryHandler::class . ":yearMonths");
-
-  $app->post('/api/posts/', CUDHandler::class . ":addEntry");
-  $app->put('/api/posts/{id}', CUDHandler::class . ":updateEntry");
-  $app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
-
-  $app->get('/media/', MediaHandler::class . ":listMedia")->add(new AuthMiddleware());;
-  $app->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
-  $app->delete('/media/', MediaHandler::class . ":deleteMedia");
-
-  $app->post('/uploadImage/', UploadHandler::class . ":upload")->add(new AuthMiddleware());;
-  $app->get('/uploadRotate/', UploadHandler::class . ":rotate");
-  $app->get('/uploadResize/', UploadHandler::class . ":resize");
-  $app->post('/uploadRename/', UploadHandler::class . ":rename");
-
-  $app->get('/logs/', LogHandler::class . ":getLog")->add(new AuthMiddleware());;
-  $app->get('/logs/{logFileName}', LogHandler::class . ":getLog");
-  $app->delete('/logs/{logFileName}', LogHandler::class . ":deleteLog");
-
+  )->add(new AuthMiddleware());
   $app->get(
     '/ping',
-    function (Request $request, Response $response, $args) {
+    function (Request $request, Response $response) {
       $response->getBody()->write("{\"pong\":\"true\"}");
       return $response;
     }
   );
+  $app->get('/settings/', Settings::class);
+
+  $app->group('', function (RouteCollectorProxy $group) {
+    $group->get('/api/posts/', EntryHandler::class . ":list");
+    $group->get('/api/sameDayEntries/', EntryHandler::class . ":listSameDay");
+    $group->get('/api/yearMonth', EntryHandler::class . ":yearMonths");
+
+    $group->post('/api/posts/', CUDHandler::class . ":addEntry");
+    $group->put('/api/posts/{id}', CUDHandler::class . ":updateEntry");
+    $group->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
+
+    $group->get('/media/', MediaHandler::class . ":listMedia");;
+    $group->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
+    $group->delete('/media/', MediaHandler::class . ":deleteMedia");
+
+    $group->post('/uploadImage/', UploadHandler::class . ":upload");
+    $group->get('/uploadRotate/', UploadHandler::class . ":rotate");
+    $group->get('/uploadResize/', UploadHandler::class . ":resize");
+    $group->post('/uploadRename/', UploadHandler::class . ":rename");
+
+    $group->get('/logs/', LogHandler::class . ":getLog");;
+    $group->get('/logs/{logFileName}', LogHandler::class . ":getLog");
+    $group->delete('/logs/{logFileName}', LogHandler::class . ":deleteLog");
+  })->add(new AuthMiddleware());
 };

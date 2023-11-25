@@ -94,6 +94,10 @@ class Resource implements IResourceDAO
         return new DateTime();
     }
 
+    public function getDateByDescription(string $strDescription){
+        date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
+    }
+
     public function sendEmail($email, $subject, $message)
     {
         mail($email, $subject, $message);

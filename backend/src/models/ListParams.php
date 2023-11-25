@@ -27,33 +27,25 @@ class ListParams
     public string $endDate = '';
     public int $filterType = FILTER_ALL;
     public int $resultsLimit = RESULT_LIMIT_DEFAULT;
-    public int $monthsBackToShow = 3;
     public string $excludeTags = '';
 
-    public function loadParams($request)
+    public function loadParams($queryParams)
     {
         $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType'];
         foreach ($lookingFor as $target) {
-            if (getValue($request, $target) != false) {
-                $this->$target = trim($request[$target]);
+            if (getValue($queryParams, $target) != false) {
+                $this->$target = trim($queryParams[$target]);
             }
         }
 
-        if (getValue($request, 'date') != false) {
-            $this->startDate = $request['date'];
-            $this->endDate = $request['date'];
+        if (getValue($queryParams, 'date') != false) {
+            $this->startDate = $queryParams['date'];
+            $this->endDate = $queryParams['date'];
         }
 
-        if (getValue($request, 'month') != false) {
-            $this->startDate = $request['month'] . '-1';
-            $this->endDate = $request['month'] . '-31';
-        }
-
-        if ($this->startDate === '' && $this->searchParam === '') {
-            $this->monthsBackToShow = $request['monthsBackToShow'] ?? DEFAULT_MONTHS_TO_SHOW;
-            // echo "this->monthsBackToShow: " . $this->monthsBackToShow . "--";
-            $strDescription = '-' . $this->monthsBackToShow . ' months';
-            $this->startDate = date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
+        if (getValue($queryParams, 'month') != false) {
+            $this->startDate = $queryParams['month'] . '-1';
+            $this->endDate = $queryParams['month'] . '-31';
         }
     }
 }
