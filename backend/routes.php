@@ -30,31 +30,32 @@ return function (App $app) {
   $app->get('/settings/', Settings::class);
 
   $app->get('/api/posts/', EntryHandler::class . ":list")->add(new AuthMiddleware());
-  $app->get('/api/sameDayEntries/', EntryHandler::class . ":listSameDay");
+  $app->get('/api/sameDayEntries/', EntryHandler::class . ":listSameDay")->add(new AuthMiddleware());
   $app->get('/api/yearMonth', EntryHandler::class . ":yearMonths");
 
-  $app->post('/api/posts/', CUDHandler::class . ":addEntry");
-  $app->put('/api/posts/{id}', CUDHandler::class . ":updateEntry");
-  $app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry');
+  $app->post('/api/posts/', CUDHandler::class . ":addEntry")->add(new AuthMiddleware());
+  $app->put('/api/posts/{id}', CUDHandler::class . ":updateEntry")->add(new AuthMiddleware());
+  $app->delete('/api/posts/{id}', CUDHandler::class . ':deleteEntry')->add(new AuthMiddleware());
 
   $app->get('/media/', MediaHandler::class . ":listMedia")->add(new AuthMiddleware());;
-  $app->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
-  $app->delete('/media/', MediaHandler::class . ":deleteMedia");
+  $app->get('/media/{currentDir}', MediaHandler::class . ":listMedia")->add(new AuthMiddleware());
+  $app->delete('/media/', MediaHandler::class . ":deleteMedia")->add(new AuthMiddleware());
 
-  $app->post('/uploadImage/', UploadHandler::class . ":upload")->add(new AuthMiddleware());;
-  $app->get('/uploadRotate/', UploadHandler::class . ":rotate");
-  $app->get('/uploadResize/', UploadHandler::class . ":resize");
-  $app->post('/uploadRename/', UploadHandler::class . ":rename");
+  $app->post('/uploadImage/', UploadHandler::class . ":upload")->add(new AuthMiddleware());
+  $app->get('/uploadRotate/', UploadHandler::class . ":rotate")->add(new AuthMiddleware());
+  $app->get('/uploadResize/', UploadHandler::class . ":resize")->add(new AuthMiddleware());
+  $app->post('/uploadRename/', UploadHandler::class . ":rename")->add(new AuthMiddleware());
 
   $app->get('/logs/', LogHandler::class . ":getLog")->add(new AuthMiddleware());;
-  $app->get('/logs/{logFileName}', LogHandler::class . ":getLog");
-  $app->delete('/logs/{logFileName}', LogHandler::class . ":deleteLog");
+  $app->get('/logs/{logFileName}', LogHandler::class . ":getLog")->add(new AuthMiddleware());
+  $app->delete('/logs/{logFileName}', LogHandler::class . ":deleteLog")->add(new AuthMiddleware());
 
   $app->get(
     '/ping',
-    function (Request $request, Response $response, $args) {
+    function (Request $request, Response $response) {
       $response->getBody()->write("{\"pong\":\"true\"}");
       return $response;
     }
   );
 };
+
