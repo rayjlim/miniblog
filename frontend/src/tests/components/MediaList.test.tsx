@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
-import MediaList from "./MediaList";
+import MediaList from "../../components/MediaList";
 
 const fetchMock = vi.fn(() => ({
   json: vi.fn(()=> Promise.resolve({uploadDirs:['dir1'], dirContent: ['media1']})),

@@ -2,7 +2,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi } from 'vitest'
 import jest from 'jest-mock';
-import EditForm from "./EditForm";
+import EditForm from "../../components/EditForm";
 
 const fetchMock = vi.fn(() => ({
   json: vi.fn(()=> Promise.resolve({"id":"1","content":"99 9 fasdf","date":"2023-11-09","user_id":"1"})),
@@ -39,7 +39,7 @@ describe("EditForm component", () => {
     render(<EditForm entry={{id: '1', content: 'entry text', date: '2000-01-01'}} onSuccess={mockCallBack}/>);
     const btn = screen.getByTestId('cancelBtn');
     expect(btn).toBeInTheDocument();
-    fireEvent.click(btn)
+    fireEvent.click(btn);
 
     expect(mockCallBack).toHaveBeenCalledTimes(1);
     expect(mockCallBack.mock.calls[0][0]).toBe('');

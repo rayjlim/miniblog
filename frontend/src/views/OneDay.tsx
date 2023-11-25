@@ -31,8 +31,9 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
       <ToastContainer />
       <Header links={headerLinks} />
 
-      {isOneDay && <h1>One Day</h1>}
-      {pageMode === SAMEDAY && <h1>Same Day</h1>}
+      <h1 className="view-head">
+        {pageMode === SAMEDAY ? 'Same Day' : 'One Day'}
+      </h1>
 
       <DateNav updateDate={setPageDate} date={pageDate} />
 
