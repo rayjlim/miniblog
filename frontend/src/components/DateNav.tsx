@@ -18,12 +18,13 @@ const DateNav = ({ updateDate, date }: { updateDate: (date: string) => void, dat
       </button>
       <div>
         <input
-          type="text"
+          type="date"
           className="form-control"
-          id="formDpInput"
           onChange={e => updateDateInput(e)}
+          aria-label="date-input"
           ref={inputDate}
         />
+
       </div>
 
       <button

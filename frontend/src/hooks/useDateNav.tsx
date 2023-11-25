@@ -12,26 +12,26 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
    * @param  {Object} e Event of Button click
    */
   function handleButtonDirection(e: MouseEvent<HTMLElement>) {
-    let localDate = parse(date || '', FULL_DATE_FORMAT, new Date());
+
     const button = e.target as HTMLButtonElement;
+    console.log(button.value);
+
+    let newDate;
     if (button.value === 'today') {
-      localDate = new Date();
+      newDate = new Date();
     } else {
-      localDate = parse(date || '', FULL_DATE_FORMAT, new Date());
+      let localDate = parse(date || '', FULL_DATE_FORMAT, new Date());
+      newDate = add(localDate, { days: parseInt(button.value) });
     }
 
-    const newDate = add(localDate, { days: parseInt(button.value) });
     const ref = inputDate.current || { value: '' };
     ref.value = format(newDate, FULL_DATE_FORMAT);
     updateDate(format(newDate, FULL_DATE_FORMAT));
   }
 
   function updateDateInput(e: ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    const dateRegex = /^\d{4}[./-]\d{2}[./-]\d{2}$/;
-    if (e.target.value.match(dateRegex)) {
-      updateDate(e.target.value);
-    }
+    const newValue = e.target.value !== '' ? e.target.value : format(new Date, FULL_DATE_FORMAT);
+    updateDate(newValue);
   }
 
   useEffect(() => {
@@ -44,3 +44,4 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
 };
 
 export default useDateNav;
+
