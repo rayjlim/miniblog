@@ -48,13 +48,6 @@ class ListParams
             $this->startDate = $request['month'] . '-1';
             $this->endDate = $request['month'] . '-31';
         }
-
-        if ($this->startDate === '' && $this->searchParam === '') {
-            $this->monthsBackToShow = $request['monthsBackToShow'] ?? DEFAULT_MONTHS_TO_SHOW;
-            // echo "this->monthsBackToShow: " . $this->monthsBackToShow . "--";
-            $strDescription = '-' . $this->monthsBackToShow . ' months';
-            $this->startDate = date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
-        }
     }
 }
 
