@@ -17,8 +17,6 @@ class EntryHandlerTest extends TestCase
       $creator = $this->createMock('App\helpers\DependFactory');
 
       $resourceRef = $this->createMock('App\dao\Resource');
-      // $resourceRef->expects($this->once())->method('getDateByDescription')->willReturn(date(
-      // 'Y-m-d', 111111111));
       $creator->expects($this->once())->method('makeResource')->willReturn($resourceRef);
 
       $dbRef = $this->createMock('App\mysql\SmsEntriesRedbeanDAO');
@@ -54,6 +52,52 @@ class EntryHandlerTest extends TestCase
   }
 
   // TODO: test for no start date and no search param
+  function test_list_default_search()
+  {
+    $app = $this->getAppInstance();
+    /** @var Container $container */
+    $container = $app->getContainer();
+
+    $container->set('Objfactory', function () {
+      $creator = $this->createMock('App\helpers\DependFactory');
+
+      $resourceRef = $this->createMock('App\dao\Resource');
+      $resourceRef->expects($this->once())->method('getDateByDescription')->willReturn(date(
+        'Y-m-d',
+        strtotime('2023-08-23')
+      ));
+      $creator->expects($this->once())->method('makeResource')->willReturn($resourceRef);
+
+      $dbRef = $this->createMock('App\mysql\SmsEntriesRedbeanDAO');
+      $creator->expects($this->once())->method('makeSmsEntriesDAO')->willReturn($dbRef);
+      $listObj = new \App\models\ListParams();
+      $listObj->userId = 1;
+      $listObj->startDate = '2023-08-23';
+      $listObj->endDate = '';
+
+      $mockFoundEntries = [
+        array('id' => "3", "user_id" => "1", "date" => "2023-08-23", "content" => "day 23"),
+      ];
+      $dbRef->expects($this->once())->method('list')->with($listObj)
+
+        ->willReturn($mockFoundEntries);
+      return $creator;
+    });
+
+    $request = $this->createRequest('GET', '/api/posts/');
+
+    $response = $app->handle($request);
+    $payload = (string) $response->getBody();
+
+    $mockFoundEntries = json_decode(json_encode([
+      array('id' => "3", "user_id" => "1", "date" => "2023-08-23", "content" => "day 23"),
+    ]));
+    $this->assertEquals($mockFoundEntries, json_decode($payload)->entries);
+
+    $expectedParams = '{"userId":1,"searchParam":"","tags":[],"startDate":"2023-08-23","endDate":"","filterType":0,"resultsLimit":100,"excludeTags":""}';
+    $this->assertEquals($expectedParams, json_encode(json_decode($payload)->params));
+  }
+
   // TODO: test for same day - has day param
   // TODO: test for same day - has no day param
 }
