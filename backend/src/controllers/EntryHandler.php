@@ -58,14 +58,13 @@ class EntryHandler
         $factory = $this->container->get('Objfactory');
         $this->dao = $factory->makeSmsEntriesDAO();
         $this->resource = $factory->makeResource();
+        $reply = new \stdClass();
 
         $listObj = new ListParams();
         $listObj->loadParams($request->getQueryParams());
 
         if ($listObj->startDate === '' && $listObj->searchParam === '') {
-            $listObj->monthsBackToShow = getValue($request->getQueryParams(), 'monthsBackToShow')  ?? DEFAULT_MONTHS_TO_SHOW;
-            // echo "this->monthsBackToShow: " . $listObj->monthsBackToShow . "--";
-            $strDescription = '-' . $listObj->monthsBackToShow . ' months';
+            $strDescription = printf("-%u months", DEFAULT_MONTHS_TO_SHOW);
             $newStartDate = $this->resource->getDateByDescription($strDescription);
             $listObj->startDate = $newStartDate;
         }
@@ -74,7 +73,7 @@ class EntryHandler
         $listObj->userId = $userId;
         $entries = $this->dao->list($listObj);
 
-        $reply = new \stdClass();
+
         $reply->entries = $entries;
         $reply->params = $listObj;
 
@@ -111,10 +110,9 @@ class EntryHandler
 
         $dayValue = getValue($request->getQueryParams(), 'day');
 
-        $currentDate = $this->resource->getDateTime();
         $targetDay = $dayValue != false
             ? DateTime::createFromFormat(YEAR_MONTH_DAY_FORMAT, $dayValue)
-            : $currentDate;
+            : $this->resource->getDateTime(); //current date
 
         $entries = $this->dao->getSameDayEntries($targetDay);
 
