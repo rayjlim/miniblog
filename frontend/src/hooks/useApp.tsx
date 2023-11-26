@@ -5,18 +5,16 @@ const useApp = () => {
   useEffect(() => {
     (async () => {
       const token = window.localStorage.getItem(STORAGE_KEY);
-      console.log('check for token: ', token, token !== null);
-
       console.log(`logged in: ${(token !== null && token !== '')} ${token}`);
 
       if (!globalContext) {
         try {
           const response = await fetch(`${REST_ENDPOINT}/settings/`, {
-            mode: 'cors',
+            mode: 'cors'
           });
-          console.log(response.ok);
+         const results = await response.json();
+
           if (response.ok) {
-            const results = await response.json();
             setGlobalContext(results);
           }
         } catch (error) {

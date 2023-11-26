@@ -1,5 +1,4 @@
 build/
-config/
 vendor/
 tests/
 _logs/
@@ -12,3 +11,5 @@ _logs/
 .htaccess.production
 codeception.yml
 cron_script.php
+package.json
+package-lock.json

@@ -61,9 +61,8 @@ R::ext(
 $app = (require __DIR__ . '/config/bootstrap.php');
 
 $app->setBasePath($_ENV['BASE_PATH']);
-
-// $app->add(new App\helpers\HeaderMiddleware());
 $app->add(new App\helpers\SessionMiddleware());
+
 // $app->addErrorMiddleware(true, true, true);
 
 // Routes registered in Container & routes.php
