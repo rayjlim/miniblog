@@ -38,12 +38,9 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
       const endpoint = `${REST_ENDPOINT}/api/yearMonth`;
 
       const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set('Content-Type', 'application/json');
       requestHeaders.set(AUTH_HEADER, token);
       const response = await fetch(endpoint, {
-        method: 'GET',
         headers: requestHeaders,
-        referrerPolicy: 'no-referrer',
       });
 
       if (!response.ok) {
@@ -82,10 +79,9 @@ const useSearchForm = (setPosts: (entries: EntryType[]) => void,
         endpoint += `&endDate=${formattedEndDate}`;
       }
       const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set('Content-Type', 'application/json');
       requestHeaders.set(AUTH_HEADER, token);
+
       const response = await fetch(endpoint, {
-        method: 'GET',
         cache: 'no-cache',
         headers: requestHeaders,
         referrerPolicy: 'no-referrer',

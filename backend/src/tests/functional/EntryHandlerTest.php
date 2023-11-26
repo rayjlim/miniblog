@@ -98,7 +98,6 @@ class EntryHandlerTest extends TestCase
     $this->assertEquals($expectedParams, json_encode(json_decode($payload)->params));
   }
 
-
   function test_sameday_has_param()
   {
     // TODO: test for same day - has day param

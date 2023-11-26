@@ -16,17 +16,9 @@ use App\controllers\LogHandler;
 use App\helpers\AuthMiddleware;
 
 return function (App $app) {
-  // $app->options('/{routes:.*}', function (Request $request, Response $response) {
-  //   // CORS Pre-Flight OPTIONS Request Handler
-  //   return $response;
-  // });
 
-  $app->any(
-    '/security',
-    function (Request $request, Response $response, $args) {
-      return $response;
-    }
-  )->add(new AuthMiddleware());
+  $app->get('/settings/', Settings::class);
+
   $app->get(
     '/ping',
     function (Request $request, Response $response) {
@@ -34,9 +26,13 @@ return function (App $app) {
       return $response;
     }
   );
-  $app->get('/settings/', Settings::class);
 
   $app->group('', function (RouteCollectorProxy $group) {
+    $group->any('/security', function (Request $request, Response $response, $args) {
+        return $response;
+      }
+    );
+
     $group->get('/api/posts/', EntryHandler::class . ":list");
     $group->get('/api/sameDayEntries/', EntryHandler::class . ":listSameDay");
     $group->get('/api/yearMonth', EntryHandler::class . ":yearMonths");
@@ -58,4 +54,9 @@ return function (App $app) {
     $group->get('/logs/{logFileName}', LogHandler::class . ":getLog");
     $group->delete('/logs/{logFileName}', LogHandler::class . ":deleteLog");
   })->add(new AuthMiddleware());
+
+  $app->options('/{routes:.*}', function (Request $request, Response $response) {
+    // CORS Pre-Flight OPTIONS Request Handler
+    return $response;
+  });
 };

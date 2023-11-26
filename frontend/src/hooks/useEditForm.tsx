@@ -73,7 +73,6 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
 
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
     const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
 
     try {

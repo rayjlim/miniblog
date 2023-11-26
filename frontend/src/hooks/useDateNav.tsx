@@ -7,7 +7,7 @@ import {
 const useDateNav = (updateDate: (date: string) => void, date: string) => {
   const inputDate = useRef<HTMLInputElement>(null);
   /**
-   * Handle change in day Previous | Next
+   * Handle change in day Previous | Next | Today
    * @function
    * @param  {Object} e Event of Button click
    */
@@ -44,4 +44,3 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
 };
 
 export default useDateNav;
-

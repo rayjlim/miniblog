@@ -12,14 +12,9 @@ const useApp = () => {
       if (!globalContext) {
         try {
           const response = await fetch(`${REST_ENDPOINT}/settings/`, {
-            method: 'GET',
             mode: 'cors',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-            },
           });
-
+          console.log(response.ok);
           if (response.ok) {
             const results = await response.json();
             setGlobalContext(results);

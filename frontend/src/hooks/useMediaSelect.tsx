@@ -17,14 +17,11 @@ const useMediaSelect = (mediaDefault: MediaType) => {
     console.log(`xhrCall ${url}`);
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
     const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
-    const response = await fetch(
-      url,
-      {
-        method: 'GET',
-        headers: requestHeaders,
-      },
+
+    const response = await fetch(url, {
+      headers: requestHeaders,
+    },
     );
     console.log('response :>> ', response);
     const random = Math.random();
