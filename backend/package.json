@@ -1,9 +1,15 @@
 {
+  "watch": {
+    "test": {
+        "patterns":["src"],
+        "extensions": "php"
+    }
+  },
   "scripts": {
     "test": "vendor\\bin\\codecept run --steps",
-    "test:watch": "watch \"npm run --silent test\" src\\"
+    "watch": "npm-watch"
   },
   "devDependencies": {
-    "watch": "^1.0.2"
+    "npm-watch": "^0.11.0"
   }
 }
