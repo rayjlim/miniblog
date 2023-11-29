@@ -16,7 +16,7 @@ vi.stubGlobal('fetch', fetchMock);
 const RealDate = Date.now
 let spy: any = null;
 
-console.log = () => {};
+console.log = () => { };
 
 describe("DateNav component", () => {
   beforeAll(() => {
@@ -57,9 +57,9 @@ describe("DateNav component", () => {
   it("should render DateNav component correctly", () => {
     const mockCallBack = jest.fn();
     const tree = renderer
-    .create(<DateNav updateDate={mockCallBack} date={'2023-11-12'} />)
-    .toJSON();
-  expect(tree).toMatchSnapshot();
+      .create(<DateNav updateDate={mockCallBack} date={'2023-11-12'} />)
+      .toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   it("should go to Today on btn click", () => {
@@ -69,7 +69,7 @@ describe("DateNav component", () => {
     const input = screen.getByLabelText('date-input');
 
     expect(input).toBeInTheDocument();
-    fireEvent.change(input, {target: {value: '2022-01-01'}});
+    fireEvent.change(input, { target: { value: '2022-01-01' } });
 
     const btn = screen.getByText(/Today/);
     expect(btn).toBeInTheDocument();
@@ -103,6 +103,7 @@ describe("DateNav component", () => {
     expect(mockCallBack).toHaveBeenCalledTimes(1);
     expect(mockCallBack.mock.calls[0][0]).toBe('2023-11-11');
   });
+
   it("should go to new date on input select", () => {
     const mockCallBack = jest.fn();
     render(<DateNav updateDate={mockCallBack} date={'2023-11-10'} />);
@@ -110,7 +111,7 @@ describe("DateNav component", () => {
     const input = screen.getByLabelText('date-input');
 
     expect(input).toBeInTheDocument();
-    fireEvent.change(input, {target: {value: '2022-01-01'}});
+    fireEvent.change(input, { target: { value: '2022-01-01' } });
 
     expect(mockCallBack).toHaveBeenCalledTimes(1);
     expect(mockCallBack.mock.calls[0][0]).toBe('2022-01-01');
