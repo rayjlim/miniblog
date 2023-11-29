@@ -16,7 +16,7 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
     const refTextarea = textareaInput.current || { value: '' };
-    console.log('textarea.value :>> ', refTextarea.value);
+    // console.log('textarea.value :>> ', refTextarea.value);
     refTextarea.value = refTextarea.value.replace(pattern, replacement);
 
     setContent(refTextarea.value);
@@ -95,7 +95,6 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
   }
 
   function checkKeyPressed(e: any) {
-    console.log(`EditForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
       // Note: this is a hack because the content value is taken from the init value
@@ -110,7 +109,7 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
 
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, [entry]);
+  }, [entry.content]);
   return {handleDelete, textareaInput, textChange, content, handleSave, setDate, date};
 };
 
