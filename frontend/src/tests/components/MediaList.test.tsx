@@ -1,15 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
 import MediaList from "../../components/MediaList";
 
 const fetchMock = vi.fn(() => ({
-  json: vi.fn(()=> Promise.resolve({uploadDirs:['dir1'], dirContent: ['media1']})),
+  json: vi.fn(() => act(() => Promise.resolve({ uploadDirs: ['dir1'], dirContent: ['media1'] }))),
   ok: true,
 }));
 
 vi.stubGlobal('fetch', fetchMock);
+console.log = () => { };
 
 describe("MediaList component", () => {
   afterEach(() => {
@@ -17,7 +18,8 @@ describe("MediaList component", () => {
   })
 
   it("should render MediaList component correctly", () => {
-    render(<MediaList onMediaSelect={() => { }} />);
+
+    render(<MediaList onMediaSelect={() => { }} />)
     const element = screen.getByText(/Dirs/);
     expect(element).not.toBeNull();
     expect(element).toBeInTheDocument();
