@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import renderer from 'react-test-renderer';
 
 import { vi } from 'vitest';
 import jest from 'jest-mock';
@@ -51,7 +52,14 @@ describe("DateNav component", () => {
     expect(btn2).toBeInTheDocument();
     const btn3 = screen.getByText(/Today/);
     expect(btn3).toBeInTheDocument();
+  });
 
+  it("should render DateNav component correctly", () => {
+    const mockCallBack = jest.fn();
+    const tree = renderer
+    .create(<DateNav updateDate={mockCallBack} date={'2023-11-12'} />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
   });
 
   it("should go to Today on btn click", () => {

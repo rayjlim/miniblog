@@ -1,0 +1,50 @@
+// Vitest Snapshot v1
+
+exports[`DateNav component > should render DateNav component correctly 1`] = `
+<div
+  className="grid-3mw container"
+>
+  <button
+    className="btn btn-info btn-lrg"
+    id="prevBtn"
+    onClick={[Function]}
+    title="alt + comma"
+    type="button"
+    value="-1"
+  >
+    <i
+      className="fa fa-chevron-left"
+    />
+    Prev
+  </button>
+  <div>
+    <input
+      aria-label="date-input"
+      className="form-control"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+  <button
+    className="btn btn-success btn-lrg"
+    id="nextBtn"
+    onClick={[Function]}
+    title="alt + period"
+    type="button"
+    value="1"
+  >
+    Next
+    <i
+      className="fa fa-chevron-right"
+    />
+  </button>
+  <button
+    className="btn btn-warning btn-lrg"
+    onClick={[Function]}
+    type="button"
+    value="today"
+  >
+    Today
+  </button>
+</div>
+`;
