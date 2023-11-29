@@ -56,7 +56,7 @@ const Search = () => {
     }
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  });
+  }, []);
 
   return (
     <>
