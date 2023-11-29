@@ -7,6 +7,7 @@ import '../Types';
 const CLOSED = 0;
 const ADD = 1;
 const EDIT = 2;
+import '../Types';
 
 const AddEditForm = ({
   date,
@@ -14,7 +15,7 @@ const AddEditForm = ({
   onSuccess,
 }: {
   date: string,
-  entry: any,
+  entry: EntryType|null,
   onSuccess: () => void,
 }) => {
   const [componentMode, setComponentMode] = useState(CLOSED);
@@ -42,7 +43,7 @@ const AddEditForm = ({
 
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, [entry]);
+  }, [entry?.content]);
 
   return (
     <>

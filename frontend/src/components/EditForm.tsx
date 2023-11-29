@@ -8,7 +8,7 @@ import './EditForm.css';
 
 const propTypes = {
   entry: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     content: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   }).isRequired,
@@ -17,7 +17,7 @@ const propTypes = {
 
 type EditFormProps = PropTypes.InferProps<typeof propTypes>;
 
-const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: {entry: any, onSuccess: (msg: string)=>void}) => {
+const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: {entry: EntryType|null, onSuccess: (msg: string)=>void}) => {
 
   const { handleDelete,
     textareaInput,
