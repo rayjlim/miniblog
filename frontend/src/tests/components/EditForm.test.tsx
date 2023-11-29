@@ -26,7 +26,7 @@ describe("EditForm component", () => {
 
   it("should render EditForm component correctly", () => {
 
-    render(<EditForm entry={{id: '1', content: 'entry text', date: '2000-01-01'}} onSuccess={()=>{}}/>);
+    render(<EditForm entry={{id: 1, content: 'entry text', date: '2000-01-01'}} onSuccess={()=>{}}/>);
     const element = screen.getByText(/Cancel/);
     expect(element).not.toBeNull();
     expect(element).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe("EditForm component", () => {
 
     const mockCallBack = jest.fn();
 
-    render(<EditForm entry={{id: '1', content: 'entry text', date: '2000-01-01'}} onSuccess={mockCallBack}/>);
+    render(<EditForm entry={{id: 1, content: 'entry text', date: '2000-01-01'}} onSuccess={mockCallBack}/>);
     const btn = screen.getByTestId('cancelBtn');
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn);
@@ -48,7 +48,7 @@ describe("EditForm component", () => {
   it("should Save content on submit", async () => {
     const mockSuccessCb = jest.fn();
 
-    render(<EditForm entry={{id: '1', content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
+    render(<EditForm entry={{id: 1, content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
     const btn = screen.getByTestId('saveBtn');
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn)
@@ -65,7 +65,7 @@ describe("EditForm component", () => {
   it("should Delete call and respond", async () => {
     const mockSuccessCb = jest.fn();
 
-    render(<EditForm entry={{id: '2', content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
+    render(<EditForm entry={{id: 2, content: 'entry text', date: '2000-01-01'}} onSuccess={mockSuccessCb}/>);
     const btn = screen.getByTestId('deleteBtn');
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn)
