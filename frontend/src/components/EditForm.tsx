@@ -17,15 +17,22 @@ const propTypes = {
 
 type EditFormProps = PropTypes.InferProps<typeof propTypes>;
 
-const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: {entry: EntryType|null, onSuccess: (msg: string)=>void}) => {
+const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: { entry: EntryType | null, onSuccess: (msg: string) => void }) => {
+  const escapedContent = entry?.content.replace(
+    /<br\s*\/>/g,
+    `
+`,
+  );
 
-  const { handleDelete,
+  const {
     textareaInput,
-    textChange,
     content,
+    dateInput,
+    textChange,
     handleSave,
-    setDate,
-    date } = useEditForm(entry, onSuccess);
+    handleDelete,
+  } = useEditForm(entry, onSuccess);
+
   return (
     <div className="well">
       <h2>Edit Entry</h2>
@@ -59,7 +66,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: {entry
           className="form-control"
           placeholder="Add ..."
           rows={8}
-          defaultValue={content}
+          defaultValue={escapedContent}
         />
       </div>
       <div className="editBtns">
@@ -77,8 +84,9 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: {entry
         </button>
         <input
           type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
+          defaultValue={entry?.date || ''}
+          ref={dateInput}
+
         />
         <button
           onClick={() => onSuccess('')}

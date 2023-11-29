@@ -1,45 +1,39 @@
 import { useState, useEffect, useRef } from 'react';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-
-const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
-
-  const escapedContent = entry?.content.replace(
-    /<br\s*\/>/g,
-    `
-`,
-  );
-  const [content, setContent] = useState<string>(escapedContent);
-  const [date, setDate] = useState<string>(entry.date);
+import '../Types';
+const useEditForm = (entry: EntryType | null, onSuccess: (msg: string) => void) => {
+  const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);
+  const dateInput = useRef<HTMLInputElement>(null);
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
     const refTextarea = textareaInput.current || { value: '' };
-    // console.log('textarea.value :>> ', refTextarea.value);
-    refTextarea.value = refTextarea.value.replace(pattern, replacement);
 
+    refTextarea.value = refTextarea.value.replace(pattern, replacement);
     setContent(refTextarea.value);
   }
 
   async function handleSave() {
-    console.log('handleSave entry :', content, date);
+    console.log('handleSave entry :');
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
+    dateInput
     const options = {
       method: 'PUT',
       body: JSON.stringify({
-        content,
-        date,
+        content: textareaInput.current?.value || '',
+        date: dateInput.current?.value || '',
       }),
       headers: requestHeaders
     };
 
     try {
       const response = await fetch(
-        `${REST_ENDPOINT}/api/posts/${entry.id}`,
+        `${REST_ENDPOINT}/api/posts/${entry?.id}`,
         {
           ...options,
           mode: 'cors',
@@ -68,7 +62,7 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
     if (!go) {
       return;
     }
-    const { id } = entry;
+    const id = entry?.id;
     console.log(`handleDelete ${id}`);
 
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
@@ -109,8 +103,9 @@ const useEditForm = (entry: any, onSuccess: (msg: string)=>void) => {
 
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, [entry.content]);
-  return {handleDelete, textareaInput, textChange, content, handleSave, setDate, date};
+  }, []);
+  return { textareaInput, content, dateInput, handleDelete, textChange, handleSave };
 };
 
 export default useEditForm;
+
