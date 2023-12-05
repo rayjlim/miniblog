@@ -1,4 +1,4 @@
-import { format, subYears, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import Select from 'react-select';
 
 import { FULL_DATE_FORMAT } from '../constants';
