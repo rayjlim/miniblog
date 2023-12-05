@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 import '../Types';
-const useEditForm = (entry: EntryType | null, onSuccess: (msg: string) => void) => {
+const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);
   const dateInput = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string) => void) 
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
-    dateInput
+    const newEntry = {...entry, content: textareaInput.current?.value || '', date: dateInput.current?.value || ''};
     const options = {
       method: 'PUT',
       body: JSON.stringify({
@@ -46,10 +46,10 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string) => void) 
     } catch (error) {
       console.log(error);
       alert(error);
-      onSuccess('Edit fail' + error);
+      onSuccess('Edit fail' + error, newEntry);
     }
 
-    onSuccess('Edit Done');
+    onSuccess('Edit Done', newEntry);
   }
 
   /**
@@ -85,7 +85,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string) => void) 
       console.log(error);
       alert(error);
     }
-    onSuccess('Delete Done');
+    onSuccess('Delete Done', {});
   }
 
   function checkKeyPressed(e: any) {

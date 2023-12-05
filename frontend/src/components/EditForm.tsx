@@ -1,23 +1,12 @@
 import { FunctionComponent } from 'react';
-import PropTypes from 'prop-types';
+
 import MarkdownDisplay from './MarkdownDisplay';
 import '../Types';
 import useEditForm from '../hooks/useEditForm';
 
 import './EditForm.css';
 
-const propTypes = {
-  entry: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    content: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-  }).isRequired,
-  onSuccess: PropTypes.func.isRequired,
-};
-
-type EditFormProps = PropTypes.InferProps<typeof propTypes>;
-
-const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: { entry: EntryType | null, onSuccess: (msg: string) => void }) => {
+const EditForm: FunctionComponent<any> = ({ entry, onSuccess, }: { entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void }) => {
   const escapedContent = entry?.content.replace(
     /<br\s*\/>/g,
     `
@@ -89,7 +78,7 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: { entr
 
         />
         <button
-          onClick={() => onSuccess('')}
+          onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
           className="btn btn-warning pull-right"
           data-testid="cancelBtn"
           id="cancelBtn"
@@ -109,5 +98,3 @@ const EditForm: FunctionComponent<EditFormProps> = ({ entry, onSuccess }: { entr
 };
 
 export default EditForm;
-
-EditForm.propTypes = propTypes;

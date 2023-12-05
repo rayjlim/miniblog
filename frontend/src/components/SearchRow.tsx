@@ -4,14 +4,14 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 import { DISPLAY_DATE_FORMAT, FULL_DATE_FORMAT } from '../constants';
 import '../Types';
 
-const SearchRow = ({ searchText, entry, showEditForm }:
+const SearchRow = ({ searchText, entry, showEditForm, refs }:
   {
-    searchText: string, entry: EntryType, showEditForm: (entry: EntryType) => void
+    searchText: string, entry: EntryType, showEditForm: (entry: EntryType) => void, refs: any
   }) => {
   const dateFormated = format(parse(entry.date, FULL_DATE_FORMAT, new Date()),
     DISPLAY_DATE_FORMAT);
 
-  const highlightSearchText = (searchTextValue: string, entryLocal: EntryType)=>{
+  const highlightSearchText = (searchTextValue: string, entryLocal: EntryType) => {
     const reg = new RegExp(searchTextValue, 'gi');
     return entryLocal.content.replace(reg, (str: any) => `<b>${str}</b>`);
   }
@@ -20,7 +20,7 @@ const SearchRow = ({ searchText, entry, showEditForm }:
     : entry.content;
 
   return (
-    <li key={entry.id}>
+    <li key={entry.id} ref={refs[entry.id]}>
       <button
         type="button"
         onClick={() => showEditForm(entry)}
