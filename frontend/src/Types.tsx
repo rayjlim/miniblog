@@ -18,3 +18,11 @@ type MediaType = {
   prepend: string,
   imgUrl: string,
 }
+
+type SearchParamsType = {
+  startDate: string,
+  endDate: string,
+  resultsLimit?: number
+  searchParam: string,
+  postsCount: number
+}
