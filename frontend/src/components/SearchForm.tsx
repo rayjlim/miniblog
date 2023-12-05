@@ -1,4 +1,4 @@
-import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { format, subYears, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import Select from 'react-select';
 
 import { FULL_DATE_FORMAT } from '../constants';
@@ -105,6 +105,16 @@ const SearchForm = ({ setPosts, setSearchParams }: {
           className="plainLink rangeBtn"
         >
           12 mths
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            changeDate(format(new Date('1998-01-01'), FULL_DATE_FORMAT), 'start');
+            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
+          }}
+          className="plainLink rangeBtn"
+        >
+          All
         </button>
         <Select
           options={yearMonths}
