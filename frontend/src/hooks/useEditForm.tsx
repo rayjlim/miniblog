@@ -21,7 +21,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(AUTH_HEADER, token);
-    const newEntry = {...entry, content: textareaInput.current?.value || '', date: dateInput.current?.value || ''};
+    const newEntry = {...entry, id: entry?.id || 0, content: textareaInput.current?.value || '', date: dateInput.current?.value || ''};
     const options = {
       method: 'PUT',
       body: JSON.stringify({
@@ -85,7 +85,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       console.log(error);
       alert(error);
     }
-    onSuccess('Delete Done', {});
+    onSuccess('Delete Done', {id: -1, content: '', date: ''});
   }
 
   function checkKeyPressed(e: any) {

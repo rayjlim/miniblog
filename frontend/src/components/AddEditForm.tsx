@@ -62,7 +62,7 @@ const AddEditForm = ({
       )}
 
       {componentMode === EDIT && entry && (
-        <EditForm entry={entry} onSuccess={msg => editDone(msg)} />
+        <EditForm entry={entry} onSuccess={(msg: string) => editDone(msg)} />
       )}
     </>
   );
