@@ -22,7 +22,12 @@ const SearchForm = ({ setPosts, setSearchParams }: {
         placeholder="Search term"
         onChange={() => debouncedSearch()}
       />
-      Filter:
+      <input type="button" onClick={() => {
+        const target = searchText?.current || { value: '' };
+        target.value = '';
+        debouncedSearch();
+      }} value="Clear"/>
+        Filter:
       <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
       <input
         type="text"
