@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.24.0](https://github.com/rayjlim/miniblog/compare/v2.23.0...v2.24.0) (2023-12-07)
+
+
+### Features
+
+* [#270](https://github.com/rayjlim/miniblog/issues/270) scroll to impl in same day ([00d02ac](https://github.com/rayjlim/miniblog/commit/00d02ac72c9c2ce7960a22a42b0183c2ff5237fd))
+
+
+### Bug Fixes
+
+* [#270](https://github.com/rayjlim/miniblog/issues/270) remove deleted list items ([742c7c9](https://github.com/rayjlim/miniblog/commit/742c7c961fab6b177a8dee5c53690e3d658fc857))
+* impl useCallback ([5244f49](https://github.com/rayjlim/miniblog/commit/5244f49c2c7adca81d4a71adcec1262d0d4e01ef))
+* refactor search form ([5c58ed9](https://github.com/rayjlim/miniblog/commit/5c58ed93665e1bf2e825eede2b94cbb394f9ec02))
+* remove unused ([f30fb4e](https://github.com/rayjlim/miniblog/commit/f30fb4ec60d3be5c277374075543200409e6b86e))
+* useCallback ([ebf8cab](https://github.com/rayjlim/miniblog/commit/ebf8cabc81f892b57cfcf2cfd534752afb93da3e))
+
 ## [2.23.0](https://github.com/rayjlim/miniblog/compare/v2.22.0...v2.23.0) (2023-12-07)
 
 
