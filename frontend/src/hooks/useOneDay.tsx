@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { format } from 'date-fns';
@@ -19,7 +19,7 @@ const useOneDay = (pageMode?: number) => {
   const isMounted = useRef<boolean>(false);
   // scrollToLast: 0,
 
-  function loadDay(targetDate?: string) {
+  const loadDay = useCallback((targetDate?: string) => {
     console.log(`loadDay : ${pageDate} pagemode: ${pageMode}`);
 
     if (!pageDate) {
@@ -64,7 +64,7 @@ const useOneDay = (pageMode?: number) => {
         // toast.error(`loading error : ${err}`);
       }
     })();
-  }
+  }, [editEntry, pageDate]);
 
   function checkKeyPressed(e: KeyboardEvent) {
     console.log(`OneDay: handle key presss ${e.key}`);
