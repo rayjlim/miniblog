@@ -5,18 +5,20 @@ import '../Types';
 
 const EntryList = ({
   entries,
-  showEditForm,
+  onShowEdit,
+  refs
 }: {
   entries: EntryType[],
-  showEditForm: (entry: EntryType) => void,
+  onShowEdit: (entry: EntryType) => void,
+  refs: any
 }) => {
   return (
     <section className="container">
       <ul className="entriesList">
         {entries.map((entry: EntryType) => (
-          <li key={entry.id}>
+          <li key={entry.id} ref={refs[entry.id]}>
             <button
-              onClick={() => showEditForm(entry)}
+              onClick={() => onShowEdit(entry)}
               className="plainLink"
               type="button"
             >

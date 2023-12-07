@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
 import '../Types';
@@ -16,25 +15,19 @@ const AddEditForm = ({
 }: {
   date: string,
   entry: EntryType|null,
-  onSuccess: () => void,
+  onSuccess: (msg: string, newEntry: EntryType) => void,
 }) => {
   const [componentMode, setComponentMode] = useState(CLOSED);
 
-  function showAddForm() {
-    console.log('showAddForm#state.date :', date);
-    setComponentMode(ADD);
-  }
-
-  function editDone(msg: string) {
+  function editDone(msg: string, newEntry: EntryType) {
     setComponentMode(CLOSED);
-    msg !== '' && toast(msg);
-    onSuccess();
+    onSuccess(msg, newEntry);
   }
 
   function checkKeyPressed(e: any) {
     console.debug(`AddForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 'a') {
-      showAddForm();
+      setComponentMode(ADD);
     }
   }
 
@@ -52,17 +45,17 @@ const AddEditForm = ({
           type="button"
           className="btn btn-default"
           id="addFormBtn"
-          onClick={() => showAddForm()}
+          onClick={() => setComponentMode(ADD)}
         >
           Show Add Form
         </button>
       )}
       {componentMode === ADD && (
-        <AddForm date={date} onSuccess={msg => editDone(msg)} content="" />
+        <AddForm date={date} onSuccess={msg => editDone(msg, {id: 0, content: '', date: ''})} content="" />
       )}
 
       {componentMode === EDIT && entry && (
-        <EditForm entry={entry} onSuccess={(msg: string) => editDone(msg)} />
+        <EditForm entry={entry} onSuccess={(msg: string, newEntry: EntryType) => editDone(msg, newEntry)} />
       )}
     </>
   );

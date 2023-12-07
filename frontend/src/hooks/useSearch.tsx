@@ -27,7 +27,7 @@ const useSearch = () => {
 
   function resetEntryForm(msg: string, newEntry: EntryType) {
     if (msg) {
-      toast('Edit Done');
+      toast(msg);
     }
     let targetId = editEntry?.id || 0;
 
