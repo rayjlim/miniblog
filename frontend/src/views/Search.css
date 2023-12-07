@@ -1,6 +1,6 @@
-.filterType {
+.filter-type {
   display: 'inline';
-  margin: '0 1em';
+  margin: '0';
   width: 1.12em;
   padding: 0;
   text-align: center;
@@ -11,6 +11,12 @@
 .margin-rt-1 {
   margin-right: 1em;
 }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .search-date-container {
   display: flex;
   justify-content: center;
