@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.23.0](https://github.com/rayjlim/miniblog/compare/v2.22.0...v2.23.0) (2023-12-07)
+
+
+### Features
+
+* [#265](https://github.com/rayjlim/miniblog/issues/265) btn for search all dates ([42fbf30](https://github.com/rayjlim/miniblog/commit/42fbf3044a1e9c45f71ef32ea52a7a3bc2cdfa02))
+* [#266](https://github.com/rayjlim/miniblog/issues/266) clear search btn ([2c61c79](https://github.com/rayjlim/miniblog/commit/2c61c7938c16c0f37e48cf9da446b533da84bf79))
+* snapshot testing with DateNav ([8bdbda2](https://github.com/rayjlim/miniblog/commit/8bdbda2a12277556bc61dbf63332801e470beacd))
+
+
+### Bug Fixes
+
+* [#87](https://github.com/rayjlim/miniblog/issues/87) scroll to ref after edit ([22ff7e6](https://github.com/rayjlim/miniblog/commit/22ff7e6ffda47152bd2623f2f846df6ece561937))
+* add npm-watch for auto test run ([0adcc20](https://github.com/rayjlim/miniblog/commit/0adcc20c66f7a0093ddbbb013cac137292689177))
+* clean up console logs ([bd3207f](https://github.com/rayjlim/miniblog/commit/bd3207f852f81439e096d6d1cb8b6e69114181d8))
+* editform clean up state/refs ([754e5f3](https://github.com/rayjlim/miniblog/commit/754e5f34089ac2444b80f8ce173ae28d53d70440))
+* editform test update ([82d4e75](https://github.com/rayjlim/miniblog/commit/82d4e75de133130682d9e5d503b7e7bed32dc42d))
+* headers put back to index.php; fetch calls cleaned up ([a6b160c](https://github.com/rayjlim/miniblog/commit/a6b160c32464fb5d524076d36ea4ca780b09f66d))
+* missed types for react renderer ([8b43688](https://github.com/rayjlim/miniblog/commit/8b43688c8ed7ce6ff831c7f2525b2f3e541a103f))
+* move search logic to custom hook ([9a55aea](https://github.com/rayjlim/miniblog/commit/9a55aeacbbd2fa77094c4b20931b8ee211dec1b3))
+* no dep for useEffect ([2030224](https://github.com/rayjlim/miniblog/commit/2030224bb6fef21c22687a185aedeb355148c0f9))
+* typescript errors ([c53fa65](https://github.com/rayjlim/miniblog/commit/c53fa653548ecd28c06dfe34c9610982673295d3))
+* update name of workspace ([be49fe9](https://github.com/rayjlim/miniblog/commit/be49fe91436da49aff34f62139dcf136acb0f749))
+* use EntryType for add edit forms ([a3e7f19](https://github.com/rayjlim/miniblog/commit/a3e7f1949be11a0bc3d2b3b13a2a417b0486307a))
+* wrap act around dom change ([b2c6433](https://github.com/rayjlim/miniblog/commit/b2c64331a13df1d2a2f14c9bd218fe1e9ba55056))
+
 ## [2.22.0](https://github.com/rayjlim/miniblog/compare/v2.21.0...v2.22.0) (2023-11-25)
 
 
