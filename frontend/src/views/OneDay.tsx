@@ -17,7 +17,7 @@ const SAMEDAY = 1;
 
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
-  const { editEntry, setEditEntry, pageDate, setPageDate, entries, loadDay }
+  const { editEntry, setEditEntry, pageDate, setPageDate, entries, handleClick, refs, resetEntryForm }
     = useOneDay(pageMode || ONEDAY);
 
   const headerLinks = {
@@ -26,6 +26,7 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
     sameday: !pageMode || pageMode === ONEDAY,
   };
   const isOneDay = (!pageMode || pageMode === ONEDAY);
+
   return (
     <>
       <ToastContainer />
@@ -36,18 +37,30 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
       </h1>
 
       <DateNav updateDate={setPageDate} date={pageDate} />
-
+      <ul className="noshow">
+        {entries.map((item: EntryType) => (
+          <li key={item.id}>
+            <button
+              type="button"
+              onClick={() => handleClick(item.id)}
+              id={`btn${item.id}`}
+            >
+              Scroll Item {item.id} Into View
+            </button>
+          </li>
+        ))}
+      </ul>
       <section className="container">
         {isOneDay && <WeightInfo date={pageDate} />}
         <AddEditForm
           date={pageDate}
           entry={editEntry}
-          onSuccess={loadDay}
+          onSuccess={resetEntryForm}
         />
       </section>
-
-      <EntryList entries={entries} showEditForm={setEditEntry} />
-
+      {!editEntry &&
+        <EntryList entries={entries} onShowEdit={setEditEntry} refs={refs} />
+      }
       {isOneDay && <MovieList date={pageDate} />}
       {isOneDay && <Inspiration />}
       <Footer />
