@@ -64,7 +64,7 @@ const useOneDay = (pageMode?: number) => {
         // toast.error(`loading error : ${err}`);
       }
     })();
-  }, [editEntry, pageDate]);
+  }, [entries, editEntry, pageDate]);
 
   function checkKeyPressed(e: KeyboardEvent) {
     console.log(`OneDay: handle key presss ${e.key}`);
