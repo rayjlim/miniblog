@@ -25,9 +25,8 @@ const Search = () => {
         oneday: true,
         sameday: true
       }} />
-
-      <h1>Find Entries</h1>
       <section className="container">
+        <h1>Find Entries</h1>
         <SearchForm setPosts={setPosts} setSearchParams={setSearchParams as any} />
         <SearchAggregate searchParams={searchParams} />
 

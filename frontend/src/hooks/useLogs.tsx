@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
 
@@ -8,7 +8,7 @@ const useLogs = () => {
   const [logFileName, setLogFileName] = useState<string>('');
   const [logFile, setLogFile] = useState<string>('');
 
-  const getLog = async (log = '') => {
+  const getLog = useCallback(async (log = '') => {
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set(AUTH_HEADER, token);
@@ -27,11 +27,10 @@ const useLogs = () => {
     }
     console.error('response.status :', response.status);
     toast.error(`loading error : ${response.status}`);
-  };
+  }, [logs, logFileName, logFile]);
 
-  async function handleDelete(log: string) {
-    const go = window.confirm('You sure?');
-    if (!go) {
+  const handleDelete = async (log: string) => {
+    if (!window.confirm('You sure?')) {
       return;
     }
 

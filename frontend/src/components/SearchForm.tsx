@@ -14,28 +14,27 @@ const SearchForm = ({ setPosts, setSearchParams }: {
 
   return (
     <>
-      <input
-        id="searchText"
-        type="text"
-        className="form-control"
-        ref={searchText}
-        placeholder="Search term"
-        onChange={() => debouncedSearch()}
-      />
-      <input type="button" onClick={() => {
-        const target = searchText?.current || { value: '' };
-        target.value = '';
-        debouncedSearch();
-      }} value="Clear"/>
-        Filter:
-      <span>ALL: 0; TAGGED: 1; UNTAGGED: 2</span>
-      <input
-        type="text"
-        className="form-control filterType"
-        value={searchFilter}
-        placeholder="Search term"
-        onChange={e => setSearchFilter(parseInt(e.target.value))}
-      />
+      <div className="flex-row">
+        <input
+          id="searchText"
+          type="text"
+          className="form-control"
+          ref={searchText}
+          placeholder="Search term"
+          onChange={() => debouncedSearch()}
+        />
+        <input type="button" onClick={() => {
+          const target = searchText?.current || { value: '' };
+          target.value = '';
+          debouncedSearch();
+        }} value="Clear" />
+
+        <select name="filterType" onChange={e => setSearchFilter(parseInt(e.target.value))}>
+          <option value="0" selected={searchFilter === 0}>All</option>
+          <option value="1" selected={searchFilter === 1}>Tagged</option>
+          <option value="2" selected={searchFilter === 2}>Untagged</option>
+        </select>
+      </div >
       <div className="search-date-container">
         <div className="search-date-field">
           Start Date:
