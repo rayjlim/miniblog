@@ -62,7 +62,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     if (!go) {
       return;
     }
-    const id = entry?.id;
+    const id = entry?.id || 0;
     console.log(`handleDelete ${id}`);
 
     const token = window.localStorage.getItem(STORAGE_KEY) || '';
@@ -85,7 +85,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       console.log(error);
       alert(error);
     }
-    onSuccess('Delete Done', {id: -1, content: '', date: ''});
+    onSuccess('Delete Done', {id, content: 'DELETE', date: ''});
   }
 
   function checkKeyPressed(e: any) {

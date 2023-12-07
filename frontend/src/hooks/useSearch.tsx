@@ -27,17 +27,20 @@ const useSearch = () => {
 
   function resetEntryForm(msg: string, newEntry: EntryType) {
     if (msg) {
-      toast('Edit Done');
+      toast(msg);
     }
     let targetId = editEntry?.id || 0;
 
     setEditEntry(null);
 
-    // TODO: if delete action, remove entry from posts
-    const revisedPosts = posts.map(curr => {
-      return (curr.id === newEntry.id) ? newEntry : curr;
-    });
-    setPosts(revisedPosts);
+    if (newEntry.content === 'DELETE') {
+      const revisedPosts = posts.filter(curr => curr.id !== newEntry.id);
+      setPosts(revisedPosts);
+    }
+    else {
+      const revisedPosts = posts.map(curr => (curr.id === newEntry.id) ? newEntry : curr);
+      setPosts(revisedPosts);
+    }
 
     setTimeout(() => {
       // handleClick(targetId); // Not scrolling to location
