@@ -1,5 +1,5 @@
 import { createRef, useCallback, useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { format } from 'date-fns';
@@ -14,6 +14,8 @@ const SAMEDAY = 1;
 
 const useOneDay = (pageMode?: number) => {
   const navigate = useNavigate();
+  const routeParams = useParams();
+
   const [entries, setEntries] = useState<EntryType[]>([]);
   const [editEntry, setEditEntry] = useState<EntryType | null>(null);
   const [pageDate, setPageDate] = useState<string>(format(new Date(), FULL_DATE_FORMAT));
@@ -135,8 +137,9 @@ const useOneDay = (pageMode?: number) => {
         const param = loc.substring(loc.indexOf('?'));
         console.log('param :', param);
         const urlParams = new URLSearchParams(param);
+        console.log(`routeParams: ${JSON.stringify(routeParams)}`);
+        const pageDateParam = urlParams.get('date') || routeParams?.date || format(new Date(), FULL_DATE_FORMAT);
 
-        const pageDateParam = urlParams.get('date') || format(new Date(), FULL_DATE_FORMAT);
         setPageDate(pageDateParam);
         loadDay(pageDateParam || '');
         isMounted.current = true;

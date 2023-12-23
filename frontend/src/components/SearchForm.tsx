@@ -37,14 +37,12 @@ const SearchForm = ({ setPosts, setSearchParams }: {
       </div >
       <div className="search-date-container">
         <div className="search-date-field">
-          Start Date:
-          {' '}
+          {'Start Date: '}
           {startDateValue !== '' ? (
             <input type="date" value={startDate.current || ''} onChange={e => changeDate(e.target.value, 'start')} />
           ) : (
             <>
-              None
-              {' '}
+              {'None '}
               <button
                 type="button"
                 onClick={() => changeDate('', 'start')}
@@ -56,8 +54,7 @@ const SearchForm = ({ setPosts, setSearchParams }: {
           )}
         </div>
         <div className="search-date-field">
-          End Date:
-          {' '}
+          {'End Date: '}
           {endDateValue !== '' ? (
             <input type="date" onChange={e => changeDate(e.target.value, 'end')} value={endDate.current || ''} />
           ) : (

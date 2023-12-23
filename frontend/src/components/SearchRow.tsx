@@ -28,9 +28,8 @@ const SearchRow = ({ searchText, entry, showEditForm, refs }:
       >
         {dateFormated}
       </button>
-      <RouterNavLink to={`/oneday?pageMode=0&date=${entry.date}`}>
-        {' '}
-        <i className="fa fa-calendar-check" title="Same Day" />
+      <RouterNavLink to={`/oneday/${entry.date}`}>
+        <i className="fa fa-calendar-check icon-one-day" title="One Day"/>
       </RouterNavLink>
       <div className="markdownDisplay">
         <MarkdownDisplay source={content} />
