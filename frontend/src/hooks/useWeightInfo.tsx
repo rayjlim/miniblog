@@ -2,20 +2,20 @@ import { useQuery } from "react-query";
 import { useContext } from 'react';
 import MyContext from '../components/MyContext';
 
-const fetchData = async (TRACKS_API: string, date: string) => {
-  if (TRACKS_API !== '') {
-    const weightApiUrl = `${TRACKS_API}?start=${date}&end=${date}`;
-    const response = await fetch(weightApiUrl);
-
+const fetchData = async (api: string, date: string) => {
+  if (api !== '') {
+    const apiUrl = `${api}?start=${date}&end=${date}`;
+    const response = await fetch(apiUrl);
     const data = await response.json();
-    return data.data[0];
+    return data;
   }
 };
 
 const useWeightInfo = (date: string) => {
   const { TRACKS_API } = useContext(MyContext);
-  const { data: weight, error, isLoading } = useQuery(["postsData", date], () => fetchData(TRACKS_API, date));
-
+  const { data, error, isLoading } = useQuery(["weight", date], () => fetchData(TRACKS_API, date));
+  const weight = data?.data[0] || {count: 0};
+  console.log(weight);
   return { weight, isLoading, error }
 };
 

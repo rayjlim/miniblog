@@ -6,7 +6,10 @@ import './MovieWindow.css';
 import '../Types';
 
 const MovieList = ({ date }: { date: string }) => {
-  const { movies } = useMovies(date);
+  const { movies, isLoading, error } = useMovies(date);
+
+  if (isLoading) return <div>Load movies...</div>;
+  if (error) return <div>An error occurred: {error?.message}</div>;
 
   return (
     <section className="movieList">
