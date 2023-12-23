@@ -34,14 +34,18 @@ const App = () => {
                     <Route path="/media" element={<Media />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/oneday" element={<OneDay />} />
+                    <Route path="/oneday/:date" element={<OneDay />} />
                     <Route
                       path="/sameday"
                       element={<OneDay pageMode={SAMEDAY} />}
                     />
+                    <Route
+                      path="/sameday/:date"
+                      element={<OneDay pageMode={SAMEDAY} />}
+                    />
                     <Route path="/logs" element={<Logs />} />
                     <Route path="/login" element={<LoginPassword />} />
-                    <Route path="/" element={<OneDay />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<Navigate to="/oneday/" replace />} />
                   </Routes>
                 </BrowserRouter>
               </div>

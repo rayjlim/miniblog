@@ -28,7 +28,7 @@ const SearchRow = ({ searchText, entry, showEditForm, refs }:
       >
         {dateFormated}
       </button>
-      <RouterNavLink to={`/oneday?pageMode=0&date=${entry.date}`}>
+      <RouterNavLink to={`/oneday/${entry.date}`}>
         {' '}
         <i className="fa fa-calendar-check" title="Same Day" />
       </RouterNavLink>
