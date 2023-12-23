@@ -6,19 +6,7 @@ const SearchAggregate = ({searchParams}: any) =>{
     {searchParams !== null
       ? (
         <>
-          Date:
-          {' '}
-          {searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}
-          {' '}
-          to
-          {' '}
-          {searchParams.endDate !== '' ? searchParams.endDate : 'Now'}
-          , Limit:
-          {' '}
-          {searchParams.resultsLimit}
-          . Found
-          {' '}
-          {searchParams.postsCount}
+          {` Date: ${searchParams.startDate !== '' ? searchParams.startDate : 'Beginning'}  to ${searchParams.endDate !== '' ? searchParams.endDate : 'Now'}, Limit: ${searchParams.resultsLimit}. Found ${searchParams.postsCount}`}
         </>
       )
       : (<>No Search Params</>)}

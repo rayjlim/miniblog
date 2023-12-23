@@ -40,12 +40,11 @@ const EditForm: FunctionComponent<any> = ({ entry, onSuccess, }: { entry: EntryT
         <button
           onClick={handleDelete}
           data-testid="deleteBtn"
-          className="btn btn-danger pull-right delete-btn"
+          className="btn btn-danger pull-right delete-btn spaced-link"
           type="button"
         >
           <i className="fa fa-trash" />
-          {' '}
-          Delete
+          <span>Delete</span>
         </button>
       </div>
       <div className="form-group">
@@ -61,15 +60,14 @@ const EditForm: FunctionComponent<any> = ({ entry, onSuccess, }: { entry: EntryT
       <div className="editBtns">
         <button
           onClick={() => handleSave()}
-          className="btn btn-primary"
+          className="btn btn-primary spaced-link"
           data-testid="saveBtn"
           id="saveBtn"
           type="button"
           title="alt + s"
         >
           <i className="fa fa-save" />
-          {' '}
-          Save
+          <span>Save</span>
         </button>
         <input
           type="date"
@@ -79,15 +77,14 @@ const EditForm: FunctionComponent<any> = ({ entry, onSuccess, }: { entry: EntryT
         />
         <button
           onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
-          className="btn btn-warning pull-right"
+          className="btn btn-warning pull-right spaced-link"
           data-testid="cancelBtn"
           id="cancelBtn"
           type="button"
           title="ESC"
         >
           <i className="fa fa-ban" />
-          {' '}
-          Cancel
+          <span>Cancel</span>
         </button>
       </div>
       <div className="markdownDisplay preview dashBorder">

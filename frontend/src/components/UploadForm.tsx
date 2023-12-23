@@ -82,8 +82,7 @@ const UploadForm = () => {
           />
           <div className="form-group">
             <label htmlFor="fileToUpload">
-              Select image to upload:
-              {' '}
+              {'Select image to upload: '}
               <input
                 type="file"
                 name="fileToUpload"
