@@ -1,48 +1,22 @@
-import { useContext, useState, useEffect } from 'react';
-
+import { useQuery } from "react-query";
+import { useContext } from 'react';
 import MyContext from '../components/MyContext';
 
+const fetchData = async (TRACKS_API: string, date: string) => {
+  if (TRACKS_API !== '') {
+    const weightApiUrl = `${TRACKS_API}?start=${date}&end=${date}`;
+    const response = await fetch(weightApiUrl);
+
+    const data = await response.json();
+    return data.data[0];
+  }
+};
+
 const useWeightInfo = (date: string) => {
-  const [weight, setWeight] = useState<{ count: number, comment: string }>({ count: 0, comment: '' });
-  const {
-    TRACKS_API
-  } = useContext(MyContext);
+  const { TRACKS_API } = useContext(MyContext);
+  const { data: weight, error, isLoading } = useQuery(["postsData", date], () => fetchData(TRACKS_API, date));
 
-  async function xhrCall(url: string, apiDescription: string) {
-    console.log(`xhrCall ${url} : ${apiDescription}`);
-    try {
-      const apiResponse = await fetch(url, { cache: 'no-cache' });
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        return data;
-      }
-      throw new Error(`${apiResponse.status}`);
-    } catch (err) {
-      console.error(err);
-    }
-    return false;
-  }
-
-  async function getWeight(date: string) {
-    const weightApi = `${TRACKS_API}?start=${date}&end=${date}`;
-    const data = await xhrCall(weightApi, 'weight');
-    if (data?.data[0]?.count) {
-      setWeight(data.data[0]);
-    } else {
-      setWeight({ count: 0, comment: '' });
-    }
-  }
-
-  useEffect(() => {
-    const ueFunc = async () => {
-      if (TRACKS_API !== '') {
-        await getWeight(date);
-      }
-    };
-    ueFunc();
-  }, [date]);
-
-  return { weight }
+  return { weight, isLoading, error }
 };
 
 export default useWeightInfo;

@@ -1,20 +1,18 @@
-import PropTypes from 'prop-types';
-
 import useWeightInfo from '../hooks/useWeightInfo';
 
 const WeightInfo = ({ date }: { date: string }) => {
-  const { weight } = useWeightInfo(date);
+  const { weight, isLoading, error } = useWeightInfo(date);
+
+  if (isLoading) return <div>Load weight...</div>;
+  if (error) return <div>An error occurred: {error?.message}</div>;
 
   return (
     <span className="weight">
-      Weight :
-      {weight.count}
-      {weight.comment && weight.comment !== '' && <span title={weight.comment}>...</span>}
-    </span>);
+      {`Weight : ${weight?.count}`}
+      {weight?.comment && <span title={weight?.comment}>...</span>}
+    </span>
+  );
+
 };
 
 export default WeightInfo;
-
-WeightInfo.propTypes = {
-  date: PropTypes.string.isRequired
-};
