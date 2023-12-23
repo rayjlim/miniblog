@@ -7,7 +7,7 @@ type LinksPropType = {
   sameday: boolean,
   search: boolean
 }
-const Footer = ({ links }: { links?: LinksPropType }) => {
+const Header = ({ links }: { links?: LinksPropType }) => {
   return (
     <nav className="navbar navbar-expand-sm navbar-light bg-light">
       {links?.search && <RouterNavLink to="/search">
@@ -30,9 +30,9 @@ const Footer = ({ links }: { links?: LinksPropType }) => {
   );
 };
 
-export default Footer;
+export default Header;
 
-Footer.defaultProps = {
+Header.defaultProps = {
   links: {
     search: true,
     sameday: true,
