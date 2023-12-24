@@ -8,7 +8,7 @@ import useLogs from '../hooks/useLogs';
 import './Logs.css';
 
 const Logs = () => {
-  const { logs, logFileName, logFile, handleDelete, getLog } = useLogs();
+  const { logs, logFileName, logFile, handleDelete, setLogFileName, error, isLoading } = useLogs();
 
   const footerLinks = {
     upload: false,
@@ -16,6 +16,10 @@ const Logs = () => {
     logs: false,
     oneday: true,
   };
+
+  if (isLoading) return <div>Load ...</div>;
+  if (error) return <div>An error occurred: {error?.message}</div>;
+
   return (
     <>
       <ToastContainer />
@@ -24,7 +28,7 @@ const Logs = () => {
       <ul>
         {logs.length &&
           logs.map((log: string) => (
-            <LogRow log={log} handleDelete={handleDelete} getLog={getLog} />
+            <LogRow log={log} handleDelete={handleDelete} getLog={(name)=> setLogFileName(name)} key={log}/>
           ))}
       </ul>
       <h2>Log File -{logFileName}</h2>
