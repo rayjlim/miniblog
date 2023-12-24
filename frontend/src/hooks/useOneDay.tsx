@@ -1,4 +1,5 @@
 import { createRef, useCallback, useState, useEffect, useRef } from 'react';
+import { useQuery } from "react-query";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -12,14 +13,52 @@ import {
 
 const SAMEDAY = 1;
 
+const fetchData = async (date: string, pageMode: number) => {
+  let endPointURL = '';
+  switch (pageMode) {
+    case SAMEDAY: {
+      endPointURL = `${REST_ENDPOINT}/api/sameDayEntries/?day=${date}`;
+      break;
+    }
+    default: {
+      endPointURL = `${REST_ENDPOINT}/api/posts/?date=${date}`;
+      break;
+    }
+  }
+
+  if (endPointURL !== '') {
+    const token = window.localStorage.getItem(STORAGE_KEY) || '';
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set(AUTH_HEADER, token);
+
+    const response = await fetch(endPointURL, {
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: requestHeaders,
+    });
+
+    const data = await response.json();
+    return data;
+  }
+};
+
 const useOneDay = (pageMode?: number) => {
   const navigate = useNavigate();
   const routeParams = useParams();
 
-  const [entries, setEntries] = useState<EntryType[]>([]);
   const [editEntry, setEditEntry] = useState<EntryType | null>(null);
   const [pageDate, setPageDate] = useState<string>(format(new Date(), FULL_DATE_FORMAT));
   const isMounted = useRef<boolean>(false);
+
+  const { data, error, isLoading } = useQuery(["oneday", pageDate, pageMode], () => fetchData(pageDate, pageMode || 0));
+  // const movies = data?.movies;
+  console.log(data);
+  const entries = data?.entries;
+  const refs = entries?.reduce((acc: any, value: any) => {
+    // @ts-ignore
+    acc[value.id] = createRef();
+    return acc;
+  }, {});
 
   const handleClick = (id: number) => {
     console.log(refs);
@@ -29,53 +68,6 @@ const useOneDay = (pageMode?: number) => {
       block: 'start',
     });
   };
-
-  const loadDay = useCallback((targetDate?: string) => {
-    console.log(`loadDay : ${pageDate} pagemode: ${pageMode}`);
-
-    if (!pageDate) {
-      return;
-    }
-    let endPointDate = targetDate || pageDate;
-    let endPointURL = '';
-    switch (pageMode) {
-      case SAMEDAY: {
-        endPointURL = `${REST_ENDPOINT}/api/sameDayEntries/?day=${endPointDate}`;
-        break;
-      }
-      default: {
-        endPointURL = `${REST_ENDPOINT}/api/posts/?date=${endPointDate}`;
-        break;
-      }
-    }
-    setEditEntry(null);
-    (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
-      try {
-        const response = await fetch(endPointURL, {
-          mode: 'cors',
-          cache: 'no-cache',
-          headers: requestHeaders,
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('response.data :>> ', data.entries);
-
-          setEntries(data.entries);
-
-          // console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-        } else {
-          console.error('response.status :', response.status);
-          // toast.error(`loading error : ${response.status}`);
-        }
-      } catch (err) {
-        console.error(err);
-        // toast.error(`loading error : ${err}`);
-      }
-    })();
-  }, [entries, editEntry, pageDate]);
 
   function checkKeyPressed(e: KeyboardEvent) {
     console.log(`OneDay: handle key presss ${e.key}`);
@@ -108,14 +100,15 @@ const useOneDay = (pageMode?: number) => {
 
     setEditEntry(null);
 
-    if (newEntry.content === 'DELETE') {
-      const revised = entries.filter(curr => curr.id !== newEntry.id);
-      setEntries(revised);
-    }
-    else {
-      const revised = entries.map(curr => (curr.id === newEntry.id) ? newEntry : curr);
-      setEntries(revised);
-    }
+    // if (newEntry.content === 'DELETE') {
+    //   const revised = entries.filter(curr => curr.id !== newEntry.id);
+    //   setEntries(revised);
+    // }
+    // else {
+    //   const revised = entries.map(curr => (curr.id === newEntry.id) ? newEntry : curr);
+    //   setEntries(revised);
+    // }
+    console.log(newEntry);
 
     setTimeout(() => {
       // handleClick(targetId); // Not scrolling to location
@@ -141,10 +134,7 @@ const useOneDay = (pageMode?: number) => {
         const pageDateParam = urlParams.get('date') || routeParams?.date || format(new Date(), FULL_DATE_FORMAT);
 
         setPageDate(pageDateParam);
-        loadDay(pageDateParam || '');
         isMounted.current = true;
-      } else {
-        loadDay('');
       }
     }
     ueFunc();
@@ -152,13 +142,7 @@ const useOneDay = (pageMode?: number) => {
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [pageMode, pageDate]);
 
-  const refs = entries.reduce((acc, value) => {
-    // @ts-ignore
-    acc[value.id] = createRef();
-    return acc;
-  }, {});
-
-  return { editEntry, setEditEntry, pageDate, setPageDate, entries, loadDay, handleClick, refs, resetEntryForm }
+  return { entries, refs, editEntry, setEditEntry, pageDate, setPageDate, handleClick, resetEntryForm, isLoading, error }
 }
 
 export default useOneDay;

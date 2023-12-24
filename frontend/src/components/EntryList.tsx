@@ -6,17 +6,27 @@ import '../Types';
 const EntryList = ({
   entries,
   onShowEdit,
-  refs
+  refs,
+  handleClick
 }: {
   entries: EntryType[],
   onShowEdit: (entry: EntryType) => void,
-  refs: any
+  refs: any,
+  handleClick: (id: number) => void
 }) => {
   return (
     <section className="container">
       <ul className="entriesList">
         {entries.map((entry: EntryType) => (
           <li key={entry.id} ref={refs[entry.id]}>
+            <button
+            className="noshow"
+              type="button"
+              onClick={() => handleClick(entry.id)}
+              id={`btn${entry.id}`}
+            >
+              Scroll entry {entry.id} Into View
+            </button>
             <button
               onClick={() => onShowEdit(entry)}
               className="plainLink"

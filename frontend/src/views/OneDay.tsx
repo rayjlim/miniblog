@@ -17,7 +17,7 @@ const SAMEDAY = 1;
 
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
-  const { editEntry, setEditEntry, pageDate, setPageDate, entries, handleClick, refs, resetEntryForm }
+  const { entries, refs, editEntry, setEditEntry, pageDate, setPageDate, handleClick, resetEntryForm, isLoading, error }
     = useOneDay(pageMode || ONEDAY);
 
   const headerLinks = {
@@ -26,6 +26,9 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
     sameday: !pageMode || pageMode === ONEDAY,
   };
   const isOneDay = (!pageMode || pageMode === ONEDAY);
+
+  if (isLoading) return <div>Load posts...</div>;
+  if (error) return <div>An error occurred: {error?.message}</div>;
 
   return (
     <>
@@ -37,19 +40,6 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
       </h1>
 
       <DateNav updateDate={setPageDate} date={pageDate} />
-      <ul className="noshow">
-        {entries.map((item: EntryType) => (
-          <li key={item.id}>
-            <button
-              type="button"
-              onClick={() => handleClick(item.id)}
-              id={`btn${item.id}`}
-            >
-              Scroll Item {item.id} Into View
-            </button>
-          </li>
-        ))}
-      </ul>
       <section className="container">
         {isOneDay && <WeightInfo date={pageDate} />}
         <AddEditForm
@@ -58,8 +48,9 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
           onSuccess={resetEntryForm}
         />
       </section>
-      {!editEntry &&
-        <EntryList entries={entries} onShowEdit={setEditEntry} refs={refs} />
+      {/* page date to entry list and then do the query */}
+      {entries && !editEntry &&
+        <EntryList entries={entries} onShowEdit={setEditEntry} refs={refs} handleClick={handleClick}/>
       }
       {isOneDay && <MovieList date={pageDate} />}
       {isOneDay && <Inspiration />}
