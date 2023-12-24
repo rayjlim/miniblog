@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { FULL_DATE_FORMAT, STORAGE_KEY } from '../constants';
 
-const useOneDay = (pageMode?: number) => {
+const useOneDay = () => {
   const navigate = useNavigate();
   const routeParams = useParams();
 
@@ -14,14 +14,7 @@ const useOneDay = (pageMode?: number) => {
   const childRef = useRef();
 
   function checkKeyPressed(e: KeyboardEvent) {
-    console.log(`OneDay: handle key presss ${e.key}`);
-    if (e.altKey && e.key === ',') {
-      console.log('alt comma keybinding');
-      document.getElementById('prevBtn')?.click();
-    } else if (e.altKey && e.key === '.') {
-      console.log('alt period keybinding');
-      document.getElementById('nextBtn')?.click();
-    } else if (e.altKey && e.key === 'f') {
+    if (e.altKey && e.key === 'f') {
       navigate('/search');
       e.preventDefault();
     }
@@ -59,7 +52,7 @@ const useOneDay = (pageMode?: number) => {
     ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, [pageMode, pageDate]);
+  }, []);
 
   return { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef }
 }

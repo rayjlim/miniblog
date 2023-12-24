@@ -33,12 +33,23 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
     const newValue = e.target.value !== '' ? e.target.value : format(new Date, FULL_DATE_FORMAT);
     updateDate(newValue);
   }
-
+  function checkKeyPressed(e: KeyboardEvent) {
+    console.log(`DateNav: handle key presss ${e.key}`);
+    if (e.altKey && e.key === ',') {
+      console.log('alt comma keybinding');
+      document.getElementById('prevBtn')?.click();
+    } else if (e.altKey && e.key === '.') {
+      console.log('alt period keybinding');
+      document.getElementById('nextBtn')?.click();
+    }
+  }
   useEffect(() => {
     console.log('DateNav: useEffect');
     const ref = inputDate.current || { value: '' };
     ref.value = date;
-  });
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
+  }, []);
 
   return { inputDate, handleButtonDirection, updateDateInput };
 };
