@@ -35,7 +35,7 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
   }
 
   useEffect(() => {
-    console.log('DateNave useEffect');
+    console.log('DateNav: useEffect');
     const ref = inputDate.current || { value: '' };
     ref.value = date;
   });

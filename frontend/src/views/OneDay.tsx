@@ -17,7 +17,7 @@ const SAMEDAY = 1;
 
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
-  const { entries, refs, editEntry, setEditEntry, pageDate, setPageDate, handleClick, resetEntryForm, isLoading, error }
+  const { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef}
     = useOneDay(pageMode || ONEDAY);
 
   const headerLinks = {
@@ -26,9 +26,6 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
     sameday: !pageMode || pageMode === ONEDAY,
   };
   const isOneDay = (!pageMode || pageMode === ONEDAY);
-
-  if (isLoading) return <div>Load posts...</div>;
-  if (error) return <div>An error occurred: {error?.message}</div>;
 
   return (
     <>
@@ -48,10 +45,7 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
           onSuccess={resetEntryForm}
         />
       </section>
-      {/* page date to entry list and then do the query */}
-      {entries && !editEntry &&
-        <EntryList entries={entries} onShowEdit={setEditEntry} refs={refs} handleClick={handleClick}/>
-      }
+      <EntryList date={pageDate} isOneDay={isOneDay} onShowEdit={setEditEntry} ref={childRef}/>
       {isOneDay && <MovieList date={pageDate} />}
       {isOneDay && <Inspiration />}
       <Footer />
