@@ -1,4 +1,10 @@
-import { createRef, forwardRef, useRef, useState, MutableRefObject, useImperativeHandle } from 'react';
+import {
+  forwardRef,
+  useRef,
+  useState,
+  MutableRefObject,
+  useImperativeHandle
+} from 'react';
 import { useQuery } from "react-query";
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from '../components/MarkdownDisplay';
@@ -56,42 +62,30 @@ const EntryList = ({
     resetView: (entry: EntryType) => {
 
       // if (entry.content === 'DELETE') {
-    //   const revised = entries.filter(curr => curr.id !== newEntry.id);
-    //   setEntries(revised);
-    // }
-    // else {
-    //   const revised = entries.map(curr => (curr.id === entry.id) ? entry : curr);
-    //   setEntries(revised);
-    // }
+      //   const revised = entries.filter(curr => curr.id !== newEntry.id);
+      //   setEntries(revised);
+      // }
+      // else {
+      //   const revised = entries.map(curr => (curr.id === entry.id) ? entry : curr);
+      //   setEntries(revised);
+      // }
 
       console.log('resetView:', internalState.current, entry);
       setIsEditing(false);
+
       setTimeout(() => {
         console.log(editEntryId.current);
-        const btn = document.getElementById(`btn${editEntryId.current}`);
-        btn?.click();
-      }, 100);
-    },
-    // Other methods or properties can be added here
+        const target = document.getElementById(`li${editEntryId.current}`);
+        target?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 0);
+    }
   }), [internalState]);
 
-  console.log(data);
   const entries: EntryType[] = data?.entries;
 
-  const refs = entries?.reduce((acc: any, value: any) => {
-    // @ts-ignore
-    acc[value.id] = createRef();
-    return acc;
-  }, {});
-
-  const handleClick = (id: number) => {
-    console.log(refs);
-    // @ts-ignore
-    refs[id].current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  };
 
   if (isLoading) return <div>Load posts...</div>;
   if (error) return <div>An error occurred: {error?.message}</div>;
@@ -100,15 +94,7 @@ const EntryList = ({
     <section className={isEditing ? 'noshow' : 'container'}>
       <ul className="entriesList">
         {entries && entries.map((entry: EntryType) => (
-          <li key={entry.id} ref={refs[entry.id]}>
-            <button
-            className="noshow"
-              type="button"
-              onClick={() => handleClick(entry.id)}
-              id={`btn${entry.id}`}
-            >
-              Scroll entry {entry.id} Into View
-            </button>
+          <li key={entry.id} id={`li${entry.id}`}>
             <button
               onClick={() => showEdit(entry)}
               className="plainLink"
