@@ -13,7 +13,7 @@ const MovieList = ({ date }: { date: string }) => {
 
   return (
     <section className="movieList">
-      {movies.map((movie: MovieType) => (
+      {movies && movies.map((movie: MovieType) => (
         <MovieWindow movie={movie} key={movie.id} />
       ))}
     </section>

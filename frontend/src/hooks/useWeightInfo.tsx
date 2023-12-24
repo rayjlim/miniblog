@@ -15,7 +15,7 @@ const useWeightInfo = (date: string) => {
   const { TRACKS_API } = useContext(MyContext);
   const { data, error, isLoading } = useQuery(["weight", date], () => fetchData(TRACKS_API, date));
   const weight = data?.data[0] || {count: 0};
-  console.log(weight);
+
   return { weight, isLoading, error }
 };
 

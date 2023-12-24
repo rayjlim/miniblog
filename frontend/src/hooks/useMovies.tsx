@@ -15,7 +15,7 @@ const useMovies = (date: string) => {
   const { MOVIES_API } = useContext(MyContext);
   const { data, error, isLoading } = useQuery(["movies", date], () => fetchData(MOVIES_API, date));
   const movies = data?.movies;
-  console.log(movies);
+
   return { movies, isLoading, error }
 }
 
