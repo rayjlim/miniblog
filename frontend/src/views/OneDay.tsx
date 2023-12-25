@@ -18,7 +18,7 @@ const SAMEDAY = 1;
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
   const { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef}
-    = useOneDay(pageMode || ONEDAY);
+    = useOneDay();
 
   const headerLinks = {
     search: true,
