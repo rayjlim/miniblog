@@ -51,7 +51,7 @@ const AddEditForm = ({
         </button>
       )}
       {componentMode === ADD && (
-        <AddForm date={date} onSuccess={msg => editDone(msg, {id: 0, content: '', date: ''})} content="" />
+        <AddForm date={date} onSuccess={editDone} content="" />
       )}
 
       {componentMode === EDIT && entry && (

@@ -11,7 +11,7 @@ const propTypes = {
 
 type AddFormProps = PropTypes.InferProps<typeof propTypes>;
 
-const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: any }) => {
+const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void }) => {
 
   const { handleAdd, textChange, dateChange, formContent, formDate, textareaInput } =
     useAddForm(content, date, onSuccess);

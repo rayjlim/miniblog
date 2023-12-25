@@ -36,7 +36,7 @@ const useFetch = (): any => {
   return [newId, setNewEntry];
 };
 
-const useAddForm = (content: string, date: string, onSuccess: (msg: string) => void) => {
+const useAddForm = (content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [formContent, setFormContent] = useState<string>(content || '');
   const [formDate, setFormDate] = useState<string>(date);
   const isMounted = useRef(false);
@@ -83,7 +83,11 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string) => v
     if (isMounted.current && id !== null) {
       // This makes it so this is not called on the first render
       // but when the Id is set
-      onSuccess(`Add Done : New Id: ${id}`);
+      onSuccess(`Add Done : New Id: ${id}`, {
+        id,
+        content: formContent.trim(),
+        date: formDate,
+      });
     } else {
       isMounted.current = true;
 
