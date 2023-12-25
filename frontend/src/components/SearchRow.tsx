@@ -4,10 +4,11 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 import { DISPLAY_DATE_FORMAT, FULL_DATE_FORMAT } from '../constants';
 import '../Types';
 
-const SearchRow = ({ searchText, entry, showEditForm, refs }:
+const SearchRow = ({ searchText, entry, showEditForm }:
   {
-    searchText: string, entry: EntryType, showEditForm: (entry: EntryType) => void, refs: any
+    searchText: string, entry: EntryType, showEditForm: (entry: EntryType) => void
   }) => {
+
   const dateFormated = format(parse(entry.date, FULL_DATE_FORMAT, new Date()),
     DISPLAY_DATE_FORMAT);
 
@@ -20,7 +21,7 @@ const SearchRow = ({ searchText, entry, showEditForm, refs }:
     : entry.content;
 
   return (
-    <li key={entry.id} ref={refs[entry.id]}>
+    <li key={entry.id} id={`li${entry.id}`}>
       <button
         type="button"
         onClick={() => showEditForm(entry)}
@@ -29,7 +30,7 @@ const SearchRow = ({ searchText, entry, showEditForm, refs }:
         {dateFormated}
       </button>
       <RouterNavLink to={`/oneday/${entry.date}`}>
-        <i className="fa fa-calendar-check icon-one-day" title="One Day"/>
+        <i className="fa fa-calendar-check icon-one-day" title="One Day" />
       </RouterNavLink>
       <div className="markdownDisplay">
         <MarkdownDisplay source={content} />
