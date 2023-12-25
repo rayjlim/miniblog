@@ -8,11 +8,7 @@ const useSearch = () => {
   const navigate = useNavigate();
 
   const [editEntry, setEditEntry] = useState<EntryType | null>(null);
-  const [searchParams, setSearchParams] = useState<SearchParamsType>({
-    startDate: '',
-    endDate: '',
-    text: '',
-  });
+  const [searchParams, setSearchParams] = useState<SearchParamsType>(null);
   const childRef = useRef();
 
   function resetEntryForm(msg: string, entry: EntryType) {
