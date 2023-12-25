@@ -27,7 +27,7 @@ const useInspiration = () => {
   }
 
   const { data, error, isLoading } = useQuery(["inspiration", random], () => fetchData(api));
-  console.log(data);
+
   const output = isInspiration ? `${data?.message} - ${data?.author}` : data?.prompt;
 
   return { output, isLoading, error, getByType }

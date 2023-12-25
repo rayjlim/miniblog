@@ -12,10 +12,7 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
    * @param  {Object} e Event of Button click
    */
   function handleButtonDirection(e: MouseEvent<HTMLElement>) {
-
     const button = e.target as HTMLButtonElement;
-    console.log(button.value);
-
     let newDate;
     if (button.value === 'today') {
       newDate = new Date();
@@ -44,7 +41,6 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
     }
   }
   useEffect(() => {
-    console.log('DateNav: useEffect');
     const ref = inputDate.current || { value: '' };
     ref.value = date;
     document.addEventListener('keydown', checkKeyPressed);

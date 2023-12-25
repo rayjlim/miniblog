@@ -4,7 +4,7 @@ import useSearchResults from '../hooks/useSearchResults';
 import SearchRow from '../components/SearchRow';
 
 const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (entry: EntryType) => void }, ref: MutableRefObject<void>) => {
-  const { data, posts, startDate, endDate, isLoading, error } = useSearchResults(params);
+  const { data, entries, startDate, endDate, isLoading, error } = useSearchResults(params);
   const [isEditing, setIsEditing] = useState(false);
   const internalState = useRef();
   const editEntryId = useRef(0);
@@ -20,13 +20,13 @@ const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (e
   // Expose a custom API to the parent component
   useImperativeHandle(ref, () => ({
     resetView: (entry: EntryType) => {
-
+      console.log('resetView', entry);
       if (entry.content === 'DELETE') {
-        const revised = posts.filter((curr: EntryType) => curr.id !== entry.id);
+        const revised = entries.filter((curr: EntryType) => curr.id !== entry.id);
         queryClient.setQueryData(["search", params], {...data, entries: revised});
       }
       else {
-        const revised = posts.map((curr: EntryType) => (curr.id === entry.id) ? entry : curr);
+        const revised = entries.map((curr: EntryType) => (curr.id === entry.id) ? entry : curr);
         queryClient.setQueryData(["search", params], {...data, entries: revised});
       }
 
@@ -53,16 +53,16 @@ const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (e
         {params !== null
           ? (
             <>
-              {` Date: ${startDate || 'Beginning'}  to ${endDate || 'Now'}, Limit: ${params.resultsLimit}. Found ${posts.length}`}
+              {` Date: ${startDate || 'Beginning'}  to ${endDate || 'Now'}, Limit: ${params.resultsLimit}. Found ${entries.length}`}
             </>
           ) : (
             <>No Search Params</>
           )}
       </div>
 
-      {posts?.length ? (
+      {entries?.length ? (
         <ul className={!isEditing ? 'entriesList' : 'noshow'}>
-          {posts.map((entry: EntryType) => (
+          {entries.map((entry: EntryType) => (
             <SearchRow entry={entry} searchText={params.text}
               showEditForm={showEditForm} key={entry.id}
             />
