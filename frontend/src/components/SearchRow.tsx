@@ -2,7 +2,6 @@ import { NavLink as RouterNavLink } from 'react-router-dom';
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import { DISPLAY_DATE_FORMAT, FULL_DATE_FORMAT } from '../constants';
-import '../Types';
 
 const SearchRow = ({ searchText, entry, showEditForm }:
   {

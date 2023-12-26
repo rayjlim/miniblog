@@ -1,8 +1,7 @@
 import { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import MyContext from './MyContext';
-import '../Types';
+
 import './MovieWindow.css';
 
 const MovieWindow = ({ movie }: { movie: MovieType }) => {
@@ -22,11 +21,3 @@ const MovieWindow = ({ movie }: { movie: MovieType }) => {
 };
 
 export default MovieWindow;
-
-MovieWindow.propTypes = {
-  movie: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    imdbImageId: PropTypes.string.isRequired,
-    imdbId: PropTypes.string.isRequired,
-  }).isRequired,
-};

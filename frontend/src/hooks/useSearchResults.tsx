@@ -2,7 +2,6 @@ import { useImperativeHandle, useRef, MutableRefObject } from 'react';
 import { useQueryClient, useQuery } from "react-query";
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
-import '../Types';
 
 const fetchData = async (searchParam: SearchParamsType) => {
   const { text, startDate, endDate } = searchParam;

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import MyContext from '../components/MyContext';
-import '../Types';
+
 import {
   AUTH_HEADER,
   REST_ENDPOINT,

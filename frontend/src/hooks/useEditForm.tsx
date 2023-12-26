@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import '../Types';
+
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);

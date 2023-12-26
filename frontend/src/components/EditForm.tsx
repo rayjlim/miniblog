@@ -1,12 +1,12 @@
-import { FunctionComponent } from 'react';
-
 import MarkdownDisplay from './MarkdownDisplay';
-import '../Types';
 import useEditForm from '../hooks/useEditForm';
 
 import './EditForm.css';
 
-const EditForm: FunctionComponent<any> = ({ entry, onSuccess, }: { entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void }) => {
+const EditForm = ({ entry, onSuccess, }: {
+  entry: EntryType | null,
+  onSuccess: (msg: string, entry: EntryType) => void
+}) => {
   const escapedContent = entry?.content.replace(
     /<br\s*\/>/g,
     `

@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
-
 import MovieWindow from './MovieWindow';
 import useMovies from '../hooks/useMovies';
 import './MovieWindow.css';
-import '../Types';
 
 const MovieList = ({ date }: { date: string }) => {
   const { movies, isLoading, error } = useMovies(date);
@@ -21,7 +18,3 @@ const MovieList = ({ date }: { date: string }) => {
 };
 
 export default MovieList;
-
-MovieList.propTypes = {
-  date: PropTypes.string.isRequired
-};

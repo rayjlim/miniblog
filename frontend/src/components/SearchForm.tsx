@@ -2,7 +2,6 @@ import { format, subMonths } from 'date-fns';
 import { FULL_DATE_FORMAT } from '../constants';
 import YearMonthSelector from './YearMonthSelector';
 import useSearchForm from '../hooks/useSearchForm';
-import '../Types';
 
 const SearchForm = ({ params, setSearchParams }:
   { params: SearchParamsType, setSearchParams: (params: SearchParamsType) => void }) => {

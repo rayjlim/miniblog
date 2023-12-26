@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import MyContext from '../components/MyContext';
-import '../Types';
+
 
 const useMedia = () => {
   const { UPLOAD_ROOT } = useContext(MyContext);

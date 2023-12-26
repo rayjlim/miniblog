@@ -10,7 +10,6 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 
 import { FULL_DATE_FORMAT, REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
-import '../Types';
 
 const fetchData = async (date: string, isOneDay: boolean) => {
   // console.log('fetchData', date, isOneDay);
