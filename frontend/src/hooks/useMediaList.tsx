@@ -1,45 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery } from "react-query";
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
+
+const fetchData = async (dir: string) => {
+  const requestHeaders = createHeaders();
+  const response = await fetch(`${REST_ENDPOINT}/media/${dir}`, {
+    headers: requestHeaders,
+  });
+  const data = await response.json();
+  return data;
+};
+
 const useMediaList = () => {
 
-  const [medias, setMedias] = useState<any[string]>([]);
-  const [uploadDirs, setUploadDirs] = useState<string[]>([]);
   const [currentDir, setCurrentDir] = useState<string>('');
 
+  const { data, error, isLoading } = useQuery(["mediaDir", currentDir], () => fetchData(currentDir));
+
   function mediaDelete(dir: string){
-    loadDir(dir);
-  }
-  function loadDir(dir: string) {
-    console.log(dir);
-    (async () => {
-      const requestHeaders = createHeaders();
-      const response = await fetch(`${REST_ENDPOINT}/media/${dir}`, {
-        headers: requestHeaders,
-      });
-      console.log('response :', response);
-      if (!response.ok) {
-        console.log('response.status :', response.status);
-        alert(`loading error : ${response.status}`);
-      } else {
-        const data = await response.json();
-
-        const dirs = Object.values(data.uploadDirs);
-        setUploadDirs(dirs as string[]);
-        if(currentDir === ''){
-          setCurrentDir(dirs[dirs.length-1] as string);
-        }
-
-        const media = Object.values(data.dirContent);
-        setMedias(media);
-      }
-    })();
+    // loadDir(dir);
+    console.log('media delete', dir);
   }
 
-  useEffect(() => {
-    loadDir(currentDir);
-  }, [currentDir]);
+  const uploadDirs = data && Object.values(data?.uploadDirs);
+  const medias = data && Object.values(data?.dirContent);
 
-  return { medias, uploadDirs, currentDir, setCurrentDir, mediaDelete };
+  return { medias, uploadDirs, currentDir, setCurrentDir, mediaDelete, error, isLoading };
 };
 export default useMediaList;
