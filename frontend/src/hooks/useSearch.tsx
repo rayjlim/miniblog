@@ -8,7 +8,7 @@ const useSearch = () => {
   const navigate = useNavigate();
 
   const [editEntry, setEditEntry] = useState<EntryType | null>(null);
-  const [searchParams, setSearchParams] = useState<SearchParamsType>(null);
+  const [searchParams, setSearchParams] = useState<SearchParamsType | null>(null);
   const childRef = useRef();
 
   function resetEntryForm(msg: string, entry: EntryType) {
@@ -17,7 +17,8 @@ const useSearch = () => {
     }
 
     setEditEntry(null);
-    childRef.current.resetView(entry);
+    const subComp = childRef.current as any;
+    subComp?.resetView(entry);
   }
 
   function checkKeyPressed(e: KeyboardEvent) {

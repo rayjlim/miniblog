@@ -21,12 +21,11 @@ const useOneDay = () => {
   }
 
   function resetEntryForm(msg: string, entry: EntryType) {
-    if (msg) {
-      toast(msg);
-    }
+    toast(msg);
 
     setEditEntry(null);
-    childRef.current.resetView(entry);
+    const subComp = childRef.current as any;
+    subComp?.resetView(entry);
   }
 
   useEffect(() => {
