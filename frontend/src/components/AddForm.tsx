@@ -1,17 +1,7 @@
-import { FunctionComponent } from 'react';
-import PropTypes from 'prop-types';
 import MarkdownDisplay from './MarkdownDisplay';
 import useAddForm from '../hooks/useAddForm';
 
-const propTypes = {
-  content: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  onSuccess: PropTypes.func.isRequired,
-};
-
-type AddFormProps = PropTypes.InferProps<typeof propTypes>;
-
-const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void }) => {
+const AddForm = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void }) => {
 
   const { handleAdd, textChange, dateChange, formContent, formDate, textareaInput } =
     useAddForm(content, date, onSuccess);
@@ -59,7 +49,7 @@ const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: 
       </button>
       <button
         type="button"
-        onClick={() => onSuccess('')}
+        onClick={() => onSuccess('', {id: -1, content: '', date:''})}
         className="btn btn-warning pull-right"
         id="cancelBtn"
       >
@@ -74,5 +64,3 @@ const AddForm: FunctionComponent<AddFormProps> = ({ content, date, onSuccess }: 
 };
 
 export default AddForm;
-
-AddForm.propTypes = propTypes;
