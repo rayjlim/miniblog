@@ -28,22 +28,22 @@ const useSearchForm = (params: SearchParamsType, setSearchParams: (params: Searc
     } else {
       endDate.current = date;
     }
-    setSearchParams({ ...params, startDate: startDate.current, endDate: endDate.current });
+    setSearchParams({ ...params, startDate: startDate.current || '', endDate: endDate.current || '' });
   }
 
   // const debouncedSearch = debounce(setParams, DEBOUNCE_TIME);
   const changeText = () => {
-    setSearchParams({ ...params, text: searchText?.current.value });
-
+    const textInput = searchText?.current || { value: '' };
+    setSearchParams({ ...params, text: textInput.value });
   }
 
   useEffect(() => {
     searchText.current?.focus();
-
+    const textInput = searchText?.current || { value: '' };
     const params = {
-      text: searchText.current.value,
-      startDate: startDate.current,
-      endDate: endDate.current,
+      text: textInput.value,
+      startDate: startDate.current || '',
+      endDate: endDate.current || '',
     };
     setSearchParams(params);
   }, []);
