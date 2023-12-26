@@ -1,14 +1,12 @@
-import { forwardRef, useImperativeHandle, useRef, useState, MutableRefObject } from 'react';
-import { useQueryClient } from 'react-query';
+import { forwardRef, useRef, useState } from 'react';
+
 import useSearchResults from '../hooks/useSearchResults';
 import SearchRow from '../components/SearchRow';
 
-const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (entry: EntryType) => void }, ref: MutableRefObject<void>) => {
-  const { data, entries, startDate, endDate, isLoading, error } = useSearchResults(params);
+const SearchResults = forwardRef(({ params, setEditEntry }: { params: SearchParamsType, setEditEntry: (entry: EntryType) => void }, ref: any) => {
   const [isEditing, setIsEditing] = useState(false);
-  const internalState = useRef();
   const editEntryId = useRef(0);
-  const queryClient = useQueryClient();
+  const { entries, startDate, endDate, isLoading, error } = useSearchResults(params, editEntryId, setIsEditing, ref);
 
   const showEditForm = (entry: EntryType) => {
     console.log('showEditForm', entry.id);
@@ -17,35 +15,8 @@ const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (e
     setEditEntry(entry);
   }
 
-  // Expose a custom API to the parent component
-  useImperativeHandle(ref, () => ({
-    resetView: (entry: EntryType) => {
-      console.log('resetView', entry);
-      if (entry.content === 'DELETE') {
-        const revised = entries.filter((curr: EntryType) => curr.id !== entry.id);
-        queryClient.setQueryData(["search", params], {...data, entries: revised});
-      }
-      else {
-        const revised = entries.map((curr: EntryType) => (curr.id === entry.id) ? entry : curr);
-        queryClient.setQueryData(["search", params], {...data, entries: revised});
-      }
-
-      console.log('resetView:', internalState.current, entry);
-      setIsEditing(false);
-
-      setTimeout(() => {
-        console.log(editEntryId.current);
-        const target = document.getElementById(`li${editEntryId.current}`);
-        target?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }, 0);
-    }
-  }), [internalState]);
-
   if (isLoading) return <div>Load ..</div>;
-  if (error) return <div>An error occurred: {error?.message}</div>;
+  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <>
@@ -63,7 +34,7 @@ const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (e
       {entries?.length ? (
         <ul className={!isEditing ? 'entriesList' : 'noshow'}>
           {entries.map((entry: EntryType) => (
-            <SearchRow entry={entry} searchText={params.text}
+            <SearchRow entry={entry} searchText={params.text || ''}
               showEditForm={showEditForm} key={entry.id}
             />
           ))}
@@ -73,6 +44,6 @@ const SearchResults = ({ params, setEditEntry }: { params: any, setEditEntry: (e
       )}
     </>
   );
-};
+});
 
-export default forwardRef(SearchResults);
+export default SearchResults;
