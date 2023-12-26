@@ -4,7 +4,7 @@ const WeightInfo = ({ date }: { date: string }) => {
   const { weight, isLoading, error } = useWeightInfo(date);
 
   if (isLoading) return <div>Load weight...</div>;
-  if (error) return <div>An error occurred: {error?.message}</div>;
+  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <span className="weight">

@@ -20,8 +20,12 @@ type MediaType = {
 }
 
 type SearchParamsType = {
-  startDate: string,
-  endDate: string,
+  startDate?: string,
+  endDate?: string,
   resultsLimit?: number
-  text: string,
+  text?: string,
+}
+
+type RequestError = {
+  message?: string;
 }

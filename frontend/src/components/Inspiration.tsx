@@ -16,7 +16,7 @@ const Inspiration = () => {
   }
 
   if (isLoading) return <div>Load ...</div>;
-  if (error) return <div>An error occurred: {error?.message}</div>;
+  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <>

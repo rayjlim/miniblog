@@ -7,7 +7,9 @@ const YearMonthSelector = ({ changeDate }: { changeDate: (date: string, type: st
   const { yearMonths, isLoading, error } = useFetchYearMonths();
 
   if (isLoading) return <div>Load ..</div>;
-  if (error) return <div>An error occurred: {error?.message}</div>;
+  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
+
+
   return (
     <Select
       options={yearMonths}
