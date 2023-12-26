@@ -2,40 +2,30 @@ import {
   forwardRef,
   useRef,
   useState,
-  MutableRefObject,
   useImperativeHandle
 } from 'react';
 import { useQueryClient, useQuery } from "react-query";
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 
-import {
-  FULL_DATE_FORMAT,
-  REST_ENDPOINT,
-  STORAGE_KEY,
-  AUTH_HEADER,
-} from '../constants';
+import { FULL_DATE_FORMAT, REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
 import '../Types';
 
 const fetchData = async (date: string, isOneDay: boolean) => {
   // console.log('fetchData', date, isOneDay);
   let endPointURL = isOneDay ? `${REST_ENDPOINT}/api/posts/?date=${date}`
     : `${REST_ENDPOINT}/api/sameDayEntries/?day=${date}`;
+  const requestHeaders = createHeaders();
+  const response = await fetch(endPointURL, {
+    mode: 'cors',
+    cache: 'no-cache',
+    headers: requestHeaders,
+  });
 
-  if (endPointURL !== '') {
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set(AUTH_HEADER, token);
+  const data = await response.json();
+  return data;
 
-    const response = await fetch(endPointURL, {
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: requestHeaders,
-    });
-
-    const data = await response.json();
-    return data;
-  }
 };
 
 const EntryList = ({
@@ -46,19 +36,21 @@ const EntryList = ({
   date: string,
   isOneDay: boolean,
   onShowEdit: (entry: EntryType) => void
-}, ref: MutableRefObject<void>) => {
+}, ref: any) => {
   const queryClient = useQueryClient();
   const { data, error, isLoading } = useQuery(["entrylist", date, isOneDay], () => fetchData(date, isOneDay));
   const [isEditing, setIsEditing] = useState(false);
   const internalState = useRef();
   const editEntryId = useRef(0);
 
+  const entries: EntryType[] = data?.entries;
+
   const showEdit = (entry: EntryType) => {
     setIsEditing(true);
     editEntryId.current = entry.id;
     onShowEdit(entry);
   }
-  const entries: EntryType[] = data?.entries;
+
   // Expose a custom API to the parent component
   useImperativeHandle(ref, () => ({
     resetView: (entry: EntryType) => {
@@ -75,7 +67,7 @@ const EntryList = ({
           const revised = entries.map((curr: EntryType) => (curr.id === entry.id) ? entry : curr);
           queryClient.setQueryData(["entrylist", date, isOneDay], { ...data, entries: revised });
         }
-      }else if(entry.id !== 0){
+      } else if (entry.id !== 0) {
         console.log('make new entry list', entry);
         queryClient.setQueryData(["entrylist", date, isOneDay], { ...data, entries: [entry] });
       }
@@ -92,11 +84,8 @@ const EntryList = ({
     }
   }), [internalState]);
 
-
-
-
   if (isLoading) return <div>Load posts...</div>;
-  if (error) return <div>An error occurred: {error?.message}</div>;
+  if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <section className={isEditing ? 'noshow' : 'container'}>

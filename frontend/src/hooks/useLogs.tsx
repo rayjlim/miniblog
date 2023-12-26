@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { useQuery } from "react-query";
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
 
 const fetchData = async (log: string) => {
-  const token = window.localStorage.getItem(STORAGE_KEY) || '';
-  const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set(AUTH_HEADER, token);
   const api = `${REST_ENDPOINT}/logs/${log}`;
-  const response = await fetch(api, {
-    headers: requestHeaders,
-  });
+  const requestHeaders = createHeaders();
+  const response = await fetch(api, { headers: requestHeaders });
   const data = await response.json();
   return data;
 };
@@ -24,9 +21,7 @@ const useLogs = () => {
     }
 
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
+      const requestHeaders = createHeaders();
 
       const response = await fetch(
         `${REST_ENDPOINT}/logs/${log}`,
