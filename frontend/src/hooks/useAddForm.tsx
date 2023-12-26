@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT } from '../constants';
+
+import createHeaders from '../utils/createHeaders';
 
 const useFetch = (): any => {
   const [newId, setId] = useState<number | null>(null);
@@ -11,10 +13,7 @@ const useFetch = (): any => {
   useEffect(() => {
     if (formEntry.content !== '') {
       (async () => {
-        const token = window.localStorage.getItem(STORAGE_KEY) || '';
-        const requestHeaders: HeadersInit = new Headers();
-        requestHeaders.set('Content-Type', 'application/json');
-        requestHeaders.set(AUTH_HEADER, token);
+        const requestHeaders = createHeaders();
         try {
           const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
             method: 'POST',

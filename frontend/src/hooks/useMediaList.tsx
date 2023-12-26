@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-
+import { REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
 const useMediaList = () => {
 
   const [medias, setMedias] = useState<any[string]>([]);
@@ -13,9 +13,7 @@ const useMediaList = () => {
   function loadDir(dir: string) {
     console.log(dir);
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
+      const requestHeaders = createHeaders();
       const response = await fetch(`${REST_ENDPOINT}/media/${dir}`, {
         headers: requestHeaders,
       });

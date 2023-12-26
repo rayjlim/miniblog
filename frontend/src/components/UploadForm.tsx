@@ -2,7 +2,9 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
 import MyContext from '../components/MyContext';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT } from '../constants';
+
+import createHeaders from '../utils/createHeaders';
 
 const UploadForm = () => {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const UploadForm = () => {
 
   function onChangeHandler(event: any) {
     console.log(event.target.files[0]);
-    if(event.target.files[0].size > UPLOAD_SIZE_LIMIT){
+    if (event.target.files[0].size > UPLOAD_SIZE_LIMIT) {
       alert('File Size too large');
       setFile(undefined);
       return;
@@ -24,7 +26,7 @@ const UploadForm = () => {
 
   async function upload() {
     const formData = new FormData();
-    if(!file){
+    if (!file) {
       alert('no file');
       return;
     }
@@ -35,10 +37,7 @@ const UploadForm = () => {
       filePath.length ? filePath : format(new Date(), 'yyyy-MM'),
     );
 
-    console.log('send upload');
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set(AUTH_HEADER, token);
+    const requestHeaders = createHeaders();
     try {
       const response = await fetch(`${REST_ENDPOINT}/uploadImage/?a=1`, {
         method: 'POST',
@@ -110,10 +109,8 @@ const UploadForm = () => {
             Upload
           </button>
         </form>
-        <Result status={status}/>
+        <Result status={status} />
       </div>
-
-
     </>
   );
 };

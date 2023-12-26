@@ -1,12 +1,11 @@
 import { useQuery } from "react-query";
-import { AUTH_HEADER, STORAGE_KEY, REST_ENDPOINT } from '../constants';
+import { REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
 
 const fetchData = async () => {
   console.log('fetch#YearMonth');
   const endpoint = `${REST_ENDPOINT}/api/yearMonth`;
-  const requestHeaders: HeadersInit = new Headers();
-  const token = window.localStorage.getItem(STORAGE_KEY) || '';
-  requestHeaders.set(AUTH_HEADER, token);
+  const requestHeaders = createHeaders();
 
   const response = await fetch(endpoint, { headers: requestHeaders });
 
@@ -21,8 +20,4 @@ const useFetchYearMonths = () => {
   return { yearMonths: data, isLoading, error };
 };
 
-
-
 export default useFetchYearMonths;
-
-

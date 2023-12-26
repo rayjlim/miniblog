@@ -1,6 +1,7 @@
 import { useContext } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT } from '../constants';
 import MyContext from './MyContext';
+import createHeaders from '../utils/createHeaders';
 
 const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
   media: string, currentDir: string,
@@ -15,9 +16,7 @@ const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
       return;
     }
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
+      const requestHeaders = createHeaders();
       const response = await fetch(
         `${REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {
