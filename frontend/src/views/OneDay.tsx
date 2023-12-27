@@ -1,5 +1,3 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DateNav from '../components/DateNav';
 import AddEditForm from '../components/AddEditForm';
 import EntryList from '../components/EntryList';
@@ -17,8 +15,8 @@ const SAMEDAY = 1;
 
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
-  const { editEntry, setEditEntry, pageDate, setPageDate, entries, handleClick, refs, resetEntryForm }
-    = useOneDay(pageMode || ONEDAY);
+  const { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef}
+    = useOneDay();
 
   const headerLinks = {
     search: true,
@@ -29,7 +27,6 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
   return (
     <>
-      <ToastContainer />
       <Header links={headerLinks} />
 
       <h1 className="view-head">
@@ -37,19 +34,6 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
       </h1>
 
       <DateNav updateDate={setPageDate} date={pageDate} />
-      <ul className="noshow">
-        {entries.map((item: EntryType) => (
-          <li key={item.id}>
-            <button
-              type="button"
-              onClick={() => handleClick(item.id)}
-              id={`btn${item.id}`}
-            >
-              Scroll Item {item.id} Into View
-            </button>
-          </li>
-        ))}
-      </ul>
       <section className="container">
         {isOneDay && <WeightInfo date={pageDate} />}
         <AddEditForm
@@ -58,9 +42,7 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
           onSuccess={resetEntryForm}
         />
       </section>
-      {!editEntry &&
-        <EntryList entries={entries} onShowEdit={setEditEntry} refs={refs} />
-      }
+      <EntryList date={pageDate} isOneDay={isOneDay} onShowEdit={setEditEntry} ref={childRef}/>
       {isOneDay && <MovieList date={pageDate} />}
       {isOneDay && <Inspiration />}
       <Footer />

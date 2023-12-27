@@ -1,39 +1,41 @@
-
-import { useContext } from 'react';
-import MyContext from '../components/MyContext';
+import { useSetting } from './SettingContext';
 import useInspiration from '../hooks/useInspiration';
 
 const Inspiration = () => {
-  const { inspiration, getInspiration, getPrompt } = useInspiration();
-  const {
-    INSPIRATION_API,
-    QUESTION_API,
-  } = useContext(MyContext);
+  const { output, isLoading, error, getByType } = useInspiration();
+  const { INSPIRATION_API, QUESTION_API } = useSetting() as SettingsType;
 
   function copyToClipboard(content: string) {
     console.log(`clipboard: ${content}`);
     navigator.clipboard.writeText(content);
   }
 
+  if (isLoading) return <div>Load ...</div>;
+  if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
+
   return (
-    <section>
-      <div>{inspiration}</div>
-      {inspiration !== '' && (
-        <button onClick={() => copyToClipboard(inspiration)} type="button" className="copy-btn">
-          /clip
-        </button>
-      )}
-      {QUESTION_API !== '' && (
-        <button onClick={() => getPrompt()} className="plainLink" type="button">
-          [Get Prompt]
-        </button>
-      )}
-      {INSPIRATION_API !== '' && (
-        <button onClick={() => getInspiration()} className="plainLink" type="button">
-          [Get Inspiration]
-        </button>
-      )}
-    </section>
+    <>
+      {(QUESTION_API !== '' || INSPIRATION_API !== '') &&
+        <section>
+          <div>{output}</div>
+          {output !== '' && (
+            <button onClick={() => copyToClipboard(output)} type="button" className="copy-btn">
+              /clip
+            </button>
+          )}
+          {QUESTION_API !== '' && (
+            <button onClick={() => getByType(false)} className="plainLink" type="button">
+              [Get Prompt]
+            </button>
+          )}
+          {INSPIRATION_API !== '' && (
+            <button onClick={() => getByType(true)} className="plainLink" type="button">
+              [Get Inspiration]
+            </button>
+          )}
+        </section>
+      }
+    </>
   )
 };
 

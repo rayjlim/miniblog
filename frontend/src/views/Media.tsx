@@ -1,5 +1,3 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,7 +31,6 @@ const Media = () => {
 
   return (
     <>
-      <ToastContainer />
       <Header links={headerLinks} />
       {media && (
         <MediaSelect media={media} onClose={mediaClosed} />

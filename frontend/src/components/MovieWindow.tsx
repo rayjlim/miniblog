@@ -1,12 +1,9 @@
-import { useContext } from 'react';
-import PropTypes from 'prop-types';
+import { useSetting } from './SettingContext';
 
-import MyContext from './MyContext';
-import '../Types';
 import './MovieWindow.css';
 
 const MovieWindow = ({ movie }: { movie: MovieType }) => {
-  const { MOVIES_POSTERS } = useContext(MyContext);
+  const { MOVIES_POSTERS } = useSetting() as SettingsType;
   const { title, imdbImageId, imdbId } = movie;
   const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
   const imdbUrl = `https://www.imdb.com/title/${imdbId}/`;
@@ -22,11 +19,3 @@ const MovieWindow = ({ movie }: { movie: MovieType }) => {
 };
 
 export default MovieWindow;
-
-MovieWindow.propTypes = {
-  movie: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    imdbImageId: PropTypes.string.isRequired,
-    imdbId: PropTypes.string.isRequired,
-  }).isRequired,
-};

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { REST_ENDPOINT } from '../constants';
+
+import createHeaders from '../utils/createHeaders';
 
 const useFetch = (): any => {
   const [newId, setId] = useState<number | null>(null);
@@ -11,10 +13,7 @@ const useFetch = (): any => {
   useEffect(() => {
     if (formEntry.content !== '') {
       (async () => {
-        const token = window.localStorage.getItem(STORAGE_KEY) || '';
-        const requestHeaders: HeadersInit = new Headers();
-        requestHeaders.set('Content-Type', 'application/json');
-        requestHeaders.set(AUTH_HEADER, token);
+        const requestHeaders = createHeaders();
         try {
           const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
             method: 'POST',
@@ -36,7 +35,7 @@ const useFetch = (): any => {
   return [newId, setNewEntry];
 };
 
-const useAddForm = (content: string, date: string, onSuccess: (msg: string) => void) => {
+const useAddForm = (content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [formContent, setFormContent] = useState<string>(content || '');
   const [formDate, setFormDate] = useState<string>(date);
   const isMounted = useRef(false);
@@ -83,7 +82,11 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string) => v
     if (isMounted.current && id !== null) {
       // This makes it so this is not called on the first render
       // but when the Id is set
-      onSuccess(`Add Done : New Id: ${id}`);
+      onSuccess(`Add Done : New Id: ${id}`, {
+        id,
+        content: formContent.trim(),
+        date: formDate,
+      });
     } else {
       isMounted.current = true;
 

@@ -1,33 +1,19 @@
-import { useCallback, useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
+import { useState } from 'react';
+import { useQuery } from "react-query";
+import { REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
+
+const fetchData = async (log: string) => {
+  const api = `${REST_ENDPOINT}/logs/${log}`;
+  const requestHeaders = createHeaders();
+  const response = await fetch(api, { headers: requestHeaders });
+  const data = await response.json();
+  return data;
+};
 
 const useLogs = () => {
-
-  const [logs, setLogs] = useState<string[]>([]);
-  const [logFileName, setLogFileName] = useState<string>('');
-  const [logFile, setLogFile] = useState<string>('');
-
-  const getLog = useCallback(async (log = '') => {
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set(AUTH_HEADER, token);
-
-    const response = await fetch(`${REST_ENDPOINT}/logs/${log}`, {
-      headers: requestHeaders,
-    });
-    console.log('response :', response);
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log('responseData :', responseData);
-      setLogs(responseData.logs);
-      setLogFileName(responseData.logFileName);
-      setLogFile(responseData.logFile);
-      return;
-    }
-    console.error('response.status :', response.status);
-    toast.error(`loading error : ${response.status}`);
-  }, [logs, logFileName, logFile]);
+  const [logFileName, setLogFileName] = useState('');
+  const { data, error, isLoading } = useQuery(["logs", logFileName], () => fetchData(logFileName));
 
   const handleDelete = async (log: string) => {
     if (!window.confirm('You sure?')) {
@@ -35,9 +21,7 @@ const useLogs = () => {
     }
 
     try {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
+      const requestHeaders = createHeaders();
 
       const response = await fetch(
         `${REST_ENDPOINT}/logs/${log}`,
@@ -49,19 +33,18 @@ const useLogs = () => {
       );
 
       console.log(response);
-      getLog();
-
+      setLogFileName('');
     } catch (error) {
       console.log(error);
       alert(error);
     }
   }
 
-  useEffect(() => {
-    getLog();
-  }, []);
+  const logs = data?.logs;
+  const logFile = data?.logFile;
 
-  return { logs, logFileName, logFile, handleDelete, getLog };
+  return { logs, logFileName, logFile, handleDelete, setLogFileName, error, isLoading };
+
 };
 
 export default useLogs;

@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
-import '../Types';
 
 const CLOSED = 0;
 const ADD = 1;
 const EDIT = 2;
-import '../Types';
 
-const AddEditForm = ({
-  date,
-  entry,
-  onSuccess,
-}: {
+const AddEditForm = ({ date, entry, onSuccess }: {
   date: string,
-  entry: EntryType|null,
+  entry: EntryType | null,
   onSuccess: (msg: string, newEntry: EntryType) => void,
 }) => {
+
   const [componentMode, setComponentMode] = useState(CLOSED);
 
   function editDone(msg: string, newEntry: EntryType) {
@@ -51,7 +46,7 @@ const AddEditForm = ({
         </button>
       )}
       {componentMode === ADD && (
-        <AddForm date={date} onSuccess={msg => editDone(msg, {id: 0, content: '', date: ''})} content="" />
+        <AddForm date={date} onSuccess={editDone} content="" />
       )}
 
       {componentMode === EDIT && entry && (

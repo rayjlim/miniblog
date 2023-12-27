@@ -1,48 +1,33 @@
-import { useContext, useState, useEffect } from 'react';
-import MyContext from '../components/MyContext';
+import { useState } from 'react';
+import { useQuery } from "react-query";
+import { useSetting } from '../components/SettingContext';
+
+const fetchData = async (api: string) => {
+  if (api !== '') {
+    const response = await fetch(api);
+    const data = await response.json();
+    return data;
+  }
+};
 
 const useInspiration = () => {
-  const [inspiration, setInspiration] = useState<string>('');
-  const {
-    INSPIRATION_API,
-    QUESTION_API,
-  } = useContext(MyContext);
+  const { INSPIRATION_API, QUESTION_API } = useSetting() as SettingsType;
+  const [isInspiration, setIsInspiration] = useState<boolean>(true);
+  const [random, setRandom] = useState(0);
+  const [api, setApi] = useState<string>(INSPIRATION_API);
 
-  async function xhrCall(url: string, apiDescription: string) {
-    console.log(`xhrCall ${url} : ${apiDescription}`);
-    try {
-      const apiResponse = await fetch(url, { cache: 'no-cache' });
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        return data;
-      }
-      throw new Error(`${apiResponse.status}`);
-    } catch (err) {
-      console.error(err);
-    }
-    return false;
+  async function getByType(isInspiration = true) {
+    console.log('getByType');
+    setApi(isInspiration ? INSPIRATION_API : QUESTION_API);
+    setIsInspiration(isInspiration);
+    setRandom(Math.random());
   }
 
-  async function getInspiration() {
-    const apiUrl = `${INSPIRATION_API}`;
-    const data = await xhrCall(apiUrl, 'inspiration');
-    setInspiration(`Inspire: ${data.message} : ${data.author}`);
-  }
-  async function getPrompt() {
-    const data = await xhrCall(QUESTION_API, 'prompt');
-    setInspiration(`Question: ${data.prompt} : ${data.category}`);
-  }
+  const { data, error, isLoading } = useQuery(["inspiration", random], () => fetchData(api));
 
-  useEffect(() => {
-    const ueFunc = async () => {
-      if (INSPIRATION_API !== '') {
-        await getInspiration();
-      }
-    };
-    ueFunc();
-  }, []);
+  const output = isInspiration ? `${data?.message} - ${data?.author}` : data?.prompt;
 
-  return { inspiration, getInspiration, getPrompt };
+  return { output, isLoading, error, getByType }
 };
 
 export default useInspiration;

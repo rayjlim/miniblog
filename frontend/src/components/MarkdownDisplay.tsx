@@ -1,10 +1,7 @@
 /* eslint-disable react/no-danger */
-import { useContext } from 'react';
-import PropTypes from 'prop-types';
 //@ts-ignore
 import { marked } from 'marked';
-
-import MyContext from './MyContext';
+import { useSetting } from './SettingContext';
 
 const renderer = {
 
@@ -40,7 +37,7 @@ const renderer = {
 marked.use({ renderer });
 
 const MarkdownDisplay = ({ source }: { source: string }) => {
-  const { UPLOAD_ROOT } = useContext(MyContext);
+  const { UPLOAD_ROOT } = useSetting() as SettingsType;
   let output = '';
   try {
     // console.log(source);
@@ -58,7 +55,3 @@ const MarkdownDisplay = ({ source }: { source: string }) => {
 };
 
 export default MarkdownDisplay;
-
-MarkdownDisplay.propTypes = {
-  source: PropTypes.string.isRequired,
-};

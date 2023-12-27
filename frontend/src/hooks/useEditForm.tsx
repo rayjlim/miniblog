@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import '../Types';
+import { REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
+
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);
@@ -17,10 +18,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
 
   async function handleSave() {
     console.log('handleSave entry :');
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('Content-Type', 'application/json');
-    requestHeaders.set(AUTH_HEADER, token);
+    const requestHeaders = createHeaders();
     const newEntry = {...entry, id: entry?.id || 0, content: textareaInput.current?.value || '', date: dateInput.current?.value || ''};
     const options = {
       method: 'PUT',
@@ -65,9 +63,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     const id = entry?.id || 0;
     console.log(`handleDelete ${id}`);
 
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set(AUTH_HEADER, token);
+    const requestHeaders = createHeaders();
 
     try {
       const response = await fetch(

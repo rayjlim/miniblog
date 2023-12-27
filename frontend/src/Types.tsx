@@ -20,9 +20,29 @@ type MediaType = {
 }
 
 type SearchParamsType = {
-  startDate: string,
-  endDate: string,
+  startDate?: string,
+  endDate?: string,
   resultsLimit?: number
-  searchParam: string,
-  postsCount: number
+  text?: string,
+}
+
+type RequestError = {
+  message?: string;
+}
+
+type AuthContextType = {
+  user: any,
+  login: (username: string, password: string) => void,
+  logout: () => void
+}
+
+type SettingsType = {
+  TRACKS_API: string,
+  MOVIES_API: string,
+  MOVIES_POSTERS: string,
+  UPLOAD_ROOT: string,
+  INSPIRATION_API: string,
+  QUESTION_API: string,
+  UPLOAD_SIZE_LIMIT: number
+
 }

@@ -1,24 +1,17 @@
-import { useContext, useState } from 'react';
-import MyContext from '../components/MyContext';
-import '../Types';
-import {
-  AUTH_HEADER,
-  REST_ENDPOINT,
-  STORAGE_KEY,
-} from '../constants';
+import { useState } from 'react';
+import { useSetting } from '../components/SettingContext';
+import createHeaders from '../utils/createHeaders';
+import { REST_ENDPOINT } from '../constants';
 
 const useMediaSelect = (mediaDefault: MediaType) => {
   //type safe the media
-  const { UPLOAD_ROOT } = useContext(MyContext);
-
+  const { UPLOAD_ROOT } = useSetting() as SettingsType;
   const [mediaSelect, setMedia] = useState<MediaType>(mediaDefault);
 
   async function xhrCall(url: string) {
     console.log(`xhrCall ${url}`);
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set(AUTH_HEADER, token);
 
+    const requestHeaders = createHeaders();
     const response = await fetch(url, {
       headers: requestHeaders,
     },
