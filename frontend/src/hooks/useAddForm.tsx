@@ -5,13 +5,10 @@ import createHeaders from '../utils/createHeaders';
 
 const useFetch = (): any => {
   const [newId, setId] = useState<number | null>(null);
-  const [formEntry, setNewEntry] = useState<{
-    content: string,
-    date: string,
-  }>({ content: '', date: '' });
+  const [formEntry, setNewEntry] = useState<EntryType | null>(null);
 
   useEffect(() => {
-    if (formEntry.content !== '') {
+    if (formEntry?.content !== '') {
       (async () => {
         const requestHeaders = createHeaders();
         try {

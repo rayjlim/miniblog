@@ -26,19 +26,12 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
         content: textareaInput.current?.value || '',
         date: dateInput.current?.value || '',
       }),
-      headers: requestHeaders
-    };
+      headers: requestHeaders,
+      mode: 'cors'
+    } as any;
 
     try {
-      const response = await fetch(
-        `${REST_ENDPOINT}/api/posts/${entry?.id}`,
-        {
-          ...options,
-          mode: 'cors',
-          cache: 'no-cache',
-          redirect: 'follow',
-        },
-      );
+      const response = await fetch(`${REST_ENDPOINT}/api/posts/${entry?.id}`, options);
 
       console.log(response);
     } catch (error) {
@@ -87,7 +80,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   function checkKeyPressed(e: any) {
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
-      // Note: this is a hack because the content value is taken from the init value
+      // could convert this to refs instead?
       document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
       document.getElementById('cancelBtn')?.click();

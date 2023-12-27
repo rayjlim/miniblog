@@ -4,7 +4,7 @@ import {
   useState,
   useImperativeHandle
 } from 'react';
-import { useQueryClient, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 
@@ -36,8 +36,8 @@ const EntryList = ({
   isOneDay: boolean,
   onShowEdit: (entry: EntryType) => void
 }, ref: any) => {
-  const queryClient = useQueryClient();
-  const { data, error, isLoading } = useQuery(["entrylist", date, isOneDay], () => fetchData(date, isOneDay));
+
+  const { data, error, isLoading, refetch } = useQuery(["entrylist", date, isOneDay], () => fetchData(date, isOneDay));
   const [isEditing, setIsEditing] = useState(false);
   const internalState = useRef();
   const editEntryId = useRef(0);
@@ -56,19 +56,8 @@ const EntryList = ({
 
       // console.log('resetView', entry);
       console.log(entries, entry);
-      if (entry?.id !== 0 && entries) {
-        if (entry.content === 'DELETE') {
-          const revised = entries.filter((curr: EntryType) => curr.id !== entry.id);
-          queryClient.setQueryData(["entrylist", date, isOneDay], { ...data, entries: revised });
-        }
-        else {
-          console.log(data, date, isOneDay);
-          const revised = entries.map((curr: EntryType) => (curr.id === entry.id) ? entry : curr);
-          queryClient.setQueryData(["entrylist", date, isOneDay], { ...data, entries: revised });
-        }
-      } else if (entry.id !== 0) {
-        console.log('make new entry list', entry);
-        queryClient.setQueryData(["entrylist", date, isOneDay], { ...data, entries: [entry] });
+      if (entry?.id !== -1) {
+        refetch();
       }
 
       setIsEditing(false);
@@ -100,7 +89,6 @@ const EntryList = ({
                 parse(entry.date, FULL_DATE_FORMAT, new Date()),
                 'EEE MM, dd yyyy'
               )}
-              {entry.id}
             </button>
             <div className="markdownDisplay">
               <MarkdownDisplay source={entry.content} />
