@@ -11,6 +11,7 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 
 import { FULL_DATE_FORMAT, REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
+import GoogleMap from './GoogleMap';
 
 const fetchData = async (date: string, isOneDay: boolean) => {
   // console.log('fetchData', date, isOneDay);
@@ -25,7 +26,6 @@ const fetchData = async (date: string, isOneDay: boolean) => {
 
   const data = await response.json();
   return data;
-
 };
 
 const EntryList = ({ date, isOneDay, onShowEdit }: {
@@ -88,7 +88,11 @@ const EntryList = ({ date, isOneDay, onShowEdit }: {
 
   if (isLoading) return <div>Load posts...</div>;
   if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
-
+  const markers: { lat: number, lng: number }[] = [];
+  // const markers: MarkerType[] = [
+  //   { title: 'Random place', lat: 37 + parseFloat(`${Math.random()}`), lng: -121 +  parseFloat(`${Math.random()}`) },
+  //   { title: 'Sharks Ice', lat: 37.319246, lng: -121.864025 },
+  //   { title: 'Saint Anne\'s Church', lat: 37.537338,lng: -121.952241}];
   return (
     <section className={isEditing ? 'noshow' : 'container'}>
       <ul className="entriesList">
@@ -111,6 +115,7 @@ const EntryList = ({ date, isOneDay, onShowEdit }: {
           </li>
         ))}
       </ul>
+      {markers.length > 0 && <GoogleMap markers={markers}/>}
     </section>
   );
 };

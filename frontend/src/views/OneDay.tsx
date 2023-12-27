@@ -6,15 +6,11 @@ import Inspiration from '../components/Inspiration';
 import WeightInfo from '../components/WeightInfo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
+import { SAMEDAY, ONEDAY } from '../constants';
 import './OneDay.css';
 import useOneDay from '../hooks/useOneDay';
 
-const ONEDAY = 0;
-const SAMEDAY = 1;
-
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
-
   const { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef}
     = useOneDay();
 

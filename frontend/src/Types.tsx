@@ -36,6 +36,12 @@ type AuthContextType = {
   logout: () => void
 }
 
+type MarkerType = {
+  lat: number,
+  lng: number,
+  title?: string
+}
+
 type SettingsType = {
   TRACKS_API: string,
   MOVIES_API: string,
@@ -43,6 +49,6 @@ type SettingsType = {
   UPLOAD_ROOT: string,
   INSPIRATION_API: string,
   QUESTION_API: string,
-  UPLOAD_SIZE_LIMIT: number
-
+  UPLOAD_SIZE_LIMIT: number,
+  GOOGLE_API_KEY: string
 }
