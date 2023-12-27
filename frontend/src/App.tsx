@@ -21,6 +21,7 @@ const SAMEDAY = 1;
 
 const queryClient = new QueryClient();
 
+
 const App = () => {
 
   return (
@@ -30,7 +31,7 @@ const App = () => {
           <StrictMode>
             <DevRibbon />
             <div id="app" className="App d-flex flex-column h-100">
-            <ToastContainer />
+            <ToastContainer autoClose={500} />
               <BrowserRouter>
                 <Routes>
                   <Route path="/upload" element={<Upload />} />
