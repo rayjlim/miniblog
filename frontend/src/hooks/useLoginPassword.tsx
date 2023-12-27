@@ -5,9 +5,6 @@ import { useAuth } from '../components/AuthContext';
 import { STORAGE_KEY } from '../constants';
 // import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
-
-
-
 // const fetchGoogleInfo = async (user: any) => {
 //   console.log(user);
 //   const endpoint = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`;

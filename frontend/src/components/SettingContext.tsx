@@ -1,44 +1,28 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
+import { createContext, useContext } from 'react';
+import { useQuery } from "react-query";
+import { REST_ENDPOINT } from '../constants';
 
 const SettingContext = createContext({});
 
+const fetchData = async () => {
+  const response = await fetch(`${REST_ENDPOINT}/settings/`, {
+    mode: 'cors'
+  });
+
+  const data = await response.json();
+  console.log(data);
+  return data;
+};
+
 export const SettingProvider = ({ children }: { children: any }) => {
-  const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState(null);
-  console.log('setting provider');
-  useEffect(() => {
-    console.log('seting up Setting Context');
-    (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY);
-      console.log(`logged in: ${(token !== null && token !== '')} ${token}`);
+  const { data: settings, error, isLoading } = useQuery(["settings"], () => fetchData());
 
-      if (!settings && token) {
-        try {
-          const response = await fetch(`${REST_ENDPOINT}/settings/`, {
-            mode: 'cors'
-          });
-          const results = await response.json();
-
-          if (response.ok) {
-            console.log('Setting Context is UP');
-            setSettings(results);
-            console.log(results);
-          }
-        } catch (error) {
-          console.error('Error: ', error);
-          throw new Error('Settings not loading correctly');
-        }finally {
-          setLoading(false);
-        }
-      }
-    })();
-  }, [settings]);
-
+  if (isLoading) return <div>Loading settings...</div>;
+  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <SettingContext.Provider value={settings || {}}>
-       {loading ? <div>Loading settings...</div> : children}
+       {children}
     </SettingContext.Provider>
   );
 };
