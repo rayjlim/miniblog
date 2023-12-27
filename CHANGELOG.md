@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.25.0](https://github.com/rayjlim/miniblog/compare/v2.24.0...v2.25.0) (2023-12-27)
+
+
+### Features
+
+* [#280](https://github.com/rayjlim/miniblog/issues/280) logs converted to react query ([223986a](https://github.com/rayjlim/miniblog/commit/223986a3f44a2854391ff782ffe9f7093f49ead7))
+* [#280](https://github.com/rayjlim/miniblog/issues/280) movies use react-query ([5bae3f5](https://github.com/rayjlim/miniblog/commit/5bae3f5eb3fd246acd8de99faf0cd65be46eac0e))
+* [#280](https://github.com/rayjlim/miniblog/issues/280) OneDay view using react query ([28ed060](https://github.com/rayjlim/miniblog/commit/28ed060a1206639601aa9fa226c845c51a2bb20b))
+* [#280](https://github.com/rayjlim/miniblog/issues/280) react-query usage impl-weight ([2fec174](https://github.com/rayjlim/miniblog/commit/2fec174b0ecfcc6c364a4df12b271a371c95f2a4))
+* [#280](https://github.com/rayjlim/miniblog/issues/280) search impl react query ([5aee99c](https://github.com/rayjlim/miniblog/commit/5aee99c9ec7dfcc1c99be3df1e4196f92e5e341c))
+* Auth login converted to react query context ([a38330a](https://github.com/rayjlim/miniblog/commit/a38330a33b360f357e47b3f7946c0cd3a9409f58))
+* handle date passed in URL path ([ebb52f6](https://github.com/rayjlim/miniblog/commit/ebb52f6f9081d2d3f11ce1f010cdb8b26fc8abda))
+* inpiration use react-query ([f0daf63](https://github.com/rayjlim/miniblog/commit/f0daf6362310093a9abf269fa53e1aa83029d38d))
+* media list using react query ([430b4d1](https://github.com/rayjlim/miniblog/commit/430b4d127af78a6e70de96e682a6da2fca916ce3))
+* pass date as part of URL from search ([504ca82](https://github.com/rayjlim/miniblog/commit/504ca825e0a4dd6180486da95c36fa088e040da8))
+* search results and edit work ([4dbefd7](https://github.com/rayjlim/miniblog/commit/4dbefd7df79467f1ccdf4668320282366475b450))
+* SearchResults component w/ React-query ([8688f2c](https://github.com/rayjlim/miniblog/commit/8688f2cc6bae9478ee032e22afcdec5c2e6f4125))
+* year month selector refactor ([9ef7710](https://github.com/rayjlim/miniblog/commit/9ef771088bed8c3bad385492deea3f60efae5f10))
+
+
+### Bug Fixes
+
+* check movies exists ([f87a84a](https://github.com/rayjlim/miniblog/commit/f87a84ad35a10bbdfab9586d4e423e2f5fde3dad))
+* component name ([9cfcd59](https://github.com/rayjlim/miniblog/commit/9cfcd59982e216aeb6c82dfb1dfabf6dad661579))
+* convert to createHeaders util function ([a8aeba0](https://github.com/rayjlim/miniblog/commit/a8aeba06bf636067b84cbbdc01dcdc08313bd338))
+* handle of default start date ([97ff9a1](https://github.com/rayjlim/miniblog/commit/97ff9a11019c79d44b37bc7c979de2886a708e31))
+* refactor error message output ([98b7037](https://github.com/rayjlim/miniblog/commit/98b70376577f53fe1f7ba999cbdfd7a2441d0883))
+* refactor media list display tags, remove proptypes ([88442a5](https://github.com/rayjlim/miniblog/commit/88442a5ae11564732ed2df1bd6947c715970b18d))
+* refactor MyContext to SettingContext ([1af8a55](https://github.com/rayjlim/miniblog/commit/1af8a55f9669f8cec60b9c3c936409d4110ed6bc))
+* refactor remove PropTypes usage ([dbbac12](https://github.com/rayjlim/miniblog/commit/dbbac129949d796cff18a7cc8ef6dc38bd5dd45b))
+* refactor to custom hook ([2ffd16e](https://github.com/rayjlim/miniblog/commit/2ffd16e5c7a0c0948790cdef3008b6f42acb4870))
+* refactor to useCreateHeaders ([4cbaff8](https://github.com/rayjlim/miniblog/commit/4cbaff8545ab34c42c7c22b2c54aa4c5013f24cd))
+* refactor=move toastcontainer to top ([33a747e](https://github.com/rayjlim/miniblog/commit/33a747e988eda049684a0d44ba24952b8bbab900))
+* refetch on media delete ([b25239f](https://github.com/rayjlim/miniblog/commit/b25239fab30ca310fe48126674fcf31d7ff3482f))
+* remove hacky hidden button scroll to ([f21f841](https://github.com/rayjlim/miniblog/commit/f21f841945bedb2bfdd45d1f4669ff7a892de1da))
+* remove spacer text used ([5983202](https://github.com/rayjlim/miniblog/commit/5983202f652e945f402a5b8172ee55447abe0473))
+* remove unneccesary param ([6f68ed3](https://github.com/rayjlim/miniblog/commit/6f68ed3ce1c1c4b14fbb5e66b93b801554a7d623))
+* remove unneded Typpes import, remove PropTypes usage ([e0dc0e3](https://github.com/rayjlim/miniblog/commit/e0dc0e38c8d1b444c75b34224664512219d2b23f))
+* search param type ([059ccb6](https://github.com/rayjlim/miniblog/commit/059ccb69575e7dc566468a20787340c901144d1e))
+* settingcontext impl react query ([45ec7ff](https://github.com/rayjlim/miniblog/commit/45ec7ff2cf37de4e2d9126e721515cc0927f8c05))
+* settings don't refetch on navigating away ([450df54](https://github.com/rayjlim/miniblog/commit/450df54e9216991a862659613b4ba36fdcbec352))
+* type check in sub-comp call ([c06ed39](https://github.com/rayjlim/miniblog/commit/c06ed39ae912681cb9ba204c78cba2f37ecce26c))
+* type checking ([cfb57a1](https://github.com/rayjlim/miniblog/commit/cfb57a1922720e495fe1f0d761083852fffd39b5))
+* WIP: react query breaks Vite mocks ([9df93a1](https://github.com/rayjlim/miniblog/commit/9df93a17cde097a20d0e7b1b345401523e273027))
+
 ## [2.24.0](https://github.com/rayjlim/miniblog/compare/v2.23.0...v2.24.0) (2023-12-07)
 
 
