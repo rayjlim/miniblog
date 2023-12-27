@@ -8,7 +8,7 @@ const useFetch = (): any => {
   const [formEntry, setNewEntry] = useState<EntryType | null>(null);
 
   useEffect(() => {
-    if (formEntry?.content !== '') {
+    if (formEntry && formEntry?.content !== '') {
       (async () => {
         const requestHeaders = createHeaders();
         try {
@@ -76,7 +76,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string, entr
 
   useEffect(() => {
     console.log(`AddForm: useEffect ${isMounted.current}`);
-    if (isMounted.current && id !== null) {
+    if (id !== null) {
       // This makes it so this is not called on the first render
       // but when the Id is set
       onSuccess(`Add Done : New Id: ${id}`, {
