@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useRef } from 'react';
 import { useQuery } from "react-query";
 import { REST_ENDPOINT } from '../constants';
 
@@ -10,19 +10,20 @@ const fetchData = async () => {
   });
 
   const data = await response.json();
-  console.log(data);
   return data;
 };
 
 export const SettingProvider = ({ children }: { children: any }) => {
-  const { data: settings, error, isLoading } = useQuery(["settings"], () => fetchData());
+  const isLoaded = useRef(false);
+  const { data: settings, error, isLoading } = useQuery(["settings"], () => fetchData(), { keepPreviousData: true, enabled: !isLoaded.current });
+  isLoaded.current = true;
 
   if (isLoading) return <div>Loading settings...</div>;
-  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
+  if (error) return <div>Unable to Load Settings, an error occurred: {(error as RequestError).message}</div>;
 
   return (
     <SettingContext.Provider value={settings || {}}>
-       {children}
+      {children}
     </SettingContext.Provider>
   );
 };
