@@ -29,3 +29,9 @@ type SearchParamsType = {
 type RequestError = {
   message?: string;
 }
+
+type AuthContextType = {
+  user: any,
+  login: (username: string, password: string)=>void,
+  logout: ()=>void
+}

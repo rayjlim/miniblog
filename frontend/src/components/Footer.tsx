@@ -1,5 +1,6 @@
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { STORAGE_KEY } from '../constants';
+import { useAuth } from './AuthContext';
 import pkg from '../../package.json';
 import './Footer.css'
 
@@ -12,9 +13,10 @@ type LinksPropType = {
 
 const Footer = ({ links }: { links?: LinksPropType }) => {
   const usersFullname = window.localStorage.getItem('user-name') || '';
+  const { logout } = useAuth() as any;
   const navigate = useNavigate();
   const doLogout = () => {
-    window.localStorage.removeItem(STORAGE_KEY);
+    logout();
     navigate('/login');
   };
 

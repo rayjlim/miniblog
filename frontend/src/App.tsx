@@ -14,6 +14,7 @@ import LoginPassword from './views/LoginPassword';
 import Logs from './views/Logs';
 
 import './App.css';
+import { AuthProvider } from './components/AuthContext';
 
 const SAMEDAY = 1;
 
@@ -26,36 +27,38 @@ const App = () => {
     <>
       {globalContext !== null && (
         <QueryClientProvider client={queryClient}>
-          <MyContext.Provider value={globalContext}>
-            <GoogleOAuthProvider clientId={globalContext.GOOGLE_OAUTH_CLIENTID}>
-              <React.StrictMode>
-                <DevRibbon />
+          <AuthProvider>
+            <MyContext.Provider value={globalContext}>
+              <GoogleOAuthProvider clientId={globalContext.GOOGLE_OAUTH_CLIENTID}>
+                <React.StrictMode>
+                  <DevRibbon />
 
-                <div id="app" className="App d-flex flex-column h-100">
-                  <BrowserRouter>
-                    <Routes>
-                      <Route path="/upload" element={<Upload />} />
-                      <Route path="/media" element={<Media />} />
-                      <Route path="/search" element={<Search />} />
-                      <Route path="/oneday" element={<OneDay />} />
-                      <Route path="/oneday/:date" element={<OneDay />} />
-                      <Route
-                        path="/sameday"
-                        element={<OneDay pageMode={SAMEDAY} />}
-                      />
-                      <Route
-                        path="/sameday/:date"
-                        element={<OneDay pageMode={SAMEDAY} />}
-                      />
-                      <Route path="/logs" element={<Logs />} />
-                      <Route path="/login" element={<LoginPassword />} />
-                      <Route path="*" element={<Navigate to="/oneday/" replace />} />
-                    </Routes>
-                  </BrowserRouter>
-                </div>
-              </React.StrictMode>
-            </GoogleOAuthProvider>
-          </MyContext.Provider>
+                  <div id="app" className="App d-flex flex-column h-100">
+                    <BrowserRouter>
+                      <Routes>
+                        <Route path="/upload" element={<Upload />} />
+                        <Route path="/media" element={<Media />} />
+                        <Route path="/search" element={<Search />} />
+                        <Route path="/oneday" element={<OneDay />} />
+                        <Route path="/oneday/:date" element={<OneDay />} />
+                        <Route
+                          path="/sameday"
+                          element={<OneDay pageMode={SAMEDAY} />}
+                        />
+                        <Route
+                          path="/sameday/:date"
+                          element={<OneDay pageMode={SAMEDAY} />}
+                        />
+                        <Route path="/logs" element={<Logs />} />
+                        <Route path="/login" element={<LoginPassword />} />
+                        <Route path="*" element={<Navigate to="/oneday/" replace />} />
+                      </Routes>
+                    </BrowserRouter>
+                  </div>
+                </React.StrictMode>
+              </GoogleOAuthProvider>
+            </MyContext.Provider>
+          </AuthProvider>
         </QueryClientProvider>
       )}
     </>
