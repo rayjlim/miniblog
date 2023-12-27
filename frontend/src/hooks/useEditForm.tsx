@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
 
@@ -19,13 +20,10 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   async function handleSave() {
     console.log('handleSave entry :');
     const requestHeaders = createHeaders();
-    const newEntry = {...entry, id: entry?.id || 0, content: textareaInput.current?.value || '', date: dateInput.current?.value || ''};
+    const newEntry = { ...entry, content: textareaInput.current?.value || '', date: dateInput.current?.value || '' };
     const options = {
       method: 'PUT',
-      body: JSON.stringify({
-        content: textareaInput.current?.value || '',
-        date: dateInput.current?.value || '',
-      }),
+      body: JSON.stringify(newEntry),
       headers: requestHeaders,
       mode: 'cors'
     } as any;
@@ -36,11 +34,11 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       console.log(response);
     } catch (error) {
       console.log(error);
-      alert(error);
-      onSuccess('Edit fail' + error, newEntry);
+      toast((error as any).message);
+      onSuccess('Edit fail' + error, newEntry as EntryType);
     }
 
-    onSuccess('Edit Done', newEntry);
+    onSuccess('Edit Done', newEntry as EntryType);
   }
 
   /**
@@ -69,12 +67,11 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       );
 
       console.log(response);
-
     } catch (error) {
       console.log(error);
-      alert(error);
+      toast((error as any).message);
     }
-    onSuccess('Delete Done', {id, content: 'DELETE', date: ''});
+    onSuccess('Delete Done', { id, content: 'DELETE', date: '' });
   }
 
   function checkKeyPressed(e: any) {
@@ -89,7 +86,9 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
 
   useEffect(() => {
     console.log('EditForm: useEffect');
-
+    textareaInput.current?.focus();
+    const textLength = textareaInput.current?.value.length || 0;
+    textareaInput.current?.setSelectionRange(textLength, textLength);
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
