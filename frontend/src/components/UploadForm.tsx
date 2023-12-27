@@ -1,14 +1,14 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
-import MyContext from '../components/MyContext';
+import { useSetting } from './SettingContext';
 import { REST_ENDPOINT } from '../constants';
 
 import createHeaders from '../utils/createHeaders';
 
 const UploadForm = () => {
   const navigate = useNavigate();
-  const { UPLOAD_SIZE_LIMIT } = useContext(MyContext);
+  const { UPLOAD_SIZE_LIMIT } = useSetting() as SettingsType;
   const [file, setFile] = useState<File>();
   const [status, setStatus] = useState<
     "initial" | "uploading" | "success" | "fail"

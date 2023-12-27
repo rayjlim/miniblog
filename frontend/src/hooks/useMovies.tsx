@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { useQuery } from "react-query";
-import MyContext from '../components/MyContext';
+import { useSetting } from '../components/SettingContext';
 
 const fetchData = async (api: string, date: string) => {
   if (api !== '') {
@@ -12,7 +11,7 @@ const fetchData = async (api: string, date: string) => {
 };
 
 const useMovies = (date: string) => {
-  const { MOVIES_API } = useContext(MyContext);
+  const { MOVIES_API } = useSetting() as SettingsType;
   const { data, error, isLoading } = useQuery(["movies", date], () => fetchData(MOVIES_API, date));
   const movies = data?.movies;
 

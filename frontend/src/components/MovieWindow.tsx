@@ -1,11 +1,9 @@
-import { useContext } from 'react';
-
-import MyContext from './MyContext';
+import { useSetting } from './SettingContext';
 
 import './MovieWindow.css';
 
 const MovieWindow = ({ movie }: { movie: MovieType }) => {
-  const { MOVIES_POSTERS } = useContext(MyContext);
+  const { MOVIES_POSTERS } = useSetting() as SettingsType;
   const { title, imdbImageId, imdbId } = movie;
   const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
   const imdbUrl = `https://www.imdb.com/title/${imdbId}/`;

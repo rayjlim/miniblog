@@ -32,6 +32,17 @@ type RequestError = {
 
 type AuthContextType = {
   user: any,
-  login: (username: string, password: string)=>void,
-  logout: ()=>void
+  login: (username: string, password: string) => void,
+  logout: () => void
+}
+
+type SettingsType = {
+  TRACKS_API: string,
+  MOVIES_API: string,
+  MOVIES_POSTERS: string,
+  UPLOAD_ROOT: string,
+  INSPIRATION_API: string,
+  QUESTION_API: string,
+  UPLOAD_SIZE_LIMIT: number
+
 }

@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { REST_ENDPOINT } from '../constants';
-import MyContext from './MyContext';
+import { useSetting } from './SettingContext';
 import createHeaders from '../utils/createHeaders';
 
 const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
@@ -8,7 +7,7 @@ const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
   selectMedia: (filePath: string, fileName: string) => void,
   onChange: (filePath: string) => void
 }) => {
-  const { UPLOAD_ROOT } = useContext(MyContext);
+  const { UPLOAD_ROOT } = useSetting() as SettingsType;
 
   function deleteMedia(filePath: string, fileName: string) {
     const go = window.confirm('You sure?');

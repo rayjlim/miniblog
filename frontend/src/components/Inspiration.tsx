@@ -1,14 +1,9 @@
-
-import { useContext } from 'react';
-import MyContext from '../components/MyContext';
+import { useSetting } from './SettingContext';
 import useInspiration from '../hooks/useInspiration';
 
 const Inspiration = () => {
   const { output, isLoading, error, getByType } = useInspiration();
-  const {
-    INSPIRATION_API,
-    QUESTION_API,
-  } = useContext(MyContext);
+  const { INSPIRATION_API, QUESTION_API } = useSetting() as SettingsType;
 
   function copyToClipboard(content: string) {
     console.log(`clipboard: ${content}`);
@@ -16,7 +11,7 @@ const Inspiration = () => {
   }
 
   if (isLoading) return <div>Load ...</div>;
-  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
+  if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <>

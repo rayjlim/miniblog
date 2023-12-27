@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
-import { useContext } from 'react';
-import MyContext from '../components/MyContext';
+import { useSetting } from '../components/SettingContext';
 
 const fetchData = async (api: string, date: string) => {
   if (api !== '') {
@@ -12,9 +11,9 @@ const fetchData = async (api: string, date: string) => {
 };
 
 const useWeightInfo = (date: string) => {
-  const { TRACKS_API } = useContext(MyContext);
+  const { TRACKS_API } = useSetting() as SettingsType;
   const { data, error, isLoading } = useQuery(["weight", date], () => fetchData(TRACKS_API, date));
-  const weight = data?.data[0] || {count: 0};
+  const weight = data?.data[0] || { count: 0 };
 
   return { weight, isLoading, error }
 };

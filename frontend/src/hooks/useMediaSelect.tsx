@@ -1,12 +1,11 @@
-import { useContext, useState } from 'react';
-import MyContext from '../components/MyContext';
+import { useState } from 'react';
+import { useSetting } from '../components/SettingContext';
 import createHeaders from '../utils/createHeaders';
 import { REST_ENDPOINT } from '../constants';
 
 const useMediaSelect = (mediaDefault: MediaType) => {
   //type safe the media
-  const { UPLOAD_ROOT } = useContext(MyContext);
-
+  const { UPLOAD_ROOT } = useSetting() as SettingsType;
   const [mediaSelect, setMedia] = useState<MediaType>(mediaDefault);
 
   async function xhrCall(url: string) {

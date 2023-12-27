@@ -1,5 +1,4 @@
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
-import { STORAGE_KEY } from '../constants';
 import { useAuth } from './AuthContext';
 import pkg from '../../package.json';
 import './Footer.css'

@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect, useRef } from 'react';
-import MyContext from '../components/MyContext';
+import { useState, useEffect, useRef } from 'react';
+import { useSetting } from '../components/SettingContext';
 
 
 const useMedia = () => {
-  const { UPLOAD_ROOT } = useContext(MyContext);
+  const { UPLOAD_ROOT } = useSetting() as SettingsType;
   const isMounted = useRef<boolean>(false);
   const [media, setMedia] = useState<MediaType | null>(null);
 

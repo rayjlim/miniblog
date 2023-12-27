@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from "react-query";
-import MyContext from '../components/MyContext';
+import { useSetting } from '../components/SettingContext';
 
 const fetchData = async (api: string) => {
   if (api !== '') {
@@ -11,10 +11,7 @@ const fetchData = async (api: string) => {
 };
 
 const useInspiration = () => {
-  const {
-    INSPIRATION_API,
-    QUESTION_API,
-  } = useContext(MyContext);
+  const { INSPIRATION_API, QUESTION_API } = useSetting() as SettingsType;
   const [isInspiration, setIsInspiration] = useState<boolean>(true);
   const [random, setRandom] = useState(0);
   const [api, setApi] = useState<string>(INSPIRATION_API);
