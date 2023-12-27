@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useEffect,
   useRef,
   useState,
   useImperativeHandle
@@ -27,11 +28,7 @@ const fetchData = async (date: string, isOneDay: boolean) => {
 
 };
 
-const EntryList = ({
-  date,
-  isOneDay,
-  onShowEdit
-}: {
+const EntryList = ({ date, isOneDay, onShowEdit }: {
   date: string,
   isOneDay: boolean,
   onShowEdit: (entry: EntryType) => void
@@ -40,13 +37,13 @@ const EntryList = ({
   const { data, error, isLoading, refetch } = useQuery(["entrylist", date, isOneDay], () => fetchData(date, isOneDay));
   const [isEditing, setIsEditing] = useState(false);
   const internalState = useRef();
-  const editEntryId = useRef(0);
+  const scrollBackEntryId = useRef(0);
 
   const entries: EntryType[] = data?.entries;
 
   const showEdit = (entry: EntryType) => {
     setIsEditing(true);
-    editEntryId.current = entry.id;
+    scrollBackEntryId.current = entry.id;
     onShowEdit(entry);
   }
 
@@ -63,7 +60,7 @@ const EntryList = ({
       setIsEditing(false);
 
       setTimeout(() => {
-        const target = document.getElementById(`li${editEntryId.current}`);
+        const target = document.getElementById(`li${scrollBackEntryId.current}`);
         target?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
@@ -71,6 +68,21 @@ const EntryList = ({
       }, 0);
     }
   }), [internalState]);
+
+  function checkKeyPressed(e: any) {
+    console.log(`Entrylist: handle key presss ${e.key}`);
+    if (e.altKey && e.key === '1') {
+      console.log('e keybinding');
+      document.getElementById(`edit${entries[0]?.id}`)?.click();
+    }
+  }
+
+  useEffect(() => {
+    console.log(`entrylist: useEffect`);
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
+  }, []);
+
 
   if (isLoading) return <div>Load posts...</div>;
   if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
@@ -81,6 +93,7 @@ const EntryList = ({
         {entries && entries.map((entry: EntryType) => (
           <li key={entry.id} id={`li${entry.id}`}>
             <button
+              id={`edit${entry.id}`}
               onClick={() => showEdit(entry)}
               className="plainLink"
               type="button"
