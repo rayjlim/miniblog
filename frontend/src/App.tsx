@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ToastContainer } from 'react-toastify';
 // import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import DevRibbon from './components/DevRibbon';
@@ -12,9 +13,10 @@ import LoginPassword from './views/LoginPassword';
 import Logs from './views/Logs';
 
 import { SettingProvider } from './components/SettingContext';
-import './App.css';
 import { AuthProvider } from './components/AuthContext';
 
+import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 const SAMEDAY = 1;
 
 const queryClient = new QueryClient();
@@ -28,6 +30,7 @@ const App = () => {
           <StrictMode>
             <DevRibbon />
             <div id="app" className="App d-flex flex-column h-100">
+            <ToastContainer />
               <BrowserRouter>
                 <Routes>
                   <Route path="/upload" element={<Upload />} />

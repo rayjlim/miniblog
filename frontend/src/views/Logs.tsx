@@ -1,5 +1,3 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import LogRow from '../components/LogRow';
@@ -15,7 +13,6 @@ const Logs = () => {
 
   return (
     <>
-      <ToastContainer />
       <Header />
       <h1>Logs</h1>
       <ul>

@@ -1,8 +1,5 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-
 import EditForm from '../components/EditForm';
 import SearchForm from '../components/SearchForm';
 import SearchResults from '../components/SearchResults';
@@ -15,7 +12,6 @@ const Search = () => {
 
   return (
     <>
-      <ToastContainer />
       <Header links={{
         search: false,
         oneday: true,

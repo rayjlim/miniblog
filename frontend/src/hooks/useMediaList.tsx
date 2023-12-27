@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useQuery } from "react-query";
+import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
 
@@ -17,15 +18,12 @@ const fetchData = async (dir: string) => {
 const useMediaList = () => {
   const [currentDir, setCurrentDir] = useState<string>('');
   const { data, error, isLoading, refetch } = useQuery(["mediaDir", currentDir], () => fetchData(currentDir));
-  const _data = useRef(data);
 
   function onDeleteItem(fileName: string) {
-    console.log('media delete', fileName, _data.current);
+    console.log('media delete', fileName);
+    toast(`Removed ${fileName}`);
     refetch();
   }
-
-  _data.current = data;
-  console.log(_data.current);
 
   const uploadDirs = data && Object.values(data?.uploadDirs);
   const medias = data && Object.values(data?.dirContent);

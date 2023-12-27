@@ -1,11 +1,9 @@
-import { ToastContainer } from 'react-toastify';
 import useLoginPassword from '../hooks/useLoginPassword';
 
 const LoginForm = () => {
   const {handleLogin, loginMutation, user} = useLoginPassword();
   return (
     <div className="App">
-      <ToastContainer />
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <label>

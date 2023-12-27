@@ -1,5 +1,3 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DateNav from '../components/DateNav';
 import AddEditForm from '../components/AddEditForm';
 import EntryList from '../components/EntryList';
@@ -29,7 +27,6 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
 
   return (
     <>
-      <ToastContainer />
       <Header links={headerLinks} />
 
       <h1 className="view-head">
