@@ -2,10 +2,10 @@ import { REST_ENDPOINT } from '../constants';
 import { useSetting } from './SettingContext';
 import createHeaders from '../utils/createHeaders';
 
-const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
+const MediaItem = ({ media, currentDir, selectMedia, onDelete }: {
   media: string, currentDir: string,
   selectMedia: (filePath: string, fileName: string) => void,
-  onChange: (filePath: string) => void
+  onDelete: (filePath: string) => void
 }) => {
   const { UPLOAD_ROOT } = useSetting() as SettingsType;
 
@@ -30,7 +30,7 @@ const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
       } else {
         // Do anything with the metadata return after delete?
         // const data = await response.json();
-        onChange(filePath);
+        onDelete(fileName);
       }
     })();
   }
