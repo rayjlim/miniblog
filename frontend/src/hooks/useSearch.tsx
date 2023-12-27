@@ -12,9 +12,7 @@ const useSearch = () => {
   const childRef = useRef();
 
   function resetEntryForm(msg: string, entry: EntryType) {
-    if (msg) {
-      toast(msg);
-    }
+    msg && toast(msg);
 
     setEditEntry(null);
     const subComp = childRef.current as any;

@@ -21,7 +21,7 @@ const useOneDay = () => {
   }
 
   function resetEntryForm(msg: string, entry: EntryType) {
-    toast(msg);
+    msg && toast(msg);
 
     setEditEntry(null);
     const subComp = childRef.current as any;
