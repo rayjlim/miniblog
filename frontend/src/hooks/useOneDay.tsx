@@ -17,11 +17,27 @@ const useOneDay = () => {
     if (e.altKey && e.key === 'f') {
       navigate('/search');
       e.preventDefault();
+    } else if (e.altKey && e.key === 't') {
+      e.preventDefault();
+      const target = document.getElementById('top');
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+
+    } else if (e.altKey && e.key === 'b') {
+      e.preventDefault();
+      const target = document.getElementById('bottom');
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+
     }
   }
 
   function resetEntryForm(msg: string, entry: EntryType) {
-    toast(msg);
+    msg && toast(msg);
 
     setEditEntry(null);
     const subComp = childRef.current as any;

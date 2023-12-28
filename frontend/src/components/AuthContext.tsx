@@ -2,7 +2,6 @@
 import { createContext, useContext, useState } from 'react';
 import { REST_ENDPOINT, STORAGE_KEY } from '../constants';
 
-
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }: { children: any }) => {
@@ -29,7 +28,6 @@ export const AuthProvider = ({ children }: { children: any }) => {
       const userData = await response.json();
       setUser(userData);
     } else {
-
       throw new Error('Login failed');
     }
   };

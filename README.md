@@ -43,3 +43,16 @@ Output will be
     a DB drop and populate file, to be called for reset of data
         will drop the table(s)
         will populate from sql values
+
+## Shortcut Keys
+
+Alt + o : Open OneDay [search]  
+Alt + f : Open Search [one day]  
+Alt + t : Go to Top [one day]  
+Alt + b : Go to Bottom [one day]  
+Alt + s : Save [Edit mode, Add mode]  
+Escape  : Cancel [Edit mode, Add mode]  
+Alt + , : Prev Day [one day]  
+Alt + . : Next Day [one day]  
+Alt + 1 : Add or Edit first entry [one day]  
+Alt + a ' Open Add Form [one day]  

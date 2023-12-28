@@ -21,7 +21,7 @@ const Footer = ({ links }: { links?: LinksPropType }) => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left footer">
+      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left footer" id="bottom">
         {links?.upload && <RouterNavLink to="/upload" className="spaced-link">
           <i className="fa fa-file-upload" />
           <span className="nav-text">Upload Pix</span>

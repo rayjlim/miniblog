@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useEffect,
   useRef,
   useState,
   useImperativeHandle
@@ -10,6 +11,7 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 
 import { FULL_DATE_FORMAT, REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
+import GoogleMap from './GoogleMap';
 
 const fetchData = async (date: string, isOneDay: boolean) => {
   // console.log('fetchData', date, isOneDay);
@@ -24,14 +26,9 @@ const fetchData = async (date: string, isOneDay: boolean) => {
 
   const data = await response.json();
   return data;
-
 };
 
-const EntryList = ({
-  date,
-  isOneDay,
-  onShowEdit
-}: {
+const EntryList = ({ date, isOneDay, onShowEdit }: {
   date: string,
   isOneDay: boolean,
   onShowEdit: (entry: EntryType) => void
@@ -40,13 +37,13 @@ const EntryList = ({
   const { data, error, isLoading, refetch } = useQuery(["entrylist", date, isOneDay], () => fetchData(date, isOneDay));
   const [isEditing, setIsEditing] = useState(false);
   const internalState = useRef();
-  const editEntryId = useRef(0);
+  const scrollBackEntryId = useRef(0);
 
   const entries: EntryType[] = data?.entries;
 
   const showEdit = (entry: EntryType) => {
     setIsEditing(true);
-    editEntryId.current = entry.id;
+    scrollBackEntryId.current = entry.id;
     onShowEdit(entry);
   }
 
@@ -63,7 +60,7 @@ const EntryList = ({
       setIsEditing(false);
 
       setTimeout(() => {
-        const target = document.getElementById(`li${editEntryId.current}`);
+        const target = document.getElementById(`li${scrollBackEntryId.current}`);
         target?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
@@ -72,15 +69,37 @@ const EntryList = ({
     }
   }), [internalState]);
 
+  function checkKeyPressed(e: any) {
+    // console.log(`Entrylist: handle key presss ${e.key}`);
+    if (e.altKey && e.key === '1') {
+      console.log('e keybinding', entries);
+      const targetId = entries.length ?
+      `edit${entries[0]?.id}` : 'addFormBtn';
+      document.getElementById(targetId)?.click();
+    }
+  }
+
+  useEffect(() => {
+    console.log(`entrylist: useEffect`);
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
+  }, [entries]);
+
+
   if (isLoading) return <div>Load posts...</div>;
   if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
-
+  const markers: { lat: number, lng: number }[] = [];
+  // const markers: MarkerType[] = [
+  //   { title: 'Random place', lat: 37 + parseFloat(`${Math.random()}`), lng: -121 +  parseFloat(`${Math.random()}`) },
+  //   { title: 'Sharks Ice', lat: 37.319246, lng: -121.864025 },
+  //   { title: 'Saint Anne\'s Church', lat: 37.537338,lng: -121.952241}];
   return (
     <section className={isEditing ? 'noshow' : 'container'}>
       <ul className="entriesList">
         {entries && entries.map((entry: EntryType) => (
           <li key={entry.id} id={`li${entry.id}`}>
             <button
+              id={`edit${entry.id}`}
               onClick={() => showEdit(entry)}
               className="plainLink"
               type="button"
@@ -96,6 +115,7 @@ const EntryList = ({
           </li>
         ))}
       </ul>
+      {markers.length > 0 && <GoogleMap markers={markers}/>}
     </section>
   );
 };

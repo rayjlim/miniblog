@@ -31,6 +31,7 @@ class Settings
         $data = new stdClass();
         $data->UPLOAD_ROOT = $_ENV['FE_UPLOAD_ROOT'] ?? '';
         $data->GOOGLE_OAUTH_CLIENTID = $_ENV['FE_GOOGLE_OAUTH_CLIENTID'] ?? '';
+        $data->GOOGLE_API_KEY = $_ENV['FE_GOOGLE_API_KEY'] ?? '';
 
         $data->INSPIRATION_API = $_ENV['FE_INSPIRATION_API'] ?? '';
         $data->QUESTION_API = $_ENV['FE_QUESTION_API'] ?? '';
@@ -46,3 +47,4 @@ class Settings
         return $response;
     }
 }
+
