@@ -81,7 +81,7 @@ class CUDHandler
             $smsEntry = new SmsEntrie();
             $smsEntry->id = $found['id'];
             $smsEntry->date = $found['date'];
-            $smsEntry->content = $found['content'] . "  \n" . trim(urldecode($entry->content));
+            $smsEntry->content = $found['content'] . "\n\n" . trim(urldecode($entry->content));
             $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
             $this->dao->update($smsEntry);
         } else {

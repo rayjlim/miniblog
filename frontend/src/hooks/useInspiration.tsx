@@ -27,11 +27,6 @@ const useInspiration = () => {
 
   const output = isInspiration ? `${data?.message} - ${data?.author}` : data?.prompt;
 
-  // function copyToClipboard(content: string) {
-  //   console.log(`clipboard: ${content}`);
-  //   navigator.clipboard.writeText(content);
-  // }
-
   function openWithPrompt(content: string) {
     // console.log(`clipboard: ${content}`);
     document.getElementById('addFormBtn')?.click();
@@ -40,7 +35,7 @@ const useInspiration = () => {
       textareaInput?.focus();
 
       if (textareaInput)
-        textareaInput.value = `**${content}** #prompt  \n`;
+        textareaInput.value = `\n\n----\n**${content}** #prompt  \n`;
       const textLength = textareaInput?.value.length || 0;
       textareaInput?.setSelectionRange(textLength, textLength);
     }, 100);
