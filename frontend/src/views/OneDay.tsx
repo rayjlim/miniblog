@@ -12,7 +12,7 @@ import useOneDay from '../hooks/useOneDay';
 
 const OneDay = ({ pageMode }: { pageMode?: number }) => {
   const { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef }
-    = useOneDay();
+    = useOneDay(pageMode || ONEDAY);
 
   const headerLinks = {
     search: true,

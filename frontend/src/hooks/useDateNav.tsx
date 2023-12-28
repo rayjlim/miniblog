@@ -44,7 +44,7 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
     ref.value = date;
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, []);
+  }, [date]);
 
   return { inputDate, handleButtonDirection, updateDateInput };
 };
