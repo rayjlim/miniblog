@@ -33,6 +33,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $postBean->content = $smsEntrie->content;
         $postBean->date = $smsEntrie->date;
         $postBean->user_id = $smsEntrie->userId;
+        $postBean->locations = $smsEntrie->locations;
         $id = R::store($postBean);
         return $id;
     }
@@ -42,6 +43,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $postBean = R::load(POSTS, $smsEntrie->id);
         $postBean->content = $smsEntrie->content;
         $postBean->date = $smsEntrie->date;
+        $postBean->locations = $smsEntrie->locations;
         R::store($postBean);
     }
 
@@ -126,6 +128,9 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         if ($listParams->filterType == FILTER_TAGGED) {
             $sqlParam .= ' AND (content LIKE \'%#%\' or content LIKE \'@%\')'
                 . ' AND content NOT LIKE \'%##%\'';
+        }
+        if ($listParams->location != '') {
+            $sqlParam .= ' AND locations LIKE \'%' . $listParams->location . '%\'';
         }
         // echo $sqlParam;
         // exit;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Model for ORM Entry
  *
@@ -10,9 +11,11 @@
  * @license  MIT License
  * @link     https://github.com/rayjlim/miniblog/
  */
+
 namespace App\models;
 
 defined('ABSPATH') or exit('No direct script access allowed');
+
 use App\core\DevHelp;
 
 /**
@@ -23,39 +26,47 @@ use App\core\DevHelp;
  */
 class SmsEntrie
 {
-     /**
-      * The entry id
-      *
-      * @var           integer
-      * @OA\Property()
-      */
+    /**
+     * The entry id
+     *
+     * @var integer
+     * @OA\Property()
+     */
     public int $id;
-         /**
-          * The entry content
-          *
-          * @var           string
-          * @OA\Property()
-          */
+    /**
+     * The entry content
+     *
+     * @var string
+     * @OA\Property()
+     */
     public string $content;
-         /**
-          * The entry date
-          *
-          * @var           date
-          * @OA\Property()
-          */
-    public $date;
-         /**
-          * The entry creator id
-          *
-          * @var           integer
-          * @OA\Property()
-          */
+    /**
+     * The entry date
+     *
+     * @var string
+     * @OA\Property()
+     */
+    public string $date;
+    /**
+     * The entry creator id
+     *
+     * @var integer
+     * @OA\Property()
+     */
     public int $userId;
+    /**
+     * The locations associated with entry
+     *
+     * @var string
+     * @OA\Property()
+     */
+    public int $locations;
 
-    public function __construct($date = '', $content = '')
+    public function __construct($date = '', $content = '', $locations = '')
     {
         $this->date = $date;
         $this->content = $content;
+        $this->locations = $locations;
     }
 
     public static function sanitizeContent(string $content)

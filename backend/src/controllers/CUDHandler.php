@@ -61,36 +61,39 @@ class CUDHandler
         if (!$entry) {
             throw new Exception('Invalid json' . $request->getBody());
         }
-        $currentDateTime = $this->resource->getDateTime();
-        $smsEntry = new SmsEntrie();
-        $smsEntry->userId = $_ENV['ACCESS_ID'];
-        $smsEntry->date = (!isset($entry->date) || $entry->date == '')
-            ? $currentDateTime->format(FULL_DATETIME_FORMAT)
+        $now = $this->resource->getDateTime();
+        $targetDate = (!isset($entry->date) || $entry->date == '')
+            ? $now->format(FULL_DATETIME_FORMAT)
             : $entry->date;
 
         //check for exisiting by date
         $listObj = new ListParams();
-        $listObj->startDate = $smsEntry->date;
-        $listObj->endDate = $smsEntry->date;
+        $listObj->startDate = $targetDate;
+        $listObj->endDate = $targetDate;
         $entries = $this->dao->list($listObj);
 
         // if no entries, dao insert
         // else, update last entry in array
         if (count($entries)) {
             $found = $entries[count($entries) - 1];
-            $smsEntry = new SmsEntrie();
-            $smsEntry->id = $found['id'];
-            $smsEntry->date = $found['date'];
-            $smsEntry->content = $found['content'] . "\n\n" . trim(urldecode($entry->content));
-            $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
-            $this->dao->update($smsEntry);
+            $found->content = $found['content'] . "\n\n"
+                . trim(urldecode($entry->content));
+            $found->content = SmsEntrie::sanitizeContent($found->content);
+            //TODO: join new entry to existing, need to look for duplicates
+            // $found->locations = $entry->locations;
+            $this->dao->update($found);
+            $response->getBody()->write(json_encode($found));
         } else {
-            $smsEntry->content = trim(urldecode($entry->content));
-            $smsEntry->content = SmsEntrie::sanitizeContent($smsEntry->content);
-            $smsEntry->id = $this->dao->insert($smsEntry);
+            $newEntry = new SmsEntrie();
+            $newEntry->date = $targetDate;
+            $newEntry->content = trim(urldecode($entry->content));
+            $newEntry->content = SmsEntrie::sanitizeContent($newEntry->content);
+            $newEntry->userId = $_ENV['ACCESS_ID'];
+            $newEntry->locations = $entry->locations;
+            $newEntry->id = $this->dao->insert($newEntry);
+            $response->getBody()->write(json_encode($newEntry));
         }
 
-        $response->getBody()->write(json_encode($smsEntry));
         return $response
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(201);
@@ -138,7 +141,6 @@ class CUDHandler
 
         $found = $this->dao->load($args['id']);
         if ($found['user_id'] !== $_ENV['ACCESS_ID']) {
-
             $metaData = new stdClass();
             $metaData->message = "Unauthorized User";
             $metaData->status = "fail";
@@ -147,13 +149,13 @@ class CUDHandler
             return $response
                 ->withStatus(403);
         }
-        $smsEntry = new SmsEntrie();
-        $smsEntry->id = $found['id'];
-        $smsEntry->content = SmsEntrie::sanitizeContent($entry->content);
-        $smsEntry->date = $entry->date;
-        $this->dao->update($smsEntry);
 
-        $response->getBody()->write(json_encode($smsEntry));
+        $found->id = $found['id'];
+        $found->content = SmsEntrie::sanitizeContent($entry->content);
+        $found->locations = $entry->locations;
+        $this->dao->update($found);
+
+        $response->getBody()->write(json_encode($found));
         return $response
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(201);
