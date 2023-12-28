@@ -80,7 +80,6 @@ const EntryList = ({ date, isOneDay, onShowEdit }: {
   }
 
   useEffect(() => {
-    console.log(`entrylist: useEffect`);
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [entries]);

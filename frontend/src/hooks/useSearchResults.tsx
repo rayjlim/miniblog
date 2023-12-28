@@ -27,7 +27,7 @@ const useSearchResults = (params: SearchParamsType, editEntryId: MutableRefObjec
   //prep output values
   const { startDate, endDate } = data?.params || {};
   const entries = data?.entries || [];
-  console.log(data);
+
 
   // Expose a custom API to the parent component
   useImperativeHandle(ref, () => ({
