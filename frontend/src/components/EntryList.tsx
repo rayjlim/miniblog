@@ -70,7 +70,7 @@ const EntryList = ({ date, isOneDay, onShowEdit }: {
   }), [internalState]);
 
   function checkKeyPressed(e: any) {
-    console.log(`Entrylist: handle key presss ${e.key}`);
+    // console.log(`Entrylist: handle key presss ${e.key}`);
     if (e.altKey && e.key === '1') {
       console.log('e keybinding', entries);
       const targetId = entries.length ?

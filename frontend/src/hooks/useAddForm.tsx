@@ -64,10 +64,8 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string, entr
   }
 
   function checkKeyPressed(e: any) {
-    console.log(`AddForm: handle key presss ${e.key}`);
+    // console.log(`AddForm: handle key presss ${e.key}`);
     if (e.altKey && e.key === 's') {
-      console.log('S keybinding');
-      // Note: this is a hack because the content value was taken from the init value
       document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
       document.getElementById('cancelBtn')?.click();

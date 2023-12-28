@@ -85,7 +85,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   }
 
   useEffect(() => {
-    console.log('EditForm: useEffect');
+    // console.log('EditForm: useEffect');
     textareaInput.current?.focus();
     const textLength = textareaInput.current?.value.length || 0;
     textareaInput.current?.setSelectionRange(textLength, textLength);

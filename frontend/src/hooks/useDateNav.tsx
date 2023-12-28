@@ -31,7 +31,6 @@ const useDateNav = (updateDate: (date: string) => void, date: string) => {
     updateDate(newValue);
   }
   function checkKeyPressed(e: KeyboardEvent) {
-    console.log(`DateNav: handle key presss ${e.key}`);
     if (e.altKey && e.key === ',') {
       console.log('alt comma keybinding');
       document.getElementById('prevBtn')?.click();
