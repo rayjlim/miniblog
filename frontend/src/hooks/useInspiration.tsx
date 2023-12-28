@@ -40,7 +40,7 @@ const useInspiration = () => {
       textareaInput?.focus();
 
       if (textareaInput)
-        textareaInput.value = `**${content}**  \n`;
+        textareaInput.value = `**${content}** #prompt  \n`;
       const textLength = textareaInput?.value.length || 0;
       textareaInput?.setSelectionRange(textLength, textLength);
     }, 100);
