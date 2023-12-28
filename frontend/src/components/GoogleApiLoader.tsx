@@ -28,6 +28,6 @@ const GoogleApiLoader = () => {
     };
   });
 
-  return ;
+  return (<></>);
 };
 export default GoogleApiLoader;
