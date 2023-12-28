@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.26.0](https://github.com/rayjlim/miniblog/compare/v2.25.0...v2.26.0) (2023-12-28)
+
+
+### Features
+
+* [#281](https://github.com/rayjlim/miniblog/issues/281) shortcut to top and bottom ([a202e6f](https://github.com/rayjlim/miniblog/commit/a202e6f395bd0550b5a0f7ac64bd5e14fe181709))
+* [#282](https://github.com/rayjlim/miniblog/issues/282) FE for google maps usage ([81f7c16](https://github.com/rayjlim/miniblog/commit/81f7c16f4f9951a8eeb86e7a8256a14e36f90f5e))
+* shortcut 1 goes Edits first entry ([af600d4](https://github.com/rayjlim/miniblog/commit/af600d4be737c3e1e0d3b0de3cfc3e3fd9b35558))
+
+
+### Bug Fixes
+
+* alt +1 to edit, add entry ([206eb89](https://github.com/rayjlim/miniblog/commit/206eb890c630ddf0b6a1df4f9781906743e25a4a))
+* blank toasts message ([19b3fde](https://github.com/rayjlim/miniblog/commit/19b3fde4c0d5f2bbd91592b1eaa449c8f1eb8faa))
+* document shortcut keys ([18d7a97](https://github.com/rayjlim/miniblog/commit/18d7a9705a83e79416b5d8f9e3d7c0c2736cf2a6))
+* not checking if formEntry is null ([22e1b71](https://github.com/rayjlim/miniblog/commit/22e1b715184b78ddedb97475eecb7862e91a0fac))
+* refetch on CUD actions ([55bf0f0](https://github.com/rayjlim/miniblog/commit/55bf0f01b69c5388e496b54c0d4f6b5246398f18))
+* shorten toast time ([d097370](https://github.com/rayjlim/miniblog/commit/d09737022430568ee1f9b53ffccbc9c5cc7f4086))
+
 ## [2.25.0](https://github.com/rayjlim/miniblog/compare/v2.24.0...v2.25.0) (2023-12-27)
 
 
