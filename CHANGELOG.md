@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.27.0](https://github.com/rayjlim/miniblog/compare/v2.26.0...v2.27.0) (2023-12-28)
+
+
+### Features
+
+* [#286](https://github.com/rayjlim/miniblog/issues/286) shortcut keys for get prompt and populate ([9f60ee6](https://github.com/rayjlim/miniblog/commit/9f60ee63d0e3675ac1b3549463a2dc8f49332ac0))
+* shortcut key to toggle oneday ([e385dd2](https://github.com/rayjlim/miniblog/commit/e385dd28f641889b9d6e85bd2fab60ec4bb2b189))
+
+
+### Bug Fixes
+
+* add return of JSX ([b770c9a](https://github.com/rayjlim/miniblog/commit/b770c9a006b5d968001f74f60ab48785bd9ffa9d))
+* update Setting test ([7d31195](https://github.com/rayjlim/miniblog/commit/7d31195fc50942ffdfb31ea97fc6726f853541c4))
+* upgrade @react-oauth/google from 0.11.1 to 0.12.1 ([73d71b9](https://github.com/rayjlim/miniblog/commit/73d71b906a022051ba2963c44c7a30c76e4156e0))
+* upgrade react-router-dom from 6.19.0 to 6.20.0 ([d840daa](https://github.com/rayjlim/miniblog/commit/d840daaa4c72a72c110c31ffbcac8a40d06b00d0))
+
 ## [2.26.0](https://github.com/rayjlim/miniblog/compare/v2.25.0...v2.26.0) (2023-12-28)
 
 
