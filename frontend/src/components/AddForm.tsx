@@ -25,6 +25,7 @@ const AddForm = ({ content, date, onSuccess }: { content: string, date: string, 
 
       <div className="form-group">
         <textarea
+          id="addFormTextarea"
           ref={textareaInput}
           rows={6}
           onChange={() => textChange()}

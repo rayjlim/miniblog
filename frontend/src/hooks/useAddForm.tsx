@@ -73,7 +73,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string, entr
   }
 
   useEffect(() => {
-    console.log(`AddForm: useEffect ${isMounted.current}`);
+
     if (id !== null) {
       // This makes it so this is not called on the first render
       // but when the Id is set

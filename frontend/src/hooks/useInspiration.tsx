@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from "react-query";
 import { useSetting } from '../components/SettingContext';
 
@@ -27,7 +27,41 @@ const useInspiration = () => {
 
   const output = isInspiration ? `${data?.message} - ${data?.author}` : data?.prompt;
 
-  return { output, isLoading, error, getByType }
+  // function copyToClipboard(content: string) {
+  //   console.log(`clipboard: ${content}`);
+  //   navigator.clipboard.writeText(content);
+  // }
+
+  function openWithPrompt(content: string) {
+    // console.log(`clipboard: ${content}`);
+    document.getElementById('addFormBtn')?.click();
+    setTimeout(() => {
+      const textareaInput = document.getElementById('addFormTextarea') as any;
+      textareaInput?.focus();
+
+      if (textareaInput)
+        textareaInput.value = `**${content}**  \n`;
+      const textLength = textareaInput?.value.length || 0;
+      textareaInput?.setSelectionRange(textLength, textLength);
+    }, 100);
+  }
+
+  function checkKeyPressed(e: KeyboardEvent) {
+    if (e.altKey && e.key === 'p') {
+      console.log('alt populate keybinding');
+      const target = document.getElementById('populateBtn') as any;
+      target?.click();
+    } else if (e.altKey && e.key === '[') {
+      const target = document.getElementById('promptBtn') as any;
+      target?.click();
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('keydown', checkKeyPressed);
+    return () => document.removeEventListener('keydown', checkKeyPressed);
+  });
+
+  return { output, isLoading, error, getByType, openWithPrompt }
 };
 
 export default useInspiration;

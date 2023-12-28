@@ -19,18 +19,8 @@ const AddEditForm = ({ date, entry, onSuccess }: {
     onSuccess(msg, newEntry);
   }
 
-  function checkKeyPressed(e: any) {
-    console.debug(`AddForm: handle key presss ${e.key}`);
-    if (e.altKey && e.key === 'a') {
-      setComponentMode(ADD);
-    }
-  }
-
   useEffect(() => {
     setComponentMode(entry ? EDIT : CLOSED);
-
-    document.addEventListener('keydown', checkKeyPressed);
-    return () => document.removeEventListener('keydown', checkKeyPressed);
   }, [entry?.content]);
 
   return (

@@ -2,13 +2,8 @@ import { useSetting } from './SettingContext';
 import useInspiration from '../hooks/useInspiration';
 
 const Inspiration = () => {
-  const { output, isLoading, error, getByType } = useInspiration();
+  const { output, isLoading, error, getByType, openWithPrompt } = useInspiration();
   const { INSPIRATION_API, QUESTION_API } = useSetting() as SettingsType;
-
-  function copyToClipboard(content: string) {
-    console.log(`clipboard: ${content}`);
-    navigator.clipboard.writeText(content);
-  }
 
   if (isLoading) return <div>Load ...</div>;
   if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
@@ -19,12 +14,12 @@ const Inspiration = () => {
         <section>
           <div>{output}</div>
           {output !== '' && (
-            <button onClick={() => copyToClipboard(output)} type="button" className="copy-btn">
+            <button onClick={() => openWithPrompt(output)} type="button" className="copy-btn" id="populateBtn">
               /clip
             </button>
           )}
           {QUESTION_API !== '' && (
-            <button onClick={() => getByType(false)} className="plainLink" type="button">
+            <button onClick={() => getByType(false)} className="plainLink" type="button" id="promptBtn">
               [Get Prompt]
             </button>
           )}

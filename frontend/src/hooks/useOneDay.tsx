@@ -25,7 +25,6 @@ const useOneDay = (pageMode: number) => {
         behavior: 'smooth',
         block: 'start',
       });
-
     } else if (e.altKey && e.key === 'b') {
       e.preventDefault();
       const target = document.getElementById('bottom');
@@ -33,7 +32,6 @@ const useOneDay = (pageMode: number) => {
         behavior: 'smooth',
         block: 'start',
       });
-
     } else if (e.altKey && e.key === 'o') {
       console.log(pageMode, pageMode === SAMEDAY ? 'oneday' : 'sameday');
       navigate(pageMode === SAMEDAY ? '/oneday' : '/sameday');
