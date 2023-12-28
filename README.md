@@ -48,8 +48,8 @@ Output will be
 
 Alt + o : Open OneDay [search]  
 Alt + f : Open Search [one day]  
-Alt + t : Go to Top [one day]  
-Alt + b : Go to Bottom [one day]  
+Alt + t : Go to Top [one day, search]  
+Alt + b : Go to Bottom [one day, search]  
 Alt + s : Save [Edit mode, Add mode]  
 Escape  : Cancel [Edit mode, Add mode]  
 Alt + , : Prev Day [one day]  

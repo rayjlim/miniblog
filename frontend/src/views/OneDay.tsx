@@ -25,7 +25,17 @@ const OneDay = ({ pageMode }: { pageMode?: number }) => {
     <>
       <Header links={headerLinks} />
 
-      <h1 className="view-head">
+      <h1 className="view-head" title="Alt + o : Open OneDay [search]
+Alt + f : Open Search [one day]
+Alt + t : Go to Top [one day, search]
+Alt + b : Go to Bottom [one day, search]
+Alt + s : Save [Edit mode, Add mode]
+Escape  : Cancel [Edit mode, Add mode]
+Alt + , : Prev Day [one day]
+Alt + . : Next Day [one day]
+Alt + 1 : Add or Edit first entry [one day]
+Alt + [ ' Get new prompt [one day]
+Alt + p ' Populate Add form with Prompt [one day] ">
         {pageMode === SAMEDAY ? 'Same Day' : 'One Day'}
       </h1>
 
