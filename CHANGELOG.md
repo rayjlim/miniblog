@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.28.0](https://github.com/rayjlim/miniblog/compare/v2.27.0...v2.28.0) (2023-12-28)
+
+
+### Features
+
+* [#287](https://github.com/rayjlim/miniblog/issues/287) hover over oneday title shows shortcuts ([ef26ec9](https://github.com/rayjlim/miniblog/commit/ef26ec99820e000654bfb060e2e544233151c910))
+
+
+### Bug Fixes
+
+* add nav shortcuts to search ([626eadf](https://github.com/rayjlim/miniblog/commit/626eadfc11e90a27296b14e7e86cc961efcfad23))
+* tag new prompt entry [#286](https://github.com/rayjlim/miniblog/issues/286) ([3726f8d](https://github.com/rayjlim/miniblog/commit/3726f8d252d8903db37afa3aa8312a82f8cc9525))
+
 ## [2.27.0](https://github.com/rayjlim/miniblog/compare/v2.26.0...v2.27.0) (2023-12-28)
 
 
