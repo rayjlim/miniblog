@@ -23,6 +23,20 @@ const useSearch = () => {
     if (e.altKey && e.key === 'o') {
       navigate('/oneday');
       e.preventDefault();
+    } else if (e.altKey && e.key === 't') {
+      e.preventDefault();
+      const target = document.getElementById('top');
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    } else if (e.altKey && e.key === 'b') {
+      e.preventDefault();
+      const target = document.getElementById('bottom');
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   }
 
