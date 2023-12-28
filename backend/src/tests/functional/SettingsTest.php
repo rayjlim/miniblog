@@ -19,6 +19,7 @@ class SettingTest extends TestCase
     $this->assertEquals(json_encode([
       'UPLOAD_ROOT' => '',
       'GOOGLE_OAUTH_CLIENTID' => '',
+      'GOOGLE_API_KEY' => '',
       'INSPIRATION_API' => '',
       'QUESTION_API' => '',
 
