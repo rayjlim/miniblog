@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
+import { SAMEDAY } from '../constants';
 import { FULL_DATE_FORMAT, STORAGE_KEY } from '../constants';
 
-const useOneDay = () => {
+const useOneDay = (pageMode: number) => {
   const navigate = useNavigate();
   const routeParams = useParams();
 
@@ -33,6 +34,10 @@ const useOneDay = () => {
         block: 'start',
       });
 
+    } else if (e.altKey && e.key === 'o') {
+      console.log(pageMode, pageMode === SAMEDAY ? 'oneday' : 'sameday');
+      navigate(pageMode === SAMEDAY ? '/oneday' : '/sameday');
+      e.preventDefault();
     }
   }
 
@@ -67,7 +72,7 @@ const useOneDay = () => {
     ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, []);
+  }, [pageMode]);
 
   return { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef }
 }
