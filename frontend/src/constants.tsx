@@ -4,6 +4,8 @@ export const FULL_DATE_FORMAT = 'yyyy-MM-dd';
 export const REST_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 export const STORAGE_KEY = 'MINIBLOG_TOKEN';
 export const AUTH_HEADER = 'x-app-token';
+export const ONEDAY = 0;
+export const SAMEDAY = 1;
 export const DEFAULT_SEARCH_MONTHS_BACK = 3;
 export const FILTER = {
   all: 0,

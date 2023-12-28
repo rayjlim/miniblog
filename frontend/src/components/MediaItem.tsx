@@ -1,13 +1,13 @@
-import { useContext } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import MyContext from './MyContext';
+import { REST_ENDPOINT } from '../constants';
+import { useSetting } from './SettingContext';
+import createHeaders from '../utils/createHeaders';
 
-const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
+const MediaItem = ({ media, currentDir, selectMedia, onDelete }: {
   media: string, currentDir: string,
   selectMedia: (filePath: string, fileName: string) => void,
-  onChange: (filePath: string) => void
+  onDelete: (filePath: string) => void
 }) => {
-  const { UPLOAD_ROOT } = useContext(MyContext);
+  const { UPLOAD_ROOT } = useSetting() as SettingsType;
 
   function deleteMedia(filePath: string, fileName: string) {
     const go = window.confirm('You sure?');
@@ -15,9 +15,7 @@ const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
       return;
     }
     (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
+      const requestHeaders = createHeaders();
       const response = await fetch(
         `${REST_ENDPOINT}/media/?fileName=${fileName}&filePath=${filePath}`,
         {
@@ -32,7 +30,7 @@ const MediaItem = ({ media, currentDir, selectMedia, onChange }: {
       } else {
         // Do anything with the metadata return after delete?
         // const data = await response.json();
-        onChange(filePath);
+        onDelete(fileName);
       }
     })();
   }

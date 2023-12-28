@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { REST_ENDPOINT, STORAGE_KEY, AUTH_HEADER } from '../constants';
-import '../Types';
+import { toast } from 'react-toastify';
+import { REST_ENDPOINT } from '../constants';
+import createHeaders from '../utils/createHeaders';
+
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);
@@ -17,39 +19,26 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
 
   async function handleSave() {
     console.log('handleSave entry :');
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('Content-Type', 'application/json');
-    requestHeaders.set(AUTH_HEADER, token);
-    const newEntry = {...entry, id: entry?.id || 0, content: textareaInput.current?.value || '', date: dateInput.current?.value || ''};
+    const requestHeaders = createHeaders();
+    const newEntry = { ...entry, content: textareaInput.current?.value || '', date: dateInput.current?.value || '' };
     const options = {
       method: 'PUT',
-      body: JSON.stringify({
-        content: textareaInput.current?.value || '',
-        date: dateInput.current?.value || '',
-      }),
-      headers: requestHeaders
-    };
+      body: JSON.stringify(newEntry),
+      headers: requestHeaders,
+      mode: 'cors'
+    } as any;
 
     try {
-      const response = await fetch(
-        `${REST_ENDPOINT}/api/posts/${entry?.id}`,
-        {
-          ...options,
-          mode: 'cors',
-          cache: 'no-cache',
-          redirect: 'follow',
-        },
-      );
+      const response = await fetch(`${REST_ENDPOINT}/api/posts/${entry?.id}`, options);
 
       console.log(response);
     } catch (error) {
       console.log(error);
-      alert(error);
-      onSuccess('Edit fail' + error, newEntry);
+      toast((error as any).message);
+      onSuccess('Edit fail' + error, newEntry as EntryType);
     }
 
-    onSuccess('Edit Done', newEntry);
+    onSuccess('Edit Done', newEntry as EntryType);
   }
 
   /**
@@ -65,9 +54,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     const id = entry?.id || 0;
     console.log(`handleDelete ${id}`);
 
-    const token = window.localStorage.getItem(STORAGE_KEY) || '';
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set(AUTH_HEADER, token);
+    const requestHeaders = createHeaders();
 
     try {
       const response = await fetch(
@@ -80,18 +67,17 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       );
 
       console.log(response);
-
     } catch (error) {
       console.log(error);
-      alert(error);
+      toast((error as any).message);
     }
-    onSuccess('Delete Done', {id, content: 'DELETE', date: ''});
+    onSuccess('Delete Done', { id, content: 'DELETE', date: '' });
   }
 
   function checkKeyPressed(e: any) {
     if (e.altKey && e.key === 's') {
       console.log('S keybinding');
-      // Note: this is a hack because the content value is taken from the init value
+      // could convert this to refs instead?
       document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
       document.getElementById('cancelBtn')?.click();
@@ -99,8 +85,10 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   }
 
   useEffect(() => {
-    console.log('EditForm: useEffect');
-
+    // console.log('EditForm: useEffect');
+    textareaInput.current?.focus();
+    const textLength = textareaInput.current?.value.length || 0;
+    textareaInput.current?.setSelectionRange(textLength, textLength);
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);

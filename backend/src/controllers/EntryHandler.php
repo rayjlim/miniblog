@@ -10,7 +10,6 @@ use App\models\ListParams;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use \DateTime;
-use \stdClass;
 
 function getValue($array, $key)
 {
@@ -29,16 +28,11 @@ class EntryHandler
     private $resource = null;
     private $container;
 
-    // constructor receives container instance
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
-    // public function __construct($_smsEntriesDAO, $_resource)
-    // {
-    //     $this->dao = $_smsEntriesDAO;
-    //     $this->resource = $_resource;
-    // }
+
 
     /**
      * @OA\Get(
@@ -64,9 +58,9 @@ class EntryHandler
         $listObj->loadParams($request->getQueryParams());
 
         if ($listObj->startDate === '' && $listObj->searchParam === '') {
-            $strDescription = printf("-%u months", DEFAULT_MONTHS_TO_SHOW);
+            $strDescription = "-" . DEFAULT_MONTHS_TO_SHOW . " months";
             $newStartDate = $this->resource->getDateByDescription($strDescription);
-            $listObj->startDate = $newStartDate;
+            $listObj->startDate = !is_null($newStartDate) ? $newStartDate : '';
         }
 
         $userId = $_ENV['ACCESS_ID'];

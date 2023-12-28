@@ -1,125 +1,52 @@
-import { createRef, useCallback, useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
 import { format } from 'date-fns';
-import {
-  FULL_DATE_FORMAT,
-  REST_ENDPOINT,
-  STORAGE_KEY,
-  AUTH_HEADER,
-} from '../constants';
+import { SAMEDAY } from '../constants';
+import { FULL_DATE_FORMAT, STORAGE_KEY } from '../constants';
 
-const SAMEDAY = 1;
-
-const useOneDay = (pageMode?: number) => {
+const useOneDay = (pageMode: number) => {
   const navigate = useNavigate();
-  const [entries, setEntries] = useState<EntryType[]>([]);
+  const routeParams = useParams();
+
   const [editEntry, setEditEntry] = useState<EntryType | null>(null);
   const [pageDate, setPageDate] = useState<string>(format(new Date(), FULL_DATE_FORMAT));
   const isMounted = useRef<boolean>(false);
-
-  const handleClick = (id: number) => {
-    console.log(refs);
-    // @ts-ignore
-    refs[id].current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  };
-
-  const loadDay = useCallback((targetDate?: string) => {
-    console.log(`loadDay : ${pageDate} pagemode: ${pageMode}`);
-
-    if (!pageDate) {
-      return;
-    }
-    let endPointDate = targetDate || pageDate;
-    let endPointURL = '';
-    switch (pageMode) {
-      case SAMEDAY: {
-        endPointURL = `${REST_ENDPOINT}/api/sameDayEntries/?day=${endPointDate}`;
-        break;
-      }
-      default: {
-        endPointURL = `${REST_ENDPOINT}/api/posts/?date=${endPointDate}`;
-        break;
-      }
-    }
-    setEditEntry(null);
-    (async () => {
-      const token = window.localStorage.getItem(STORAGE_KEY) || '';
-      const requestHeaders: HeadersInit = new Headers();
-      requestHeaders.set(AUTH_HEADER, token);
-      try {
-        const response = await fetch(endPointURL, {
-          mode: 'cors',
-          cache: 'no-cache',
-          headers: requestHeaders,
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('response.data :>> ', data.entries);
-
-          setEntries(data.entries);
-
-          // console.log('state.scrollToLast :>> ', loadParams.scrollToLast);
-        } else {
-          console.error('response.status :', response.status);
-          // toast.error(`loading error : ${response.status}`);
-        }
-      } catch (err) {
-        console.error(err);
-        // toast.error(`loading error : ${err}`);
-      }
-    })();
-  }, [entries, editEntry, pageDate]);
+  const childRef = useRef();
 
   function checkKeyPressed(e: KeyboardEvent) {
-    console.log(`OneDay: handle key presss ${e.key}`);
-
-    // Note: getting element by id is a hack; IDKW
-    // the content value is being taken from the init value
-    if (e.altKey && e.key === ',') {
-      console.log('alt comma keybinding');
-      document.getElementById('prevBtn')?.click();
-    } else if (e.altKey && e.key === '.') {
-      console.log('alt period keybinding');
-      document.getElementById('nextBtn')?.click();
-
-      // NOT working?? gets cached entry from somewhere else
-      // } else if (e.altKey && e.key === 'e' && entries) {
-      //   console.table(entries);
-      //   setEditEntry(entries[0]);
-      //   e.preventDefault();
-    } else if (e.altKey && e.key === 'f') {
+    if (e.altKey && e.key === 'f') {
       navigate('/search');
+      e.preventDefault();
+    } else if (e.altKey && e.key === 't') {
+      e.preventDefault();
+      const target = document.getElementById('top');
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+
+    } else if (e.altKey && e.key === 'b') {
+      e.preventDefault();
+      const target = document.getElementById('bottom');
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+
+    } else if (e.altKey && e.key === 'o') {
+      console.log(pageMode, pageMode === SAMEDAY ? 'oneday' : 'sameday');
+      navigate(pageMode === SAMEDAY ? '/oneday' : '/sameday');
       e.preventDefault();
     }
   }
 
-  function resetEntryForm(msg: string, newEntry: EntryType) {
-    if (msg) {
-      toast(msg);
-    }
-    let targetId = editEntry?.id || 0;
+  function resetEntryForm(msg: string, entry: EntryType) {
+    msg && toast(msg);
 
     setEditEntry(null);
-
-    if (newEntry.content === 'DELETE') {
-      const revised = entries.filter(curr => curr.id !== newEntry.id);
-      setEntries(revised);
-    }
-    else {
-      const revised = entries.map(curr => (curr.id === newEntry.id) ? newEntry : curr);
-      setEntries(revised);
-    }
-
-    setTimeout(() => {
-      // handleClick(targetId); // Not scrolling to location
-      const btn = document.getElementById(`btn${targetId}`);
-      btn?.click();
-    }, 100);
+    const subComp = childRef.current as any;
+    subComp?.resetView(entry);
   }
 
   useEffect(() => {
@@ -135,27 +62,19 @@ const useOneDay = (pageMode?: number) => {
         const param = loc.substring(loc.indexOf('?'));
         console.log('param :', param);
         const urlParams = new URLSearchParams(param);
+        console.log(`routeParams: ${JSON.stringify(routeParams)}`);
+        const pageDateParam = urlParams.get('date') || routeParams?.date || format(new Date(), FULL_DATE_FORMAT);
 
-        const pageDateParam = urlParams.get('date') || format(new Date(), FULL_DATE_FORMAT);
         setPageDate(pageDateParam);
-        loadDay(pageDateParam || '');
         isMounted.current = true;
-      } else {
-        loadDay('');
       }
     }
     ueFunc();
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
-  }, [pageMode, pageDate]);
+  }, [pageMode]);
 
-  const refs = entries.reduce((acc, value) => {
-    // @ts-ignore
-    acc[value.id] = createRef();
-    return acc;
-  }, {});
-
-  return { editEntry, setEditEntry, pageDate, setPageDate, entries, loadDay, handleClick, refs, resetEntryForm }
+  return { editEntry, setEditEntry, pageDate, setPageDate, resetEntryForm, childRef }
 }
 
 export default useOneDay;

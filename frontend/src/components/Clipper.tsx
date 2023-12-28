@@ -1,4 +1,3 @@
-import '../Types';
 import { toast } from 'react-toastify';
 const Clipper = ({media}: {media: MediaType}) => {
 

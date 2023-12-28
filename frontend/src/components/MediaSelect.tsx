@@ -1,23 +1,11 @@
-import { FunctionComponent } from 'react';
 import format from 'date-fns/format';
-
-import PropTypes from 'prop-types';
 import { FULL_DATE_FORMAT } from '../constants';
 import Clipper from './Clipper';
 import useMediaSelect from '../hooks/useMediaSelect';
 
-import '../Types';
-
 import AddForm from '../components/AddForm';
 
-const propTypes = {
-  media: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-type MediaSelectProps = PropTypes.InferProps<typeof propTypes>;
-
-const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
+const MediaSelect = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
   const { mediaSelect, rotate, resize } = useMediaSelect(media);
 
   return (
@@ -46,5 +34,3 @@ const MediaSelect: FunctionComponent<MediaSelectProps> = ({ media, onClose }: { 
 };
 
 export default MediaSelect;
-
-MediaSelect.propTypes = propTypes;

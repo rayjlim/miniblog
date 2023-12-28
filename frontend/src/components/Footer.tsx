@@ -1,7 +1,5 @@
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
-import {
-  STORAGE_KEY,
-} from '../constants';
+import { useAuth } from './AuthContext';
 import pkg from '../../package.json';
 import './Footer.css'
 
@@ -14,32 +12,33 @@ type LinksPropType = {
 
 const Footer = ({ links }: { links?: LinksPropType }) => {
   const usersFullname = window.localStorage.getItem('user-name') || '';
+  const { logout } = useAuth() as any;
   const navigate = useNavigate();
   const doLogout = () => {
-    window.localStorage.removeItem(STORAGE_KEY);
+    logout();
     navigate('/login');
   };
 
   return (
     <>
-      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left footer">
-        {links?.upload && <RouterNavLink to="/upload">
-          <i className="fa fa-file-upload" />{' '}
+      <nav className="navbar navbar-expand-sm navbar-light bg-light text-left footer" id="bottom">
+        {links?.upload && <RouterNavLink to="/upload" className="spaced-link">
+          <i className="fa fa-file-upload" />
           <span className="nav-text">Upload Pix</span>
         </RouterNavLink>
         }
-        {links?.media && <RouterNavLink to="/media">
-          <i className="fa fa-portrait" />{' '}
-          <span className="nav-text">Media</span>{' '}
+        {links?.media && <RouterNavLink to="/media" className="spaced-link">
+          <i className="fa fa-portrait" />
+          <span className="nav-text">Media</span>
         </RouterNavLink>
         }
-        {links?.logs && <RouterNavLink to="/logs">
-          <i className="fa fa-clipboard-list" />{' '}
-          <span className="nav-text">Logs</span>{' '}
+        {links?.logs && <RouterNavLink to="/logs" className="spaced-link">
+          <i className="fa fa-clipboard-list" />
+          <span className="nav-text">Logs</span>
         </RouterNavLink>
         }
-        {links?.oneday && <RouterNavLink to="/oneday">
-          <i className="fa fa-home" />{' '}
+        {links?.oneday && <RouterNavLink to="/oneday" className="spaced-link">
+          <i className="fa fa-home" />
           <span className="nav-text">One Day</span>
         </RouterNavLink>
         }
