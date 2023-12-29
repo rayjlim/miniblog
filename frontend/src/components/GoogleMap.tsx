@@ -40,7 +40,18 @@ const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
   });
   if (!locations?.length) return <div>No Map Points found</div>;
 
-  return (locations.length > 0 && <div id="map" style={{ height: '400px', width: '100%' }} />);
+  return (locations.length > 0 &&
+    (
+      <>
+        <ul>
+        {locations.map(location=><li>{location.title}</li>)}
+        </ul>
+        <div id="map" style={{ height: '400px', width: '100%' }} />
+      </>
+    )
+
+
+  );
 };
 
 export default GoogleMap;
