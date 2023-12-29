@@ -60,14 +60,7 @@ class SmsEntrie
      * @var string
      * @OA\Property()
      */
-    public int $locations;
-
-    public function __construct($date = '', $content = '', $locations = '')
-    {
-        $this->date = $date;
-        $this->content = $content;
-        $this->locations = $locations;
-    }
+    public string $locations;
 
     public static function sanitizeContent(string $content)
     {

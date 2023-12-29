@@ -89,7 +89,7 @@ class CUDHandler
             $newEntry->content = trim(urldecode($entry->content));
             $newEntry->content = SmsEntrie::sanitizeContent($newEntry->content);
             $newEntry->userId = $_ENV['ACCESS_ID'];
-            $newEntry->locations = $entry->locations;
+            $newEntry->locations = "";//$entry->locations;
             $newEntry->id = $this->dao->insert($newEntry);
             $response->getBody()->write(json_encode($newEntry));
         }
@@ -131,16 +131,14 @@ class CUDHandler
     {
         $factory = $this->container->get('Objfactory');
         $this->dao = $factory->makeSmsEntriesDAO();
-
         DevHelp::debugMsg('start update ' . __FILE__);
-
         $entry = json_decode($request->getBody());
         if (!$entry) {
             throw new Exception('Invalid json' . $request->getBody());
         }
 
         $found = $this->dao->load($args['id']);
-        if ($found['user_id'] !== $_ENV['ACCESS_ID']) {
+        if ($found["user_id"] !== $_ENV['ACCESS_ID']) {
             $metaData = new stdClass();
             $metaData->message = "Unauthorized User";
             $metaData->status = "fail";
@@ -149,13 +147,15 @@ class CUDHandler
             return $response
                 ->withStatus(403);
         }
+        $updated = new SmsEntrie();
+        $updated->id = $found["id"];
+        $updated->content = SmsEntrie::sanitizeContent($entry->content);
+        $updated->userId = $found["user_id"];
+        $updated->date = $entry->date;
+        $updated->locations = $entry->locations;
+        $this->dao->update($updated);
 
-        $found->id = $found['id'];
-        $found->content = SmsEntrie::sanitizeContent($entry->content);
-        $found->locations = $entry->locations;
-        $this->dao->update($found);
-
-        $response->getBody()->write(json_encode($found));
+        $response->getBody()->write(json_encode($updated));
         return $response
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(201);
@@ -198,7 +198,6 @@ class CUDHandler
 
         $metaData = new stdClass();
         $metaData->rowsAffected = $rows_affected;
-
         $response->getBody()->write(json_encode($metaData));
         return $response
             ->withHeader('Content-Type', 'application/json')
