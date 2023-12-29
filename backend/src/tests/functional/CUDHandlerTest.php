@@ -30,6 +30,7 @@ class CUDHandlerTest extends TestCase
       'id' => '1',
       'content' => 'content',
       'date' => '2023-11-22',
+      'locations' => '',
       'user_id' => 2
     ]));
     $response = $app->handle($request);
@@ -38,6 +39,8 @@ class CUDHandlerTest extends TestCase
       'id' => 1,
       'content' => 'content',
       'date' => '2023-11-22',
+      'userId' => 1,
+      'locations' => ''
     ]), $payload);
 
   }

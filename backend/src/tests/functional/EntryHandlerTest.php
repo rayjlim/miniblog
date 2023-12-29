@@ -46,7 +46,7 @@ class EntryHandlerTest extends TestCase
       array('id' => "3", "user_id" => "1", "date" => "2023-11-23", "content" => "day 23"),
     ]));
 
-    $expectedParams = '{"userId":1,"searchParam":"","tags":[],"startDate":"2023-11-23","endDate":"2023-11-23","filterType":0,"resultsLimit":100,"excludeTags":""}';
+    $expectedParams = '{"userId":1,"searchParam":"","tags":[],"startDate":"2023-11-23","endDate":"2023-11-23","filterType":0,"resultsLimit":100,"excludeTags":"","location":""}';
     $this->assertEquals($mockFoundEntries, json_decode($payload)->entries);
     $this->assertEquals($expectedParams, json_encode(json_decode($payload)->params));
   }
@@ -94,7 +94,7 @@ class EntryHandlerTest extends TestCase
     ]));
     $this->assertEquals($mockFoundEntries, json_decode($payload)->entries);
 
-    $expectedParams = '{"userId":1,"searchParam":"","tags":[],"startDate":"2023-08-23","endDate":"","filterType":0,"resultsLimit":100,"excludeTags":""}';
+    $expectedParams = '{"userId":1,"searchParam":"","tags":[],"startDate":"2023-08-23","endDate":"","filterType":0,"resultsLimit":100,"excludeTags":"","location":""}';
     $this->assertEquals($expectedParams, json_encode(json_decode($payload)->params));
   }
 
