@@ -33,8 +33,10 @@ const useEntryList = (date: string, isOneDay: boolean, onShowEdit:
   const internalState = useRef();
   const scrollBackEntryId = useRef(0);
 
-  const entries: EntryType[] = data?.entries;
-
+  const entries: EntryType[] = data?.entries.map((entry: EntryType) => ({
+    ...entry, locations: entry.locations !== ''
+      ? JSON.parse(entry?.locations as string) : ''
+  }));
 
   const showEdit = (entry: EntryType) => {
     setIsEditing(true);

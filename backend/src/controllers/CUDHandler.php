@@ -61,6 +61,9 @@ class CUDHandler
         if (!$entry) {
             throw new Exception('Invalid json' . $request->getBody());
         }
+        if (!isSet($entry->locations) || $entry->locations === null) {
+            $entry->locations = '';
+        }
         $now = $this->resource->getDateTime();
         $targetDate = (!isset($entry->date) || $entry->date == '')
             ? $now->format(FULL_DATETIME_FORMAT)
@@ -76,13 +79,20 @@ class CUDHandler
         // else, update last entry in array
         if (count($entries)) {
             $found = $entries[count($entries) - 1];
-            $found->content = $found['content'] . "\n\n"
+            $newEntry = new SmsEntrie();
+            $newEntry->content = $found['content'] . "\n\n"
                 . trim(urldecode($entry->content));
-            $found->content = SmsEntrie::sanitizeContent($found->content);
+            $newEntry->content = SmsEntrie::sanitizeContent($newEntry->content);
+            $newEntry->id = $found['id'];
+            $newEntry->date = $found['date'];
+            $newEntry->userId = $found['user_id'];
+            $newEntry->locations = $found['locations'];
+
+
             //TODO: join new entry to existing, need to look for duplicates
             // $found->locations = $entry->locations;
-            $this->dao->update($found);
-            $response->getBody()->write(json_encode($found));
+            $this->dao->update($newEntry);
+            $response->getBody()->write(json_encode($newEntry));
         } else {
             $newEntry = new SmsEntrie();
             $newEntry->date = $targetDate;
@@ -138,7 +148,7 @@ class CUDHandler
         }
 
         $found = $this->dao->load($args['id']);
-        if ($found["user_id"] !== $_ENV['ACCESS_ID']) {
+        if ($found['user_id'] !== $_ENV['ACCESS_ID']) {
             $metaData = new stdClass();
             $metaData->message = "Unauthorized User";
             $metaData->status = "fail";

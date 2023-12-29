@@ -17,7 +17,9 @@ const EditForm = ({ entry, onSuccess, }: {
     textareaInput,
     content,
     dateInput,
+    locationsInput,
     textChange,
+    locationChange,
     handleSave,
     handleDelete,
   } = useEditForm(entry, onSuccess);
@@ -86,6 +88,16 @@ const EditForm = ({ entry, onSuccess, }: {
           <i className="fa fa-ban" />
           <span>Cancel</span>
         </button>
+      </div>
+      <div>
+      <textarea
+          ref={locationsInput as any}
+          onChange={() => locationChange()}
+          className="form-control"
+          placeholder="Add ..."
+          rows={8}
+          defaultValue={entry?.locations}
+        />
       </div>
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={content} />

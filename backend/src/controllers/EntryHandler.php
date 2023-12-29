@@ -66,8 +66,6 @@ class EntryHandler
         $userId = $_ENV['ACCESS_ID'];
         $listObj->userId = $userId;
         $entries = $this->dao->list($listObj);
-
-
         $reply->entries = $entries;
         $reply->params = $listObj;
 

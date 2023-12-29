@@ -7,20 +7,28 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);
   const dateInput = useRef<HTMLInputElement>(null);
+  const locationsInput = useRef<HTMLTextAreaElement>();
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
     const refTextarea = textareaInput.current || { value: '' };
-
     refTextarea.value = refTextarea.value.replace(pattern, replacement);
     setContent(refTextarea.value);
+  }
+
+  function locationChange(){
+
   }
 
   async function handleSave() {
     console.log('handleSave entry :');
     const requestHeaders = createHeaders();
-    const newEntry = { ...entry, content: textareaInput.current?.value || '', date: dateInput.current?.value || '' };
+    const newEntry = { ...entry,
+      content: textareaInput.current?.value || '',
+      date: dateInput.current?.value || '',
+      locations: locationsInput.current?.value || ""
+    };
     const options = {
       method: 'PUT',
       body: JSON.stringify(newEntry),
@@ -92,7 +100,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
-  return { textareaInput, content, dateInput, handleDelete, textChange, handleSave };
+  return { textareaInput, content, dateInput, locationsInput, locationChange, handleDelete, textChange, handleSave };
 };
 
 export default useEditForm;

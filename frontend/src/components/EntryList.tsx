@@ -39,7 +39,12 @@ const EntryList = ({ date, isOneDay, onShowEdit }: {
               <MarkdownDisplay source={entry.content} />
             </div>
             {isOneDay && (entry as any)?.locations?.length > 0
-              && <GoogleMap locations={JSON.parse((entry as any)?.locations)} />}
+              && (<>
+                {/* {typeof((entry as any)?.locations)} */}
+                {/* a{(entry as any)?.locations}b */}
+                <GoogleMap locations={ (entry as any)?.locations} />
+
+              </>)}
           </li>
         ))}
       </ul>
