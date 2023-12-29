@@ -96,7 +96,7 @@ const EditForm = ({ entry, onSuccess, }: {
           className="form-control"
           placeholder="Add ..."
           rows={8}
-          defaultValue={entry?.locations}
+          defaultValue={JSON.stringify(entry?.locations)}
         />
       </div>
       <div className="markdownDisplay preview dashBorder">
