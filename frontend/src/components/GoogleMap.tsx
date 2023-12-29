@@ -1,32 +1,45 @@
 import { useEffect } from 'react';
 
-const GoogleMap = ({ markers }: { markers: MarkerType[]}) => {
+const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
+  console.log(locations);
   const googleApi = (window as any).google;
-  const drawMap = (markers: MarkerType[]) => {
+
+  const drawMap = () => {
     const mapOptions = {
-      mapId: "DEMO_MAP_ID"
+      mapId: "DEMO_MAP_ID",
     };
 
     const map = new googleApi.maps.Map(document.getElementById('map'), mapOptions);
-    const bounds = new googleApi.maps.LatLngBounds();
+    if (locations.length > 1) {
+      const bounds = new googleApi.maps.LatLngBounds();
+      // Iterate through each marker and extend the bounds
+      locations.forEach(location => {
+        const position = new googleApi.maps.LatLng(location.lat, location.lng);
+        bounds.extend(position);
+        new googleApi.maps.Marker({ position, map, title: location?.title });
 
-    // Iterate through each marker and extend the bounds
-    markers.forEach(marker => {
-      const position = new googleApi.maps.LatLng(marker.lat, marker.lng);
-      bounds.extend(position);
-      new googleApi.maps.Marker({ position, map, title: marker?.title});
-
-    });
-    // Set the map's viewport to fit the bounds
-    map.fitBounds(bounds);
+      });
+      // Set the map's viewport to fit the bounds
+      map.fitBounds(bounds);
+    }
+    else {
+      let location = locations[0];
+      map.setCenter(location);
+      map.setZoom(8);
+      new googleApi.maps.Marker({
+        ...location,
+        position: location,
+        map: map
+      });
+    }
   }
 
   useEffect(() => {
-    markers.length && drawMap(markers);
+    locations.length && drawMap();
   });
-  if (!markers?.length) return <div>No Map Points found</div>;
+  if (!locations?.length) return <div>No Map Points found</div>;
 
-  return (markers.length > 0 && <div id="map" style={{ height: '400px', width: '100%' }} />);
+  return (locations.length > 0 && <div id="map" style={{ height: '400px', width: '100%' }} />);
 };
 
 export default GoogleMap;

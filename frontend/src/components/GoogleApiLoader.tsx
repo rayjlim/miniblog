@@ -10,7 +10,7 @@ const GoogleApiLoader = () => {
   }
   useEffect(() => {
 
-    if (!isMounted) {
+    if (!isMounted || !(window as any).initMap) {
       // Load the Google Maps API
       const script = document.createElement('script');
       if (!GOOGLE_API_KEY) {
@@ -22,7 +22,7 @@ const GoogleApiLoader = () => {
       script.async = true;
       document.head.appendChild(script);
       (window as any).initMap = initMap;
-      console.log('api loaded');
+      console.log('googleapis loaded');
       (isMounted as any).current = true;
       // Clean up the script tag when the component is unmounted
       return () => {

@@ -28,11 +28,11 @@ class ListParams
     public int $filterType = FILTER_ALL;
     public int $resultsLimit = RESULT_LIMIT_DEFAULT;
     public string $excludeTags = '';
-    public string $locations = '';
+    public string $location = '';
 
     public function loadParams($queryParams)
     {
-        $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType', 'locations'];
+        $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType', 'location'];
         foreach ($lookingFor as $target) {
             if (getValue($queryParams, $target) != false) {
                 $this->$target = trim($queryParams[$target]);
