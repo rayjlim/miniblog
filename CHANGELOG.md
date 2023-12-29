@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.29.0](https://github.com/rayjlim/miniblog/compare/v2.28.0...v2.29.0) (2023-12-29)
+
+
+### Features
+
+* [#282](https://github.com/rayjlim/miniblog/issues/282) BE support locations ([3eed448](https://github.com/rayjlim/miniblog/commit/3eed44830488dde476792a00f887a7d6799db7e7))
+* [#282](https://github.com/rayjlim/miniblog/issues/282) display locations, custom hook for EntryList ([a73bfaa](https://github.com/rayjlim/miniblog/commit/a73bfaa553d8e81f5fb734f4e2d4105c0545b659))
+* [#282](https://github.com/rayjlim/miniblog/issues/282) doc update for DB schema ([6a83087](https://github.com/rayjlim/miniblog/commit/6a83087b74e3ab1f9edfe08da3794acfd42058af))
+* [#282](https://github.com/rayjlim/miniblog/issues/282) save locations in edit ([e167eb5](https://github.com/rayjlim/miniblog/commit/e167eb5311dd4e47598b252f83ae4961c42ddcc8))
+
+
+### Bug Fixes
+
+* appearance of search rows ([b4f606a](https://github.com/rayjlim/miniblog/commit/b4f606a99f2c8c40fe60c02114c8168faaafbbd9))
+* BE handling of edit ([1e05dff](https://github.com/rayjlim/miniblog/commit/1e05dff440a6175b2f694b398aa1e41214e1b325))
+* only load googleapi key once ([1d77210](https://github.com/rayjlim/miniblog/commit/1d77210a4314ef8a5b5cd1e8ea46ecf451bca44f))
+* remove debug statements ([ef03d3d](https://github.com/rayjlim/miniblog/commit/ef03d3d0185d7f2acfdd1afa43143548539cbc6a))
+* spacing when adding to existing entry ([aa88c92](https://github.com/rayjlim/miniblog/commit/aa88c92f5c500aea177707070a69f877cc387303))
+* update backend .env ([eb5cebf](https://github.com/rayjlim/miniblog/commit/eb5cebf0682c4807367ffffd3fc51299ed8c32e1))
+
 ## [2.28.0](https://github.com/rayjlim/miniblog/compare/v2.27.0...v2.28.0) (2023-12-28)
 
 
