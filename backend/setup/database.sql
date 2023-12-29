@@ -27,9 +27,12 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE `sms_entries` (
-  `id` int(11) NOT NULL auto_increment,
-  `content` text NOT NULL,
+  `id` int(11) NOT NULL,
+  `content` text CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10583 ;
+  `locations` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+ALTER TABLE `sms_entries`
+  ADD PRIMARY KEY (`id`);
