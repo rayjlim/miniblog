@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { DEFAULT_MAP_ZOOM } from '../constants';
 
 const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
   console.log(locations);
@@ -25,7 +26,7 @@ const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
     else {
       let location = locations[0];
       map.setCenter(location);
-      map.setZoom(8);
+      map.setZoom(DEFAULT_MAP_ZOOM);
       new googleApi.maps.Marker({
         ...location,
         position: location,

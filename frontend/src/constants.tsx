@@ -12,3 +12,4 @@ export const FILTER = {
   tagged: 1,
   untagged: 2
 }
+export const DEFAULT_MAP_ZOOM = 12;
