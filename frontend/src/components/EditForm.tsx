@@ -28,6 +28,7 @@ const EditForm = ({ entry, onSuccess, }: {
     locations,
     parseLocationPrep,
     populateLocationsInput,
+    getCoordinatesByBrowser
   } = useEditForm(entry, onSuccess);
 
   console.log(locations);
@@ -108,7 +109,7 @@ const EditForm = ({ entry, onSuccess, }: {
         />
         <button type="button"
           onClick={() => populateLocations()}>input to locations</button>
-          <button type="button"
+        <button type="button"
           onClick={() => populateLocationsInput()}>locations to input</button>
 
         {locations.map((location => (
@@ -118,6 +119,9 @@ const EditForm = ({ entry, onSuccess, }: {
         <input type="text" ref={locationPrep as any} />
         <button type="button"
           onClick={() => parseLocationPrep()}>parse</button>
+        <button type="button" title="get current location"
+          onClick={() => getCoordinatesByBrowser()}>Here</button>
+
       </div>
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={content} />
