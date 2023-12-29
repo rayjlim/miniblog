@@ -22,8 +22,14 @@ const EditForm = ({ entry, onSuccess, }: {
     locationChange,
     handleSave,
     handleDelete,
+    locationPrep,
+    populateLocations,
+    locations,
+    parseLocationPrep,
+    populateLocationsInput,
   } = useEditForm(entry, onSuccess);
 
+  console.log(locations);
   return (
     <div className="well">
       <h2>Edit Entry</h2>
@@ -90,14 +96,27 @@ const EditForm = ({ entry, onSuccess, }: {
         </button>
       </div>
       <div>
-      <textarea
+        <textarea
+
           ref={locationsInput as any}
           onChange={() => locationChange()}
           className="form-control"
-          placeholder="Add ..."
-          rows={8}
-          defaultValue={JSON.stringify(entry?.locations)}
+          placeholder="locations"
+          rows={3}
+          defaultValue={entry?.locations !== '' ? JSON.stringify(entry?.locations) : ''}
         />
+        <button type="button"
+          onClick={() => populateLocations()}>input to locations</button>
+          <button type="button"
+          onClick={() => populateLocationsInput()}>locations to input</button>
+
+        {locations.map((location => (
+          <div>{location.title}, {location.lat}, {location.lng}</div>
+        )))}
+        <input type="text" ref={locationPrep as any}
+        />
+        <button type="button"
+          onClick={() => parseLocationPrep()}>parse</button>
       </div>
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={content} />

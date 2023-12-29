@@ -3,11 +3,53 @@ import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
 
+function removeFirstAndLastCharacters(str: string) {
+  return str.substring(1, str.length - 1);
+}
+
+function parseJsonArray(str: string) {
+  try {
+    const jsonArray = JSON.parse(str);
+
+    // Verify if the parsed array is not blank
+    if (Array.isArray(jsonArray) && jsonArray.length > 0) {
+      return jsonArray;
+    } else {
+      // Return an empty array if the parsed array is blank
+      return [];
+    }
+  } catch (error) {
+    // Handle parsing errors (e.g., invalid JSON)
+    console.error('Error parsing JSON:', (error as any)?.message);
+    return [];
+  }
+}
+
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [content, setContent] = useState<string>(entry?.content || '');
   const textareaInput = useRef<HTMLTextAreaElement>(null);
   const dateInput = useRef<HTMLInputElement>(null);
   const locationsInput = useRef<HTMLTextAreaElement>();
+  const locationPrep = useRef<HTMLInputElement>();
+  const [locations, setLocations] = useState<any[]>([]);
+
+  const populateLocations = () =>{
+    const parsedLocations = parseJsonArray(locationsInput.current.value);
+    setLocations(parsedLocations);
+  };
+  const populateLocationsInput = () =>{
+    locationsInput.current.value = JSON.stringify(locations);
+  };
+  function parseLocationPrep(){
+    console.log((locationPrep as any)?.current.value);
+    const pieces = (locationPrep.current.value as string).split(',');
+    const newLocation = {
+      title: '',
+      lat: pieces[0],
+      lng: pieces[1]
+    }
+    setLocations([...locations, newLocation]);
+  }
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
@@ -100,7 +142,8 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
-  return { textareaInput, content, dateInput, locationsInput, locationChange, handleDelete, textChange, handleSave };
+  return { textareaInput, content, dateInput, locationsInput, locationChange, handleDelete, textChange, handleSave,
+    locationPrep, locations, populateLocations, populateLocationsInput, parseLocationPrep, };
 };
 
 export default useEditForm;
