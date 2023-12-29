@@ -22,6 +22,7 @@ const EditForm = ({ entry, onSuccess, }: {
     locationChange,
     handleSave,
     handleDelete,
+    locationPrepTitle,
     locationPrep,
     populateLocations,
     locations,
@@ -111,10 +112,10 @@ const EditForm = ({ entry, onSuccess, }: {
           onClick={() => populateLocationsInput()}>locations to input</button>
 
         {locations.map((location => (
-          <div>{location.title}, {location.lat}, {location.lng}</div>
+          <div key={`${location.lat},${location.lng}`}>{location.title}, {location.lat}, {location.lng}</div>
         )))}
-        <input type="text" ref={locationPrep as any}
-        />
+        <input type="text" ref={locationPrepTitle as any} />
+        <input type="text" ref={locationPrep as any} />
         <button type="button"
           onClick={() => parseLocationPrep()}>parse</button>
       </div>

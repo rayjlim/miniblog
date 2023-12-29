@@ -3,11 +3,9 @@ import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
 
-function removeFirstAndLastCharacters(str: string) {
-  return str.substring(1, str.length - 1);
-}
-
-function parseJsonArray(str: string) {
+function parseJsonArray(str: string | undefined) {
+  if (!str)
+    return [];
   try {
     const jsonArray = JSON.parse(str);
 
@@ -30,23 +28,43 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   const textareaInput = useRef<HTMLTextAreaElement>(null);
   const dateInput = useRef<HTMLInputElement>(null);
   const locationsInput = useRef<HTMLTextAreaElement>();
+
+  const locationPrepTitle = useRef<HTMLInputElement>();
   const locationPrep = useRef<HTMLInputElement>();
   const [locations, setLocations] = useState<any[]>([]);
 
-  const populateLocations = () =>{
-    const parsedLocations = parseJsonArray(locationsInput.current.value);
+  const populateLocations = () => {
+    const parsedLocations = parseJsonArray(locationsInput?.current?.value);
     setLocations(parsedLocations);
   };
-  const populateLocationsInput = () =>{
-    locationsInput.current.value = JSON.stringify(locations);
+  const populateLocationsInput = () => {
+    if (locationsInput && locationsInput.current) {
+      locationsInput.current.value = JSON.stringify(locations);
+    }
   };
-  function parseLocationPrep(){
+
+  function parseLocationPrep() {
+    // The different forms of expected input
+    // 1. 37.82879684957708, -122.42176267186676
+    // 2. https://maps.apple.com/?address=1500%20S%20Tenth%20St,%20San%20Jose,%20CA%2095112,%20United%20States&auid=4146272712971004545&ll=37.319246,-121.864025&lsp=9902&q=Sharks%20Ice&t=m
+
     console.log((locationPrep as any)?.current.value);
-    const pieces = (locationPrep.current.value as string).split(',');
+
+    let pieces: string[] = [];
+    if((locationPrep?.current?.value as string)?.includes('maps.apple.com')){
+      const regex = /&ll=([^&]+)/;
+      const match = (locationPrep?.current?.value as string)?.match(regex);
+      if(match && match[1]){
+        pieces = (match[1] as string).split(',');
+      }
+    }else{
+      pieces = (locationPrep?.current?.value as string).split(',');
+    }
+
     const newLocation = {
-      title: '',
-      lat: pieces[0],
-      lng: pieces[1]
+      title: locationPrepTitle?.current?.value,
+      lat: parseFloat(pieces[0]),
+      lng: parseFloat(pieces[1])
     }
     setLocations([...locations, newLocation]);
   }
@@ -59,14 +77,15 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     setContent(refTextarea.value);
   }
 
-  function locationChange(){
+  function locationChange() {
 
   }
 
   async function handleSave() {
     console.log('handleSave entry :');
     const requestHeaders = createHeaders();
-    const newEntry = { ...entry,
+    const newEntry = {
+      ...entry,
       content: textareaInput.current?.value || '',
       date: dateInput.current?.value || '',
       locations: locationsInput.current?.value || ""
@@ -142,8 +161,11 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
-  return { textareaInput, content, dateInput, locationsInput, locationChange, handleDelete, textChange, handleSave,
-    locationPrep, locations, populateLocations, populateLocationsInput, parseLocationPrep, };
+  return {
+    textareaInput, content, dateInput, locationsInput, locationChange, handleDelete, textChange, handleSave,
+    locationPrepTitle,
+    locationPrep, locations, populateLocations, populateLocationsInput, parseLocationPrep,
+  };
 };
 
 export default useEditForm;
