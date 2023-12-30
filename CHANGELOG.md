@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.30.0](https://github.com/rayjlim/miniblog/compare/v2.29.0...v2.30.0) (2023-12-30)
+
+
+### Features
+
+* [#282](https://github.com/rayjlim/miniblog/issues/282) still crude location editor ([fe4e7a6](https://github.com/rayjlim/miniblog/commit/fe4e7a639fea9670c09138a19b5d38e32aa1e3bd))
+* [#282](https://github.com/rayjlim/miniblog/issues/282) WIP: locations editable ([1713975](https://github.com/rayjlim/miniblog/commit/17139750a70061f711180a484479e82dd3ba84fe))
+* [#288](https://github.com/rayjlim/miniblog/issues/288) get location from browser, more regex handling ([3fbc834](https://github.com/rayjlim/miniblog/commit/3fbc834abdd18f7cb4bf6f2d2a1fb4f9cdcebcc6))
+* [#289](https://github.com/rayjlim/miniblog/issues/289) dislay list of geo locations ([e695e23](https://github.com/rayjlim/miniblog/commit/e695e23abea8a054604380244db066804bfa386b))
+* [#294](https://github.com/rayjlim/miniblog/issues/294) addform check in ([2c8d3cd](https://github.com/rayjlim/miniblog/commit/2c8d3cd41227e06bceb061ba4b5e4d49b2ddc376))
+* [#294](https://github.com/rayjlim/miniblog/issues/294) refactor location to own subcomp ([7c4d399](https://github.com/rayjlim/miniblog/commit/7c4d39976e0b9e3a9281d6a32b50eec014ae0cb5))
+
+
+### Bug Fixes
+
+* default map zoom to constants ([a1ba09d](https://github.com/rayjlim/miniblog/commit/a1ba09d878bead6f5c2d686fb383a2fb100e9355))
+* editform not showing location as JSON ([757c100](https://github.com/rayjlim/miniblog/commit/757c100ce8b070a3b90fc2a4f967917c244ca4b6))
+* update BE tests for locations ([a2294c7](https://github.com/rayjlim/miniblog/commit/a2294c75fa304e88913ac5999a2008b23b60c00d))
+* update FE tests for locations ([23cfc81](https://github.com/rayjlim/miniblog/commit/23cfc814a5414f04502dbc83da74309552f1d1cb))
+
 ## [2.29.0](https://github.com/rayjlim/miniblog/compare/v2.28.0...v2.29.0) (2023-12-29)
 
 
