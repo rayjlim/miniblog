@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from 'react-toastify';
-import GoogleApiLoader from './components/GoogleApiLoader';
+
 // import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import DevRibbon from './components/DevRibbon';
@@ -27,7 +27,7 @@ const App = () => {
       <AuthProvider>
         <SettingProvider>
           <StrictMode>
-            <GoogleApiLoader />
+
             <DevRibbon />
             <div id="app" className="App d-flex flex-column h-100">
             <ToastContainer autoClose={500} />
