@@ -24,7 +24,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       ...entry,
       content: textareaInput.current?.value || '',
       date: dateInput.current?.value || '',
-      locations: locationsRef.current?.value || ""
+      locations: locationsRef.current?.value || ''
     };
     const options = {
       method: 'PUT',
@@ -46,11 +46,6 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     onSuccess('Edit Done', newEntry as EntryType);
   }
 
-  /**
-   * The above function handles the deletion of a post by sending a DELETE request to
-   * the server and displaying a success message or an error message.
-   * @returns The function `handleDelete` returns nothing (`undefined`).
-   */
   async function handleDelete() {
     const go = window.confirm('You sure?');
     if (!go) {
@@ -58,7 +53,6 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     }
     const id = entry?.id || 0;
     console.log(`handleDelete ${id}`);
-
     const requestHeaders = createHeaders();
 
     try {

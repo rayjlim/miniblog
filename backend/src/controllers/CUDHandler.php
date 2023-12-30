@@ -89,14 +89,8 @@ class CUDHandler
 
             $array1 = json_decode($found['locations'], true);
             $array2 = json_decode($entry->locations, true);
-
-            // Merge the arrays
             $mergedArray = array_merge($array1, $array2);
-
-            // Encode the merged array back to JSON
-            $mergedJson = json_encode($mergedArray);
-
-            $newEntry->locations = $mergedJson;
+            $newEntry->locations = json_encode($mergedArray);
 
 
             //TODO: join new entry to existing, need to look for duplicates
