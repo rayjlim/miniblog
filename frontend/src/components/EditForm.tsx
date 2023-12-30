@@ -1,6 +1,6 @@
 import MarkdownDisplay from './MarkdownDisplay';
 import useEditForm from '../hooks/useEditForm';
-
+import LocationForm from './LocationForm';
 import './EditForm.css';
 
 const EditForm = ({ entry, onSuccess, }: {
@@ -15,23 +15,14 @@ const EditForm = ({ entry, onSuccess, }: {
 
   const {
     textareaInput,
-    content,
+    markdownContent,
     dateInput,
-    locationsInput,
     textChange,
-    locationChange,
     handleSave,
     handleDelete,
-    locationPrepTitle,
-    locationPrep,
-    populateLocations,
-    locations,
-    parseLocationPrep,
-    populateLocationsInput,
-    getCoordinatesByBrowser
+    locationsRef
   } = useEditForm(entry, onSuccess);
 
-  console.log(locations);
   return (
     <div className="well">
       <h2>Edit Entry</h2>
@@ -59,7 +50,7 @@ const EditForm = ({ entry, onSuccess, }: {
       </div>
       <div className="form-group">
         <textarea
-          ref={textareaInput}
+          ref={textareaInput as any}
           onChange={() => textChange()}
           className="form-control"
           placeholder="Add ..."
@@ -82,7 +73,7 @@ const EditForm = ({ entry, onSuccess, }: {
         <input
           type="date"
           defaultValue={entry?.date || ''}
-          ref={dateInput}
+          ref={dateInput as any}
 
         />
         <button
@@ -97,34 +88,9 @@ const EditForm = ({ entry, onSuccess, }: {
           <span>Cancel</span>
         </button>
       </div>
-      <div>
-        <textarea
-
-          ref={locationsInput as any}
-          onChange={() => locationChange()}
-          className="form-control"
-          placeholder="locations"
-          rows={3}
-          defaultValue={entry?.locations !== '' ? JSON.stringify(entry?.locations) : ''}
-        />
-        <button type="button"
-          onClick={() => populateLocations()}>input to locations</button>
-        <button type="button"
-          onClick={() => populateLocationsInput()}>locations to input</button>
-
-        {locations.map((location => (
-          <div key={`${location.lat},${location.lng}`}>{location.title}, {location.lat}, {location.lng}</div>
-        )))}
-        <input type="text" ref={locationPrepTitle as any} />
-        <input type="text" ref={locationPrep as any} />
-        <button type="button"
-          onClick={() => parseLocationPrep()}>parse</button>
-        <button type="button" title="get current location"
-          onClick={() => getCoordinatesByBrowser()}>Here</button>
-
-      </div>
+      <LocationForm ref={locationsRef}/>
       <div className="markdownDisplay preview dashBorder">
-        <MarkdownDisplay source={content} />
+        <MarkdownDisplay source={markdownContent} />
       </div>
     </div>
   );
