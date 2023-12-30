@@ -86,7 +86,17 @@ class CUDHandler
             $newEntry->id = $found['id'];
             $newEntry->date = $found['date'];
             $newEntry->userId = $found['user_id'];
-            $newEntry->locations = $found['locations'];
+
+            $array1 = json_decode($found['locations'], true);
+            $array2 = json_decode($entry->locations, true);
+
+            // Merge the arrays
+            $mergedArray = array_merge($array1, $array2);
+
+            // Encode the merged array back to JSON
+            $mergedJson = json_encode($mergedArray);
+
+            $newEntry->locations = $mergedJson;
 
 
             //TODO: join new entry to existing, need to look for duplicates
@@ -99,7 +109,7 @@ class CUDHandler
             $newEntry->content = trim(urldecode($entry->content));
             $newEntry->content = SmsEntrie::sanitizeContent($newEntry->content);
             $newEntry->userId = $_ENV['ACCESS_ID'];
-            $newEntry->locations = "";//$entry->locations;
+            $newEntry->locations = $entry->locations;
             $newEntry->id = $this->dao->insert($newEntry);
             $response->getBody()->write(json_encode($newEntry));
         }
