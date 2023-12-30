@@ -16,7 +16,6 @@ const useFetch = (): any => {
             method: 'POST',
             body: JSON.stringify(formEntry),
             mode: 'cors',
-            cache: 'no-cache',
             headers: requestHeaders,
           });
           const { id } = await response.json();
@@ -32,12 +31,14 @@ const useFetch = (): any => {
   return [newId, setNewEntry];
 };
 
-const useAddForm = (content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void) => {
-  const [formContent, setFormContent] = useState<string>(content || '');
-  const [formDate, setFormDate] = useState<string>(date);
+const useAddForm = (onSuccess: (msg: string, entry: EntryType) => void) => {
+  const [formContent, setFormContent] = useState<string>();
   const isMounted = useRef(false);
   const [id, setNewEntry] = useFetch();
-  const textareaInput = useRef<HTMLTextAreaElement>(null);
+
+  const textareaInput = useRef<HTMLTextAreaElement>();
+  const dateInput = useRef<HTMLInputElement>();
+  const locationsRef = useRef<HTMLTextAreaElement>();
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
@@ -48,18 +49,17 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string, entr
     setFormContent(refTextareaInput.value);
   }
 
-  function dateChange(value: string) {
-    console.log('value :', value);
-    if (value) {
-      setFormDate(value);
-    }
-  }
-
   function handleAdd() {
     console.log('handleAdd');
+    let newContent = (textareaInput as any)?.current.value.trim();
+    if (newContent === '' && (locationsRef as any)?.current.value){
+      newContent = JSON.parse((locationsRef as any)?.current.value)[0].title;
+    }
+    console.log(newContent);
     setNewEntry({
-      content: formContent.trim(),
-      date: formDate,
+      content: newContent,
+      date: (dateInput as any)?.current.value,
+      locations: (locationsRef as any)?.current.value,
     });
   }
 
@@ -79,8 +79,8 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string, entr
       // but when the Id is set
       onSuccess(`Add Done : New Id: ${id}`, {
         id,
-        content: formContent.trim(),
-        date: formDate,
+        content: formContent?.trim() || '',
+        date: (dateInput as any)?.current.value || '',
       });
     } else {
       isMounted.current = true;
@@ -91,7 +91,7 @@ const useAddForm = (content: string, date: string, onSuccess: (msg: string, entr
     }
   }, [id]);
 
-  return { handleAdd, textChange, dateChange, formContent, formDate, textareaInput };
+  return { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef };
 };
 
 export default useAddForm;

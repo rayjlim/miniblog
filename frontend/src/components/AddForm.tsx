@@ -1,10 +1,11 @@
 import MarkdownDisplay from './MarkdownDisplay';
 import useAddForm from '../hooks/useAddForm';
+import LocationForm from './LocationForm';
 
 const AddForm = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void }) => {
 
-  const { handleAdd, textChange, dateChange, formContent, formDate, textareaInput } =
-    useAddForm(content, date, onSuccess);
+  const { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef } =
+    useAddForm(onSuccess);
 
   return (
     <div className="well">
@@ -26,7 +27,7 @@ const AddForm = ({ content, date, onSuccess }: { content: string, date: string, 
       <div className="form-group">
         <textarea
           id="addFormTextarea"
-          ref={textareaInput}
+          ref={textareaInput as any}
           rows={6}
           onChange={() => textChange()}
           className="form-control"
@@ -36,7 +37,9 @@ const AddForm = ({ content, date, onSuccess }: { content: string, date: string, 
       </div>
 
       <div className="form-group">
-        <input type="date" onChange={e => dateChange(e.target.value)} value={formDate} />
+        <input type="date"
+          ref={dateInput as any}
+          defaultValue={date}/>
       </div>
 
       <button
@@ -57,8 +60,9 @@ const AddForm = ({ content, date, onSuccess }: { content: string, date: string, 
         <i className="fa fa-ban" />
         Cancel
       </button>
+      <LocationForm ref={locationsRef} />
       <div className="markdownDisplay preview dashBorder">
-        <MarkdownDisplay source={formContent} />
+        <MarkdownDisplay source={formContent as any || ''} />
       </div>
     </div>
   );
