@@ -1,38 +1,64 @@
 import { useEffect } from 'react';
+import { useSetting } from './SettingContext';
 import { DEFAULT_MAP_ZOOM } from '../constants';
+import { Loader } from "@googlemaps/js-api-loader"
+import './GoogleMap.css';
 
 const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
   console.log(locations);
-  const googleApi = (window as any).google;
+  const { GOOGLE_API_KEY } = useSetting() as SettingsType;
 
-  const drawMap = () => {
-    const mapOptions = {
-      mapId: "DEMO_MAP_ID",
-    };
+  const loader = new Loader({
+    apiKey: GOOGLE_API_KEY,
+    version: "weekly"
+  });
 
-    const map = new googleApi.maps.Map(document.getElementById('map'), mapOptions);
-    if (locations.length > 1) {
-      const bounds = new googleApi.maps.LatLngBounds();
-      // Iterate through each marker and extend the bounds
-      locations.forEach(location => {
-        const position = new googleApi.maps.LatLng(location.lat, location.lng);
-        bounds.extend(position);
-        new googleApi.maps.Marker({ position, map, title: location?.title });
-
+  const drawMap = async () => {
+    loader.load().then(async () => {
+      //@ts-ignore
+      const { Map } = await google.maps.importLibrary("maps");
+      let map = new Map(document.getElementById("map") as HTMLElement, {
+        mapId: "DEMO_MAP_ID",
       });
-      // Set the map's viewport to fit the bounds
-      map.fitBounds(bounds);
-    }
-    else {
-      let location = locations[0];
-      map.setCenter(location);
-      map.setZoom(DEFAULT_MAP_ZOOM);
-      new googleApi.maps.Marker({
-        ...location,
-        position: location,
-        map: map
-      });
-    }
+      //@ts-ignore
+      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+      if (locations.length > 1) {
+        const bounds = new google.maps.LatLngBounds();
+        // Iterate through each marker and extend the bounds
+        locations.forEach(location => {
+          const position = new google.maps.LatLng(location.lat, location.lng);
+          bounds.extend(position);
+          const locationDiv = document.createElement("div");
+
+          locationDiv.className = "map-marker";
+          locationDiv.textContent = location?.title || '';
+          console.log(locationDiv);
+          new AdvancedMarkerElement({
+            position,
+            map,
+            content: locationDiv
+          });
+
+        });
+        // Set the map's viewport to fit the bounds
+        map.fitBounds(bounds);
+      }
+      else {
+        let location = locations[0];
+        const locationDiv = document.createElement("div");
+
+        locationDiv.className = "map-marker";
+        locationDiv.textContent = location?.title || '';
+        map.setCenter(location);
+        map.setZoom(DEFAULT_MAP_ZOOM);
+        new AdvancedMarkerElement({
+          position: location,
+          map: map,
+          content: locationDiv
+        });
+      }
+    });
   }
 
   useEffect(() => {
@@ -44,9 +70,9 @@ const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
     (
       <>
         <ul>
-        {locations.map(location=><li>{location.title}</li>)}
+          {locations.map(location => <li key={location.title}>{location.title}</li>)}
         </ul>
-        <div id="map" style={{ height: '400px', width: '100%' }} />
+        <div id="map"/>
       </>
     )
 
