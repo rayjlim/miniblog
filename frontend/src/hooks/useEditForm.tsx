@@ -34,7 +34,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     } as any;
     (async () => {
       try {
-        const response = await fetch(`${REST_ENDPOINT}/api/posts/`, options);
+        const response = await fetch(`${REST_ENDPOINT}/api/posts/${entry?.id}`, options);
         const results = await response.json();
         console.log(results);
       } catch (error) {
