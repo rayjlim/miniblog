@@ -17,7 +17,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     setContent(refTextarea.value);
   }
 
-  async function handleSave() {
+  function handleSave() {
     console.log('handleSave entry :');
     const requestHeaders = createHeaders();
     const newEntry = {
@@ -29,21 +29,22 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     const options = {
       method: 'PUT',
       body: JSON.stringify(newEntry),
-      headers: requestHeaders,
-      mode: 'cors'
+      mode: 'cors',
+      headers: requestHeaders
     } as any;
+    (async () => {
+      try {
+        const response = await fetch(`${REST_ENDPOINT}/api/posts/`, options);
+        const results = await response.json();
+        console.log(results);
+      } catch (error) {
+        console.log(error);
+        toast((error as any).message);
+        onSuccess('Edit fail' + error, newEntry as EntryType);
+      }
 
-    try {
-      const response = await fetch(`${REST_ENDPOINT}/api/posts/${entry?.id}`, options);
-
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      toast((error as any).message);
-      onSuccess('Edit fail' + error, newEntry as EntryType);
-    }
-
-    onSuccess('Edit Done', newEntry as EntryType);
+      onSuccess('Edit Done', newEntry as EntryType);
+    })()
   }
 
   async function handleDelete() {
@@ -64,8 +65,8 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
           headers: requestHeaders
         },
       );
-
-      console.log(response);
+      const results = await response.json();
+      console.log(results);
     } catch (error) {
       console.log(error);
       toast((error as any).message);
@@ -89,8 +90,8 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     const textLength = textareaInput.current?.value.length || 0;
     textareaInput.current?.setSelectionRange(textLength, textLength);
 
-    if(locationsRef && locationsRef.current){
-      locationsRef.current.value =   entry?.locations !== '' ? JSON.stringify(entry?.locations) : ''
+    if (locationsRef && locationsRef.current) {
+      locationsRef.current.value = entry?.locations !== '' ? JSON.stringify(entry?.locations) : ''
     }
 
     document.addEventListener('keydown', checkKeyPressed);
@@ -100,13 +101,10 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     textareaInput,
     markdownContent,
     dateInput,
-
     textChange,
-
     handleSave,
     handleDelete,
     locationsRef
-
   };
 };
 

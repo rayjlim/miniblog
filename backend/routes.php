@@ -14,13 +14,13 @@ use App\controllers\MediaHandler;
 use App\controllers\UploadHandler;
 use App\controllers\LogHandler;
 use App\helpers\AuthMiddleware;
+use App\core\Logger;
 
 return function (App $app) {
 
   $app->get('/settings/', Settings::class);
 
-  $app->get(
-    '/ping',
+  $app->post('/ping',
     function (Request $request, Response $response) {
       $response->getBody()->write("{\"pong\":\"true\"}");
       return $response;

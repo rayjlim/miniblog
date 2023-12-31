@@ -32,7 +32,8 @@ const useLogs = () => {
         },
       );
 
-      console.log(response);
+      const results = await response.json();
+      console.log(results);
       setLogFileName('');
     } catch (error) {
       console.log(error);

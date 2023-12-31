@@ -1,11 +1,9 @@
 <?php
-
 namespace App\controllers;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
 use Psr\Container\ContainerInterface;
-
 use App\core\DevHelp;
 use App\models\SmsEntrie;
 use App\models\ListParams;
@@ -92,9 +90,7 @@ class CUDHandler
             $mergedArray = array_merge($array1, $array2);
             $newEntry->locations = json_encode($mergedArray);
 
-
-            //TODO: join new entry to existing, need to look for duplicates
-            // $found->locations = $entry->locations;
+            //TODO: need to look for duplicates
             $this->dao->update($newEntry);
             $response->getBody()->write(json_encode($newEntry));
         } else {
@@ -105,6 +101,7 @@ class CUDHandler
             $newEntry->userId = $_ENV['ACCESS_ID'];
             $newEntry->locations = $entry->locations;
             $newEntry->id = $this->dao->insert($newEntry);
+            Logger::log("Add: \t" . $newEntry->id . "\t" . $newEntry->date);
             $response->getBody()->write(json_encode($newEntry));
         }
 

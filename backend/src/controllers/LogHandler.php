@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 use App\core\DevHelp;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use App\core\Logger;
 
 class LogHandler
 {
@@ -52,6 +53,7 @@ class LogHandler
         $this->resource = $factory->makeResource();
         $logFileName = $args['logFileName'] ?? '';
         if ($logFileName !== '') {
+            Logger::log("Remove Log: \t" . LOGS_DIR . DIR_SEP . $logFileName);
             $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
             $reply = 'File Removed: ' . $logFileName;
             $response->getBody()->write(json_encode($reply));

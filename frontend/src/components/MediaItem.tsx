@@ -28,6 +28,8 @@ const MediaItem = ({ media, currentDir, selectMedia, onDelete }: {
         console.log('response.status :', response.status);
         alert(`loading error : ${response.status}`);
       } else {
+        const results = await response.json();
+        console.log(results);
         // Do anything with the metadata return after delete?
         // const data = await response.json();
         onDelete(fileName);
