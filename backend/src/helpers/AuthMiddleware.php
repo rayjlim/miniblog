@@ -1,4 +1,5 @@
 <?php
+
 namespace App\helpers;
 
 defined('ABSPATH') or exit('No direct script access allowed');
@@ -77,7 +78,7 @@ class AuthMiddleware
         $response->status = "fail";
         $response->message = $message;
 
-        Logger::log('User Login: '.$message.' from IP Address: ' . $ipaddress);
+        Logger::log('User Login Err: ' . $message . ' from IP Address: ' . $ipaddress, array('logFilePrefix' => "mb-login"));
         header('HTTP/1.0 403 Forbidden');
         echo json_encode($response);
         exit(0);
@@ -105,7 +106,7 @@ class AuthMiddleware
      */
     private function isLoggedIn()
     {
-        if(isset($_ENV['PHP_TEST']) && $_ENV['PHP_TEST']){
+        if (isset($_ENV['PHP_TEST']) && $_ENV['PHP_TEST']) {
             return true;
         }
         $headers = getallheaders();
@@ -127,7 +128,7 @@ class AuthMiddleware
 
         if (isset($_GET["cron_pass"]) && $_GET["cron_pass"] == $_ENV['CRON_PW']) {
             $ipaddress = getenv("REMOTE_ADDR");
-            Logger::log("Cron called from IP Address: " . $ipaddress);
+            Logger::log("Cron called from IP Address: " . $ipaddress, array('logFilePrefix' => "mb-login"));
             return true;
         }
 
@@ -144,7 +145,7 @@ class AuthMiddleware
     private function isValidUsernamePassword($username, $password)
     {
         $ipaddress = getenv("REMOTE_ADDR");
-        Logger::log('isValidUsernamePassword:' . $username . 'from IP Address: ' . $ipaddress);
+        Logger::log('check Valid Username: ' . $username . ' from IP Address: ' . $ipaddress, array('logFilePrefix' => "mb-login"));
         return $username === $_ENV['ACCESS_USER'] && $password === $_ENV['ACCESS_PASSWORD'];
     }
 }
