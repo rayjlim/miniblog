@@ -87,8 +87,8 @@ class CUDHandler
             $newEntry->date = $found['date'];
             $newEntry->userId = $found['user_id'];
 
-            $array1 = json_decode($found['locations'], true);
-            $array2 = json_decode($entry->locations, true);
+            $array1 = !empty($found['locations']) ? json_decode($found['locations'], true) : [];
+            $array2 = !empty($entry->locations) ? json_decode($entry->locations, true) : [];
             $mergedArray = array_merge($array1, $array2);
             $newEntry->locations = json_encode($mergedArray);
 
