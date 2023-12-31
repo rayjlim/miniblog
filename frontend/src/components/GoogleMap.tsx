@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useSetting } from './SettingContext';
 import { DEFAULT_MAP_ZOOM } from '../constants';
-import { Loader } from "@googlemaps/js-api-loader"
+import { Loader } from "@googlemaps/js-api-loader";
+import { GOOGLE_MAPS_ENABLED } from '../constants';
 import './GoogleMap.css';
 
 const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
@@ -62,7 +63,7 @@ const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
   }
 
   useEffect(() => {
-    locations.length && drawMap();
+    locations.length && GOOGLE_MAPS_ENABLED && drawMap();
   });
   if (!locations?.length) return <div>No Map Points found</div>;
 
@@ -72,7 +73,7 @@ const GoogleMap = ({ locations }: { locations: MarkerType[] }) => {
         <ul>
           {locations.map(location => <li key={location.title}>{location.title}</li>)}
         </ul>
-        <div id="map"/>
+        <div id="map" />
       </>
     )
 
