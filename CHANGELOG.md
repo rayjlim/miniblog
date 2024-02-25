@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.31.0](https://github.com/rayjlim/miniblog/compare/v2.30.0...v2.31.0) (2024-02-25)
+
+
+### Features
+
+* ability to disable map by constant ([206d4d4](https://github.com/rayjlim/miniblog/commit/206d4d43bbe07459cb9d8c199d3c4c8c0fdfc334))
+* support split of logs for auth/app ([c6519fc](https://github.com/rayjlim/miniblog/commit/c6519fc13d8d5b52a327deea39cc1989a64b0874))
+
+
+### Bug Fixes
+
+* [#290](https://github.com/rayjlim/miniblog/issues/290) debug network call, missed await response ([34dbd75](https://github.com/rayjlim/miniblog/commit/34dbd755d2f32e47c31d2d83096c651318350ae7))
+* add google api to package list ([f36239d](https://github.com/rayjlim/miniblog/commit/f36239dbefab1447de9c3dad5cd1db1c18bdb7de))
+* add google maps api for TS ([3adf995](https://github.com/rayjlim/miniblog/commit/3adf995c3a546b2bccfd3675a375bbcf8d297754))
+* broken test edit form ([9e45064](https://github.com/rayjlim/miniblog/commit/9e450644108a868e65a60023a67cf406e9e165c1))
+* handle no location string in db or request ([8a9d04d](https://github.com/rayjlim/miniblog/commit/8a9d04d26d8d457b94437dcb146170b2f9253c24))
+* messed up URL for edit ([e02d7dd](https://github.com/rayjlim/miniblog/commit/e02d7dd4d2189df7cc9674f1dce006857991e19f))
+* styles to css,  use Loader for api ([109d123](https://github.com/rayjlim/miniblog/commit/109d123aa8605aa27e8c3807dccf14cba7929c21))
+* upgrade react-router-dom from 6.20.0 to 6.20.1 ([0df29df](https://github.com/rayjlim/miniblog/commit/0df29df92c4d2a6e19be05746de437b47e00acf7))
+
+## [2.31.0](https://github.com/rayjlim/miniblog/compare/v2.30.0...v2.31.0) (2024-02-25)
+
+
+### Features
+
+* ability to disable map by constant ([206d4d4](https://github.com/rayjlim/miniblog/commit/206d4d43bbe07459cb9d8c199d3c4c8c0fdfc334))
+* support split of logs for auth/app ([c6519fc](https://github.com/rayjlim/miniblog/commit/c6519fc13d8d5b52a327deea39cc1989a64b0874))
+
+
+### Bug Fixes
+
+* [#290](https://github.com/rayjlim/miniblog/issues/290) debug network call, missed await response ([34dbd75](https://github.com/rayjlim/miniblog/commit/34dbd755d2f32e47c31d2d83096c651318350ae7))
+* add google api to package list ([f36239d](https://github.com/rayjlim/miniblog/commit/f36239dbefab1447de9c3dad5cd1db1c18bdb7de))
+* add google maps api for TS ([3adf995](https://github.com/rayjlim/miniblog/commit/3adf995c3a546b2bccfd3675a375bbcf8d297754))
+* broken test edit form ([9e45064](https://github.com/rayjlim/miniblog/commit/9e450644108a868e65a60023a67cf406e9e165c1))
+* handle no location string in db or request ([8a9d04d](https://github.com/rayjlim/miniblog/commit/8a9d04d26d8d457b94437dcb146170b2f9253c24))
+* messed up URL for edit ([e02d7dd](https://github.com/rayjlim/miniblog/commit/e02d7dd4d2189df7cc9674f1dce006857991e19f))
+* styles to css,  use Loader for api ([109d123](https://github.com/rayjlim/miniblog/commit/109d123aa8605aa27e8c3807dccf14cba7929c21))
+* upgrade react-router-dom from 6.20.0 to 6.20.1 ([0df29df](https://github.com/rayjlim/miniblog/commit/0df29df92c4d2a6e19be05746de437b47e00acf7))
+
 ## [2.30.0](https://github.com/rayjlim/miniblog/compare/v2.29.0...v2.30.0) (2023-12-30)
 
 
