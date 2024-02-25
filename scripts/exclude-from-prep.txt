@@ -2,6 +2,7 @@ build/
 vendor/
 tests/
 _logs/
+node_modules/
 
 *.txt
 *.md

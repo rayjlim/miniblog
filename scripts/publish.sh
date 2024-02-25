@@ -31,6 +31,7 @@ do
 done
 
 if [ -z "$NOBACKENDBUILD" ]; then
+  echo "start Backend Build"
   mkdir -p ../backend/build
   cd ../backend
   rsync -ravz --exclude-from '../scripts/exclude-from-prep.txt' --delete . ./build
@@ -40,7 +41,7 @@ if [ -z "$NOBACKENDBUILD" ]; then
   rsync -avz  "../scripts/exclude-from-prod.txt"   ./build
 
   cd ./build
-  /usr/local/bin/composer install  --no-dev
+  composer.bat install  --no-dev
   chmod 755 *.php
 
   echo "build ready"
