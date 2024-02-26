@@ -56,4 +56,8 @@ Alt + , : Prev Day [one day]
 Alt + . : Next Day [one day]  
 Alt + 1 : Add or Edit first entry [one day]  
 Alt + [ ' Get new prompt [one day]  
-Alt + p ' Populate Add form with Prompt [one day]  
+Alt + p ' Populate Add form with Prompt [one day]
+
+## Debugging
+
+- when cors issue, check the auth token header variable case matches from frontend to backend

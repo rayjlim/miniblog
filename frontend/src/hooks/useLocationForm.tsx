@@ -95,6 +95,21 @@ const useLocationForm = (locationsInput: any) => {
       console.error('Geolocation is not supported by this browser.');
     }
   }
+
+const getLocation = () =>{
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    if (newCoords && newCoords.current)
+      newCoords.current.value = "Geolocation is not supported by this browser.";  }
+
+  function showPosition(position: any) {
+    if (newCoords && newCoords.current)
+      newCoords.current.value = `${position.coords.latitude}, ${position.coords.longitude}`;
+  }
+}
+
   return {
     locationChange,
     newTitle,
@@ -103,7 +118,8 @@ const useLocationForm = (locationsInput: any) => {
     locations,
     createNewLocation,
     updateInputFromLocations,
-    getCoordinatesByBrowser
+    getCoordinatesByBrowser,
+    getLocation
   };
 
 };
