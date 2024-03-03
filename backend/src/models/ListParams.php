@@ -30,7 +30,7 @@ class ListParams
     public string $excludeTags = '';
     public string $location = '';
 
-    public function loadParams($queryParams)
+    public function loadParams(array $queryParams): void
     {
         $lookingFor = ['searchParam', 'tags', 'startDate', 'endDate', 'resultsLimit', 'filterType', 'location'];
         foreach ($lookingFor as $target) {

@@ -62,7 +62,7 @@ class SmsEntrie
      */
     public string $locations;
 
-    public static function sanitizeContent(string $content)
+    public static function sanitizeContent(string $content): string
     {
         $order = ["\r\n", "\n", "\r"];
 

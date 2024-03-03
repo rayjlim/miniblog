@@ -9,7 +9,7 @@ class SettingTest extends TestCase
   // $resourceMock = $this->createMock('App\dao\Resource');
   // $creator->expects($this->once())->method('makeResource')->willReturn($resourceMock);
 
-  function test_basic_path()
+  function test_basic_path(): void
   {
 
     $app = $this->getAppInstance();

@@ -9,8 +9,9 @@ class Resource implements IResourceDAO
     /**
      * setSession
      *
-     * @param  string $key site url
-     * @return none
+     * @param string $key site url
+     *
+     * @return void
      */
     public function setSession($key, $value)
     {
@@ -31,28 +32,45 @@ class Resource implements IResourceDAO
         return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : null;
     }
 
+    /**
+     * @return bool
+     */
     public function issetSession($key)
     {
         return isset($_SESSION[$key]);
     }
 
+    /**
+     * @return void
+     */
     public function setCookie($key, $value, $expiration)
     {
         setcookie($key, $value, $expiration);
     }
 
+    /**
+     * @return void
+     */
     public function destroySession()
     {
         session_destroy();
     }
 
-    public function writeFile($filename, $content)
+    /**
+     * @return void
+     */
+    public function writeFile(string $filename, string $content)
     {
         $filehandler = fopen($filename, 'a') or die("can't open file");
         fwrite($filehandler, $content);
         fclose($filehandler);
     }
 
+    /**
+     * @return string[]
+     *
+     * @psalm-return array<int<0, max>, string>
+     */
     public function readdir($logDirectory)
     {
         $filelist = [];
@@ -73,6 +91,9 @@ class Resource implements IResourceDAO
         return $filelist;
     }
 
+    /**
+     * @return false|string
+     */
     public function readfile($logfile)
     {
         $myFile = $logfile;
@@ -83,26 +104,41 @@ class Resource implements IResourceDAO
         return $fileContents;
     }
 
+    /**
+     * @return void
+     */
     public function removefile($logfile)
     {
         $myFile = $logfile;
         unlink($myFile);
     }
 
+    /**
+     * @return DateTime
+     */
     public function getDateTime()
     {
         return new DateTime();
     }
 
+    /**
+     * @return void
+     */
     public function getDateByDescription(string $strDescription){
         date(YEAR_MONTH_DAY_FORMAT, strtotime($strDescription));
     }
 
+    /**
+     * @return void
+     */
     public function sendEmail($email, $subject, $message)
     {
         mail($email, $subject, $message);
     }
 
+    /**
+     * @return string|true
+     */
     public function load($url)
     {
         //echo 'url loadings: '.$url;
@@ -121,6 +157,9 @@ class Resource implements IResourceDAO
         return $response;
     }
 
+    /**
+     * @return void
+     */
     public function echoOut($output)
     {
         echo $output;

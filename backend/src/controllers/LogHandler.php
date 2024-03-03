@@ -57,8 +57,8 @@ class LogHandler
             $this->resource->removefile(LOGS_DIR . DIR_SEP . $logFileName);
             $reply = 'File Removed: ' . $logFileName;
             $response->getBody()->write(json_encode($reply));
-            return $response->withHeader('Content-Type', 'application/json');
         }
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function readFilelist(string $targetDir): array

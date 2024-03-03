@@ -8,7 +8,7 @@ use App\dao\Resource;
 
 class Logger
 {
-    public static function log($message, $options = array())
+    public static function log(string $message, array $options = array()): void
     {
         $defaults = array(
             'logFilePrefix' => LOG_PREFIX

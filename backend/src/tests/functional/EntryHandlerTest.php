@@ -7,7 +7,7 @@ use App\tests\functional\TestCase;
 
 class EntryHandlerTest extends TestCase
 {
-  function test_list_one_day()
+  function test_list_one_day(): void
   {
     $app = $this->getAppInstance();
     /** @var Container $container */
@@ -52,7 +52,7 @@ class EntryHandlerTest extends TestCase
   }
 
   // TODO: test for no start date and no search param
-  function test_list_default_search()
+  function test_list_default_search(): void
   {
     $app = $this->getAppInstance();
     /** @var Container $container */
@@ -98,12 +98,18 @@ class EntryHandlerTest extends TestCase
     $this->assertEquals($expectedParams, json_encode(json_decode($payload)->params));
   }
 
+  /**
+   * @return never
+   */
   function test_sameday_has_param()
   {
     // TODO: test for same day - has day param
     $this->markTestSkipped('Need to write test.');
   }
   // TODO: test for same day - has no day param
+  /**
+   * @return never
+   */
   function test_sameday_has_no_param()
   {
     $this->markTestSkipped('Need to write test.');

@@ -11,7 +11,8 @@ interface SmsEntriesDao
     /**
      * Get Domain object by primry key
      *
-     * @param  string $id primary key
+     * @param int $id primary key
+     *
      * @return array[SmsEntries]
      */
     public function load(int $id): array;

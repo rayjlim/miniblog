@@ -58,6 +58,9 @@ class AuthMiddleware
         $this->generateToken();
     }
 
+    /**
+     * @return never
+     */
     private function generateToken()
     {
         $tokenObj = new stdClass();
@@ -71,7 +74,10 @@ class AuthMiddleware
         exit;
     }
 
-    private function loginError($message)
+    /**
+     * @return never
+     */
+    private function loginError(string $message)
     {
         $ipaddress = $this->getRealIpAddr();
         $response = new stdClass();
@@ -150,7 +156,10 @@ class AuthMiddleware
     }
 }
 
-function encrypt($simple_string)
+/**
+ * @return false|string
+ */
+function encrypt($simple_string): string|false
 {
     $ciphering = "AES-128-CTR"; // the cipher method
 
@@ -172,7 +181,10 @@ function encrypt($simple_string)
     return $encryption;
 }
 
-function decrypt($encryption)
+/**
+ * @return false|string
+ */
+function decrypt($encryption): string|false
 {
     $ciphering = "AES-128-CTR"; // the cipher method
     // Non-NULL Initialization Vector for decryption

@@ -10,7 +10,7 @@ class CUDHandlerTest extends TestCase
   // $resourceMock = $this->createMock('App\dao\Resource');
   // $creator->expects($this->once())->method('makeResource')->willReturn($resourceMock);
 
-  function test_update_basic_path()
+  function test_update_basic_path(): void
   {
     $app = $this->getAppInstance();
     /** @var Container $container */
@@ -45,7 +45,7 @@ class CUDHandlerTest extends TestCase
 
   }
 
-  function test_update_no_request_body()
+  function test_update_no_request_body(): void
   {
     $app = $this->getAppInstance();
     /** @var Container $container */
@@ -65,7 +65,7 @@ class CUDHandlerTest extends TestCase
     }
   }
 
-  function test_update_invalid_user()
+  function test_update_invalid_user(): void
   {
     $app = $this->getAppInstance();
     /** @var Container $container */
@@ -93,7 +93,7 @@ class CUDHandlerTest extends TestCase
     $this->assertEquals('{"message":"Unauthorized User","status":"fail"}', $payload);
   }
 
-  function test_delete_basic()
+  function test_delete_basic(): void
   {
     $app = $this->getAppInstance();
     /** @var Container $container */

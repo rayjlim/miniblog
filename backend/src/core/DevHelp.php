@@ -6,34 +6,17 @@ defined('ABSPATH') or exit('No direct script access allowed');
 class DevHelp
 {
     /**
-     *  debugger_msg
+     * debugger_msg
      *
      * @param string $msg message output
-     *
-     * @return None
      */
-    public static function debugMsg($msg)
+    public static function debugMsg($msg): void
     {
         if ((isset($_SESSION['debug']) &&  $_SESSION['debug']) && !isset($_REQUEST["xhr"])) {
             echo $msg.'<br>';
         }
     }
-    /**
-     *  redirectHelper
-     *
-     * @param string $url target location
-     *
-     * @return None
-     */
-    public static function redirectHelper($url)
-    {
-        if (isset($_SESSION['debug']) && $_SESSION['debug']) {
-            echo '<a href="'.$url.'">Follow Redirect '.$url.'</a>';
-            exit;
-        }
-        header("Location: $url");
-        exit;
-    }
+
 }
 
 if (isset($_REQUEST['debug'])) {

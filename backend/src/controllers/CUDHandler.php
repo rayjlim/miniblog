@@ -98,7 +98,7 @@ class CUDHandler
             $newEntry->date = $targetDate;
             $newEntry->content = trim(urldecode($entry->content));
             $newEntry->content = SmsEntrie::sanitizeContent($newEntry->content);
-            $newEntry->userId = $_ENV['ACCESS_ID'];
+            $newEntry->userId = (int)$_ENV['ACCESS_ID'];
             $newEntry->locations = $entry->locations;
             $newEntry->id = $this->dao->insert($newEntry);
             Logger::log("Add: \t" . $newEntry->id . "\t" . $newEntry->date);

@@ -14,6 +14,9 @@ use App\models\ListParams;
 
 class SmsEntriesRedbeanDAO implements SmsEntriesDAO
 {
+    /**
+     * @param int $id
+     */
     public function load(int $id): array
     {
         $post = R::load(POSTS, $id);
@@ -34,7 +37,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         $postBean->date = $smsEntrie->date;
         $postBean->user_id = $smsEntrie->userId;
         $postBean->locations = $smsEntrie->locations;
-        $id = R::store($postBean);
+        $id = (int)R::store($postBean);
         return $id;
     }
 
@@ -98,7 +101,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 
     // ;
-    public function listParamsToSqlParam($listParams)
+    public function listParamsToSqlParam(ListParams $listParams): string
     {
         $sqlParam = '';
         if ($listParams->searchParam != '') {
@@ -138,7 +141,7 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
     }
 }
 
-function pickDate($n)
+function pickDate($n): string
 {
     return (substr($n['date'], 0, 7));
 }
