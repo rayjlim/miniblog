@@ -10,8 +10,6 @@ const LocationForm = ({ }, ref: any) => {
     createNewLocation,
     updateInputFromLocations,
     getCoordinatesByBrowser,
-    getLocation
-
   } = useLocationForm(ref);
 
   return (
@@ -36,11 +34,8 @@ const LocationForm = ({ }, ref: any) => {
         <input type="text" ref={newTitle as any} />
         <input type="text" ref={newCoords as any} />
       </div>
-      <button type="button" onClick={() => getLocation()}>Get Location</button>
+      <button type="button" onClick={() => getCoordinatesByBrowser()}>Use Current Location</button>
       <button type="button" onClick={() => createNewLocation()}>parse</button>
-      <button type="button" title="get current location"
-        onClick={() => getCoordinatesByBrowser()}>Here</button>
-
     </div>
   );
 };

@@ -25,7 +25,9 @@ const useLocationForm = (locationsInput: any) => {
     // 2. https://maps.apple.com/?address=1500%20S%20Tenth%20St,%20San%20Jose,%20CA%2095112,%20United%20States&auid=4146272712971004545&ll=37.319246,-121.864025&lsp=9902&q=Sharks%20Ice&t=m
     // 3. https://maps.apple.com/?address=211%20N%20Ninth%20St,%20Unit%207,%20San%20Jose,%20CA%20%2095112,%20United%20States&auid=8237050432004312930&ll=37.336411,-121.880426&lsp=9902&q=Bowling%20%26%20Billiards%20-%20San%20Jos%C3%A9%20State%20University&t=m
     // 4. https://maps.apple.com/?ll=37.738379,-121.461823&q=Dropped%20Pin&t=m
-
+    if (locationsInput?.current?.value !== ''){
+      populateLocations();
+    }
     console.log((newCoords as any)?.current.value);
     let title = 'place';
     let pieces: string[] = [];
@@ -75,6 +77,10 @@ const useLocationForm = (locationsInput: any) => {
   }
 
   function getCoordinatesByBrowser() {
+
+    if (locationsInput?.current?.value !== ''){
+      populateLocations();
+    }
     if ('geolocation' in navigator) {
       // Use the Geolocation API to get the current position
       navigator.geolocation.getCurrentPosition(
@@ -96,20 +102,6 @@ const useLocationForm = (locationsInput: any) => {
     }
   }
 
-const getLocation = () =>{
-
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    if (newCoords && newCoords.current)
-      newCoords.current.value = "Geolocation is not supported by this browser.";  }
-
-  function showPosition(position: any) {
-    if (newCoords && newCoords.current)
-      newCoords.current.value = `${position.coords.latitude}, ${position.coords.longitude}`;
-  }
-}
-
   return {
     locationChange,
     newTitle,
@@ -118,8 +110,7 @@ const getLocation = () =>{
     locations,
     createNewLocation,
     updateInputFromLocations,
-    getCoordinatesByBrowser,
-    getLocation
+    getCoordinatesByBrowser
   };
 
 };
