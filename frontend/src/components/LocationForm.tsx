@@ -31,8 +31,8 @@ const LocationForm = ({ }, ref: any) => {
         <div key={`${location.lat},${location.lng}`}>{location.title}, {location.lat}, {location.lng}</div>
       )))}
       <div>
-        <input type="text" ref={newTitle as any} />
-        <input type="text" ref={newCoords as any} />
+        <input type="text" ref={newTitle as any} placeholder="title"/>
+        <input type="text" ref={newCoords as any} placeholder="url or lat, lon"/>
       </div>
       <button type="button" onClick={() => getCoordinatesByBrowser()}>Use Current Location</button>
       <button type="button" onClick={() => createNewLocation()}>parse</button>
