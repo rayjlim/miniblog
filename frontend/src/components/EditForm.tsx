@@ -20,7 +20,8 @@ const EditForm = ({ entry, onSuccess, }: {
     textChange,
     handleSave,
     handleDelete,
-    locationsRef
+    locationsRef,
+    isLoading
   } = useEditForm(entry, onSuccess);
 
   return (
@@ -66,6 +67,7 @@ const EditForm = ({ entry, onSuccess, }: {
           id="saveBtn"
           type="button"
           title="alt + s"
+          disabled={isLoading}
         >
           <i className="fa fa-save" />
           <span>Save</span>

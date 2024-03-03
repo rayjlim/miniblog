@@ -5,6 +5,7 @@ import createHeaders from '../utils/createHeaders';
 
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [markdownContent, setContent] = useState<string>(entry?.content || '');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const textareaInput = useRef<HTMLTextAreaElement>();
   const dateInput = useRef<HTMLInputElement>();
   const locationsRef = useRef<HTMLTextAreaElement>();
@@ -32,11 +33,13 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       mode: 'cors',
       headers: requestHeaders
     } as any;
+    setIsLoading(true);
     (async () => {
       try {
         const response = await fetch(`${REST_ENDPOINT}/api/posts/${entry?.id}`, options);
         const results = await response.json();
         console.log(results);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
         toast((error as any).message);
@@ -104,7 +107,8 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     textChange,
     handleSave,
     handleDelete,
-    locationsRef
+    locationsRef,
+    isLoading
   };
 };
 

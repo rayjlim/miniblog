@@ -4,7 +4,7 @@ import LocationForm from './LocationForm';
 
 const AddForm = ({ content, date, onSuccess }: { content: string, date: string, onSuccess: (msg: string, entry: EntryType) => void }) => {
 
-  const { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef } =
+  const { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef, isLoading } =
     useAddForm(onSuccess);
 
   return (
@@ -47,6 +47,7 @@ const AddForm = ({ content, date, onSuccess }: { content: string, date: string, 
         className="btn btn-primary"
         id="saveBtn"
         type="button"
+        disabled={isLoading}
       >
         <i className="fa fa-save" />
         Submit

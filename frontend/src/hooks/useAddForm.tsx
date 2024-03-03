@@ -6,12 +6,15 @@ import createHeaders from '../utils/createHeaders';
 const useFetch = (): any => {
   const [newId, setId] = useState<number | null>(null);
   const [formEntry, setNewEntry] = useState<EntryType | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (formEntry && formEntry?.content !== '') {
+      setIsLoading(true);
       (async () => {
         const requestHeaders = createHeaders();
         try {
+
           const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
             method: 'POST',
             body: JSON.stringify(formEntry),
@@ -21,6 +24,7 @@ const useFetch = (): any => {
           const { id } = await response.json();
           console.log('new id :>> ', id);
           setId(id);
+          setIsLoading(false);
         } catch (error) {
           console.log(error);
           alert(error);
@@ -28,13 +32,13 @@ const useFetch = (): any => {
       })();
     }
   }, [formEntry]);
-  return [newId, setNewEntry];
+  return [newId, setNewEntry, isLoading];
 };
 
 const useAddForm = (onSuccess: (msg: string, entry: EntryType) => void) => {
   const [formContent, setFormContent] = useState<string>();
   const isMounted = useRef(false);
-  const [id, setNewEntry] = useFetch();
+  const [id, setNewEntry, isLoading] = useFetch();
 
   const textareaInput = useRef<HTMLTextAreaElement>();
   const dateInput = useRef<HTMLInputElement>();
@@ -91,7 +95,7 @@ const useAddForm = (onSuccess: (msg: string, entry: EntryType) => void) => {
     }
   }, [id]);
 
-  return { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef };
+  return { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef, isLoading };
 };
 
 export default useAddForm;
