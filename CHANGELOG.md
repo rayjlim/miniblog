@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.32.0](https://github.com/rayjlim/miniblog/compare/v2.31.0...v2.32.0) (2024-03-03)
+
+
+### Features
+
+* add button to get geo data from navigator ([ac93bd9](https://github.com/rayjlim/miniblog/commit/ac93bd97d3defd9dc2fe43362d5b576239451ab1))
+
+
+### Bug Fixes
+
+* disable submit button on save [#298](https://github.com/rayjlim/miniblog/issues/298) ([51cedb4](https://github.com/rayjlim/miniblog/commit/51cedb4d1f1d87f83e06ae166664ba0afbf2474e))
+* disable submit on image uploading [#299](https://github.com/rayjlim/miniblog/issues/299) ([48a6952](https://github.com/rayjlim/miniblog/commit/48a695257f042bd8580de3ce4be1f9d5d2473db4))
+* errors fixed by psalm static analysis ([ceccccb](https://github.com/rayjlim/miniblog/commit/ceccccbfeafe5b7b2c272a02da37ea7313a78845))
+* parse button loads existing entries before parse [#300](https://github.com/rayjlim/miniblog/issues/300) ([e6cb95c](https://github.com/rayjlim/miniblog/commit/e6cb95c68f6caa24c197585a9216631a2d16e06a))
+* publish exclude files ([aa3985f](https://github.com/rayjlim/miniblog/commit/aa3985ff3e280a0d84aa6b6b03680bece4688f89))
+* publishing backend errors ([3ae7dff](https://github.com/rayjlim/miniblog/commit/3ae7dffab0de58db65fef96870a3c76a9697b67c))
+
 ## [2.31.0](https://github.com/rayjlim/miniblog/compare/v2.30.0...v2.31.0) (2024-02-25)
 
 
