@@ -3,6 +3,5 @@ composer.lock
 exclude-from-prod.txt
 _logs/
 
-
-.git/
+.git*/
 tests/

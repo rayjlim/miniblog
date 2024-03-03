@@ -2,10 +2,12 @@ build/
 vendor/
 tests/
 _logs/
+setup/
 node_modules/
 
 *.txt
 *.md
+.htaccess.production
 
 .env*
 .htaccess
