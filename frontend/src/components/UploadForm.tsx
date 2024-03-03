@@ -36,7 +36,7 @@ const UploadForm = () => {
       'filePath',
       filePath.length ? filePath : format(new Date(), 'yyyy-MM'),
     );
-
+    setStatus("uploading");
     const requestHeaders = createHeaders();
     try {
       const response = await fetch(`${REST_ENDPOINT}/uploadImage/?a=1`, {
@@ -47,7 +47,7 @@ const UploadForm = () => {
 
       console.log(response);
       const data = await response.json();
-      setStatus("success")
+      setStatus("success");
       navigate(`/media?fileName=${data.fileName}&filePath=${data.filePath}`);
     } catch (error) {
       console.log(error);
@@ -104,7 +104,7 @@ const UploadForm = () => {
             type="button"
             className="btn btn-success btn-block"
             onClick={() => upload()}
-            disabled={!file}
+            disabled={!file || status == 'uploading'}
           >
             Upload
           </button>
