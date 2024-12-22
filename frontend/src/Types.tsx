@@ -45,6 +45,7 @@ type MarkerType = {
 
 type SettingsType = {
   TRACKS_API: string,
+  TRACKS_URL: string,
   MOVIES_API: string,
   MOVIES_POSTERS: string,
   UPLOAD_ROOT: string,

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.33.0](https://github.com/rayjlim/miniblog/compare/v2.32.0...v2.33.0) (2024-12-22)
+
+
+### Features
+
+* new css ([b5c6353](https://github.com/rayjlim/miniblog/commit/b5c6353cb629a0c61f6a206e26186eb503596db5))
+
+
+### Bug Fixes
+
+* add placeholders to fields ([e80d57b](https://github.com/rayjlim/miniblog/commit/e80d57bf9c0641f75f5c388d426ca140dfb1e2ac))
+
 ## [2.32.0](https://github.com/rayjlim/miniblog/compare/v2.31.0...v2.32.0) (2024-03-03)
 
 
