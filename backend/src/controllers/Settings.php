@@ -37,6 +37,7 @@ class Settings
         $data->QUESTION_API = $_ENV['FE_QUESTION_API'] ?? '';
 
         $data->TRACKS_API = $_ENV['FE_TRACKS_API'] ?? '';
+        $data->TRACKS_URL = $_ENV['FE_TRACKS_URL'] ?? '';
         $data->MOVIES_API = $_ENV['FE_MOVIES_API'] ?? '';
         $data->MOVIES_POSTERS = $_ENV['FE_MOVIES_POSTERS'] ?? '';
 
