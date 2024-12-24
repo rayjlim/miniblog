@@ -36,31 +36,35 @@ const AddForm = ({ content, date, onSuccess }: { content: string, date: string, 
         />
       </div>
 
-      <div className="form-group">
-        <input type="date"
-          ref={dateInput as any}
-          defaultValue={date}/>
-      </div>
+      <div className="editBtns col-3">
+        <button
+          onClick={() => handleAdd()}
+          className="btn btn-primary success"
+          id="saveBtn"
+          type="button"
+          disabled={isLoading}
+        >
+          <i className="fa fa-save" />
+          Submit
+        </button>
 
-      <button
-        onClick={() => handleAdd()}
-        className="btn btn-primary"
-        id="saveBtn"
-        type="button"
-        disabled={isLoading}
-      >
-        <i className="fa fa-save" />
-        Submit
-      </button>
-      <button
-        type="button"
-        onClick={() => onSuccess('', {id: -1, content: '', date:''})}
-        className="btn btn-warning pull-right"
-        id="cancelBtn"
-      >
-        <i className="fa fa-ban" />
-        Cancel
-      </button>
+        <div className="form-group">
+          <input type="date"
+            ref={dateInput as any}
+            defaultValue={date} />
+        </div>
+
+
+        <button
+          type="button"
+          onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
+          className="btn btn-warning pull-right attention"
+          id="cancelBtn"
+        >
+          <i className="fa fa-ban" />
+          Cancel
+        </button>
+      </div>
       <LocationForm ref={locationsRef} />
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={formContent as any || ''} />

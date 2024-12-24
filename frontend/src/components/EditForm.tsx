@@ -59,10 +59,10 @@ const EditForm = ({ entry, onSuccess, }: {
           defaultValue={escapedContent}
         />
       </div>
-      <div className="editBtns">
+      <div className="editBtns col-3">
         <button
           onClick={() => handleSave()}
-          className="btn btn-primary spaced-link"
+          className="btn btn-primary spaced-link success"
           data-testid="saveBtn"
           id="saveBtn"
           type="button"
@@ -72,15 +72,18 @@ const EditForm = ({ entry, onSuccess, }: {
           <i className="fa fa-save" />
           <span>Save</span>
         </button>
+        <div>
         <input
-          type="date"
-          defaultValue={entry?.date || ''}
-          ref={dateInput as any}
+            type="date"
+            defaultValue={entry?.date || ''}
+            ref={dateInput as any}
+            aria-label="date-input"
+          />
 
-        />
+        </div>
         <button
           onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
-          className="btn btn-warning pull-right spaced-link"
+          className="btn btn-warning pull-right spaced-link attention"
           data-testid="cancelBtn"
           id="cancelBtn"
           type="button"
