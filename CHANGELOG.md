@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.34.0](https://github.com/rayjlim/miniblog/compare/v2.33.0...v2.34.0) (2024-12-25)
+
+
+### Features
+
+* link to tracks in weightinfo ([b6cb4ec](https://github.com/rayjlim/miniblog/commit/b6cb4ecf5599d9f620acfc8dead2afdc69546f5d))
+
+
+### Bug Fixes
+
+* button alignment ([cf5bb97](https://github.com/rayjlim/miniblog/commit/cf5bb977f356241ce8aae7cf801eee294ed190ab))
+* button font size ([3314aa9](https://github.com/rayjlim/miniblog/commit/3314aa9d8bc8dc965e6214dcb193b7e0d181ba77))
+* display sizing so doesn't push buttons out ([30cb378](https://github.com/rayjlim/miniblog/commit/30cb3781a35e274e7c53fb77fd6d981f24d95e9a))
+* manifest and apple icon ([0c1f6ba](https://github.com/rayjlim/miniblog/commit/0c1f6ba8adc5362a52ca37f879b97f630c8f734c))
+* react-select dark mode ([dc203c3](https://github.com/rayjlim/miniblog/commit/dc203c319f6671f823244c4919c245ecb20f7b94))
+* take out today button to correct spacing ([2defcf2](https://github.com/rayjlim/miniblog/commit/2defcf2086b575afb0eceeb2b139cb0f2c33cc28))
+
 ## [2.33.0](https://github.com/rayjlim/miniblog/compare/v2.32.0...v2.33.0) (2024-12-22)
 
 
