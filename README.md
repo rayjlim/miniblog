@@ -6,6 +6,14 @@
 A headless CMS backend with a React App front end.
 Meant to be a personal journal
 
+## Goals…
+
+(to write up)
+
+## Measure of success…
+
+(to write up)
+
 ## Setup
 
 - Go into the `backend` directory
@@ -18,17 +26,9 @@ Meant to be a personal journal
 
 ## Deployment to Production
 
-- `cd scripts`
-- in `env_vars.sh`,  set up required vars (see `env_vars.sh.example`)
+- Go into the `scripts` directory
+- Create `.env` (see `.env.example`)
 - `./publish.sh`  
-
-## Testing
-
-using Codeception (to write up)
-
-### Using Enzyme for React
-
-(to write up)
 
 ## DB Setup
 
@@ -44,20 +44,12 @@ Output will be
         will drop the table(s)
         will populate from sql values
 
-## Shortcut Keys
+## Testing
 
-Alt + o : Open OneDay [search]  
-Alt + f : Open Search [one day]  
-Alt + t : Go to Top [one day, search]  
-Alt + b : Go to Bottom [one day, search]  
-Alt + s : Save [Edit mode, Add mode]  
-Escape  : Cancel [Edit mode, Add mode]  
-Alt + , : Prev Day [one day]  
-Alt + . : Next Day [one day]  
-Alt + 1 : Add or Edit first entry [one day]  
-Alt + [ ' Get new prompt [one day]  
-Alt + p ' Populate Add form with Prompt [one day]
+### Backend
 
-## Debugging
+using Codeception, (to write up)
 
-- when cors issue, check the auth token header variable case matches from frontend to backend
+### Frontend
+
+Using Enzyme for React, (to write up)
