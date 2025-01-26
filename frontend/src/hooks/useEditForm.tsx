@@ -93,8 +93,15 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     const textLength = textareaInput.current?.value.length || 0;
     textareaInput.current?.setSelectionRange(textLength, textLength);
 
-    if (locationsRef && locationsRef.current) {
-      locationsRef.current.value = entry?.locations || ''
+    if (locationsRef?.current) {
+      // if(entry?.locations.indexOf('\"') >= 0){
+      //   console.log('parse', entry?.locations);
+      //   locationsRef.current.value =  JSON.parse(entry?.locations || '');
+      // }
+      const locationJson = entry?.locations ? JSON.stringify(entry?.locations, null, 2) : '';
+      const temp = locationJson.slice(1, -1).replace(/\\"/g, '"');;
+
+      locationsRef.current.value = temp;
     }
 
     document.addEventListener('keydown', checkKeyPressed);

@@ -13,4 +13,3 @@ export const FILTER = {
   untagged: 2
 }
 export const DEFAULT_MAP_ZOOM = 12;
-export const GOOGLE_MAPS_ENABLED = true;
