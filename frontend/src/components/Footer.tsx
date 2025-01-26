@@ -10,7 +10,12 @@ type LinksPropType = {
   oneday: boolean
 }
 
-const Footer = ({ links }: { links?: LinksPropType }) => {
+const Footer = ({ links = {
+  upload: true,
+  media: true,
+  logs: true,
+  oneday: false
+} }: { links?: LinksPropType }) => {
   const usersFullname = window.localStorage.getItem('user-name') || '';
   const { logout } = useAuth() as any;
   const navigate = useNavigate();
@@ -58,12 +63,3 @@ const Footer = ({ links }: { links?: LinksPropType }) => {
 };
 
 export default Footer;
-
-Footer.defaultProps = {
-  links: {
-    upload: true,
-    media: true,
-    logs: true,
-    oneday: false
-  }
-};
