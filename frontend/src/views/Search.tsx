@@ -9,7 +9,6 @@ import './Search.css';
 
 const Search = () => {
   const { searchParams, editEntry, setEditEntry, setSearchParams, resetEntryForm, childRef } = useSearch();
-
   return (
     <>
       <Header links={{
