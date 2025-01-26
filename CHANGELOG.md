@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.35.0](https://github.com/rayjlim/miniblog/compare/v2.34.0...v2.35.0) (2025-01-26)
+
+
+### Features
+
+* [#313](https://github.com/rayjlim/miniblog/issues/313) add filesize to media select ([6e35110](https://github.com/rayjlim/miniblog/commit/6e351103eeb85d6133662ba0987f8b6b5a0681fb))
+
+
+### Bug Fixes
+
+* [#212](https://github.com/rayjlim/miniblog/issues/212) show weight comment ([e1e453a](https://github.com/rayjlim/miniblog/commit/e1e453aafedf15a7a7df2eb30f74f102be04952a))
+* readme clean up; still needs areas filled in ([f04da85](https://github.com/rayjlim/miniblog/commit/f04da85321fc62768541fb1bc28b9e6c0c1fe19b))
+* rename file for clarity ([56b7d7e](https://github.com/rayjlim/miniblog/commit/56b7d7e58fb00112d0a785f1303acd3b3a1317f3))
+
 ## [2.34.0](https://github.com/rayjlim/miniblog/compare/v2.33.0...v2.34.0) (2024-12-25)
 
 
