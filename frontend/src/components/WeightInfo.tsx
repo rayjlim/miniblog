@@ -12,7 +12,7 @@ const WeightInfo = ({ date }: { date: string }) => {
     <span className="weight">
       <a href={TRACKS_URL}>Weight</a>
       {`: ${weight?.count}`}
-      {weight?.comment && <span title={weight?.comment}>...</span>}
+      {weight?.comment && <span title={weight?.comment} style={{'fontSize': 'small'}}><br />{weight?.comment}</span>}
     </span>
   );
 
