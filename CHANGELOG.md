@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.36.0](https://github.com/rayjlim/miniblog/compare/v2.35.0...v2.36.0) (2025-01-26)
+
+
+### Features
+
+* react-leaflet dependencies ([5777142](https://github.com/rayjlim/miniblog/commit/577714256aad74f70a45deb68e7e251fa38f0d78))
+
+
+### Bug Fixes
+
+* [#201](https://github.com/rayjlim/miniblog/issues/201) remove googlemaps, leaflet deps ([67b3b2f](https://github.com/rayjlim/miniblog/commit/67b3b2f401ec059074aae6c0d7af267d7a200eb9))
+* [#308](https://github.com/rayjlim/miniblog/issues/308) wrong logic, dont need to stringify ([5bb71ef](https://github.com/rayjlim/miniblog/commit/5bb71efc83ce7ce0d9ef4b567950163dc2ff6284))
+* conversion to react-leaflet ([a51257e](https://github.com/rayjlim/miniblog/commit/a51257e02d09f93cd5c446e9d7761b995ea7df0f))
+* defaults for footer and header ([38b038b](https://github.com/rayjlim/miniblog/commit/38b038bc808f78cb71732cf7034e21451542cccc))
+
 ## [2.35.0](https://github.com/rayjlim/miniblog/compare/v2.34.0...v2.35.0) (2025-01-26)
 
 
