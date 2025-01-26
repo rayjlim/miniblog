@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import DevRibbon from './components/DevRibbon';
 import Search from './views/Search';
 import OneDay from './views/OneDay';
-import Media from './views/Media';
+import Media from './views/MediaView';
 import Upload from './views/Upload';
 import LoginPassword from './views/LoginPassword';
 import Logs from './views/Logs';
