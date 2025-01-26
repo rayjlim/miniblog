@@ -44,6 +44,7 @@ return function (App $app) {
     $group->get('/media/', MediaHandler::class . ":listMedia");;
     $group->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
     $group->delete('/media/', MediaHandler::class . ":deleteMedia");
+    $group->get('/mediainfo/', MediaHandler::class . ":mediaInfo");
 
     $group->post('/uploadImage/', UploadHandler::class . ":upload");
     $group->get('/uploadRotate/', UploadHandler::class . ":rotate");

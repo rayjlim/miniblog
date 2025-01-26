@@ -16,10 +16,13 @@ const useMediaSelect = (mediaDefault: MediaType) => {
       headers: requestHeaders,
     },
     );
-    console.log('response :>> ', response);
+
+    const json = await response.json();
     const random = Math.random();
+    console.log('response :>> ', json);
     setMedia({
       ...mediaSelect,
+      filesize: json?.size,
       imgUrl: `${UPLOAD_ROOT}/${mediaSelect.filePath}/${mediaSelect.fileName}?r=${random}`,
     });
   }

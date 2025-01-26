@@ -5,8 +5,18 @@ import useMediaSelect from '../hooks/useMediaSelect';
 
 import AddForm from '../components/AddForm';
 
+
 const MediaSelect = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
   const { mediaSelect, rotate, resize } = useMediaSelect(media);
+
+  const showFilesize = (filesize: number) => {
+    if (filesize === undefined)
+      return;
+    const sizeStyle = (filesize > 100 * 1000) ? 'red' : 'lightgreen'
+    return (
+      <div style={{ 'color': sizeStyle }}>{`${filesize / 1000} KB`}</div>
+    );
+  }
 
   return (
     <>
@@ -19,6 +29,7 @@ const MediaSelect = ({ media, onClose }: { media: any, onClose: (msg: string) =>
       <section className="container">
         {mediaSelect.imgUrl}
         <Clipper media={mediaSelect} />
+        {showFilesize(mediaSelect?.filesize)}
         <div className="preview-img-container">
           <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
         </div>

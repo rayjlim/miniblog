@@ -77,6 +77,7 @@ class UploadHandler
             $reply->fileName = $urlFileName;
             $reply->filePath = $filePath;
             $reply->createdDir = $createdDir;
+            $reply->filesize = filesize($targetFileFullPath);
             Logger::log('File Uploaded: ' . $filePath . " - " . $urlFileName);
             $response->getBody()->write(json_encode($reply));
             return $response->withHeader('Content-Type', 'application/json');
@@ -87,7 +88,7 @@ class UploadHandler
         }
     }
 
-    public function resize(Request $request, Response $response, $args)
+    public function resize(Request $request, Response $response)
     {
         DevHelp::debugMsg('resizeImage' . __FILE__);
         //375 x 667 (iphone 7)
@@ -97,13 +98,15 @@ class UploadHandler
         $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
         $fileFullPath = $targetDir . DIR_SEP . $fileName;
 
-        $new_width = $_ENV['IMG_RESIZE_WIDTH'];
+        $newWidth = $_ENV['IMG_RESIZE_WIDTH'];
 
-        $this->resizer($new_width, $fileFullPath, $fileFullPath);
+        $this->resizer($newWidth, $fileFullPath, $fileFullPath);
 
         $reply = new \stdClass();
         $reply->fileName = $fileName;
         $reply->filePath = $filePath;
+        $reply->size = filesize($fileFullPath);
+
         Logger::log('File Resized: ' . $filePath . " - " . $fileName);
         $response->getBody()->write(json_encode($reply));
         return $response->withHeader('Content-Type', 'application/json');
@@ -113,6 +116,9 @@ class UploadHandler
     {
         $info = getimagesize($originalFile);
         $mime = $info['mime'];
+        // Do no resize if smaller than set size (ie. width less than $newWidth)
+        if ($info[0] <= $newWidth)
+            return;
 
         switch ($mime) {
             case 'image/jpeg':
@@ -199,6 +205,7 @@ class UploadHandler
         $reply = new \stdClass();
         $reply->fileName = $fileName;
         $reply->filePath = $filePath;
+        $reply->size = filesize($targetFile);
 
         Logger::log('File Rotated: ' . $filePath . " - " . $fileName);
         $response->getBody()->write(json_encode($reply));

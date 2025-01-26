@@ -16,6 +16,7 @@ type MovieType = {
 type MediaType = {
   fileName: string,
   filePath: string,
+  filesize: number,
   prepend: string,
   imgUrl: string,
 }
