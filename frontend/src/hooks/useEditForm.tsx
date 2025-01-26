@@ -94,7 +94,7 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     textareaInput.current?.setSelectionRange(textLength, textLength);
 
     if (locationsRef && locationsRef.current) {
-      locationsRef.current.value = entry?.locations !== '' ? JSON.stringify(entry?.locations) : ''
+      locationsRef.current.value = entry?.locations || ''
     }
 
     document.addEventListener('keydown', checkKeyPressed);
