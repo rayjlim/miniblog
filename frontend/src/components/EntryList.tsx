@@ -5,7 +5,7 @@ import MarkdownDisplay from '../components/MarkdownDisplay';
 
 import { FULL_DATE_FORMAT } from '../constants';
 
-import GoogleMap from './GoogleMap';
+import MapDisplay from './MapDisplay';
 import useEntryList from '../hooks/useEntryList';
 
 const EntryList = ({ date, isOneDay, onShowEdit }: {
@@ -40,10 +40,7 @@ const EntryList = ({ date, isOneDay, onShowEdit }: {
             </div>
             {isOneDay && (entry as any)?.locations?.length > 0
               && (<>
-                {/* {typeof((entry as any)?.locations)} */}
-                {/* a{(entry as any)?.locations}b */}
-                <GoogleMap locations={ (entry as any)?.locations} />
-
+                <MapDisplay locations={ (entry as any)?.locations} />
               </>)}
           </li>
         ))}
