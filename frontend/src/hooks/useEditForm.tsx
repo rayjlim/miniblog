@@ -99,9 +99,14 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       //   locationsRef.current.value =  JSON.parse(entry?.locations || '');
       // }
       const locationJson = entry?.locations ? JSON.stringify(entry?.locations, null, 2) : '';
-      const temp = locationJson.slice(1, -1).replace(/\\"/g, '"');;
+      if(locationJson.startsWith('"')){
+        const temp = locationJson.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '');
+        locationsRef.current.value = temp;
+      } else {
+        locationsRef.current.value = locationJson;
 
-      locationsRef.current.value = temp;
+      }
+
     }
 
     document.addEventListener('keydown', checkKeyPressed);
