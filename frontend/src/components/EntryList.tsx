@@ -1,10 +1,9 @@
 import { forwardRef } from 'react';
-
 import { format, parse } from 'date-fns';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 
 import { FULL_DATE_FORMAT } from '../constants';
-
+import { EntryType } from '../Types';
 import MapDisplay from './MapDisplay';
 import useEntryList from '../hooks/useEntryList';
 

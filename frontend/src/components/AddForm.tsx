@@ -1,13 +1,7 @@
 import MarkdownDisplay from './MarkdownDisplay';
 import useAddForm from '../hooks/useAddForm';
 import LocationForm from './LocationForm';
-
-interface EntryType {
-  id: number;
-  content: string;
-  date: string;
-}
-
+import { EntryType } from '../Types';
 interface AddFormProps {
   content: string;
   date: string;
@@ -69,7 +63,7 @@ const AddForm = ({ content, date, onSuccess }: AddFormProps) => {
 
         <input
           type="date"
-          ref={dateInput}
+          ref={dateInput as any}
           defaultValue={date}
           className="form-control mx-2"
           style={{ width: '150px'}}
@@ -85,7 +79,7 @@ const AddForm = ({ content, date, onSuccess }: AddFormProps) => {
         </button>
       </div>
 
-      <LocationForm ref={locationsRef} />
+      <LocationForm ref={locationsRef as any} />
 
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={formContent || ''} />

@@ -1,6 +1,7 @@
 import MarkdownDisplay from './MarkdownDisplay';
 import useEditForm from '../hooks/useEditForm';
 import LocationForm from './LocationForm';
+import { EntryType } from '../Types';
 import './EditForm.css';
 
 const EditForm = ({ entry, onSuccess, }: {
@@ -93,7 +94,7 @@ const EditForm = ({ entry, onSuccess, }: {
           <span>Cancel</span>
         </button>
       </div>
-      <LocationForm ref={locationsRef}/>
+      <LocationForm ref={locationsRef as any}/>
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={markdownContent} />
       </div>
