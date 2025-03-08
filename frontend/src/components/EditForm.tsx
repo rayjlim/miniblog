@@ -95,8 +95,8 @@ const EditForm = ({ entry, onSuccess, }: {
           </button>
 
         </div>
+        <LocationForm content={JSON.stringify(entry?.locations)} />
       </form>
-      <LocationForm />
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={markdownContent} />
       </div>

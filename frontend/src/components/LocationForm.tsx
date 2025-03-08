@@ -1,10 +1,13 @@
-import { forwardRef, ForwardedRef } from 'react';
 import useLocationForm from '../hooks/useLocationForm';
 import { MarkerType } from '../Types';
 
-const LocationForm = ({}, ref: ForwardedRef<HTMLTextAreaElement>) => {
+interface LocationFormProps {
+  content?: string;
+}
+
+const LocationForm = ({ content="" }: LocationFormProps) => {
   const {
-    locationChange,
+    locationsContent,
     newTitle,
     newCoords,
     populateLocations,
@@ -12,17 +15,21 @@ const LocationForm = ({}, ref: ForwardedRef<HTMLTextAreaElement>) => {
     createNewLocation,
     updateInputFromLocations,
     getCoordinatesByBrowser,
-  } = useLocationForm(ref as any);
+  } = useLocationForm();
+
+  if (typeof content === 'string' && content.startsWith('"')) {
+    content = content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '');
+  }
 
   return (
     <div className="location-form">
       <textarea
-        ref={ref}
-        onChange={locationChange}
+        ref={locationsContent}
+        name="locationContent"
         className="form-control mb-2"
         placeholder="locations"
         rows={2}
-        defaultValue=""
+        defaultValue={content}
       />
 
       <div className="d-flex gap-2 mb-3">
@@ -87,4 +94,4 @@ const LocationForm = ({}, ref: ForwardedRef<HTMLTextAreaElement>) => {
   );
 };
 
-export default forwardRef(LocationForm);
+export default LocationForm;

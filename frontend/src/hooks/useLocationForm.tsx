@@ -1,4 +1,4 @@
-import { useState, useRef, RefObject } from 'react';
+import { useState, useRef } from 'react';
 import parseJsonArray from '../utils/parseJsonArray';
 
 import { MarkerType } from '../Types';
@@ -8,19 +8,20 @@ interface AppleMapsMatch {
   title?: string;
 }
 
-const useLocationForm = (locationsInput: RefObject<HTMLTextAreaElement>) => {
+const useLocationForm = () => {
+  const locationsContent = useRef<HTMLTextAreaElement>(null);
   const newTitle = useRef<HTMLInputElement>(null);
   const newCoords = useRef<HTMLInputElement>(null);
   const [locations, setLocations] = useState<MarkerType[]>([]);
 
   const populateLocations = () => {
-    const parsedLocations = parseJsonArray(locationsInput?.current?.value || '');
+    const parsedLocations = parseJsonArray(locationsContent?.current?.value || '');
     setLocations(parsedLocations);
   };
 
   const updateInputFromLocations = () => {
-    if (locationsInput?.current) {
-      locationsInput.current.value = JSON.stringify(locations);
+    if (locationsContent?.current) {
+      locationsContent.current.value = JSON.stringify(locations);
     }
   };
 
@@ -45,7 +46,7 @@ const useLocationForm = (locationsInput: RefObject<HTMLTextAreaElement>) => {
   const createNewLocation = () => {
     if (!newCoords.current?.value) return;
 
-    if (locationsInput?.current?.value) {
+    if (locationsContent?.current?.value) {
       populateLocations();
     }
 
@@ -82,7 +83,7 @@ const useLocationForm = (locationsInput: RefObject<HTMLTextAreaElement>) => {
   };
 
   const getCoordinatesByBrowser = () => {
-    if (locationsInput?.current?.value) {
+    if (locationsContent?.current?.value) {
       populateLocations();
     }
 
@@ -104,6 +105,7 @@ const useLocationForm = (locationsInput: RefObject<HTMLTextAreaElement>) => {
   };
 
   return {
+    locationsContent,
     newTitle,
     newCoords,
     populateLocations,

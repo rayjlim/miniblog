@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, RefObject } from 'react';
 import { REST_ENDPOINT } from '../constants';
-
+import { EntryType } from '../Types';
 import createHeaders from '../utils/createHeaders';
 
 const useFetch = (): any => {
@@ -34,36 +34,41 @@ const useFetch = (): any => {
   }, [formEntry]);
   return [newId, setNewEntry, isLoading];
 };
+interface AddHookParams {
+  onSuccess: (msg: string, entry: EntryType) => void;
+};
 
-const useAddForm = (onSuccess: (msg: string, entry: EntryType) => void) => {
-  const [formContent, setFormContent] = useState<string>();
+const useAddForm = ({ onSuccess }: AddHookParams) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [markdownContent, setMarkdownContent] = useState<string>(''); // For preview
   const isMounted = useRef(false);
   const [id, setNewEntry, isLoading] = useFetch();
-
-  const textareaInput = useRef<HTMLTextAreaElement>();
-  const dateInput = useRef<HTMLInputElement>();
-  const locationsRef = useRef<HTMLTextAreaElement>();
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
-    let refTextareaInput = textareaInput.current || { value: '' };
-    refTextareaInput.value = refTextareaInput.value.replace(pattern, replacement);
-
-    setFormContent(refTextareaInput.value);
+    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    if (content) {
+      content.value = content?.value.replace(pattern, replacement);
+      setMarkdownContent(content.value);
+    }
   }
 
-  function handleAdd() {
+  function handleAdd(event: React.FormEvent<HTMLFormElement>) {
     console.log('handleAdd');
-    let newContent = (textareaInput as any)?.current.value.trim();
-    if (newContent === '' && (locationsRef as any)?.current.value){
-      newContent = JSON.parse((locationsRef as any)?.current.value)[0].title;
+    event.preventDefault();
+    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    const dateInput = formRef.current?.querySelector('input[name="dateInput"]') as HTMLInputElement;
+    const locations = formRef.current?.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement;
+
+    if (content.value === '' && locations.value !== '') {
+      content.value = JSON.parse(locations.value)[0].title;
     }
-    console.log(newContent);
+    console.log(content.value);
     setNewEntry({
-      content: newContent,
-      date: (dateInput as any)?.current.value,
-      locations: (locationsRef as any)?.current.value,
+      content: content.value,
+      date: (dateInput as any)?.value,
+      locations: locations.value,
     });
   }
 
@@ -81,21 +86,26 @@ const useAddForm = (onSuccess: (msg: string, entry: EntryType) => void) => {
     if (id !== null) {
       // This makes it so this is not called on the first render
       // but when the Id is set
+      const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+      const dateInput = formRef.current?.querySelector('input[name="dateInput"]') as HTMLInputElement;
+      const locations = formRef.current?.querySelector('input[name="locationContent"]') as HTMLInputElement;
       onSuccess(`Add Done : New Id: ${id}`, {
         id,
-        content: formContent?.trim() || '',
-        date: (dateInput as any)?.current.value || '',
+        content: content?.value.trim() || '',
+        date: (dateInput as any)?.value || '',
+        locations: locations?.value || '',
       });
+
     } else {
       isMounted.current = true;
-
-      textareaInput.current?.focus();
+      const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+      content.focus();
       document.addEventListener('keydown', checkKeyPressed);
       return () => document.removeEventListener('keydown', checkKeyPressed);
     }
   }, [id]);
 
-  return { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef, isLoading };
+  return { formRef, handleAdd, textChange, markdownContent, isLoading };
 };
 
 export default useAddForm;

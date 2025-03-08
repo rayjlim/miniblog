@@ -8,27 +8,28 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   const [markdownContent, setMarkdownContent] = useState<string>(entry?.content || '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const locationsRef = useRef<HTMLTextAreaElement>();
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
-    const textarea = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
-    if (textarea) {
-      textarea.value = textarea?.value.replace(pattern, replacement);
-      setMarkdownContent(textarea.value);
+    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    if (content) {
+      content.value = content?.value.replace(pattern, replacement);
+      setMarkdownContent(content.value);
     }
   }
 
   function handleSave() {
-    const textarea = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
     const dateInput = formRef.current?.querySelector('input[name="dateInput"]') as HTMLInputElement;
+    const locations = formRef.current?.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement;
     const newEntry = {
       ...entry,
-      content: textarea?.value || '',
+      content: content?.value || '',
       date: dateInput?.value || '',
-      locations: locationsRef.current?.value || ''
+      locations: locations?.value || ''
     };
+
     const requestHeaders = createHeaders();
     const options = {
       method: 'PUT',
@@ -96,16 +97,6 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       content.focus();
       const textLength = content.value.length;
       content.setSelectionRange(textLength, textLength);
-    }
-    const locations = formRef.current?.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement;
-    if (locations) {
-      const locationJson = entry?.locations ? JSON.stringify(entry?.locations, null, 2) : '';
-      if (locationJson.startsWith('"')) {
-        const temp = locationJson.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '');
-        locations.value = temp;
-      } else {
-        locations.value = locationJson;
-      }
     }
 
     document.addEventListener('keydown', checkKeyPressed);
