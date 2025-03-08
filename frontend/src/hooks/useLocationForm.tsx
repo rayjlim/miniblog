@@ -13,8 +13,6 @@ const useLocationForm = (locationsInput: RefObject<HTMLTextAreaElement>) => {
   const newCoords = useRef<HTMLInputElement>(null);
   const [locations, setLocations] = useState<MarkerType[]>([]);
 
-  const locationChange = () => {};
-
   const populateLocations = () => {
     const parsedLocations = parseJsonArray(locationsInput?.current?.value || '');
     setLocations(parsedLocations);
@@ -106,7 +104,6 @@ const useLocationForm = (locationsInput: RefObject<HTMLTextAreaElement>) => {
   };
 
   return {
-    locationChange,
     newTitle,
     newCoords,
     populateLocations,

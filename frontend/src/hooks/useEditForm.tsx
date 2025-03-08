@@ -2,31 +2,34 @@ import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
+import { EntryType } from '../Types';
 
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
-  const [markdownContent, setContent] = useState<string>(entry?.content || '');
+  const [markdownContent, setMarkdownContent] = useState<string>(entry?.content || '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const textareaInput = useRef<HTMLTextAreaElement>();
-  const dateInput = useRef<HTMLInputElement>();
+  const formRef = useRef<HTMLFormElement>(null);
   const locationsRef = useRef<HTMLTextAreaElement>();
 
   function textChange() {
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
-    const refTextarea = textareaInput.current || { value: '' };
-    refTextarea.value = refTextarea.value.replace(pattern, replacement);
-    setContent(refTextarea.value);
+    const textarea = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    if (textarea) {
+      textarea.value = textarea?.value.replace(pattern, replacement);
+      setMarkdownContent(textarea.value);
+    }
   }
 
   function handleSave() {
-    console.log('handleSave entry :');
-    const requestHeaders = createHeaders();
+    const textarea = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    const dateInput = formRef.current?.querySelector('input[name="dateInput"]') as HTMLInputElement;
     const newEntry = {
       ...entry,
-      content: textareaInput.current?.value || '',
-      date: dateInput.current?.value || '',
+      content: textarea?.value || '',
+      date: dateInput?.value || '',
       locations: locationsRef.current?.value || ''
     };
+    const requestHeaders = createHeaders();
     const options = {
       method: 'PUT',
       body: JSON.stringify(newEntry),
@@ -88,38 +91,32 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   }
 
   useEffect(() => {
-    // console.log('EditForm: useEffect');
-    textareaInput.current?.focus();
-    const textLength = textareaInput.current?.value.length || 0;
-    textareaInput.current?.setSelectionRange(textLength, textLength);
-
-    if (locationsRef?.current) {
-      // if(entry?.locations.indexOf('\"') >= 0){
-      //   console.log('parse', entry?.locations);
-      //   locationsRef.current.value =  JSON.parse(entry?.locations || '');
-      // }
+    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
+    if (content) {
+      content.focus();
+      const textLength = content.value.length;
+      content.setSelectionRange(textLength, textLength);
+    }
+    const locations = formRef.current?.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement;
+    if (locations) {
       const locationJson = entry?.locations ? JSON.stringify(entry?.locations, null, 2) : '';
-      if(locationJson.startsWith('"')){
+      if (locationJson.startsWith('"')) {
         const temp = locationJson.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '');
-        locationsRef.current.value = temp;
+        locations.value = temp;
       } else {
-        locationsRef.current.value = locationJson;
-
+        locations.value = locationJson;
       }
-
     }
 
     document.addEventListener('keydown', checkKeyPressed);
     return () => document.removeEventListener('keydown', checkKeyPressed);
   }, []);
   return {
-    textareaInput,
+    formRef,
     markdownContent,
-    dateInput,
     textChange,
     handleSave,
     handleDelete,
-    locationsRef,
     isLoading
   };
 };

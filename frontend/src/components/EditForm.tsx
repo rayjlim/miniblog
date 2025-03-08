@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import MarkdownDisplay from './MarkdownDisplay';
 import useEditForm from '../hooks/useEditForm';
 import LocationForm from './LocationForm';
@@ -15,13 +16,11 @@ const EditForm = ({ entry, onSuccess, }: {
   );
 
   const {
-    textareaInput,
+    formRef,
     markdownContent,
-    dateInput,
     textChange,
     handleSave,
     handleDelete,
-    locationsRef,
     isLoading
   } = useEditForm(entry, onSuccess);
 
@@ -40,6 +39,7 @@ const EditForm = ({ entry, onSuccess, }: {
             Font Awesome
           </a>
         </div>
+
         <button
           onClick={handleDelete}
           data-testid="deleteBtn"
@@ -50,51 +50,53 @@ const EditForm = ({ entry, onSuccess, }: {
           <span>Delete</span>
         </button>
       </div>
-      <div className="form-group">
-        <textarea
-          ref={textareaInput as any}
-          onChange={() => textChange()}
-          className="form-control"
-          placeholder="Add ..."
-          rows={8}
-          defaultValue={escapedContent}
-        />
-      </div>
-      <div className="editBtns col-3">
-        <button
-          onClick={() => handleSave()}
-          className="btn btn-primary spaced-link success"
-          data-testid="saveBtn"
-          id="saveBtn"
-          type="button"
-          title="alt + s"
-          disabled={isLoading}
-        >
-          <i className="fa fa-save" />
-          <span>Save</span>
-        </button>
-        <div>
-        <input
-            type="date"
-            defaultValue={entry?.date || ''}
-            ref={dateInput as any}
-            aria-label="date-input"
+      <form ref={formRef as RefObject<HTMLFormElement>} onSubmit={handleSave} className="add-form">
+        <div className="form-group">
+          <textarea
+            name="content"
+            onChange={() => textChange()}
+            className="form-control"
+            placeholder="Add ..."
+            rows={8}
+            defaultValue={escapedContent}
           />
+        </div>
+        <div className="editBtns col-3">
+          <button
+            onClick={() => handleSave()}
+            className="btn btn-primary spaced-link success"
+            data-testid="saveBtn"
+            id="saveBtn"
+            type="submit"
+            title="alt + s"
+            disabled={isLoading}
+          >
+            <i className="fa fa-save" />
+            <span>Save</span>
+          </button>
+          <div>
+            <input
+              type="date"
+              defaultValue={entry?.date || ''}
+              name="dateInput"
+            />
+
+          </div>
+          <button
+            onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
+            className="btn btn-warning pull-right spaced-link attention"
+            data-testid="cancelBtn"
+            id="cancelBtn"
+            type="button"
+            title="ESC"
+          >
+            <i className="fa fa-ban" />
+            <span>Cancel</span>
+          </button>
 
         </div>
-        <button
-          onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
-          className="btn btn-warning pull-right spaced-link attention"
-          data-testid="cancelBtn"
-          id="cancelBtn"
-          type="button"
-          title="ESC"
-        >
-          <i className="fa fa-ban" />
-          <span>Cancel</span>
-        </button>
-      </div>
-      <LocationForm ref={locationsRef as any}/>
+      </form>
+      <LocationForm />
       <div className="markdownDisplay preview dashBorder">
         <MarkdownDisplay source={markdownContent} />
       </div>
