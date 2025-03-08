@@ -80,10 +80,10 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
           />
         </div>
 
-        <div className="editBtns col-3 gap-3">
+        <div className="form-actions d-flex justify-content-between align-items-center gap-3 mb-3">
           <button
             className="btn btn-primary spaced-link success"
-            data-testid="saveBtn"
+             data-testid="saveBtn"
             id="saveBtn"
             type="submit"
             title="alt + s"
@@ -96,14 +96,16 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
             type="date"
             name="dateInput"
             defaultValue={entry?.date || ''}
+            className="form-control"
+            style={{ width: 'auto' }}
           />
 
           <button
-            onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
-            className="btn btn-warning pull-right spaced-link attention"
-            data-testid="cancelBtn"
-            id="cancelBtn"
             type="button"
+            onClick={() => onSuccess('', { id: -1, content: '', date: '' })}
+            data-testid="cancelBtn"
+            className="btn btn-warning pull-right spaced-link attention"
+            id="cancelBtn"
             title="ESC"
           >
             <i className="fa fa-ban" /> Cancel

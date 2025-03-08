@@ -8,6 +8,8 @@ interface FormElements {
   content: HTMLTextAreaElement;
   dateInput: HTMLInputElement;
   locationContent: HTMLTextAreaElement;
+  newLocationTitle: HTMLInputElement;
+  newLocationCoords: HTMLInputElement;
 }
 
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
@@ -21,7 +23,9 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
     return {
       content: formRef.current.querySelector('textarea[name="content"]') as HTMLTextAreaElement,
       dateInput: formRef.current.querySelector('input[name="dateInput"]') as HTMLInputElement,
-      locationContent: formRef.current.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement
+      locationContent: formRef.current.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement,
+      newLocationTitle: formRef.current.querySelector('input[name="newLocationTitle"]') as HTMLInputElement,
+      newLocationCoords: formRef.current.querySelector('input[name="newLocationCoords"]') as HTMLInputElement,
     };
   };
 

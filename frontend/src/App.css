@@ -140,7 +140,7 @@ code {
   padding: 0 0.5rem;
 }
 
-.editBtns {
+.justify-content-between {
   display: flex;
   justify-content: space-between;
 }

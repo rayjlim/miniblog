@@ -62,12 +62,14 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
       <div className="input-group mb-3">
         <input
           type="text"
+          name="newLocationTitle"
           ref={newTitle as any}
           className="form-control"
           placeholder="Title"
         />
         <input
           type="text"
+          name="newLocationCoords"
           ref={newCoords as any}
           className="form-control"
           placeholder="URL or lat, lon"
