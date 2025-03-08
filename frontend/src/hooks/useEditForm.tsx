@@ -1,107 +1,116 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
 import { EntryType } from '../Types';
+
+interface FormElements {
+  content: HTMLTextAreaElement;
+  dateInput: HTMLInputElement;
+  locationContent: HTMLTextAreaElement;
+}
 
 const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: EntryType) => void) => {
   const [markdownContent, setMarkdownContent] = useState<string>(entry?.content || '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  function textChange() {
+  const getFormElements = (): FormElements | null => {
+    if (!formRef.current) return null;
+
+    return {
+      content: formRef.current.querySelector('textarea[name="content"]') as HTMLTextAreaElement,
+      dateInput: formRef.current.querySelector('input[name="dateInput"]') as HTMLInputElement,
+      locationContent: formRef.current.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement
+    };
+  };
+
+  const textChange = () => {
+    const elements = getFormElements();
+    if (!elements) return;
+
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" ></i> ';
-    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
-    if (content) {
-      content.value = content?.value.replace(pattern, replacement);
-      setMarkdownContent(content.value);
-    }
-  }
+    elements.content.value = elements.content.value.replace(pattern, replacement);
+    setMarkdownContent(elements.content.value);
+  };
 
-  function handleSave() {
-    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
-    const dateInput = formRef.current?.querySelector('input[name="dateInput"]') as HTMLInputElement;
-    const locations = formRef.current?.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement;
+  const handleSave = async () => {
+    const elements = getFormElements();
+    if (!elements) return;
+
     const newEntry = {
       ...entry,
-      content: content?.value || '',
-      date: dateInput?.value || '',
-      locations: locations?.value || ''
+      content: elements.content.value,
+      date: elements.dateInput.value,
+      locations: elements.locationContent.value
     };
 
-    const requestHeaders = createHeaders();
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify(newEntry),
-      mode: 'cors',
-      headers: requestHeaders
-    } as any;
     setIsLoading(true);
-    (async () => {
-      try {
-        const response = await fetch(`${REST_ENDPOINT}/api/posts/${entry?.id}`, options);
-        const results = await response.json();
-        console.log(results);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        toast((error as any).message);
-        onSuccess('Edit fail' + error, newEntry as EntryType);
-      }
-
+    try {
+      const response = await fetch(
+        `${REST_ENDPOINT}/api/posts/${entry?.id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(newEntry),
+          mode: 'cors',
+          headers: createHeaders()
+        }
+      );
+      const results = await response.json();
+      console.log(results);
       onSuccess('Edit Done', newEntry as EntryType);
-    })()
-  }
-
-  async function handleDelete() {
-    const go = window.confirm('You sure?');
-    if (!go) {
-      return;
+    } catch (error) {
+      console.error(error);
+      toast((error as Error).message);
+      onSuccess(`Edit failed: ${(error as Error).message}`, newEntry as EntryType);
+    } finally {
+      setIsLoading(false);
     }
-    const id = entry?.id || 0;
-    console.log(`handleDelete ${id}`);
-    const requestHeaders = createHeaders();
+  };
 
+  const handleDelete = async () => {
+    if (!window.confirm('You sure?')) return;
+
+    const id = entry?.id || 0;
     try {
       const response = await fetch(
         `${REST_ENDPOINT}/api/posts/${id}`,
         {
           method: 'DELETE',
           mode: 'cors',
-          headers: requestHeaders
-        },
+          headers: createHeaders()
+        }
       );
       const results = await response.json();
       console.log(results);
+      onSuccess('Delete Done', { id, content: 'DELETE', date: '' });
     } catch (error) {
-      console.log(error);
-      toast((error as any).message);
+      console.error(error);
+      toast((error as Error).message);
     }
-    onSuccess('Delete Done', { id, content: 'DELETE', date: '' });
-  }
+  };
 
-  function checkKeyPressed(e: any) {
+  const checkKeyPressed = (e: KeyboardEvent) => {
     if (e.altKey && e.key === 's') {
-      console.log('S keybinding');
-      // could convert this to refs instead?
       document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
       document.getElementById('cancelBtn')?.click();
     }
-  }
+  };
 
   useEffect(() => {
-    const content = formRef.current?.querySelector('textarea[name="content"]') as HTMLTextAreaElement;
-    if (content) {
-      content.focus();
-      const textLength = content.value.length;
-      content.setSelectionRange(textLength, textLength);
+    const elements = getFormElements();
+    if (elements?.content) {
+      elements.content.focus();
+      const textLength = elements.content.value.length;
+      elements.content.setSelectionRange(textLength, textLength);
     }
 
-    document.addEventListener('keydown', checkKeyPressed);
-    return () => document.removeEventListener('keydown', checkKeyPressed);
+    document.addEventListener('keydown', checkKeyPressed as any);
+    return () => document.removeEventListener('keydown', checkKeyPressed as any);
   }, []);
+
   return {
     formRef,
     markdownContent,
@@ -113,4 +122,3 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
 };
 
 export default useEditForm;
-
