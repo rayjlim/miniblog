@@ -50,10 +50,9 @@ code {
   padding-left: 0.5rem;
   padding-bottom: 1em;
 }
-.entriesList> li {
+.entriesList> article {
   list-style-type: none;
 }
-
 
 .plainLink {
   background: none !important;
@@ -69,7 +68,7 @@ code {
 
 .markdownDisplay {
   text-align: left;
-  padding-bottom: 1.25em;
+  padding-bottom: .5em;
 }
 .markdownDisplay h1 {
   font-size: 1.6em;

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { MapContainer, Marker, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import L, { LatLngExpression } from 'leaflet';
+import { MarkerType } from '../Types';
 
 const FitBounds = ({ coordinates }: { coordinates: LatLngExpression[] }) => {
   const map = useMap();
