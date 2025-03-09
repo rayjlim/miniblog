@@ -57,7 +57,7 @@ const Footer = ({ links = {
         </button>
         <span className="footer-version">v{pkg.version}</span>
       </nav>
-      <div>{usersFullname}</div>
+      {usersFullname && (<div>{usersFullname}</div>)}
     </>
   );
 };

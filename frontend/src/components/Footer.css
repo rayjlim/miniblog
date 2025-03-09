@@ -8,3 +8,6 @@
 .footer span{
   margin-left: auto;
 }
+.footer-version {
+  color: grey;
+}
