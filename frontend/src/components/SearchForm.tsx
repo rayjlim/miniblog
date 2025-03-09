@@ -39,7 +39,7 @@ const SearchForm = ({ params, setSearchParams }: SearchFormProps) => {
   };
 
   return (
-    <form className="search-form mb-1" onSubmit={changeText}>
+    <form className="search-form mb-1" onSubmit={changeText} style={{ overflow: 'visible' }}>
       <input
         id="searchText"
         type="text"
