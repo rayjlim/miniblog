@@ -1,4 +1,4 @@
-import { Dispatch, useImperativeHandle, useRef, MutableRefObject, SetStateAction, ForwardedRef } from 'react';
+import { Dispatch, useImperativeHandle, MutableRefObject, SetStateAction, ForwardedRef } from 'react';
 import { useQuery } from "react-query";
 import { EntryType, SearchParamsType } from '../Types';
 import { REST_ENDPOINT } from '../constants';

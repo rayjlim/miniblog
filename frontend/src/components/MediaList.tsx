@@ -1,6 +1,6 @@
 import MediaItem from '../components/MediaItem';
 import useMediaList from '../hooks/useMediaList';
-
+import { RequestError } from '../Types';
 import './MediaList.css';
 
 const MediaList = ({ onMediaSelect }:

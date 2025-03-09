@@ -2,7 +2,7 @@
 //@ts-ignore
 import { marked } from 'marked';
 import { useSetting } from './SettingContext';
-
+import { SettingsType } from '../Types';
 const renderer = {
 
   code(code: string, escaped = true): string {

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { SAMEDAY } from '../constants';
 import { FULL_DATE_FORMAT, STORAGE_KEY } from '../constants';
+import { EntryType } from '../Types';
 
 const useOneDay = (pageMode: number) => {
   const navigate = useNavigate();

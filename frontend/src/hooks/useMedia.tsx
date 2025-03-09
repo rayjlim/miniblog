@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSetting } from '../components/SettingContext';
 import createHeaders from '../utils/createHeaders';
 import { REST_ENDPOINT } from '../constants';
+import { SettingsType, MediaType } from '../Types';
 
 const useMedia = () => {
   const { UPLOAD_ROOT } = useSetting() as SettingsType;

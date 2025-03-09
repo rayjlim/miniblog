@@ -48,7 +48,7 @@ Alt + p ' Populate Add form with Prompt [one day] ">
           onSuccess={resetEntryForm}
         />
       </section>
-      <EntryList date={pageDate} isOneDay={isOneDay} onShowEdit={setEditEntry} ref={childRef} />
+      <EntryList date={pageDate} isOneDay={isOneDay} onShowEdit={setEditEntry} ref={childRef as any} />
       {isOneDay && <MovieList date={pageDate} />}
       {isOneDay && <Inspiration />}
       <Footer />

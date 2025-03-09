@@ -1,6 +1,7 @@
 import { REST_ENDPOINT } from '../constants';
 import { useSetting } from './SettingContext';
 import createHeaders from '../utils/createHeaders';
+import { SettingsType } from '../Types';
 
 const MediaItem = ({ media, currentDir, selectMedia, onDelete }: {
   media: string, currentDir: string,

@@ -2,12 +2,12 @@ import Select from 'react-select';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
 import useFetchYearMonths from '../hooks/useFetchYearMonths';
 import { FULL_DATE_FORMAT } from '../constants';
-
+import { RequestError } from '../Types';
 const YearMonthSelector = ({ changeDate }: { changeDate: (date: string, type: string) => void }) => {
   const { yearMonths, isLoading, error } = useFetchYearMonths();
 
   if (isLoading) return <div>Load ..</div>;
-  if (error)  return <div>An error occurred: {(error as RequestError).message}</div>;
+  if (error) return <div>An error occurred: {(error as RequestError).message}</div>;
 
   return (
     <Select

@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import LogRow from '../components/LogRow';
 import useLogs from '../hooks/useLogs';
-
+import { RequestError } from '../Types';
 import './Logs.css';
 
 const Logs = () => {

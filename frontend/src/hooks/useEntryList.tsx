@@ -5,6 +5,7 @@ import {
   useImperativeHandle
 } from 'react';
 import { useQuery } from "react-query";
+import { EntryType } from '../Types';
 
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';

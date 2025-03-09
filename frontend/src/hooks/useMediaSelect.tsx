@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSetting } from '../components/SettingContext';
 import createHeaders from '../utils/createHeaders';
 import { REST_ENDPOINT } from '../constants';
+import { SettingsType, MediaType } from '../Types';
 
 const useMediaSelect = (mediaDefault: MediaType) => {
   //type safe the media
