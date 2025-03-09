@@ -42,6 +42,9 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
   const handleSave = async () => {
     const elements = getFormElements();
     if (!elements) return;
+    if((elements.newLocationCoords.value !== '' ||
+      elements.newLocationTitle.value !== '')
+       && !confirm('Location data present?')) return;
 
     const newEntry = {
       ...entry,

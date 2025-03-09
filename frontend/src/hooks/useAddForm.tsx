@@ -48,7 +48,9 @@ const useAddForm = ({ onSuccess }: AddHookParams) => {
     event.preventDefault();
     const elements = getFormElements();
     if (!elements) return;
-
+    if((elements.newLocationCoords.value !== '' ||
+      elements.newLocationTitle.value !== '')
+       && !confirm('Location data present?')) return;
     if (elements.content.value === '' && elements.locationContent.value !== '') {
       try {
         const locations = JSON.parse(elements.locationContent.value);
