@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.37.1](https://github.com/rayjlim/miniblog/compare/v2.37.0...v2.37.1) (2025-03-09)
+
+
+### Bug Fixes
+
+* missing type includes ([7aa8124](https://github.com/rayjlim/miniblog/commit/7aa8124c163cf4c3fc284f43fd59cadc76045e98))
+
 ## [2.37.0](https://github.com/rayjlim/miniblog/compare/v2.36.2...v2.37.0) (2025-03-09)
 
 
