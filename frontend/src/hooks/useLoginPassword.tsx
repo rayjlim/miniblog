@@ -13,6 +13,10 @@ import { STORAGE_KEY } from '../constants';
 //   console.log(data);
 //   return data;
 // }
+interface LoginFormData {
+  username: string;
+  password: string;
+}
 
 const useLoginPassword = () => {
   const navigate = useNavigate();
@@ -20,10 +24,10 @@ const useLoginPassword = () => {
 
   const loginMutation = useMutation((credentials: { username: string, password: string }) => login(credentials.username, credentials.password));
 
-  const handleLogin = async (e: any) => {
-    e.preventDefault();
-    const username = e.target.elements.username.value;
-    const password = e.target.elements.password.value;
+  const handleLogin = async (formdata: LoginFormData) => {
+
+    const username = formdata.username;
+    const password = formdata.password;
 
     try {
       await loginMutation.mutateAsync({ username, password });
