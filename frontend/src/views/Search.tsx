@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { RefObject, memo, useMemo } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import EditForm from '../components/EditForm';
@@ -6,7 +6,16 @@ import SearchForm from '../components/SearchForm';
 import SearchResults from '../components/SearchResults';
 import useSearch from '../hooks/useSearch';
 
-const Search = () => {
+interface SearchParams {
+  resultsLimit: number;
+  [key: string]: any;
+}
+
+const DEFAULT_PARAMS: SearchParams = {
+  resultsLimit: 50
+};
+
+const Search = memo(() => {
   const {
     searchParams,
     editEntry,
@@ -16,43 +25,51 @@ const Search = () => {
     childRef
   } = useSearch();
 
-  const defaultParams = { resultsLimit: 50 };
+  const headerLinks = useMemo(() => ({
+    search: false,
+    oneday: true,
+    sameday: true
+  }), []);
+
+  const currentParams = searchParams ?? DEFAULT_PARAMS;
 
   return (
-    <div className="search-view">
-      <Header
-        links={{
-          search: false,
-          oneday: true,
-          sameday: true
-        }}
-      />
+    <div className="search-view min-h-screen">
+      <Header links={headerLinks} />
+      <main className="container py-4 flex-grow" role="main">
+        <h1 className="mb-1 text-2xl font-bold" id="search-title">
+          Search
+        </h1>
 
-      <main className="container py-4">
-        <h1 className="mb-4">Find Entries</h1>
+        <div className="space-y-6">
+          <section aria-labelledby="search-form">
+            <SearchForm
+              params={currentParams}
+              setSearchParams={setSearchParams}
+            />
+          </section>
 
-        <SearchForm
-          params={searchParams ?? defaultParams}
-          setSearchParams={setSearchParams}
-        />
+          {editEntry && (
+            <section aria-label="Edit Entry Form">
+              <EditForm
+                entry={editEntry}
+                onSuccess={resetEntryForm}
+              />
+            </section>
+          )}
 
-        {editEntry && (
-          <EditForm
-            entry={editEntry}
-            onSuccess={resetEntryForm}
-          />
-        )}
-
-        <SearchResults
-          params={searchParams || defaultParams}
-          setEditEntry={setEditEntry}
-          ref={childRef as unknown as RefObject<HTMLElement>}
-        />
+          <section aria-label="Search Results">
+            <SearchResults
+              params={currentParams}
+              setEditEntry={setEditEntry}
+              ref={childRef as unknown as RefObject<HTMLElement>}
+            />
+          </section>
+        </div>
       </main>
-
       <Footer />
     </div>
   );
-};
+});
 
 export default Search;
