@@ -53,7 +53,7 @@ const AddForm = ({ content, date, onSuccess }: AddFormProps) => {
       </div>
 
       <form ref={formRef} onSubmit={handleAdd} className="add-form">
-        <div className="form-group mb-3">
+        <div className="form-group mb-1">
           <textarea
             id="addFormTextarea"
             name="content"

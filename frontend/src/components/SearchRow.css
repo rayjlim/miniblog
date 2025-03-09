@@ -1,3 +1,5 @@
 .entryRow {
   border-bottom: 1px dashed grey;
+  margin: .25rem;
+  padding: .25rem;
 }

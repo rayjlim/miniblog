@@ -34,7 +34,7 @@ const EntryList = ({ date, isOneDay, onShowEdit }: EntryListProps, ref: Forwarde
             )}
           </button>
 
-          <div className="markdownDisplay mb-3">
+          <div className="markdownDisplay mb-1">
             <MarkdownDisplay source={entry.content} />
           </div>
 

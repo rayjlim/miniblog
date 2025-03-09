@@ -29,7 +29,7 @@ const SearchResults = forwardRef(({ params, setEditEntry }: SearchResultsProps, 
   if (error) return <div className="alert alert-danger">An error occurred: {(error as RequestError).message}</div>;
 
   const renderSearchParams = () => (
-    <div className="search-param-description mb-3">
+    <div className="search-param-description mb-`">
       {params ? (
         <span>
           Date: {startDate || 'Beginning'} to {endDate || 'Now'},

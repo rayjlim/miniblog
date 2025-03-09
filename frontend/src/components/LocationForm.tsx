@@ -32,7 +32,7 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
         defaultValue={content}
       />
 
-      <div className="d-flex gap-2 mb-3">
+      <div className="d-flex gap-2 mb-1">
         <button
           type="button"
           className="btn btn-secondary"
@@ -51,7 +51,7 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
         </button>
       </div>
 
-      <div className="locations-list mb-3">
+      <div className="locations-list mb-1">
         {locations.map((location: MarkerType) => (
           <div key={`${location.lat},${location.lng}`} className="location-item">
             {location.title}, {location.lat}, {location.lng}

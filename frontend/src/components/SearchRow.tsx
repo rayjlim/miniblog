@@ -1,8 +1,11 @@
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import { format, parse } from 'date-fns';
+import { EntryType } from '../Types';
 import MarkdownDisplay from '../components/MarkdownDisplay';
 import { DISPLAY_DATE_FORMAT, FULL_DATE_FORMAT } from '../constants';
+
 import './SearchRow.css';
+
 const SearchRow = ({ searchText, entry, showEditForm }:
   {
     searchText: string, entry: EntryType, showEditForm: (entry: EntryType) => void
@@ -20,21 +23,23 @@ const SearchRow = ({ searchText, entry, showEditForm }:
     : entry.content;
 
   return (
-    <li key={entry.id} id={`li${entry.id}`} className="entryRow">
-      <button
-        type="button"
-        onClick={() => showEditForm(entry)}
-        className="plainLink margin-rt-1"
-      >
-        {dateFormated}
-      </button>
-      <RouterNavLink to={`/oneday/${entry.date}`}>
-        <i className="fa fa-calendar-check icon-one-day" title="One Day" />
-      </RouterNavLink>
+    <article key={entry.id} id={`li${entry.id}`} className="entryRow d-flex align-items-center gap-2">
+      <div>
+        <button
+          type="button"
+          onClick={() => showEditForm(entry)}
+          className="plainLink margin-rt-1"
+        >
+          {dateFormated}
+        </button>
+        <RouterNavLink to={`/oneday/${entry.date}`}>
+          <i className="fa fa-calendar-check icon-one-day" title="One Day" />
+        </RouterNavLink>
+      </div>
       <div className="markdownDisplay">
         <MarkdownDisplay source={content} />
       </div>
-    </li>
+    </article>
   );
 }
 

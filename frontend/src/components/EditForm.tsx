@@ -69,7 +69,7 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
         }}
         className="add-form"
       >
-        <div className="form-group mb-3">
+        <div className="form-group mb-1">
           <textarea
             name="content"
             onChange={textChange}
