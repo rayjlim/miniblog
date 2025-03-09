@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import EditForm from '../components/EditForm';
@@ -23,7 +24,12 @@ const Search = () => {
           <EditForm entry={editEntry} onSuccess={resetEntryForm} />
         )}
 
-        {searchParams && (<SearchResults params={searchParams} setEditEntry={setEditEntry} ref={childRef} />)}
+        <SearchResults
+          params={searchParams || { resultsLimit: 10 }}
+          setEditEntry={setEditEntry}
+          ref={childRef as unknown as RefObject<HTMLElement>}
+        />
+
       </section>
       <Footer />
     </>

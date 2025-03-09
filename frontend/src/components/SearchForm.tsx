@@ -2,120 +2,147 @@ import { format, subMonths } from 'date-fns';
 import { FULL_DATE_FORMAT } from '../constants';
 import YearMonthSelector from './YearMonthSelector';
 import useSearchForm from '../hooks/useSearchForm';
+import { SearchParamsType } from '../Types';
 
-const SearchForm = ({ params, setSearchParams }:
-  { params: SearchParamsType, setSearchParams: (params: SearchParamsType) => void }) => {
-  const { searchText, changeText, startDate, endDate, changeDate, searchFilter, setSearchFilter }
-    = useSearchForm(params, setSearchParams);
+interface SearchFormProps {
+  params: SearchParamsType;
+  setSearchParams: (params: SearchParamsType) => void;
+}
+
+const SearchForm = ({ params, setSearchParams }: SearchFormProps) => {
+  const {
+    searchText,
+    changeText,
+    startDate,
+    endDate,
+    changeDate,
+    searchFilter,
+    setSearchFilter
+  } = useSearchForm(params, setSearchParams);
+
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (searchText.current) {
+      searchText.current.value = '';
+      changeText(new Event('submit') as any);
+    }
+  };
+
+  const setDateRange = (months: number) => {
+    const end = format(new Date(), FULL_DATE_FORMAT);
+    const start = format(
+      months === 0 ? new Date('1998-01-01') : subMonths(new Date(), months),
+      FULL_DATE_FORMAT
+    );
+    changeDate(start, 'start');
+    changeDate(end, 'end');
+  };
 
   return (
-    <>
-      <div className="flex-row">
-        <input
-          id="searchText"
-          type="text"
-          className="form-control"
-          ref={searchText}
-          placeholder="Search term"
-        />
-        <input type="button" onClick={() => {
-          changeText();
-        }} value="send" />
-        <input type="button" onClick={() => {
-          const target = searchText?.current || { value: '' };
-          target.value = '';
-          changeText();
-        }} value="Clear" />
-
-        <select name="filterType" onChange={e => setSearchFilter(parseInt(e.target.value))}
-          value={searchFilter}>
+    <form className="search-form mb-1" onSubmit={changeText}>
+      <input
+        id="searchText"
+        type="text"
+        className="form-control"
+        ref={searchText}
+        placeholder="Search term"
+      />
+      <div className="d-flex gap-3">
+        <button
+          type="submit"
+          style={{ height: '2.5rem' }}
+          className="btn btn-primary success"
+        >
+          Search
+        </button>
+        <button
+          type="button"
+          style={{ height: '2.5rem' }}
+          className="btn btn-secondary attention"
+          onClick={handleClear}
+        >
+          Clear
+        </button>
+        <select
+          className="form-select w-auto"
+          style={{ width: '8rem', display: 'inline' }}
+          value={searchFilter}
+          onChange={e => setSearchFilter(parseInt(e.target.value))}
+        >
           <option value="0">All</option>
           <option value="1">Tagged</option>
           <option value="2">Untagged</option>
         </select>
+        <input type="text"
+          style={{ width: '4rem', display: 'inline' }}
+          className="form-control"
+          name="limit"
+          value={params.resultsLimit?.toString() || '50'}
+          onChange={e => {
+            const value = e.target.value.trim();
+            const limit = value ? parseInt(value) : undefined;
+            setSearchParams({ ...params, resultsLimit: limit });
+          }}
+        />
       </div>
-      <div className="search-date-container">
+      <div className="search-date-container d-flex gap-4">
         <div className="search-date-field">
-          {'Start Date: '}
-          {startDate.current !== '' ? (
-            <input type="date" value={startDate.current || ''} onChange={e => changeDate(e.target.value, 'start')} />
+          <span className="me-2">Start Date:</span>
+          {startDate.current ? (
+            <input
+              type="date"
+              className="form-control"
+              value={startDate.current}
+              onChange={e => changeDate(e.target.value, 'start')}
+            />
           ) : (
-            <>
-              {'None '}
-              <button
-                type="button"
-                onClick={() => changeDate('', 'start')}
-                className="plainLink"
-              >
-                Edit
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => changeDate('', 'start')}
+              className="btn btn-link p-0"
+            >
+              Set Start Date
+            </button>
           )}
         </div>
+
         <div className="search-date-field">
-          {'End Date: '}
-          {endDate.current !== '' ? (
-            <input type="date" onChange={e => changeDate(e.target.value, 'end')} value={endDate.current || ''} />
+          <span className="me-2">End Date:</span>
+          {endDate.current ? (
+            <input
+              type="date"
+              className="form-control"
+              value={endDate.current}
+              onChange={e => changeDate(e.target.value, 'end')}
+            />
           ) : (
-            <>
-              {`None `}
-              <button
-                type="button"
-                onClick={() => changeDate(format(new Date(), FULL_DATE_FORMAT), 'end')}
-                className="plainLink"
-              >
-                Edit
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => changeDate(format(new Date(), FULL_DATE_FORMAT), 'end')}
+              className="btn btn-link p-0"
+            >
+              Set End Date
+            </button>
           )}
         </div>
-      </div>
-      <div>
-        <button
-          type="button"
-          onClick={() => {
-            changeDate(format(subMonths(new Date(), 3), FULL_DATE_FORMAT), 'start');
-            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
-          }}
-          className="plainLink rangeBtn"
-        >
-          3 mths
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            changeDate(format(subMonths(new Date(), 6), FULL_DATE_FORMAT), 'start');
-            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
-          }}
-          className="plainLink rangeBtn"
-        >
-          6 mths
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            changeDate(format(subMonths(new Date(), 12), FULL_DATE_FORMAT), 'start');
-            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
-          }}
-          className="plainLink rangeBtn"
-        >
-          12 mths
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            changeDate(format(new Date('1998-01-01'), FULL_DATE_FORMAT), 'start');
-            changeDate(format(new Date(), FULL_DATE_FORMAT), 'end');
-          }}
-          className="plainLink rangeBtn"
-        >
-          All
-        </button>
-        <YearMonthSelector changeDate={changeDate}/>
       </div>
 
-    </>
+      <div className="d-flex gap-2">
+        {[3, 6, 12, 0].map(months => (
+          <button
+            key={months}
+            type="button"
+            onClick={() => setDateRange(months)}
+            className="btn btn-outline-secondary"
+          >
+            {months === 0 ? 'All' : `${months} mths`}
+          </button>
+        ))}
+        <YearMonthSelector changeDate={changeDate} />
+      </div>
+    </form>
   );
 };
+
 export default SearchForm;
 
