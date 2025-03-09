@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.37.0](https://github.com/rayjlim/miniblog/compare/v2.36.2...v2.37.0) (2025-03-09)
+
+
+### Features
+
+* [#320](https://github.com/rayjlim/miniblog/issues/320) new search field for results limit ([160e766](https://github.com/rayjlim/miniblog/commit/160e7660398277e0d372924fc67a5db67548fa63))
+
+
+### Bug Fixes
+
+* [#301](https://github.com/rayjlim/miniblog/issues/301) check if location info is not blank ([db85b45](https://github.com/rayjlim/miniblog/commit/db85b45c5a832f65968ddc91450a98848b52a9f3))
+* [#332](https://github.com/rayjlim/miniblog/issues/332) use article instead of <div> ([bce6d64](https://github.com/rayjlim/miniblog/commit/bce6d64b3b1f6c2d8ad6e5669f90961ac7c4c974))
+* css update ([c933689](https://github.com/rayjlim/miniblog/commit/c933689c02e3b85df886b0b3255a4780262ec716))
+* display tweaks ([71444b9](https://github.com/rayjlim/miniblog/commit/71444b96d03e829aeaffb81b45e188671e84f6fe))
+* location parsing in search results edit ([b59d83c](https://github.com/rayjlim/miniblog/commit/b59d83cd808df0a9493ca34f651706fbce9356ab))
+* update to use interface types ([04c8a2f](https://github.com/rayjlim/miniblog/commit/04c8a2f89c1bedb989d0bc69231dcd42b2ae7b16))
+
 ### [2.36.2](https://github.com/rayjlim/miniblog/compare/v2.36.1...v2.36.2) (2025-01-27)
 
 ### [2.36.1](https://github.com/rayjlim/miniblog/compare/v2.36.0...v2.36.1) (2025-01-27)
