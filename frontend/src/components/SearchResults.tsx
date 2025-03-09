@@ -12,12 +12,12 @@ const SearchResults = forwardRef(({ params, setEditEntry }: SearchResultsProps, 
   const [isEditing, setIsEditing] = useState(false);
   const editEntryId = useRef<number>(0);
 
-  const { entries, startDate, endDate, isLoading, error } = useSearchResults(
+  const { entries, startDate, endDate, isLoading, error } = useSearchResults({
     params,
     editEntryId,
     setIsEditing,
     ref
-  );
+  });
 
   const showEditForm = (entry: EntryType) => {
     setIsEditing(true);
