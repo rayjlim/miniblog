@@ -14,7 +14,6 @@ use App\controllers\MediaHandler;
 use App\controllers\UploadHandler;
 use App\controllers\LogHandler;
 use App\helpers\AuthMiddleware;
-use App\core\Logger;
 
 return function (App $app) {
 
@@ -26,6 +25,9 @@ return function (App $app) {
       return $response;
     }
   );
+  $app->group('', function (RouteCollectorProxy $group) {
+    $group->any('/test/locations', EntryHandler::class . ":topLocations");
+  });
 
   $app->group('', function (RouteCollectorProxy $group) {
     $group->any('/security', function (Request $request, Response $response, $args) {
