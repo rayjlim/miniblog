@@ -83,13 +83,17 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
         <div className="form-actions d-flex justify-content-between align-items-center gap-3 mb-3">
           <button
             className="btn btn-primary spaced-link success"
-             data-testid="saveBtn"
+            data-testid="saveBtn"
             id="saveBtn"
             type="submit"
             title="alt + s"
             disabled={isLoading}
           >
-            <i className="fa fa-save" /> Save
+            {isLoading ? (
+              <><i className="fa fa-spinner fa-spin" /> Saving...</>
+            ) : (
+              <><i className="fa fa-save" /> Save</>
+            )}
           </button>
 
           <input
