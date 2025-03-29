@@ -1,39 +1,66 @@
+import { memo } from 'react';
 import format from 'date-fns/format';
 import { FULL_DATE_FORMAT } from '../constants';
 import Clipper from './Clipper';
 import useMediaSelect from '../hooks/useMediaSelect';
+import AddForm from './AddForm';
+import { MediaType } from '../Types';
 
-import AddForm from '../components/AddForm';
+interface MediaSelectProps {
+  media: MediaType;
+  onClose: (msg: string) => void;
+}
 
+const FileSizeIndicator = memo(({ size }: { size: number }) => {
+  if (!size) return null;
+  const sizeInKB = size / 1000;
+  const color = sizeInKB > 100 ? 'red' : 'lightgreen';
+  return <div style={{ color }}>{`${sizeInKB} KB`}</div>;
+});
 
-const MediaSelect = ({ media, onClose }: { media: any, onClose: (msg: string) => void }) => {
+const MediaSelect = ({ media, onClose }: MediaSelectProps) => {
   const { mediaSelect, rotate, resize } = useMediaSelect(media);
-
-  const showFilesize = (filesize: number) => {
-    if (filesize === undefined)
-      return;
-    const sizeStyle = (filesize > 100 * 1000) ? 'red' : 'lightgreen'
-    return (
-      <div style={{ 'color': sizeStyle }}>{`${filesize / 1000} KB`}</div>
-    );
-  }
 
   return (
     <>
       <p className="lead">Prepare the image for use</p>
       <div className="grid-3mw">
-        <button onClick={() => rotate(-90)} type="button">Left</button>
-        <button onClick={() => resize()} type="button">Resize</button>
-        <button onClick={() => rotate(90)} type="button">Right</button>
+        <button 
+          type="button" 
+          onClick={() => rotate(-90)}
+          className="btn btn-secondary"
+        >
+          Left
+        </button>
+        <button 
+          type="button" 
+          onClick={resize}
+          className="btn btn-primary"
+        >
+          Resize
+        </button>
+        <button 
+          type="button" 
+          onClick={() => rotate(90)}
+          className="btn btn-secondary"
+        >
+          Right
+        </button>
       </div>
+
       <section className="container">
         {mediaSelect.imgUrl}
         <Clipper media={mediaSelect} />
-        {showFilesize(mediaSelect?.filesize)}
+        <FileSizeIndicator size={mediaSelect.filesize} />
         <div className="preview-img-container">
-          <img src={mediaSelect.imgUrl} alt="edit img" className="preview" />
+          <img 
+            src={mediaSelect.imgUrl} 
+            alt="Preview" 
+            className="preview" 
+          />
         </div>
       </section>
+
       <span className="footnote">Image is automatically prepended on submit</span>
       <AddForm
         date={format(new Date(), FULL_DATE_FORMAT)}
@@ -44,4 +71,4 @@ const MediaSelect = ({ media, onClose }: { media: any, onClose: (msg: string) =>
   );
 };
 
-export default MediaSelect;
+export default memo(MediaSelect);

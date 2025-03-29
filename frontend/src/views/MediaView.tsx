@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,33 +10,41 @@ import useMedia from '../hooks/useMedia';
 
 import './MediaView.css';
 
-const Media = () => {
+const MediaView = () => {
   const { media, selectMedia } = useMedia();
-
   const navigate = useNavigate();
-  const mediaClosed = (msg: string) => {
-    if (msg !== '') {
+
+  const headerLinks = {
+    search: false,
+    oneday: true,
+    sameday: true
+  };
+
+  const footerLinks = {
+    upload: true,
+    media: false,
+    logs: false,
+    oneday: false
+  };
+
+  const handleMediaClose = useCallback((msg: string) => {
+    if (msg) {
       toast(msg);
-      setTimeout((() => { navigate('/oneday'); }), 1500);
+      const timer = setTimeout(() => {
+        navigate('/oneday');
+        clearTimeout(timer);
+      }, 1500);
     } else {
       selectMedia('', '');
     }
-  }
-
-  const headerLinks = {
-    search: false, oneday: true, sameday: true
-  };
-  const footerLinks = {
-    upload: true, media: false, logs: false, oneday: false
-  };
+  }, [navigate, selectMedia]);
 
   return (
     <>
       <Header links={headerLinks} />
-      {media && (
-        <MediaSelect media={media} onClose={mediaClosed} />
-      )}
-      {!media && (
+      {media ? (
+        <MediaSelect media={media} onClose={handleMediaClose} />
+      ) : (
         <MediaList onMediaSelect={selectMedia} />
       )}
       <Footer links={footerLinks} />
@@ -43,4 +52,4 @@ const Media = () => {
   );
 };
 
-export default Media;
+export default MediaView;
