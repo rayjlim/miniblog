@@ -39,7 +39,24 @@ class MediaHandler
         }
 
         DevHelp::debugMsg('$currentDir: ' . $currentDir);
-        $dirContent = (array) preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir));
+        $files = scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir);
+        $files = array_filter($files, function($file) use ($currentDir) {
+            return !str_starts_with($file, '.') && is_file($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir . DIR_SEP . $file);
+        });
+        
+        // Sort files by last modified time
+        $fullPaths = array_map(function($file) use ($currentDir) {
+            return [
+                'name' => $file,
+                'time' => filemtime($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir . DIR_SEP . $file)
+            ];
+        }, array_values($files));
+        
+        usort($fullPaths, function($a, $b) {
+            return $b['time'] - $a['time'];
+        });
+        
+        $dirContent = array_column($fullPaths, 'name');
         $reply = new \stdClass();
         $reply->currentDir = $currentDir;
         $reply->uploadDirs = $filelist;
