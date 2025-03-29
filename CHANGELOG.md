@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.39.0](https://github.com/rayjlim/miniblog/compare/v2.38.0...v2.39.0) (2025-03-29)
+
+
+### Features
+
+* [#318](https://github.com/rayjlim/miniblog/issues/318) debounce text search ([788b768](https://github.com/rayjlim/miniblog/commit/788b7681dd7f2aa9aabec1537984aa330f2ed0f2))
+
+
+### Bug Fixes
+
+* [#335](https://github.com/rayjlim/miniblog/issues/335) load image after upload; refactor useMedia ([641238c](https://github.com/rayjlim/miniblog/commit/641238c73a0fed2bfe11905a2b65a0f00babe501))
+* refactor and optimize media display files ([db52569](https://github.com/rayjlim/miniblog/commit/db52569d1a3418628d12a04aaea2b3728ff7f5d3))
+* update vitest ([e2153c6](https://github.com/rayjlim/miniblog/commit/e2153c6cc0dcea2dc54daa86c7ccdc32b8eab3dc))
+
 ## [2.38.0](https://github.com/rayjlim/miniblog/compare/v2.37.1...v2.38.0) (2025-03-29)
 
 
