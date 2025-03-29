@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.38.0](https://github.com/rayjlim/miniblog/compare/v2.37.1...v2.38.0) (2025-03-29)
+
+
+### Features
+
+* [#333](https://github.com/rayjlim/miniblog/issues/333) input fields for editing locations ([fa0f1db](https://github.com/rayjlim/miniblog/commit/fa0f1dbe0b8d598a81145e3fe04491fb79fe9780))
+* [#72](https://github.com/rayjlim/miniblog/issues/72) show spinner when save clicked ([c1c2bdc](https://github.com/rayjlim/miniblog/commit/c1c2bdc29ff755f85148152cf9e6704a0c5f46db))
+* new api for getting locations count ([1f8fdef](https://github.com/rayjlim/miniblog/commit/1f8fdef79c6c5b5dda281f5f02d0c5c7e1bd582e))
+
+
+### Bug Fixes
+
+* composer.lock update; refactor LocationForm and useLocationForm ([4620aed](https://github.com/rayjlim/miniblog/commit/4620aed0f965e3cdb5a608d9bd2d8c96353a7e37))
+* outdated composer.lock ([b782862](https://github.com/rayjlim/miniblog/commit/b782862fb6a6d9b77df77e96535605a0392da7aa))
+* override overflow attribute ([124808a](https://github.com/rayjlim/miniblog/commit/124808ac5524d4d7e21ea0f2a08f275dceb8ec21))
+* update snapshot ([bb83845](https://github.com/rayjlim/miniblog/commit/bb83845daaf88d63ee89309b4bdd3c7413229d8b))
+
 ### [2.37.1](https://github.com/rayjlim/miniblog/compare/v2.37.0...v2.37.1) (2025-03-09)
 
 
