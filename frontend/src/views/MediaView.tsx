@@ -7,7 +7,7 @@ import MediaList from '../components/MediaList';
 import MediaSelect from '../components/MediaSelect';
 import useMedia from '../hooks/useMedia';
 
-import './Media.css';
+import './MediaView.css';
 
 const Media = () => {
   const { media, selectMedia } = useMedia();
