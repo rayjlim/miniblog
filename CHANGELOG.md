@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.40.0](https://github.com/rayjlim/miniblog/compare/v2.39.0...v2.40.0) (2025-03-29)
+
+
+### Features
+
+* [#311](https://github.com/rayjlim/miniblog/issues/311) parse gps data from picture upload ([0e84de7](https://github.com/rayjlim/miniblog/commit/0e84de7675198db2b6e219174558f830cd26e9f3))
+
+
+### Bug Fixes
+
+* [#334](https://github.com/rayjlim/miniblog/issues/334) trim the location title and validate coords are numbers ([abe93e9](https://github.com/rayjlim/miniblog/commit/abe93e9bf4d35c5afa81b7e46c5a2a56989d1595))
+* [#70](https://github.com/rayjlim/miniblog/issues/70) font family improvement ([54f084c](https://github.com/rayjlim/miniblog/commit/54f084c5243303451ef870f814a2e162c32be8db))
+* css clean up ([3d670c2](https://github.com/rayjlim/miniblog/commit/3d670c25a5ccf3dd44d14d38c0014039591d21ab))
+* media list order by last modified date ([3ff00be](https://github.com/rayjlim/miniblog/commit/3ff00bea2ee05b21fa5176ee488f162958c77894))
+* searchform css clean up ([997fd02](https://github.com/rayjlim/miniblog/commit/997fd02f4b74dc856a0fefe794444df352e4e39b))
+
 ## [2.39.0](https://github.com/rayjlim/miniblog/compare/v2.38.0...v2.39.0) (2025-03-29)
 
 
