@@ -39,12 +39,7 @@
   gap: 1.5rem;
 }
 
-@media (max-width: 400px) {
-  .date-container {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
+
 
 .date-field {
   display: flex;
@@ -60,4 +55,23 @@
   display: flex;
   gap: 0.25rem;
   justify-content: flex-start;
+}
+
+@media only screen and (max-width: 375px) {
+  .search-container {
+    margin-bottom: 0.25rem;
+  }
+  .filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .date-container {
+    flex-direction: column;
+    gap: 0;
+  }
+  .date-label {
+    margin-top: 0.25rem;
+    margin-right: 0.5rem;
+  }
 }

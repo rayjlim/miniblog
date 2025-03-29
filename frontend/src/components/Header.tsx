@@ -12,7 +12,7 @@ const Header = ({ links = {
   oneday: false
 } }: { links?: LinksPropType }) => {
   return (
-    <nav className="navbar navbar-expand-sm navbar-light bg-light" id="top">
+    <nav className="navbar" id="top">
       {links?.search && <RouterNavLink to="/search" className="spaced-link">
         <i className="fa fa-search" />
         <span>{' Search'}</span>

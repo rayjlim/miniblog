@@ -5,6 +5,7 @@ import EditForm from '../components/EditForm';
 import SearchForm from '../components/SearchForm';
 import SearchResults from '../components/SearchResults';
 import useSearch from '../hooks/useSearch';
+import './search.css';
 
 interface SearchParams {
   resultsLimit: number;
@@ -42,7 +43,7 @@ const Search = memo(() => {
         </h1>
 
         <div className="space-y-6">
-          <section aria-labelledby="search-form">
+          <section aria-labelledby="search-form" >
             <SearchForm
               params={currentParams}
               setSearchParams={setSearchParams}
