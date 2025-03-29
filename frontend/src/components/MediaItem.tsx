@@ -39,12 +39,30 @@ const MediaItem = ({ media, currentDir, selectMedia, onDelete }: {
   }
 
   return (<li key={media}>
-    <button onClick={() => selectMedia(`${currentDir}`, media)} type="button">
-      Load
-    </button>
-    <button onClick={() => deleteMedia(`${currentDir}`, media)} type="button" className="delete">
-      Delete
-    </button>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      gap: '0.5rem'
+    }}>
+      <button
+        onClick={() => selectMedia(`${currentDir}`, media)}
+        type="button"
+        className="btn btn-primary"
+        style={{ whiteSpace: 'nowrap', width: '40px' }}
+        title="Load"
+      >
+        <i className="fa fa-download" />
+      </button>
+      <button
+        onClick={() => deleteMedia(`${currentDir}`, media)}
+        type="button"
+        className="btn btn-danger delete"
+        style={{ whiteSpace: 'nowrap', width: '40px' }}
+        title="Delete"
+      >
+        <i className="fa fa-trash" />
+      </button>
+    </div>
     <img
       src={`${UPLOAD_ROOT}/${currentDir}/${media}`}
       alt="main_img"

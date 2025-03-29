@@ -10,103 +10,95 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-/* The `MediaHandler` class is a PHP class that handles media-related operations.
-It has two methods: `listMedia()` and `deleteMedia()`. */
-
 class MediaHandler
 {
-    public $resource = null;
-    private $container = null;
+    private ContainerInterface $container;
+    private ?object $resource = null;
+    private string $uploadDir;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->uploadDir = $_ENV['UPLOAD_DIR'];
     }
 
-    public function listMedia(Request $request, Response $response, $args)
+    private function getFullPath(string $dir, string $file = ''): string
     {
-        DevHelp::debugMsg('start listMedia');
-        $currentDir = $args['currentDir'] ?? '';
-        $filelist = preg_grep('/^([^.])/', scandir($_ENV['UPLOAD_DIR'] . DIR_SEP));
+        return $this->uploadDir . DIR_SEP . $dir . ($file ? DIR_SEP . $file : '');
+    }
 
-        DevHelp::debugMsg('currentDir ' . $currentDir);
-        DevHelp::debugMsg('end($filelist)' . is_dir($_ENV['UPLOAD_DIR'] . DIR_SEP . end($filelist)));
-
-        // no media in root folder, get from last
-        if (count($filelist) > 0 && $currentDir == ''  && is_dir($_ENV['UPLOAD_DIR'] . DIR_SEP . end($filelist))) {
-            DevHelp::debugMsg('reading first file');
-            $currentDir = end($filelist);
-        }
-
-        DevHelp::debugMsg('$currentDir: ' . $currentDir);
-        $files = scandir($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir);
-        $files = array_filter($files, function($file) use ($currentDir) {
-            return !str_starts_with($file, '.') && is_file($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir . DIR_SEP . $file);
+    private function getFilesOrderedByDate(string $dir): array
+    {
+        $files = scandir($this->getFullPath($dir));
+        $files = array_filter($files, function($file) use ($dir) {
+            return !str_starts_with($file, '.') &&
+                   is_file($this->getFullPath($dir, $file));
         });
-        
-        // Sort files by last modified time
-        $fullPaths = array_map(function($file) use ($currentDir) {
+
+        $fullPaths = array_map(function($file) use ($dir) {
             return [
                 'name' => $file,
-                'time' => filemtime($_ENV['UPLOAD_DIR'] . DIR_SEP . $currentDir . DIR_SEP . $file)
+                'time' => filemtime($this->getFullPath($dir, $file))
             ];
         }, array_values($files));
-        
-        usort($fullPaths, function($a, $b) {
-            return $b['time'] - $a['time'];
-        });
-        
-        $dirContent = array_column($fullPaths, 'name');
-        $reply = new \stdClass();
-        $reply->currentDir = $currentDir;
-        $reply->uploadDirs = $filelist;
-        $reply->dirContent = $currentDir !== '' ? $dirContent : []; // do not list root dir
+
+        usort($fullPaths, fn($a, $b) => $b['time'] - $a['time']);
+        return array_column($fullPaths, 'name');
+    }
+
+    public function listMedia(Request $request, Response $response, array $args): Response
+    {
+        $currentDir = $args['currentDir'] ?? '';
+        $directories = preg_grep('/^([^.])/', scandir($this->uploadDir));
+
+        if (empty($currentDir) && !empty($directories)) {
+            $lastDir = end($directories);
+            if (is_dir($this->getFullPath($lastDir))) {
+                $currentDir = $lastDir;
+            }
+        }
+
+        $reply = (object)[
+            'currentDir' => $currentDir,
+            'uploadDirs' => $directories,
+            'dirContent' => $currentDir ? $this->getFilesOrderedByDate($currentDir) : []
+        ];
 
         $response->getBody()->write(json_encode($reply));
         return $response;
     }
 
-    public function mediaInfo(Request $request, Response $response, $args)
+    public function mediaInfo(Request $request, Response $response): Response
     {
-        DevHelp::debugMsg('start media info');
-        $queryParams = $request->getQueryParams();
+        $params = $request->getQueryParams();
+        $targetFile = $this->getFullPath($params['filePath'], $params['fileName']);
 
-        $fileName = $queryParams['fileName'];
-        $filePath = $queryParams["filePath"];
-
-        $targetDir = $_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath;
-        $targetFile = $targetDir . DIR_SEP . $fileName;
-        $info = getimagesize($targetFile);
-
-        $reply = new \stdClass();
-        $reply->fileName = $fileName;
-        $reply->filePath = $filePath;
-        $reply->info = $info;
-        $reply->fileSize = filesize($targetFile);
+        $reply = (object)[
+            'fileName' => $params['fileName'],
+            'filePath' => $params['filePath'],
+            'info' => getimagesize($targetFile),
+            'fileSize' => filesize($targetFile)
+        ];
 
         $response->getBody()->write(json_encode($reply));
         return $response;
     }
 
-    public function deleteMedia(Request $request, Response $response, $args)
+    public function deleteMedia(Request $request, Response $response): Response
     {
-        $factory = $this->container->get('Objfactory');
-        $this->resource = $factory->makeResource();
+        if (!$this->resource) {
+            $factory = $this->container->get('Objfactory');
+            $this->resource = $factory->makeResource();
+        }
 
-        DevHelp::debugMsg('delete media');
-        $fileName = $_GET["fileName"];
-        $filePath = $_GET["filePath"];
+        $params = $request->getQueryParams();
+        $targetFile = $this->getFullPath($params['filePath'], $params['fileName']);
 
-        DevHelp::debugMsg('$filePath' . $filePath . ', $fileName' . $fileName);
-
-        $this->resource->removefile($_ENV['UPLOAD_DIR'] . DIR_SEP . $filePath . DIR_SEP . $fileName);
-        $message = 'File Removed: ' . $filePath . DIR_SEP . $fileName;
+        $this->resource->removefile($targetFile);
+        $message = "File Removed: {$params['filePath']}" . DIR_SEP . $params['fileName'];
         Logger::log($message);
 
-        $reply = new \stdClass();
-        $reply->pageMessage = $message;
-
-        $response->getBody()->write(json_encode($reply));
+        $response->getBody()->write(json_encode(['pageMessage' => $message]));
         return $response;
     }
 }
