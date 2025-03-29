@@ -51,6 +51,8 @@ const useAddForm = ({ onSuccess }: AddHookParams) => {
     if((elements.newLocationCoords.value !== '' ||
       elements.newLocationTitle.value !== '')
        && !confirm('Location data present?')) return;
+       
+    // take content from locationContent if content is empty
     if (elements.content.value === '' && elements.locationContent.value !== '') {
       try {
         const locations = JSON.parse(elements.locationContent.value);
@@ -64,6 +66,23 @@ const useAddForm = ({ onSuccess }: AddHookParams) => {
 
     setIsLoading(true);
     try {
+      // Validate location content
+      if (elements.locationContent.value) {
+        const locations = JSON.parse(elements.locationContent.value);
+        if (!Array.isArray(locations)) {
+          throw new Error('Locations must be an array');
+        }
+        
+        locations.forEach(loc => {
+          if (!loc.title || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') {
+            throw new Error('Invalid location format');
+          }
+          loc.title = loc.title.trim();
+        });
+        
+        elements.locationContent.value = JSON.stringify(locations);
+      }
+
       const entry = {
         content: elements.content.value,
         date: elements.dateInput.value,

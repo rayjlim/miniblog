@@ -46,6 +46,28 @@ const useEditForm = (entry: EntryType | null, onSuccess: (msg: string, entry: En
       elements.newLocationTitle.value !== '')
        && !confirm('Location data present?')) return;
 
+    // Validate location content
+    try {
+      if (elements.locationContent.value) {
+        const locations = JSON.parse(elements.locationContent.value);
+        if (!Array.isArray(locations)) {
+          throw new Error('Locations must be an array');
+        }
+
+        locations.forEach(loc => {
+          if (!loc.title || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') {
+            throw new Error('Invalid location format');
+          }
+          loc.title = loc.title.trim();
+        });
+
+        elements.locationContent.value = JSON.stringify(locations);
+      }
+    } catch (error) {
+      toast.error('Invalid location data format');
+      return;
+    }
+
     const newEntry = {
       ...entry,
       content: elements.content.value,
