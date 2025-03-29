@@ -23,22 +23,53 @@ const LocationForm = ({ content = "" }: LocationFormProps) => {
   } = useLocationForm();
 
   useEffect(() => {
-    if (content) {
-      try {
-        const cleanContent = content.startsWith('"')
-          ? content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '')
-          : content;
+    if (!content) return;
 
-        JSON.parse(cleanContent);
-        if (locationsContent.current) {
-          locationsContent.current.value = cleanContent;
-          populateLocations();
-        }
-      } catch (e) {
-        console.error('Invalid JSON content:', e);
+    try {
+      const cleanContent = content.startsWith('"')
+        ? content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '')
+        : content;
+
+      const parsedContent = JSON.parse(cleanContent);
+      if (!Array.isArray(parsedContent)) return;
+
+      if (locationsContent.current) {
+        locationsContent.current.value = cleanContent;
+        populateLocations();
       }
+    } catch (e) {
+      console.error('Invalid JSON content:', e);
     }
   }, [content]);
+
+  const LocationItem = ({ location }: { location: MarkerType }) => (
+    <div className="input-group mb-2" style={{
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      gap: '0.5rem'
+    }}>
+      <input
+        type="text"
+        className="form-control"
+        value={location.title}
+        onChange={(e) => updateLocation(location, 'title', e.target.value)}
+      />
+      <input
+        type="text"
+        className="form-control"
+        value={`${location.lat}, ${location.lng}`}
+        onChange={(e) => updateLocation(location, 'coordinates', e.target.value)}
+      />
+      <button
+        type="button"
+        className="btn btn-danger"
+        onClick={() => removeLocation(location)}
+      >
+        <i className="fa fa-trash" />
+      </button>
+    </div>
+  );
 
   return (
     <div className="location-form">
@@ -50,64 +81,34 @@ const LocationForm = ({ content = "" }: LocationFormProps) => {
         rows={2}
         defaultValue={content}
         onChange={handleContentChange}
-        // style={{
-        //   'display': isValid ? 'none' : 'block',
-        // }}
       />
 
-      <div className="d-flex gap-2 mb-1">
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={populateLocations}
-          disabled={!isValid}
-          style={{
-            'display': isValid ? 'none' : 'block',
-          }}
-        >
-          Input to locations
-        </button>
-        <button
-          type="button"
-          id="locToInputBtn"
-          className="btn btn-secondary"
-          style={{ display: 'none' }}
-          onClick={updateInputFromLocations}
-        >
-          Locations to input
-        </button>
-      </div>
+      <button
+        type="button"
+        className="btn btn-secondary mb-2"
+        onClick={populateLocations}
+        disabled={!isValid}
+        style={{ display: isValid ? 'none' : 'block' }}
+      >
+        Input to locations
+      </button>
+
+      <button
+        type="button"
+        id="locToInputBtn"
+        className="btn btn-secondary"
+        style={{ display: 'none' }}
+        onClick={updateInputFromLocations}
+      >
+        Locations to input
+      </button>
 
       <div className="locations-list mb-1">
-        {locations.map((location: MarkerType) => (
-          <div key={`${location.lat},${location.lng}`} className="input-group mb-2" style={{
-            display: 'flex',
-            flexDirection: 'row',
-            width: '100%',
-            gap: '0.5rem'
-          }}>
-
-            <input
-              type="text"
-              className="form-control"
-              value={location.title}
-              onChange={(e) => updateLocation(location, 'title', e.target.value)}
-            />
-            <input
-              type="text"
-              className="form-control"
-              value={`${location.lat}, ${location.lng}`}
-              onChange={(e) => updateLocation(location, 'coordinates', e.target.value)}
-            />
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={() => removeLocation(location)}
-            >
-              <i className="fa fa-trash" />
-            </button>
-
-          </div>
+        {locations.map((location) => (
+          <LocationItem 
+            key={`${location.lat},${location.lng}`} 
+            location={location} 
+          />
         ))}
       </div>
 
@@ -115,14 +116,14 @@ const LocationForm = ({ content = "" }: LocationFormProps) => {
         <input
           type="text"
           name="newLocationTitle"
-          ref={newTitle as any}
+          ref={newTitle}
           className="form-control"
           placeholder="Title"
         />
         <input
           type="text"
           name="newLocationCoords"
-          ref={newCoords as any}
+          ref={newCoords}
           className="form-control"
           placeholder="URL or lat, lon"
         />
