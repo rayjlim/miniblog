@@ -3,6 +3,7 @@ import { FULL_DATE_FORMAT } from '../constants';
 import YearMonthSelector from './YearMonthSelector';
 import useSearchForm from '../hooks/useSearchForm';
 import { SearchParamsType } from '../Types';
+import { useCallback, useRef } from 'react';
 
 interface SearchFormProps {
   params: SearchParamsType;
@@ -19,7 +20,6 @@ const SearchForm = ({ params, setSearchParams }: SearchFormProps) => {
     searchFilter,
     setSearchFilter
   } = useSearchForm(params, setSearchParams);
-
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (searchText.current) {
@@ -38,6 +38,17 @@ const SearchForm = ({ params, setSearchParams }: SearchFormProps) => {
     changeDate(end, 'end');
   };
 
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  const debouncedSearch = useCallback((event: Event) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      return changeText(event as any);
+    }, 300);
+  }, [changeText]);
+
   return (
     <form className="search-form mb-1" onSubmit={changeText} style={{ overflow: 'visible' }}>
       <input
@@ -46,6 +57,7 @@ const SearchForm = ({ params, setSearchParams }: SearchFormProps) => {
         className="form-control"
         ref={searchText}
         placeholder="Search term"
+        onChange={(e) => debouncedSearch(e.nativeEvent)}
       />
       <div className="d-flex gap-3">
         <button
