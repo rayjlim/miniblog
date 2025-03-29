@@ -72,12 +72,35 @@ class MediaHandler
     {
         $params = $request->getQueryParams();
         $targetFile = $this->getFullPath($params['filePath'], $params['fileName']);
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+        // Extract EXIF data
+        $exifData = [];
+        if ($imageFileType !== 'png' && $imageFileType !== 'gif') {
+            $exif = @exif_read_data($targetFile);
+            if ($exif !== false) {
+                $exifData = [
+                    'datetime' => $exif['DateTimeOriginal'] ?? $exif['DateTime'] ?? '',
+                    'make' => $exif['Make'] ?? '',
+                    'model' => $exif['Model'] ?? '',
+                    'exposure' => $exif['ExposureTime'] ?? '',
+                    'aperture' => $exif['COMPUTED']['ApertureFNumber'] ?? '',
+                    'iso' => $exif['ISOSpeedRatings'] ?? '',
+                    'focal_length' => $exif['FocalLength'] ?? '',
+                    'gps' => [
+                        'latitude' => $this->getGPSCoordinate($exif, 'GPSLatitude', 'GPSLatitudeRef'),
+                        'longitude' => $this->getGPSCoordinate($exif, 'GPSLongitude', 'GPSLongitudeRef')
+                    ]
+                ];
+            }
+        }
 
         $reply = (object)[
             'fileName' => $params['fileName'],
             'filePath' => $params['filePath'],
             'info' => getimagesize($targetFile),
-            'fileSize' => filesize($targetFile)
+            'fileSize' => filesize($targetFile),
+            'exif' => $exifData
         ];
 
         $response->getBody()->write(json_encode($reply));
@@ -100,5 +123,43 @@ class MediaHandler
 
         $response->getBody()->write(json_encode(['pageMessage' => $message]));
         return $response;
+    }
+
+    private function getGPSCoordinate($exif, $coord, $ref)
+    {
+        if (!isset($exif[$coord]) || !isset($exif[$ref])) {
+            return null;
+        }
+
+        $degrees = $this->convertGPSToDecimal($exif[$coord]);
+        $ref = $exif[$ref];
+
+        if ($ref == 'S' || $ref == 'W') {
+            $degrees = -$degrees;
+        }
+
+        return $degrees;
+    }
+
+    private function convertGPSToDecimal($coordParts)
+    {
+        if (!is_array($coordParts)) {
+            return 0;
+        }
+
+        $degrees = count($coordParts) > 0 ? $this->convertToDecimal($coordParts[0]) : 0;
+        $minutes = count($coordParts) > 1 ? $this->convertToDecimal($coordParts[1]) : 0;
+        $seconds = count($coordParts) > 2 ? $this->convertToDecimal($coordParts[2]) : 0;
+
+        return $degrees + ($minutes / 60) + ($seconds / 3600);
+    }
+
+    private function convertToDecimal($ratio)
+    {
+        if (strpos($ratio, '/') !== false) {
+            list($num, $den) = explode('/', $ratio);
+            return $den == 0 ? 0 : ($num / $den);
+        }
+        return floatval($ratio);
     }
 }

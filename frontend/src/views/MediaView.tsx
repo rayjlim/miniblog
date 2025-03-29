@@ -22,7 +22,7 @@ const MediaView = () => {
 
   const footerLinks = {
     upload: true,
-    media: false,
+    media: true,
     logs: false,
     oneday: false
   };

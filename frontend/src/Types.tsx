@@ -25,6 +25,9 @@ interface MediaType {
   filesize: number;
   prepend: string;
   imgUrl: string;
+  exif?: {
+    gps?: { latitude?: number, longitude?: number }
+  };
 }
 
 // Search related types

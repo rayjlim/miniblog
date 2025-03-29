@@ -4,9 +4,13 @@ import { MarkerType } from '../Types';
 
 interface LocationFormProps {
   content?: string;
+  initialLocation?: {
+    title: string;
+    coord: string;
+  };
 }
 
-const LocationForm = ({ content = "" }: LocationFormProps) => {
+const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
   const {
     locationsContent,
     newTitle,
@@ -23,24 +27,34 @@ const LocationForm = ({ content = "" }: LocationFormProps) => {
   } = useLocationForm();
 
   useEffect(() => {
-    if (!content) return;
+    if (!content && !initialLocation) return;
 
     try {
-      const cleanContent = content.startsWith('"')
-        ? content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '')
-        : content;
+      let locations = [];
+      if (content) {
+        const cleanContent = content.startsWith('"')
+          ? content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '')
+          : content;
+        locations = JSON.parse(cleanContent);
+      }
 
-      const parsedContent = JSON.parse(cleanContent);
-      if (!Array.isArray(parsedContent)) return;
+      if (initialLocation) {
+        const [lat, lng] = initialLocation.coord.split(',').map(coord => parseFloat(coord.trim()));
+        locations.push({
+          title: initialLocation.title,
+          lat,
+          lng
+        });
+      }
 
       if (locationsContent.current) {
-        locationsContent.current.value = cleanContent;
+        locationsContent.current.value = JSON.stringify(locations);
         populateLocations();
       }
     } catch (e) {
-      console.error('Invalid JSON content:', e);
+      console.error('Invalid JSON content or coordinates:', e);
     }
-  }, [content]);
+  }, [content, initialLocation]);
 
   const LocationItem = ({ location }: { location: MarkerType }) => (
     <div className="input-group mb-2" style={{

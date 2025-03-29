@@ -14,7 +14,7 @@ const useMedia = () => {
     return response.json();
   }, []);
 
-  const createMediaObject = useCallback((fileName: string, filePath: string, fileSize = 0) => {
+  const createMediaObject = useCallback((fileName: string, filePath: string, fileSize = 0, exif: object) => {
     const random = Math.random();
     return {
       fileName,
@@ -22,17 +22,20 @@ const useMedia = () => {
       filesize: fileSize,
       prepend: `![](../uploads/${filePath}/${fileName}?)`,
       imgUrl: `${UPLOAD_ROOT}/${filePath}/${fileName}?${random}`,
+      exif
     };
   }, [UPLOAD_ROOT]);
 
   useEffect(() => {
     const initializeMedia = async () => {
+      console.log('useMedia useEffect');
       const queryParams = new URLSearchParams(window.location.search);
       const fileName = queryParams.get('fileName');
       const filePath = queryParams.get('filePath');
 
       if (fileName && filePath) {
-        setMedia(createMediaObject(fileName, filePath));
+        console.log('useMedia useEffect selectMedia');
+        selectMedia(filePath, fileName);
       }
     };
 
@@ -48,7 +51,7 @@ const useMedia = () => {
     try {
       const url = `${REST_ENDPOINT}/mediainfo/?filePath=${filePath}&fileName=${fileName}`;
       const fileInfo = await xhrCall(url);
-      setMedia(createMediaObject(fileName, filePath, fileInfo.fileSize));
+      setMedia(createMediaObject(fileName, filePath, fileInfo.fileSize, fileInfo.exif));
     } catch (error) {
       console.error('Error selecting media:', error);
       setMedia(null);

@@ -25,22 +25,22 @@ const MediaSelect = ({ media, onClose }: MediaSelectProps) => {
     <>
       <p className="lead">Prepare the image for use</p>
       <div className="grid-3mw">
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={() => rotate(-90)}
           className="btn btn-secondary"
         >
           Left
         </button>
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={resize}
           className="btn btn-primary"
         >
           Resize
         </button>
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={() => rotate(90)}
           className="btn btn-secondary"
         >
@@ -52,11 +52,12 @@ const MediaSelect = ({ media, onClose }: MediaSelectProps) => {
         {mediaSelect.imgUrl}
         <Clipper media={mediaSelect} />
         <FileSizeIndicator size={mediaSelect.filesize} />
+        {mediaSelect.exif && `${mediaSelect.exif?.gps?.latitude}, ${mediaSelect.exif?.gps?.longitude}`}
         <div className="preview-img-container">
-          <img 
-            src={mediaSelect.imgUrl} 
-            alt="Preview" 
-            className="preview" 
+          <img
+            src={mediaSelect.imgUrl}
+            alt="Preview"
+            className="preview"
           />
         </div>
       </section>
@@ -65,6 +66,10 @@ const MediaSelect = ({ media, onClose }: MediaSelectProps) => {
       <AddForm
         date={format(new Date(), FULL_DATE_FORMAT)}
         content={mediaSelect.prepend}
+        location={mediaSelect.exif?.gps?.latitude && mediaSelect.exif?.gps?.longitude ? {
+          title: 'Photo Location',
+          coord: `${mediaSelect.exif.gps.latitude}, ${mediaSelect.exif.gps.longitude}`
+        } : undefined}
         onSuccess={onClose}
       />
     </>

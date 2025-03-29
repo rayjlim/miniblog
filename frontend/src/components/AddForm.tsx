@@ -6,10 +6,14 @@ import { EntryType } from '../Types';
 interface AddFormProps {
   content: string;
   date: string;
+  location?: {
+    title: string;
+    coord: string;
+  };
   onSuccess: (msg: string, entry: EntryType) => void;
 }
 
-const AddForm = ({ content, date, onSuccess }: AddFormProps) => {
+const AddForm = ({ content, date, location, onSuccess }: AddFormProps) => {
   const {
     formRef,
     handleAdd,
@@ -94,7 +98,7 @@ const AddForm = ({ content, date, onSuccess }: AddFormProps) => {
           </button>
         </div>
 
-        <LocationForm />
+        <LocationForm initialLocation={location} />
       </form>
 
       <div className="markdown-preview mt-3 p-3 border rounded">
