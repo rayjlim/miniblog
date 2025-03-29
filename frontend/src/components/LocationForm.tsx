@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import useLocationForm from '../hooks/useLocationForm';
 import { MarkerType } from '../Types';
 
@@ -5,7 +6,7 @@ interface LocationFormProps {
   content?: string;
 }
 
-const LocationForm = ({ content="" }: LocationFormProps) => {
+const LocationForm = ({ content = "" }: LocationFormProps) => {
   const {
     locationsContent,
     newTitle,
@@ -15,11 +16,29 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
     createNewLocation,
     updateInputFromLocations,
     getCoordinatesByBrowser,
+    isValid,
+    handleContentChange,
+    removeLocation,
+    updateLocation,
   } = useLocationForm();
 
-  if (typeof content === 'string' && content.startsWith('"')) {
-    content = content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '');
-  }
+  useEffect(() => {
+    if (content) {
+      try {
+        const cleanContent = content.startsWith('"')
+          ? content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '')
+          : content;
+
+        JSON.parse(cleanContent);
+        if (locationsContent.current) {
+          locationsContent.current.value = cleanContent;
+          populateLocations();
+        }
+      } catch (e) {
+        console.error('Invalid JSON content:', e);
+      }
+    }
+  }, [content]);
 
   return (
     <div className="location-form">
@@ -30,6 +49,10 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
         placeholder="locations"
         rows={2}
         defaultValue={content}
+        onChange={handleContentChange}
+        // style={{
+        //   'display': isValid ? 'none' : 'block',
+        // }}
       />
 
       <div className="d-flex gap-2 mb-1">
@@ -37,6 +60,10 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
           type="button"
           className="btn btn-secondary"
           onClick={populateLocations}
+          disabled={!isValid}
+          style={{
+            'display': isValid ? 'none' : 'block',
+          }}
         >
           Input to locations
         </button>
@@ -53,8 +80,33 @@ const LocationForm = ({ content="" }: LocationFormProps) => {
 
       <div className="locations-list mb-1">
         {locations.map((location: MarkerType) => (
-          <div key={`${location.lat},${location.lng}`} className="location-item">
-            {location.title}, {location.lat}, {location.lng}
+          <div key={`${location.lat},${location.lng}`} className="input-group mb-2" style={{
+            display: 'flex',
+            flexDirection: 'row',
+            width: '100%',
+            gap: '0.5rem'
+          }}>
+
+            <input
+              type="text"
+              className="form-control"
+              value={location.title}
+              onChange={(e) => updateLocation(location, 'title', e.target.value)}
+            />
+            <input
+              type="text"
+              className="form-control"
+              value={`${location.lat}, ${location.lng}`}
+              onChange={(e) => updateLocation(location, 'coordinates', e.target.value)}
+            />
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => removeLocation(location)}
+            >
+              <i className="fa fa-trash" />
+            </button>
+
           </div>
         ))}
       </div>

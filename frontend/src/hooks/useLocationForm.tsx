@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import parseJsonArray from '../utils/parseJsonArray';
 
 import { MarkerType } from '../Types';
@@ -13,6 +13,7 @@ const useLocationForm = () => {
   const newTitle = useRef<HTMLInputElement>(null);
   const newCoords = useRef<HTMLInputElement>(null);
   const [locations, setLocations] = useState<MarkerType[]>([]);
+  const [isValid, setIsValid] = useState(false);
 
   const populateLocations = () => {
     const parsedLocations = parseJsonArray(locationsContent?.current?.value || '');
@@ -79,6 +80,7 @@ const useLocationForm = () => {
 
     setTimeout(() => {
       document.getElementById('locToInputBtn')?.click();
+      setIsValid(validateContent());
     }, 10);
   };
 
@@ -104,16 +106,74 @@ const useLocationForm = () => {
     );
   };
 
-  return {
-    locationsContent,
-    newTitle,
-    newCoords,
-    populateLocations,
-    locations,
-    createNewLocation,
-    updateInputFromLocations,
-    getCoordinatesByBrowser
+  const validateContent = useCallback(() => {
+    try {
+      const currentContent = locationsContent.current?.value || '';
+      const parsed = JSON.parse(currentContent);
+      return Array.isArray(parsed) && parsed.every(item =>
+        typeof item === 'object' &&
+        'title' in item &&
+        'lat' in item &&
+        'lng' in item
+      );
+    } catch {
+      return false;
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsValid(validateContent());
+  }, [validateContent]);
+
+  const handleContentChange = () => {
+    setIsValid(validateContent());
   };
+
+  const removeLocation = (locationToRemove: MarkerType) => {
+      const newLocations = locations.filter(
+        loc => loc.lat !== locationToRemove.lat || loc.lng !== locationToRemove.lng
+      );
+      setLocations(newLocations);
+
+      setTimeout(() => {
+        document.getElementById('locToInputBtn')?.click();
+        setIsValid(validateContent());
+      }, 10);
+    };
+
+    const updateLocation = (location: MarkerType, field: 'title' | 'coordinates', value: string) => {
+        const updatedLocations = locations.map(loc => {
+          if (loc.lat === location.lat && loc.lng === location.lng) {
+            if (field === 'title') {
+              return { ...loc, title: value };
+            } else {
+              const [lat, lng] = value.split(',').map(n => parseFloat(n.trim()));
+              return { ...loc, lat, lng };
+            }
+          }
+          return loc;
+        });
+        setLocations(updatedLocations);
+        setTimeout(() => {
+          document.getElementById('locToInputBtn')?.click();
+          setIsValid(validateContent());
+        }, 10);
+      };
+
+      return {
+        locationsContent,
+        newTitle,
+        newCoords,
+        populateLocations,
+        locations,
+        createNewLocation,
+        updateInputFromLocations,
+        getCoordinatesByBrowser,
+        isValid,
+        handleContentChange,
+        removeLocation,
+        updateLocation,
+      };
 };
 
 export default useLocationForm;
