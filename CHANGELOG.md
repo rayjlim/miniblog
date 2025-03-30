@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.41.0](https://github.com/rayjlim/miniblog/compare/v2.40.0...v2.41.0) (2025-03-30)
+
+
+### Features
+
+* [#291](https://github.com/rayjlim/miniblog/issues/291) add home location to .env files ([7282b4e](https://github.com/rayjlim/miniblog/commit/7282b4e9427a1c94126f30c9bbab177cfb3e7e8a))
+* [#291](https://github.com/rayjlim/miniblog/issues/291) add house location marker ([6e35f22](https://github.com/rayjlim/miniblog/commit/6e35f2204e4a644c89c283115964bf9d794848d5))
+
+
+### Bug Fixes
+
+* css clean up ([5d9539b](https://github.com/rayjlim/miniblog/commit/5d9539b50c325c0943d97fd8364f5ee2cab504e6))
+
 ## [2.40.0](https://github.com/rayjlim/miniblog/compare/v2.39.0...v2.40.0) (2025-03-29)
 
 
