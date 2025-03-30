@@ -121,7 +121,7 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
         </div>
       </form>
 
-      <div className="markdownDisplay preview dashBorder mt-3">
+      <div className="markdown-content preview dashBorder mt-3">
         <MarkdownDisplay source={markdownContent} />
       </div>
     </div>

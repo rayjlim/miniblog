@@ -36,7 +36,7 @@ const SearchRow = ({ searchText, entry, showEditForm }:
           <i className="fa fa-calendar-check icon-one-day" title="One Day" />
         </RouterNavLink>
       </div>
-      <div className="markdownDisplay">
+      <div className="markdown-content">
         <MarkdownDisplay source={content} />
       </div>
     </article>

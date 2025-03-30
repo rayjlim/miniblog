@@ -45,12 +45,12 @@ code {
   }
 }
 
-.entriesList {
+.entries-list {
   text-align: left;
   padding-left: 0.5rem;
   padding-bottom: 1em;
 }
-.entriesList> article {
+.entries-list > article {
   list-style-type: none;
 }
 
@@ -66,39 +66,39 @@ code {
   cursor: pointer;
 }
 
-.markdownDisplay {
+.markdown-content {
   text-align: left;
   padding: 0 .25em .25em .25em;
 }
 
-.markdownDisplay h1,
-.markdownDisplay h2,
-.markdownDisplay h3,
-.markdownDisplay h4 {
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
   margin-bottom: 0;
 }
 
-.markdownDisplay h1 { font-size: 1.6em; }
-.markdownDisplay h2 { font-size: 1.4em; }
-.markdownDisplay h3 { font-size: 1.2em; }
-.markdownDisplay h4 { font-size: 1.1em; }
+.markdown-content h1 { font-size: 1.6em; }
+.markdown-content h2 { font-size: 1.4em; }
+.markdown-content h3 { font-size: 1.2em; }
+.markdown-content h4 { font-size: 1.1em; }
 
-.markdownDisplay p,
-.markdownDisplay ul,
-.markdownDisplay ol {
+.markdown-content p,
+.markdown-content ul,
+.markdown-content ol {
   margin-bottom: 0.1rem;
 }
 
-.markdownDisplay ul,
-.markdownDisplay ol {
+.markdown-content ul,
+.markdown-content ol {
   padding-left: 1.25em;
 }
 
-.markdownDisplay ul {
+.markdown-content ul {
   list-style-type: disc;
 }
 
-.markdownDisplay pre {
+.markdown-content pre {
   box-sizing: border-box;
   width: 100%;
   margin: 0;
@@ -111,7 +111,7 @@ code {
   border: 1px solid #777;
   color: #000;
 }
-.markdownDisplay blockquote {
+.markdown-content blockquote {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
   margin: 1em 0.25em;
@@ -156,7 +156,7 @@ button:nth-of-type(3) {
     padding: 0 0 0 0.5em;
   }
 
-  .entriesList {
+  .entries-list {
     padding-left: 0;
     padding-bottom: 4em;
   }

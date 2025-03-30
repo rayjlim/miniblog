@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, Marker, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import L, { LatLngExpression } from 'leaflet';
 import { MarkerType } from '../Types';
+import { HOME_LOCATION } from '../constants';
 
 const FitBounds = ({ coordinates }: { coordinates: LatLngExpression[] }) => {
   const map = useMap();
@@ -11,22 +12,28 @@ const FitBounds = ({ coordinates }: { coordinates: LatLngExpression[] }) => {
       const bounds = L.latLngBounds(coordinates);
       map.fitBounds(bounds);
     }
-    coordinates.forEach((coord) => {
-      console.log(coord);
-      // const popup = L.popup()
-      //   .setLatLng(coord)
-      //   .setContent(coord.title);
-      // popup.openOn(map);
-    });
+    // coordinates.forEach((coord) => {
+    //   console.log(coord);
+    // });
   }, [map, coordinates]);
 
   return null;
 };
 
-const MapDisplay = ({ locations }: { locations: MarkerType[] }) => {
-  console.log('locations', locations);
+const houseIcon = L.divIcon({
+  html: '🏠',
+  className: 'house-marker',
+  iconSize: [25, 25],
+  iconAnchor: [12, 12]
+});
 
-  // import { QueryClient } from 'react-query';
+interface MapDisplayProps {
+  locations: MarkerType[];
+}
+
+const MapDisplay = ({ locations }: MapDisplayProps) => {
+  const homeLocation = HOME_LOCATION ? JSON.parse(HOME_LOCATION) : null;
+  const [showHome, setShowHome] = useState(true);
 
   if (!locations?.length) return <div>No Map Points found</div>;
 
@@ -41,19 +48,30 @@ const MapDisplay = ({ locations }: { locations: MarkerType[] }) => {
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {homeLocation && showHome && (
+              <Marker position={homeLocation as LatLngExpression} icon={houseIcon}>
+                <Tooltip permanent={false} interactive>Home</Tooltip>
+              </Marker>
+            )}
             {locations.map((coord, index) => (
               <Marker key={index} position={coord}>
-                <Tooltip permanent>{coord.title}</Tooltip>
+                <Tooltip>{coord.title}</Tooltip>
               </Marker>
-             ))}
-
-            <FitBounds coordinates={locations} />
+            ))}
+            <FitBounds coordinates={(homeLocation && showHome ? [...locations, homeLocation] : locations) as LatLngExpression[]} />
           </MapContainer>
+        </div>
+        <div className="map-controls mb-2">
+          <button
+            className="btn btn-sm"
+            onClick={() => setShowHome(!showHome)}
+            title="Toggle home location"
+          >
+            {showHome ? '🏠' : '⌂'}
+          </button>
         </div>
       </>
     )
-
-
   );
 };
 

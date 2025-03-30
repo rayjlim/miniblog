@@ -15,17 +15,17 @@ interface EntryListProps {
 const EntryList = ({ date, isOneDay, onShowEdit }: EntryListProps, ref: ForwardedRef<HTMLElement>) => {
   const { isLoading, error, isEditing, entries, showEdit } = useEntryList(date, isOneDay, onShowEdit, ref);
 
-  if (isLoading) return <div className="alert alert-info">Loading posts...</div>;
-  if (error) return <div className="alert alert-danger">An error occurred: {(error as RequestError).message}</div>;
+  if (isLoading) return <div className="notice notice-info">Loading posts...</div>;
+  if (error) return <div className="notice notice-error">An error occurred: {(error as RequestError).message}</div>;
 
   return (
-    <section className={`entriesList ${isEditing ? 'noshow' : 'container'}`}>
+    <section className={`entries-list ${isEditing ? 'hidden' : ''}`}>
       {entries?.map((entry: EntryType) => (
         <article key={entry.id} id={`li${entry.id}`} className="entry-item">
           <button
             id={`edit${entry.id}`}
             onClick={() => showEdit(entry)}
-            className="plainLink"
+            className="link-button"
             type="button"
           >
             {format(
@@ -34,12 +34,12 @@ const EntryList = ({ date, isOneDay, onShowEdit }: EntryListProps, ref: Forwarde
             )}
           </button>
 
-          <div className="markdownDisplay mb-1">
+          <div className="markdown-content mb-1">
             <MarkdownDisplay source={entry.content} />
           </div>
 
           {isOneDay && entry.locations && entry.locations.length > 0 && (
-            <MapDisplay locations={entry?.locations as any} />
+            <MapDisplay locations={entry?.locations as any}/>
           )}
         </article>
       ))}
