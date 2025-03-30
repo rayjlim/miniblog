@@ -11,7 +11,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
 }
-
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
