@@ -101,7 +101,7 @@ const AddForm = ({ content, date, location, onSuccess }: AddFormProps) => {
         <LocationForm initialLocation={location} />
       </form>
 
-      <div className="markdown-content mt-3 p-3 border rounded">
+      <div className="markdown-content preview dashBorder mt-3">
         <MarkdownDisplay source={markdownContent} />
       </div>
     </div>
