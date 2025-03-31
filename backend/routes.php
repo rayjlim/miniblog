@@ -14,7 +14,6 @@ use App\controllers\MediaHandler;
 use App\controllers\UploadHandler;
 use App\controllers\LogHandler;
 use App\helpers\AuthMiddleware;
-use App\core\Logger;
 
 return function (App $app) {
 
@@ -26,6 +25,9 @@ return function (App $app) {
       return $response;
     }
   );
+  $app->group('', function (RouteCollectorProxy $group) {
+    $group->any('/test/locations', EntryHandler::class . ":topLocations");
+  });
 
   $app->group('', function (RouteCollectorProxy $group) {
     $group->any('/security', function (Request $request, Response $response, $args) {
@@ -44,6 +46,7 @@ return function (App $app) {
     $group->get('/media/', MediaHandler::class . ":listMedia");;
     $group->get('/media/{currentDir}', MediaHandler::class . ":listMedia");
     $group->delete('/media/', MediaHandler::class . ":deleteMedia");
+    $group->get('/mediainfo/', MediaHandler::class . ":mediaInfo");
 
     $group->post('/uploadImage/', UploadHandler::class . ":upload");
     $group->get('/uploadRotate/', UploadHandler::class . ":rotate");

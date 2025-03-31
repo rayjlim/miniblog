@@ -6,9 +6,13 @@ type LinksPropType = {
   search: boolean
 }
 
-const Header = ({ links }: { links?: LinksPropType }) => {
+const Header = ({ links = {
+  search: true,
+  sameday: true,
+  oneday: false
+} }: { links?: LinksPropType }) => {
   return (
-    <nav className="navbar navbar-expand-sm navbar-light bg-light" id="top">
+    <nav className="navbar" id="top">
       {links?.search && <RouterNavLink to="/search" className="spaced-link">
         <i className="fa fa-search" />
         <span>{' Search'}</span>
@@ -30,11 +34,3 @@ const Header = ({ links }: { links?: LinksPropType }) => {
 };
 
 export default Header;
-
-Header.defaultProps = {
-  links: {
-    search: true,
-    sameday: true,
-    oneday: false
-  }
-};

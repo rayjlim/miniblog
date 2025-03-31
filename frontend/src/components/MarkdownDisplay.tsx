@@ -2,7 +2,8 @@
 //@ts-ignore
 import { marked } from 'marked';
 import { useSetting } from './SettingContext';
-
+import { SettingsType } from '../Types';
+import './MarkdownDisplay.css';
 const renderer = {
 
   code(code: string, escaped = true): string {

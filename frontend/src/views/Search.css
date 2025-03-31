@@ -34,3 +34,12 @@
 .noshow {
   display: none;
 }
+
+@media only screen and (max-width: 375px) {
+  #search-title {
+    margin-top: 0.5rem;
+  }
+  section {
+    margin: 0 1rem 0.5rem 0.5rem;
+  }
+}

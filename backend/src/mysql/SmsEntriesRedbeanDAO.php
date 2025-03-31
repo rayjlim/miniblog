@@ -100,6 +100,26 @@ class SmsEntriesRedbeanDAO implements SmsEntriesDAO
         }, $posts);
     }
 
+    /**
+     * Get Locations list of all entries
+     *
+     * @param  none
+     * @return array locations
+     */
+    public function getLocations(): array
+    {
+        $posts = R::getAll('SELECT locations, date '
+           . 'FROM sms_entries '
+           . 'WHERE user_id = 1 '
+           . 'ORDER BY locations DESC');
+        return array_map(function (array $row): array {
+            return [
+                'locations' => $row["locations"],
+                'date' => $row["date"]
+            ];
+        }, $posts);
+    }
+
     // ;
     public function listParamsToSqlParam(ListParams $listParams): string
     {

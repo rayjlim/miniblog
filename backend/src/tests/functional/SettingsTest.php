@@ -24,6 +24,7 @@ class SettingTest extends TestCase
       'QUESTION_API' => '',
 
       'TRACKS_API' => '',
+      'TRACKS_URL' => '',
       'MOVIES_API' => '',
       'MOVIES_POSTERS' => '',
 

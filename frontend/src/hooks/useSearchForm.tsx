@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { format, subMonths } from 'date-fns';
+import { SearchParamsType } from '../Types';
 
 import {
   DEFAULT_SEARCH_MONTHS_BACK,
@@ -32,7 +33,8 @@ const useSearchForm = (params: SearchParamsType, setSearchParams: (params: Searc
   }
 
   // const debouncedSearch = debounce(setParams, DEBOUNCE_TIME);
-  const changeText = () => {
+  const changeText = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const textInput = searchText?.current || { value: '' };
     setSearchParams({ ...params, text: textInput.value });
   }

@@ -5,6 +5,7 @@ import {
   useImperativeHandle
 } from 'react';
 import { useQuery } from "react-query";
+import { EntryType } from '../Types';
 
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
@@ -33,10 +34,16 @@ const useEntryList = (date: string, isOneDay: boolean, onShowEdit:
   const internalState = useRef();
   const scrollBackEntryId = useRef(0);
 
-  const entries: EntryType[] = data?.entries.map((entry: EntryType) => ({
-    ...entry, locations: entry.locations !== ''
-      ? JSON.parse(entry?.locations as string) : ''
-  }));
+  const entries: EntryType[] = data?.entries.map((entry: EntryType) => {
+    try {
+      const locations = entry.locations !== '' ? JSON.parse(entry?.locations as string) : '';
+      return { ...entry, locations };
+    } catch (e) {
+
+      console.error(`Failed to parse locations for entry ${entry.id}:`, e);
+      return { ...entry, locations: '' };
+    }
+  });
 
   const showEdit = (entry: EntryType) => {
     setIsEditing(true);

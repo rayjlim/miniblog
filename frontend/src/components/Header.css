@@ -1,3 +1,27 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  color: #fff;
+  padding: 1rem;
+  margin: 0 0 0 0;
+  height: 1.5rem;
+}
+
+.navbar > * {
+  margin: 0 0 0 0;
+}
+
+@media only screen and (max-width: 375px) {
+  .navbar > a > span {
+    display: none;
+  }
+  .navbar > button > span {
+    display: none;
+  }
+}
+
 .spaced-link > span {
   margin-left: .5rem;
 }

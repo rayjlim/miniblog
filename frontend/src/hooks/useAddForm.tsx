@@ -1,101 +1,139 @@
 import { useState, useRef, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { REST_ENDPOINT } from '../constants';
-
+import { EntryType } from '../Types';
 import createHeaders from '../utils/createHeaders';
 
-const useFetch = (): any => {
-  const [newId, setId] = useState<number | null>(null);
-  const [formEntry, setNewEntry] = useState<EntryType | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (formEntry && formEntry?.content !== '') {
-      setIsLoading(true);
-      (async () => {
-        const requestHeaders = createHeaders();
-        try {
-
-          const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
-            method: 'POST',
-            body: JSON.stringify(formEntry),
-            mode: 'cors',
-            headers: requestHeaders,
-          });
-          const { id } = await response.json();
-          console.log('new id :>> ', id);
-          setId(id);
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-          alert(error);
-        }
-      })();
-    }
-  }, [formEntry]);
-  return [newId, setNewEntry, isLoading];
+interface AddHookParams {
+  onSuccess: (msg: string, entry: EntryType) => void;
 };
 
-const useAddForm = (onSuccess: (msg: string, entry: EntryType) => void) => {
-  const [formContent, setFormContent] = useState<string>();
+interface FormElements {
+  content: HTMLTextAreaElement;
+  dateInput: HTMLInputElement;
+  locationContent: HTMLTextAreaElement;
+  newLocationTitle: HTMLInputElement;
+  newLocationCoords: HTMLInputElement;
+}
+
+const useAddForm = ({ onSuccess }: AddHookParams) => {
+  const [markdownContent, setMarkdownContent] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const isMounted = useRef(false);
-  const [id, setNewEntry, isLoading] = useFetch();
 
-  const textareaInput = useRef<HTMLTextAreaElement>();
-  const dateInput = useRef<HTMLInputElement>();
-  const locationsRef = useRef<HTMLTextAreaElement>();
+  const getFormElements = (): FormElements | null => {
+    if (!formRef.current) return null;
 
-  function textChange() {
+    return {
+      content: formRef.current.querySelector('textarea[name="content"]') as HTMLTextAreaElement,
+      dateInput: formRef.current.querySelector('input[name="dateInput"]') as HTMLInputElement,
+      locationContent: formRef.current.querySelector('textarea[name="locationContent"]') as HTMLTextAreaElement,
+      newLocationTitle: formRef.current.querySelector('input[name="newLocationTitle"]') as HTMLInputElement,
+      newLocationCoords: formRef.current.querySelector('input[name="newLocationCoords"]') as HTMLInputElement,
+    };
+  };
+
+  const textChange = () => {
+    const elements = getFormElements();
+    if (!elements) return;
+
     const pattern = /@@([\w-]*)@@/g;
     const replacement = '<i class="fa fa-$1" /> ';
-    let refTextareaInput = textareaInput.current || { value: '' };
-    refTextareaInput.value = refTextareaInput.value.replace(pattern, replacement);
+    elements.content.value = elements.content.value.replace(pattern, replacement);
+    setMarkdownContent(elements.content.value);
+  };
 
-    setFormContent(refTextareaInput.value);
-  }
-
-  function handleAdd() {
-    console.log('handleAdd');
-    let newContent = (textareaInput as any)?.current.value.trim();
-    if (newContent === '' && (locationsRef as any)?.current.value){
-      newContent = JSON.parse((locationsRef as any)?.current.value)[0].title;
+  const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const elements = getFormElements();
+    if (!elements) return;
+    if((elements.newLocationCoords.value !== '' ||
+      elements.newLocationTitle.value !== '')
+       && !confirm('Location data present?')) return;
+       
+    // take content from locationContent if content is empty
+    if (elements.content.value === '' && elements.locationContent.value !== '') {
+      try {
+        const locations = JSON.parse(elements.locationContent.value);
+        if (locations[0]?.title) {
+          elements.content.value = locations[0].title;
+        }
+      } catch (error) {
+        console.error('Failed to parse locations:', error);
+      }
     }
-    console.log(newContent);
-    setNewEntry({
-      content: newContent,
-      date: (dateInput as any)?.current.value,
-      locations: (locationsRef as any)?.current.value,
-    });
-  }
 
-  function checkKeyPressed(e: any) {
-    // console.log(`AddForm: handle key presss ${e.key}`);
+    setIsLoading(true);
+    try {
+      // Validate location content
+      if (elements.locationContent.value) {
+        const locations = JSON.parse(elements.locationContent.value);
+        if (!Array.isArray(locations)) {
+          throw new Error('Locations must be an array');
+        }
+        
+        locations.forEach(loc => {
+          if (!loc.title || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') {
+            throw new Error('Invalid location format');
+          }
+          loc.title = loc.title.trim();
+        });
+        
+        elements.locationContent.value = JSON.stringify(locations);
+      }
+
+      const entry = {
+        content: elements.content.value,
+        date: elements.dateInput.value,
+        locations: elements.locationContent.value,
+      };
+
+      const response = await fetch(`${REST_ENDPOINT}/api/posts/`, {
+        method: 'POST',
+        body: JSON.stringify(entry),
+        mode: 'cors',
+        headers: createHeaders(),
+      });
+
+      const { id } = await response.json();
+
+      onSuccess(`Add Done : New Id: ${id}`, {
+        id,
+        content: elements.content.value.trim(),
+        date: elements.dateInput.value,
+        locations: elements.locationContent.value,
+      });
+    } catch (error) {
+      console.error(error);
+      toast((error as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const checkKeyPressed = (e: KeyboardEvent) => {
     if (e.altKey && e.key === 's') {
       document.getElementById('saveBtn')?.click();
     } else if (e.key === 'Escape') {
       document.getElementById('cancelBtn')?.click();
     }
-  }
+  };
 
   useEffect(() => {
-
-    if (id !== null) {
-      // This makes it so this is not called on the first render
-      // but when the Id is set
-      onSuccess(`Add Done : New Id: ${id}`, {
-        id,
-        content: formContent?.trim() || '',
-        date: (dateInput as any)?.current.value || '',
-      });
-    } else {
-      isMounted.current = true;
-
-      textareaInput.current?.focus();
-      document.addEventListener('keydown', checkKeyPressed);
-      return () => document.removeEventListener('keydown', checkKeyPressed);
+    const elements = getFormElements();
+    if (elements?.content) {
+      elements.content.focus();
     }
-  }, [id]);
 
-  return { handleAdd, textChange, formContent, dateInput, textareaInput, locationsRef, isLoading };
+    if (!isMounted.current) {
+      isMounted.current = true;
+      document.addEventListener('keydown', checkKeyPressed as any);
+      return () => document.removeEventListener('keydown', checkKeyPressed as any);
+    }
+  }, []);
+
+  return { formRef, handleAdd, textChange, markdownContent, isLoading };
 };
 
 export default useAddForm;

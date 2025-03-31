@@ -2,6 +2,159 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.41.1](https://github.com/rayjlim/miniblog/compare/v2.41.0...v2.41.1) (2025-03-31)
+
+
+### Bug Fixes
+
+* move markdown display styles to own css file ([f8b2274](https://github.com/rayjlim/miniblog/commit/f8b22745ea0c71d5aab653c32a2d1db7ca0fa6d1))
+
+## [2.41.0](https://github.com/rayjlim/miniblog/compare/v2.40.0...v2.41.0) (2025-03-30)
+
+
+### Features
+
+* [#291](https://github.com/rayjlim/miniblog/issues/291) add home location to .env files ([7282b4e](https://github.com/rayjlim/miniblog/commit/7282b4e9427a1c94126f30c9bbab177cfb3e7e8a))
+* [#291](https://github.com/rayjlim/miniblog/issues/291) add house location marker ([6e35f22](https://github.com/rayjlim/miniblog/commit/6e35f2204e4a644c89c283115964bf9d794848d5))
+
+
+### Bug Fixes
+
+* css clean up ([5d9539b](https://github.com/rayjlim/miniblog/commit/5d9539b50c325c0943d97fd8364f5ee2cab504e6))
+
+## [2.40.0](https://github.com/rayjlim/miniblog/compare/v2.39.0...v2.40.0) (2025-03-29)
+
+
+### Features
+
+* [#311](https://github.com/rayjlim/miniblog/issues/311) parse gps data from picture upload ([0e84de7](https://github.com/rayjlim/miniblog/commit/0e84de7675198db2b6e219174558f830cd26e9f3))
+
+
+### Bug Fixes
+
+* [#334](https://github.com/rayjlim/miniblog/issues/334) trim the location title and validate coords are numbers ([abe93e9](https://github.com/rayjlim/miniblog/commit/abe93e9bf4d35c5afa81b7e46c5a2a56989d1595))
+* [#70](https://github.com/rayjlim/miniblog/issues/70) font family improvement ([54f084c](https://github.com/rayjlim/miniblog/commit/54f084c5243303451ef870f814a2e162c32be8db))
+* css clean up ([3d670c2](https://github.com/rayjlim/miniblog/commit/3d670c25a5ccf3dd44d14d38c0014039591d21ab))
+* media list order by last modified date ([3ff00be](https://github.com/rayjlim/miniblog/commit/3ff00bea2ee05b21fa5176ee488f162958c77894))
+* searchform css clean up ([997fd02](https://github.com/rayjlim/miniblog/commit/997fd02f4b74dc856a0fefe794444df352e4e39b))
+
+## [2.39.0](https://github.com/rayjlim/miniblog/compare/v2.38.0...v2.39.0) (2025-03-29)
+
+
+### Features
+
+* [#318](https://github.com/rayjlim/miniblog/issues/318) debounce text search ([788b768](https://github.com/rayjlim/miniblog/commit/788b7681dd7f2aa9aabec1537984aa330f2ed0f2))
+
+
+### Bug Fixes
+
+* [#335](https://github.com/rayjlim/miniblog/issues/335) load image after upload; refactor useMedia ([641238c](https://github.com/rayjlim/miniblog/commit/641238c73a0fed2bfe11905a2b65a0f00babe501))
+* refactor and optimize media display files ([db52569](https://github.com/rayjlim/miniblog/commit/db52569d1a3418628d12a04aaea2b3728ff7f5d3))
+* update vitest ([e2153c6](https://github.com/rayjlim/miniblog/commit/e2153c6cc0dcea2dc54daa86c7ccdc32b8eab3dc))
+
+## [2.38.0](https://github.com/rayjlim/miniblog/compare/v2.37.1...v2.38.0) (2025-03-29)
+
+
+### Features
+
+* [#333](https://github.com/rayjlim/miniblog/issues/333) input fields for editing locations ([fa0f1db](https://github.com/rayjlim/miniblog/commit/fa0f1dbe0b8d598a81145e3fe04491fb79fe9780))
+* [#72](https://github.com/rayjlim/miniblog/issues/72) show spinner when save clicked ([c1c2bdc](https://github.com/rayjlim/miniblog/commit/c1c2bdc29ff755f85148152cf9e6704a0c5f46db))
+* new api for getting locations count ([1f8fdef](https://github.com/rayjlim/miniblog/commit/1f8fdef79c6c5b5dda281f5f02d0c5c7e1bd582e))
+
+
+### Bug Fixes
+
+* composer.lock update; refactor LocationForm and useLocationForm ([4620aed](https://github.com/rayjlim/miniblog/commit/4620aed0f965e3cdb5a608d9bd2d8c96353a7e37))
+* outdated composer.lock ([b782862](https://github.com/rayjlim/miniblog/commit/b782862fb6a6d9b77df77e96535605a0392da7aa))
+* override overflow attribute ([124808a](https://github.com/rayjlim/miniblog/commit/124808ac5524d4d7e21ea0f2a08f275dceb8ec21))
+* update snapshot ([bb83845](https://github.com/rayjlim/miniblog/commit/bb83845daaf88d63ee89309b4bdd3c7413229d8b))
+
+### [2.37.1](https://github.com/rayjlim/miniblog/compare/v2.37.0...v2.37.1) (2025-03-09)
+
+
+### Bug Fixes
+
+* missing type includes ([7aa8124](https://github.com/rayjlim/miniblog/commit/7aa8124c163cf4c3fc284f43fd59cadc76045e98))
+
+## [2.37.0](https://github.com/rayjlim/miniblog/compare/v2.36.2...v2.37.0) (2025-03-09)
+
+
+### Features
+
+* [#320](https://github.com/rayjlim/miniblog/issues/320) new search field for results limit ([160e766](https://github.com/rayjlim/miniblog/commit/160e7660398277e0d372924fc67a5db67548fa63))
+
+
+### Bug Fixes
+
+* [#301](https://github.com/rayjlim/miniblog/issues/301) check if location info is not blank ([db85b45](https://github.com/rayjlim/miniblog/commit/db85b45c5a832f65968ddc91450a98848b52a9f3))
+* [#332](https://github.com/rayjlim/miniblog/issues/332) use article instead of <div> ([bce6d64](https://github.com/rayjlim/miniblog/commit/bce6d64b3b1f6c2d8ad6e5669f90961ac7c4c974))
+* css update ([c933689](https://github.com/rayjlim/miniblog/commit/c933689c02e3b85df886b0b3255a4780262ec716))
+* display tweaks ([71444b9](https://github.com/rayjlim/miniblog/commit/71444b96d03e829aeaffb81b45e188671e84f6fe))
+* location parsing in search results edit ([b59d83c](https://github.com/rayjlim/miniblog/commit/b59d83cd808df0a9493ca34f651706fbce9356ab))
+* update to use interface types ([04c8a2f](https://github.com/rayjlim/miniblog/commit/04c8a2f89c1bedb989d0bc69231dcd42b2ae7b16))
+
+### [2.36.2](https://github.com/rayjlim/miniblog/compare/v2.36.1...v2.36.2) (2025-01-27)
+
+### [2.36.1](https://github.com/rayjlim/miniblog/compare/v2.36.0...v2.36.1) (2025-01-27)
+
+## [2.36.0](https://github.com/rayjlim/miniblog/compare/v2.35.0...v2.36.0) (2025-01-26)
+
+
+### Features
+
+* react-leaflet dependencies ([5777142](https://github.com/rayjlim/miniblog/commit/577714256aad74f70a45deb68e7e251fa38f0d78))
+
+
+### Bug Fixes
+
+* [#201](https://github.com/rayjlim/miniblog/issues/201) remove googlemaps, leaflet deps ([67b3b2f](https://github.com/rayjlim/miniblog/commit/67b3b2f401ec059074aae6c0d7af267d7a200eb9))
+* [#308](https://github.com/rayjlim/miniblog/issues/308) wrong logic, dont need to stringify ([5bb71ef](https://github.com/rayjlim/miniblog/commit/5bb71efc83ce7ce0d9ef4b567950163dc2ff6284))
+* conversion to react-leaflet ([a51257e](https://github.com/rayjlim/miniblog/commit/a51257e02d09f93cd5c446e9d7761b995ea7df0f))
+* defaults for footer and header ([38b038b](https://github.com/rayjlim/miniblog/commit/38b038bc808f78cb71732cf7034e21451542cccc))
+
+## [2.35.0](https://github.com/rayjlim/miniblog/compare/v2.34.0...v2.35.0) (2025-01-26)
+
+
+### Features
+
+* [#313](https://github.com/rayjlim/miniblog/issues/313) add filesize to media select ([6e35110](https://github.com/rayjlim/miniblog/commit/6e351103eeb85d6133662ba0987f8b6b5a0681fb))
+
+
+### Bug Fixes
+
+* [#212](https://github.com/rayjlim/miniblog/issues/212) show weight comment ([e1e453a](https://github.com/rayjlim/miniblog/commit/e1e453aafedf15a7a7df2eb30f74f102be04952a))
+* readme clean up; still needs areas filled in ([f04da85](https://github.com/rayjlim/miniblog/commit/f04da85321fc62768541fb1bc28b9e6c0c1fe19b))
+* rename file for clarity ([56b7d7e](https://github.com/rayjlim/miniblog/commit/56b7d7e58fb00112d0a785f1303acd3b3a1317f3))
+
+## [2.34.0](https://github.com/rayjlim/miniblog/compare/v2.33.0...v2.34.0) (2024-12-25)
+
+
+### Features
+
+* link to tracks in weightinfo ([b6cb4ec](https://github.com/rayjlim/miniblog/commit/b6cb4ecf5599d9f620acfc8dead2afdc69546f5d))
+
+
+### Bug Fixes
+
+* button alignment ([cf5bb97](https://github.com/rayjlim/miniblog/commit/cf5bb977f356241ce8aae7cf801eee294ed190ab))
+* button font size ([3314aa9](https://github.com/rayjlim/miniblog/commit/3314aa9d8bc8dc965e6214dcb193b7e0d181ba77))
+* display sizing so doesn't push buttons out ([30cb378](https://github.com/rayjlim/miniblog/commit/30cb3781a35e274e7c53fb77fd6d981f24d95e9a))
+* manifest and apple icon ([0c1f6ba](https://github.com/rayjlim/miniblog/commit/0c1f6ba8adc5362a52ca37f879b97f630c8f734c))
+* react-select dark mode ([dc203c3](https://github.com/rayjlim/miniblog/commit/dc203c319f6671f823244c4919c245ecb20f7b94))
+* take out today button to correct spacing ([2defcf2](https://github.com/rayjlim/miniblog/commit/2defcf2086b575afb0eceeb2b139cb0f2c33cc28))
+
+## [2.33.0](https://github.com/rayjlim/miniblog/compare/v2.32.0...v2.33.0) (2024-12-22)
+
+
+### Features
+
+* new css ([b5c6353](https://github.com/rayjlim/miniblog/commit/b5c6353cb629a0c61f6a206e26186eb503596db5))
+
+
+### Bug Fixes
+
+* add placeholders to fields ([e80d57b](https://github.com/rayjlim/miniblog/commit/e80d57bf9c0641f75f5c388d426ca140dfb1e2ac))
+
 ## [2.32.0](https://github.com/rayjlim/miniblog/compare/v2.31.0...v2.32.0) (2024-03-03)
 
 

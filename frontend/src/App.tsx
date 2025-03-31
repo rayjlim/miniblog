@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import DevRibbon from './components/DevRibbon';
 import Search from './views/Search';
 import OneDay from './views/OneDay';
-import Media from './views/Media';
+import Media from './views/MediaView';
 import Upload from './views/Upload';
 import LoginPassword from './views/LoginPassword';
 import Logs from './views/Logs';
@@ -27,10 +27,9 @@ const App = () => {
       <AuthProvider>
         <SettingProvider>
           <StrictMode>
-
             <DevRibbon />
             <div id="app" className="App d-flex flex-column h-100">
-            <ToastContainer autoClose={500} />
+              <ToastContainer autoClose={500} />
               <BrowserRouter>
                 <Routes>
                   <Route path="/upload" element={<Upload />} />
@@ -56,7 +55,6 @@ const App = () => {
         </SettingProvider>
       </AuthProvider>
     </QueryClientProvider>
-
   );
 };
 

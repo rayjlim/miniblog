@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import format from 'date-fns/format';
 import { useSetting } from './SettingContext';
 import { REST_ENDPOINT } from '../constants';
-
+import { SettingsType } from '../Types';
 import createHeaders from '../utils/createHeaders';
 
 const UploadForm = () => {
