@@ -1,5 +1,6 @@
 import { createContext, useContext, useRef } from 'react';
 import { useQuery } from "react-query";
+import { RequestError } from '../Types';
 import { REST_ENDPOINT } from '../constants';
 
 const SettingContext = createContext({});

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { toast } from 'react-toastify';
+import { EntryType, SearchParamsType } from '../Types';
 import { STORAGE_KEY } from '../constants';
 
 const useSearch = () => {

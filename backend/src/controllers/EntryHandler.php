@@ -10,6 +10,7 @@ use App\models\ListParams;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use \DateTime;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 function getValue($array, $key)
 {
@@ -125,6 +126,45 @@ class EntryHandler
         $entry = $this->dao->getYearMonths($userId);
         header('Content-Type: application/json');
         $response->getBody()->write(json_encode($entry));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function topLocations(Request $request, Response $response): Response
+    {
+        $factory = $this->container->get('Objfactory');
+        $this->dao = $factory->makeSmsEntriesDAO();
+        $locationsRaw = $this->dao->getLocations();
+        $locationCounts = [];
+        foreach ($locationsRaw as $record) {
+
+            $recordDate = $record['date'];
+            $locations = json_decode($record['locations'], true);
+            // var_dump($recordDate);
+            // var_dump($locations);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($locations)) {
+                // echo "line 145";
+                foreach ($locations as $location) {
+                    $title = $location['title'];
+
+                    if (!isset($locationCounts[$title])) {
+
+                        $locationCounts[$title] = [
+                            'count' => 0,
+                            'firstDate' =>  $recordDate
+                        ];
+                    }
+                    $locationCounts[$title]['count']++;
+                }
+            }
+        }
+
+        arsort($locationCounts);
+
+        $response->getBody()->write(json_encode([
+            'locations' => $locationCounts,
+            'total' => count($locationCounts)
+        ]));
+        header('Content-Type: application/json');
         return $response->withHeader('Content-Type', 'application/json');
     }
 }

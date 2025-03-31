@@ -1,15 +1,24 @@
-import { useImperativeHandle, useRef, MutableRefObject } from 'react';
+import { Dispatch, useImperativeHandle, MutableRefObject, SetStateAction, ForwardedRef } from 'react';
 import { useQuery } from "react-query";
+import { EntryType, SearchParamsType } from '../Types';
 import { REST_ENDPOINT } from '../constants';
 import createHeaders from '../utils/createHeaders';
 
-const fetchData = async (searchParam: SearchParamsType) => {
-  const { text, startDate, endDate } = searchParam;
-  console.log('fetch#searchText: ', text);
-  const encodedSearchText = encodeURIComponent(text || '');
+const buildEndpoint = (params: SearchParamsType): string => {
+  const { text, startDate, endDate, resultsLimit } = params;
+  const queryParams = new URLSearchParams({
+    searchParam: text || '',
+    filterType: '0',
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+    ...(resultsLimit && { resultsLimit: resultsLimit.toString() })
+  });
 
-  const endpoint = `${REST_ENDPOINT}/api/posts/?searchParam=${encodedSearchText}&filterType=0${startDate ? `&startDate=${startDate}` : ''
-    }${endDate ? `&endDate=${endDate}` : ''}`;
+  return `${REST_ENDPOINT}/api/posts/?${queryParams}`;
+};
+
+const fetchData = async (searchParam: SearchParamsType) => {
+  const endpoint = buildEndpoint(searchParam);
   console.log(endpoint);
   const requestHeaders = createHeaders();
   const response = await fetch(endpoint, { headers: requestHeaders });
@@ -18,39 +27,41 @@ const fetchData = async (searchParam: SearchParamsType) => {
   console.log(data);
   return data;
 };
+interface SearchResultsProps {
+  params: SearchParamsType;
+  editEntryId: MutableRefObject<number>;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+  ref: ForwardedRef<HTMLElement>;
+}
 
+interface RefMethods {
+  resetView: (entry: EntryType) => void;
+}
 
-const useSearchResults = (params: SearchParamsType, editEntryId: MutableRefObject<Number>, setIsEditing: any, ref: any) => {
-  const internalState = useRef();
+const useSearchResults = ({ params, editEntryId, setIsEditing, ref }: SearchResultsProps) => {
+
   const { data, error, isLoading, refetch } = useQuery(["search", params], () => fetchData(params));
 
-  //prep output values
   const { startDate, endDate } = data?.params || {};
   const entries = data?.entries || [];
 
-
-  // Expose a custom API to the parent component
-  useImperativeHandle(ref, () => ({
+  useImperativeHandle<any, RefMethods>(ref, () => ({
     resetView: (entry: EntryType) => {
-      console.log('resetView', entry, internalState.current);
-
       if (entry.content === 'DELETE' || entry.id !== -1) {
         refetch();
       }
 
-      console.log('resetView:', internalState.current, entry);
       setIsEditing(false);
 
-      setTimeout(() => {
-        console.log(editEntryId.current);
+      requestAnimationFrame(() => {
         const target = document.getElementById(`li${editEntryId.current}`);
         target?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
         });
-      }, 0);
+      });
     }
-  }), [internalState]);
+  }), [refetch, setIsEditing, editEntryId]);
 
   return { data, entries, startDate, endDate, isLoading, error };
 };

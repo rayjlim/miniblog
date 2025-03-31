@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import AddForm from '../components/AddForm';
 import EditForm from '../components/EditForm';
+import { EntryType } from '../Types';
 
 const CLOSED = 0;
 const ADD = 1;

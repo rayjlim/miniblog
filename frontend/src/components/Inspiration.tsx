@@ -1,4 +1,5 @@
 import { useSetting } from './SettingContext';
+import { SettingsType, RequestError } from '../Types';
 import useInspiration from '../hooks/useInspiration';
 
 const Inspiration = () => {

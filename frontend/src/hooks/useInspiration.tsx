@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from "react-query";
 import { useSetting } from '../components/SettingContext';
-
+import { SettingsType } from '../Types';
 const fetchData = async (api: string) => {
   if (api !== '') {
     const response = await fetch(api);

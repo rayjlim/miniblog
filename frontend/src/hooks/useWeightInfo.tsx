@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { useSetting } from '../components/SettingContext';
-
+import { SettingsType } from '../Types';
 const fetchData = async (api: string, date: string) => {
   if (api !== '') {
     const apiUrl = `${api}?start=${date}&end=${date}`;

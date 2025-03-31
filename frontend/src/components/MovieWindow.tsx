@@ -1,5 +1,5 @@
 import { useSetting } from './SettingContext';
-
+import { MovieType, SettingsType } from '../Types';
 import './MovieWindow.css';
 
 const MovieWindow = ({ movie }: { movie: MovieType }) => {

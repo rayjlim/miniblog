@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSetting } from '../components/SettingContext';
 import createHeaders from '../utils/createHeaders';
 import { REST_ENDPOINT } from '../constants';
+import { SettingsType, MediaType } from '../Types';
 
 const useMediaSelect = (mediaDefault: MediaType) => {
   //type safe the media
@@ -16,10 +17,13 @@ const useMediaSelect = (mediaDefault: MediaType) => {
       headers: requestHeaders,
     },
     );
-    console.log('response :>> ', response);
+
+    const json = await response.json();
     const random = Math.random();
+    console.log('response :>> ', json);
     setMedia({
       ...mediaSelect,
+      filesize: json?.size,
       imgUrl: `${UPLOAD_ROOT}/${mediaSelect.filePath}/${mediaSelect.fileName}?r=${random}`,
     });
   }

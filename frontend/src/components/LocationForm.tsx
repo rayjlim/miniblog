@@ -1,8 +1,18 @@
-import { forwardRef } from 'react';
+import { useEffect } from 'react';
 import useLocationForm from '../hooks/useLocationForm';
-const LocationForm = ({ }, ref: any) => {
+import { MarkerType } from '../Types';
+
+interface LocationFormProps {
+  content?: string;
+  initialLocation?: {
+    title: string;
+    coord: string;
+  };
+}
+
+const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
   const {
-    locationChange,
+    locationsContent,
     newTitle,
     newCoords,
     populateLocations,
@@ -10,33 +20,147 @@ const LocationForm = ({ }, ref: any) => {
     createNewLocation,
     updateInputFromLocations,
     getCoordinatesByBrowser,
-  } = useLocationForm(ref);
+    isValid,
+    handleContentChange,
+    removeLocation,
+    updateLocation,
+  } = useLocationForm();
+
+  useEffect(() => {
+    if (!content && !initialLocation) return;
+
+    try {
+      let locations = [];
+      if (content) {
+        const cleanContent = content.startsWith('"')
+          ? content.slice(1, -1).replace(/\\"/g, '"').replace(/\\n/g, '')
+          : content;
+        locations = JSON.parse(cleanContent);
+      }
+
+      if (initialLocation) {
+        const [lat, lng] = initialLocation.coord.split(',').map(coord => parseFloat(coord.trim()));
+        locations.push({
+          title: initialLocation.title,
+          lat,
+          lng
+        });
+      }
+
+      if (locationsContent.current) {
+        locationsContent.current.value = JSON.stringify(locations);
+        populateLocations();
+      }
+    } catch (e) {
+      console.error('Invalid JSON content or coordinates:', e);
+    }
+  }, [content, initialLocation]);
+
+  const LocationItem = ({ location }: { location: MarkerType }) => (
+    <div className="input-group mb-2" style={{
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      gap: '0.5rem'
+    }}>
+      <input
+        type="text"
+        className="form-control"
+        value={location.title}
+        onChange={(e) => updateLocation(location, 'title', e.target.value)}
+      />
+      <input
+        type="text"
+        className="form-control"
+        value={`${location.lat}, ${location.lng}`}
+        onChange={(e) => updateLocation(location, 'coordinates', e.target.value)}
+      />
+      <button
+        type="button"
+        className="btn btn-danger"
+        onClick={() => removeLocation(location)}
+      >
+        <i className="fa fa-trash" />
+      </button>
+    </div>
+  );
 
   return (
-    <div>
+    <div className="location-form">
       <textarea
-        ref={ref as any}
-        onChange={() => locationChange()}
-        className="form-control"
+        ref={locationsContent}
+        name="locationContent"
+        className="form-control mb-2"
         placeholder="locations"
         rows={2}
-        defaultValue={''}
+        defaultValue={content}
+        onChange={handleContentChange}
       />
-      <button type="button"
-        onClick={() => populateLocations()}>input to locations</button>
-      <button type="button" id="locToInputBtn" style={{ display: 'none' }}
-        onClick={() => updateInputFromLocations()}>locations to input</button>
 
-      {locations.map(((location: MarkerType) => (
-        <div key={`${location.lat},${location.lng}`}>{location.title}, {location.lat}, {location.lng}</div>
-      )))}
-      <div>
-        <input type="text" ref={newTitle as any} placeholder="title"/>
-        <input type="text" ref={newCoords as any} placeholder="url or lat, lon"/>
+      <button
+        type="button"
+        className="btn btn-secondary mb-2"
+        onClick={populateLocations}
+        disabled={!isValid}
+        style={{ display: isValid ? 'none' : 'block' }}
+      >
+        Input to locations
+      </button>
+
+      <button
+        type="button"
+        id="locToInputBtn"
+        className="btn btn-secondary"
+        style={{ display: 'none' }}
+        onClick={updateInputFromLocations}
+      >
+        Locations to input
+      </button>
+
+      <div className="locations-list mb-1">
+        {locations.map((location) => (
+          <LocationItem 
+            key={`${location.lat},${location.lng}`} 
+            location={location} 
+          />
+        ))}
       </div>
-      <button type="button" onClick={() => getCoordinatesByBrowser()}>Use Current Location</button>
-      <button type="button" onClick={() => createNewLocation()}>parse</button>
+
+      <div className="input-group mb-3">
+        <input
+          type="text"
+          name="newLocationTitle"
+          ref={newTitle}
+          className="form-control"
+          placeholder="Title"
+        />
+        <input
+          type="text"
+          name="newLocationCoords"
+          ref={newCoords}
+          className="form-control"
+          placeholder="URL or lat, lon"
+        />
+      </div>
+
+      <div className="d-flex gap-2">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={getCoordinatesByBrowser}
+        >
+          Use Current Location
+        </button>
+        <button
+          type="button"
+          className="btn btn-success"
+          onClick={createNewLocation}
+        >
+          Parse
+        </button>
+      </div>
     </div>
   );
 };
-export default forwardRef(LocationForm);
+
+export default LocationForm;
