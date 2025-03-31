@@ -1,3 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`EditForm component > should Save content on submit 1`] = `"{"id":1,"content":"entry text","date":"2000-01-01","locations":""}"`;
