@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.41.1](https://github.com/rayjlim/miniblog/compare/v2.41.0...v2.41.1) (2025-03-31)
+
+
+### Bug Fixes
+
+* move markdown display styles to own css file ([f8b2274](https://github.com/rayjlim/miniblog/commit/f8b22745ea0c71d5aab653c32a2d1db7ca0fa6d1))
+
 ## [2.41.0](https://github.com/rayjlim/miniblog/compare/v2.40.0...v2.41.0) (2025-03-30)
 
 
