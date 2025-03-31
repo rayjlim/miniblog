@@ -51,5 +51,6 @@
     "vite": "^6.2.0",
     "vitest": "^3.0.9",
     "vite-plugin-compression": "^0.5.1"
+
   }
 }
