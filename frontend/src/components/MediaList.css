@@ -32,3 +32,17 @@
 .delete {
   background-color: tomato;
 }
+
+.monthChooser {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.dir-input {
+  width: 45%;
+}
+
+.dir-select {
+  min-width: 45%;
+}
