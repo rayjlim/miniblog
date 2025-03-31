@@ -5,7 +5,7 @@ import EditForm from '../components/EditForm';
 import SearchForm from '../components/SearchForm';
 import SearchResults from '../components/SearchResults';
 import useSearch from '../hooks/useSearch';
-import './search.css';
+import './Search.css';
 
 interface SearchParams {
   resultsLimit: number;
