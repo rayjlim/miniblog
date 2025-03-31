@@ -17,6 +17,9 @@ export default defineConfig({
                 'vitest.config.ts'
             ],
             include: ['src/**/*.{ts,tsx}']
+        },
+        alias: {
+         'jest': 'vitest'
         }
     }
 })
