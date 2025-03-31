@@ -27,6 +27,7 @@ const useMediaList = () => {
 
   const uploadDirs = data && Object.values(data?.uploadDirs);
   const medias = data && Object.values(data?.dirContent);
+  if (currentDir=== ''&& uploadDirs) setCurrentDir(uploadDirs[uploadDirs.length - 1]);
   return { medias, uploadDirs, currentDir, setCurrentDir, onDeleteItem, error, isLoading };
 };
 export default useMediaList;

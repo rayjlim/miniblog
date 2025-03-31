@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { useRef, memo } from 'react';
 import MediaItem from './MediaItem';
 import useMediaList from '../hooks/useMediaList';
 import { RequestError } from '../Types';
@@ -12,23 +12,41 @@ const DirectoryList = memo(({ dirs, currentDir, onDirSelect }: {
   dirs: string[];
   currentDir: string;
   onDirSelect: (dir: string) => void;
-}) => (
-  <>
-    <h2>{`Dirs ${currentDir} (${dirs.length})`}</h2>
-    <div>
-      {dirs.map((dir) => (
-        <button
-          type="button"
-          key={dir}
-          onClick={() => onDirSelect(dir)}
-          className={dir === currentDir ? 'highlight-dir' : ''}
+}) => {
+  const dirRef = useRef<HTMLInputElement>(null);
+  const handleDirInput = (value: string) => {
+    const yearMonthRegex = /^\d{4}-(?:0[1-9]|1[0-2])$/;
+    if (yearMonthRegex.test(value)) {
+      onDirSelect(value);
+    }
+  };
+
+  return (
+    <>
+      <h2>{`Dirs ${currentDir} (${dirs.length} folders)`}</h2>
+      <div className="monthChooser">
+        <input
+          ref={dirRef}
+          defaultValue={currentDir}
+          type="text"
+          placeholder="YYYY-MM"
+          onChange={(e) => handleDirInput(e.target.value)}
+          className="dir-input"
+        />
+        <select
+          value={currentDir}
+          onChange={(e) => onDirSelect(e.target.value)}
+          className="dir-select"
         >
-          {dir}
-        </button>
-      ))}
-    </div>
-  </>
-));
+          <option value="">Select month</option>
+          {dirs.map(dir => (
+            <option key={dir} value={dir}>{dir}</option>
+          ))}
+        </select>
+      </div>
+    </>
+  );
+});
 
 const MediaList = ({ onMediaSelect }: MediaListProps) => {
   const {
@@ -51,7 +69,7 @@ const MediaList = ({ onMediaSelect }: MediaListProps) => {
         currentDir={currentDir}
         onDirSelect={setCurrentDir}
       />
-      <h2>{`Media (${medias.length})`}</h2>
+      <h2>{`Media (${medias.length} files)`}</h2>
       <ul className="media-preview">
         {currentDir && medias.map((media: string) => (
           <MediaItem

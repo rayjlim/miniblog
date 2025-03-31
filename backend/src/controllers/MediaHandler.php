@@ -29,7 +29,12 @@ class MediaHandler
 
     private function getFilesOrderedByDate(string $dir): array
     {
-        $files = scandir($this->getFullPath($dir));
+        $dirPath = $this->getFullPath($dir);
+        if (!is_dir($dirPath)) {
+            return [];
+        }
+        
+        $files = scandir($dirPath);
         $files = array_filter($files, function($file) use ($dir) {
             return !str_starts_with($file, '.') &&
                    is_file($this->getFullPath($dir, $file));
