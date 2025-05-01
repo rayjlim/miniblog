@@ -1,0 +1,31 @@
+.well {
+  display: flex;
+  gap: 2rem;
+}
+.well-vertical {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.form-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+.preview {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .well {
+    flex-direction: column;
+  }
+
+  .form-container,
+  .preview {
+    width: 100%;
+  }
+}
