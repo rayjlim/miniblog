@@ -1,7 +1,7 @@
 {
   "name": "lilplaytime/miniblog",
   "description": "Blog Web application. Backend for headless CMS, front end in Create-React-App",
-  "version": "2.41.1",
+  "version": "2.42.0",
   "license": "proprietary",
   "require": {
     "php": "8.*.*",

@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.42.0](https://github.com/rayjlim/miniblog/compare/v2.41.1...v2.42.0) (2025-05-01)
+
+
+### Features
+
+* [#315](https://github.com/rayjlim/miniblog/issues/315) make media folder select an input/select combo ([5f14dd3](https://github.com/rayjlim/miniblog/commit/5f14dd3e1b520fc5e0943f326dcc45b7e194b06a))
+* ✨ [#44](https://github.com/rayjlim/miniblog/issues/44) add preview toggle and styling for AddForm and EditForm ([93af4fd](https://github.com/rayjlim/miniblog/commit/93af4fdb1998c5b7754db7930e9b19e18f529831))
+
+
+### Bug Fixes
+
+* **AuthContext:** add type definition for useAuth hook ([4b929f3](https://github.com/rayjlim/miniblog/commit/4b929f3e3609e4f797d23583a08d06d5eef4374e))
+* build issue ([0306267](https://github.com/rayjlim/miniblog/commit/03062673f30dc59f72c4150ee536bc7bc542ecd6))
+* logs not showing ([59628a8](https://github.com/rayjlim/miniblog/commit/59628a880fd111510f7e5d41f90997281f2f7135))
+* package-lock.json ([92ac6d5](https://github.com/rayjlim/miniblog/commit/92ac6d5f8e8318e3982fdf076c9771ba430e7249))
+* test coverage report ([ba2b0a1](https://github.com/rayjlim/miniblog/commit/ba2b0a1062cf66204d7bdbccfa5494e14841b92d))
+* upgrade multiple dependencies with Snyk ([c6a4434](https://github.com/rayjlim/miniblog/commit/c6a443451bb481f8fd187feb812196545c46cbc5))
+
 ### [2.41.1](https://github.com/rayjlim/miniblog/compare/v2.41.0...v2.41.1) (2025-03-31)
 
 
