@@ -18,6 +18,10 @@ body {
   width: 100%
 }
 
+.container, section {
+  max-width: 100%;
+}
+
 @media only screen and (max-width: 900px) {
   #root {
     max-width: 1280px;
