@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.42.2](https://github.com/rayjlim/miniblog/compare/v2.42.1...v2.42.2) (2025-07-06)
+
+
+### Bug Fixes
+
+* [#347](https://github.com/rayjlim/miniblog/issues/347)💄 media query breakpoint from 768px to 900px for better responsiveness ([d39ad04](https://github.com/rayjlim/miniblog/commit/d39ad0441d879e151a672939572241da4aea0a75))
+* upgrade @react-oauth/google from 0.12.1 to 0.12.2 ([83c8eee](https://github.com/rayjlim/miniblog/commit/83c8eee927c57bbe2554e95be0153ffbb3ce66f7))
+* upgrade react-router-dom from 6.30.0 to 6.30.1 ([dbc62d3](https://github.com/rayjlim/miniblog/commit/dbc62d3d84052d3fc7c9b96a349bca7483a36f7f))
+
 ### [2.42.1](https://github.com/rayjlim/miniblog/compare/v2.42.0...v2.42.1) (2025-07-06)
 
 
