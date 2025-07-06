@@ -141,8 +141,9 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
           className="form-control"
           placeholder="URL or lat, lon"
         />
-        <span
-          className="input-group-text"
+        <button
+          type="button"
+          className="btn btn-info"
           title="Coordinate grab instructions - In google maps
 - Press and hold location to get coordinates
 - Press and hold Home bar (bottom of screen) to get to Screen capture
@@ -151,7 +152,7 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
           style={{ cursor: 'help' }}
         >
           <i className="fa fa-question-circle" />
-        </span>
+        </button>
       </div>
 
       <div className="d-flex gap-2">
