@@ -28,4 +28,8 @@
   .preview {
     width: 100%;
   }
+  .add-form {
+    padding: 2px;
+    margin: 0;
+  }
 }

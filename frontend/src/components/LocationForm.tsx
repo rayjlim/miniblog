@@ -119,9 +119,9 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
 
       <div className="locations-list mb-1">
         {locations.map((location) => (
-          <LocationItem 
-            key={`${location.lat},${location.lng}`} 
-            location={location} 
+          <LocationItem
+            key={`${location.lat},${location.lng}`}
+            location={location}
           />
         ))}
       </div>
@@ -141,6 +141,17 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
           className="form-control"
           placeholder="URL or lat, lon"
         />
+        <span
+          className="input-group-text"
+          title="Coordinate grab instructions - In google maps
+- Press and hold location to get coordinates
+- Press and hold Home bar (bottom of screen) to get to Screen capture
+- Circle the coordinates text
+- Select Text, Copy"
+          style={{ cursor: 'help' }}
+        >
+          <i className="fa fa-question-circle" />
+        </span>
       </div>
 
       <div className="d-flex gap-2">

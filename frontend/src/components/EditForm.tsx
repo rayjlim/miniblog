@@ -58,7 +58,19 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
               defaultValue={escapedContent}
             />
           </div>
-
+{/* common used tags:
+Fitness
+Tv
+Gaming
+song
+data
+devwork
+golfround
+computer
+finance
+bought
+FI
+Dream */}
           <div className="form-actions d-flex justify-content-between align-items-center gap-3 mb-3">
             <button
               className="btn btn-primary spaced-link success"
