@@ -22,7 +22,7 @@ body {
   max-width: 100%;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 415px) {
   #root {
     max-width: 1280px;
   }

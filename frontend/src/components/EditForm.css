@@ -13,7 +13,7 @@
 .delete-btn {
   margin-left: 'auto'
 }
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 415px) {
   .well {
     flex-direction: column;
     gap: .5rem;

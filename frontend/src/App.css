@@ -94,7 +94,7 @@ button:nth-of-type(3) {
   margin: 0 0.05em;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 415px) {
   .container {
     margin: 0 0.05em;
     padding: 0 0 0 0.5em;
@@ -140,7 +140,7 @@ b {
     transform: rotate(10deg);
   }
 }
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 415px) {
   .github-corner:hover .octo-arm {
     animation: none;
   }
