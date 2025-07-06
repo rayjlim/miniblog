@@ -5,14 +5,12 @@ import EditForm from '../../components/EditForm';
 
 describe('EditForm component', () => {
   it('should Delete call and respond', async () => {
-    const mockDelete = vi.fn();
     const mockHide = vi.fn();
 
     render(
       <EditForm
-        entry={{ id: '123', date: '2023-01-01', content: 'Test content' }}
-        onDelete={mockDelete}
-        hideEdit={mockHide}
+        entry={{ id: 123, date: '2023-01-01', content: 'Test content' }}
+        onSuccess={mockHide}
       />
     );
 

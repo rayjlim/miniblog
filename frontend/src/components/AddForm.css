@@ -22,10 +22,15 @@
 @media (max-width: 768px) {
   .well {
     flex-direction: column;
+    gap: .5rem;
   }
 
   .form-container,
   .preview {
     width: 100%;
+  }
+  .add-form {
+    padding: 2px;
+    margin: 0;
   }
 }

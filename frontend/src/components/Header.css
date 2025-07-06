@@ -13,7 +13,7 @@
   margin: 0 0 0 0;
 }
 
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 900px) {
   .navbar > a > span {
     display: none;
   }
