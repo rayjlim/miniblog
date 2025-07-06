@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.42.1](https://github.com/rayjlim/miniblog/compare/v2.42.0...v2.42.1) (2025-07-06)
+
+
+### Bug Fixes
+
+* [#346](https://github.com/rayjlim/miniblog/issues/346) 💄 style(forms): improve form spacing and remove redundant margins ([11f94f8](https://github.com/rayjlim/miniblog/commit/11f94f84d0896d9a12efbe6505a80560e46cefc6))
+* [#346](https://github.com/rayjlim/miniblog/issues/346)💄style: improve mobile responsiveness and form styling ([f977fbc](https://github.com/rayjlim/miniblog/commit/f977fbcdea771bc779b27134b96722efefc31ba8))
+* ♻️ refactor(LocationForm): replace help span with button for better UX ([c6a7651](https://github.com/rayjlim/miniblog/commit/c6a76517b012e37f67ed526529da795d562cd916))
+
 ## [2.42.0](https://github.com/rayjlim/miniblog/compare/v2.41.1...v2.42.0) (2025-05-01)
 
 
