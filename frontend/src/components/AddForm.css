@@ -22,6 +22,7 @@
 @media (max-width: 768px) {
   .well {
     flex-direction: column;
+    gap: .5rem;
   }
 
   .form-container,

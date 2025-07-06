@@ -59,7 +59,7 @@ const AddForm = ({ content, date, location, onSuccess }: AddFormProps) => {
               />
             </div>
 
-            <div className="form-actions d-flex justify-content-between align-items-center gap-3 mb-3">
+            <div className="form-actions d-flex justify-content-between align-items-center gap-3">
               <button
                 className="btn btn-primary spaced-link success"
                 id="saveBtn"
@@ -114,7 +114,7 @@ const AddForm = ({ content, date, location, onSuccess }: AddFormProps) => {
             </div>
           </div>
         </div>
-        <div className="markdown-content preview dashBorder mt-3">
+        <div className="markdown-content preview dashBorder">
           <MarkdownDisplay source={markdownContent} />
         </div>
       </div>

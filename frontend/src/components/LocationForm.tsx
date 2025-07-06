@@ -57,7 +57,7 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
   }, [content, initialLocation]);
 
   const LocationItem = ({ location }: { location: MarkerType }) => (
-    <div className="input-group mb-2" style={{
+    <div className="input-group" style={{
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
@@ -90,7 +90,7 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
       <textarea
         ref={locationsContent}
         name="locationContent"
-        className="form-control mb-2"
+        className="form-control"
         placeholder="locations"
         rows={2}
         defaultValue={content}
@@ -99,7 +99,7 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
 
       <button
         type="button"
-        className="btn btn-secondary mb-2"
+        className="btn btn-secondary"
         onClick={populateLocations}
         disabled={!isValid}
         style={{ display: isValid ? 'none' : 'block' }}
@@ -126,7 +126,7 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
         ))}
       </div>
 
-      <div className="input-group mb-3">
+      <div className="input-group">
         <input
           type="text"
           name="newLocationTitle"
@@ -141,21 +141,10 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
           className="form-control"
           placeholder="URL or lat, lon"
         />
-        <button
-          type="button"
-          className="btn btn-info"
-          title="Coordinate grab instructions - In google maps
-- Press and hold location to get coordinates
-- Press and hold Home bar (bottom of screen) to get to Screen capture
-- Circle the coordinates text
-- Select Text, Copy"
-          style={{ cursor: 'help' }}
-        >
-          <i className="fa fa-question-circle" />
-        </button>
+
       </div>
 
-      <div className="d-flex gap-2">
+      <div className="d-flex justify-content-around location-action-btns">
         <button
           type="button"
           className="btn btn-primary"
@@ -171,6 +160,13 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
           Parse
         </button>
       </div>
+      <p style={{fontSize: 'small'}}>
+        Coordinate grab instructions - In google maps
+- Press and hold location to get coordinates
+- Press and hold Home bar (bottom of screen) to get to Screen capture
+- Circle the coordinates text
+- Select Text, Copy
+      </p>
     </div>
   );
 };
