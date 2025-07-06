@@ -4,22 +4,23 @@
 }
 .well-vertical {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   flex-direction: column;
 }
 
 .form-container {
-  flex: 1;
-  min-width: 300px;
+  flex: 5;
+  min-width: 400px;
 }
 
 .preview {
   flex: 1;
-  min-width: 300px;
+  min-width: 400px;
+  /* border: 1px solid red; */
 }
 
 /* For mobile devices */
-@media (max-width: 768px) {
+@media only screen and (max-width: 900px) {
   .well {
     flex-direction: column;
     gap: .5rem;
@@ -29,8 +30,5 @@
   .preview {
     width: 100%;
   }
-  .add-form {
-    padding: 2px;
-    margin: 0;
-  }
+
 }

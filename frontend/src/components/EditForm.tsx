@@ -46,7 +46,7 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
             e.preventDefault();
             handleSave();
           }}
-          className="add-form"
+          className="form-container "
         >
           <div className="form-group mb-1">
             <textarea
@@ -135,12 +135,12 @@ Dream */}
           </div>
         </form>
 
-        <div className="markdown-content preview dashBorder">
+        <div className="markdown-content preview ">
           <MarkdownDisplay source={markdownContent} />
         </div>
       </div>
       <div className="entry-bar d-flex justify-content-between align-items-start">
-        <button onClick={changePreview}>toggle preview</button>
+        <button onClick={changePreview}>toggle preview Down/Right</button>
         <button
           onClick={handleDelete}
           data-testid="deleteBtn"

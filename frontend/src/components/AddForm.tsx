@@ -45,51 +45,51 @@ const AddForm = ({ content, date, location, onSuccess }: AddFormProps) => {
     <>
       <h2>Add Entry</h2>
       <div className={PREVIEW === 'down' ? 'well-vertical' : 'well'}>
-        <div className="form-container">
-          <form ref={formRef} onSubmit={handleAdd} className="add-form">
-            <div className="form-group mb-1">
-              <textarea
-                id="addFormTextarea"
-                name="content"
-                rows={6}
-                onChange={textChange}
-                className="form-control"
-                placeholder="Add ..."
-                defaultValue={content}
-              />
-            </div>
 
-            <div className="form-actions d-flex justify-content-between align-items-center gap-3">
-              <button
-                className="btn btn-primary spaced-link success"
-                id="saveBtn"
-                type="submit"
-                title="alt + s"
-                disabled={isLoading}
-              >
-                <i className="fa fa-save" /> Save
-              </button>
+        <form ref={formRef} onSubmit={handleAdd} className="form-container">
+          <div className="form-group mb-1">
+            <textarea
+              id="addFormTextarea"
+              name="content"
+              rows={6}
+              onChange={textChange}
+              className="form-control"
+              placeholder="Add ..."
+              defaultValue={content}
+            />
+          </div>
 
-              <input
-                type="date"
-                name="dateInput"
-                defaultValue={date}
-                className="form-control"
-                style={{ width: 'auto' }}
-              />
+          <div className="form-actions d-flex justify-content-between align-items-center gap-3">
+            <button
+              className="btn btn-primary spaced-link success"
+              id="saveBtn"
+              type="submit"
+              title="alt + s"
+              disabled={isLoading}
+            >
+              <i className="fa fa-save" /> Save
+            </button>
 
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="btn btn-warning pull-right spaced-link attention"
-                id="cancelBtn"
-              >
-                <i className="fa fa-ban" /> Cancel
-              </button>
-            </div>
+            <input
+              type="date"
+              name="dateInput"
+              defaultValue={date}
+              className="form-control"
+              style={{ width: 'auto' }}
+            />
 
-            <LocationForm initialLocation={location} />
-          </form>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="btn btn-warning pull-right spaced-link attention"
+              id="cancelBtn"
+            >
+              <i className="fa fa-ban" /> Cancel
+            </button>
+          </div>
+
+          <LocationForm initialLocation={location} />
+
           <div className="help-section">
             <p className="small mb-1">use `@@fa-tag@@` for quick font-awesome icon</p>
             <p className="small mb-1">link: [link text](URL)</p>
@@ -113,12 +113,13 @@ const AddForm = ({ content, date, location, onSuccess }: AddFormProps) => {
               </a>
             </div>
           </div>
-        </div>
-        <div className="markdown-content preview dashBorder">
+
+        </form>
+        <div className="markdown-content preview ">
           <MarkdownDisplay source={markdownContent} />
         </div>
       </div>
-      <button onClick={changePreview}>toggle preview</button>
+      <button onClick={changePreview}>toggle preview Down/Right</button>
     </>
   );
 };
