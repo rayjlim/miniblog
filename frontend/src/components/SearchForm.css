@@ -57,7 +57,7 @@
   justify-content: flex-start;
 }
 
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 900px) {
   .search-container {
     margin-bottom: 0.25rem;
   }

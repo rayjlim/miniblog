@@ -58,8 +58,20 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
               defaultValue={escapedContent}
             />
           </div>
-
-          <div className="form-actions d-flex justify-content-between align-items-center gap-3 mb-3">
+{/* common used tags:
+Fitness
+Tv
+Gaming
+song
+data
+devwork
+golfround
+computer
+finance
+bought
+FI
+Dream */}
+          <div className="form-actions d-flex justify-content-between align-items-center gap-3">
             <button
               className="btn btn-primary spaced-link success"
               data-testid="saveBtn"
@@ -95,7 +107,7 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
             </button>
           </div>
 
-          <div className="mt-3">
+          <div>
             <LocationForm content={entry?.locations ? JSON.stringify(entry.locations) : ''} />
           </div>
           <div className="help-text">
@@ -123,7 +135,7 @@ const EditForm = ({ entry, onSuccess }: EditFormProps) => {
           </div>
         </form>
 
-        <div className="markdown-content preview dashBorder mt-3">
+        <div className="markdown-content preview dashBorder">
           <MarkdownDisplay source={markdownContent} />
         </div>
       </div>

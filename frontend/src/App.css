@@ -97,7 +97,7 @@ button:nth-of-type(3) {
   margin: 0 0.05em;
 }
 
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 900px) {
   .container {
     margin: 0 0.05em;
     padding: 0 0 0 0.5em;
@@ -143,7 +143,7 @@ b {
     transform: rotate(10deg);
   }
 }
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 900px) {
   .github-corner:hover .octo-arm {
     animation: none;
   }
@@ -152,6 +152,11 @@ b {
   }
   .github-ribbon {
     display: none;
+  }
+
+  .entries-list > article {
+    margin: 0;
+    padding: 0;
   }
 }
 
