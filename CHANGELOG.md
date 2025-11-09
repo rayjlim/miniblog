@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.42.3](https://github.com/rayjlim/miniblog/compare/v2.42.2...v2.42.3) (2025-11-09)
+
+
+### Bug Fixes
+
+* [#343](https://github.com/rayjlim/miniblog/issues/343)💄 style: change code font color to black for better readability ([f1a7aaf](https://github.com/rayjlim/miniblog/commit/f1a7aafe979fbc28c3c3720404edfc2df08f260d))
+* 💄 style: add max-width for container and section elements ([6610e13](https://github.com/rayjlim/miniblog/commit/6610e13daf753bd29ddd7fb4d2b74763068a0e5d))
+
 ### [2.42.2](https://github.com/rayjlim/miniblog/compare/v2.42.1...v2.42.2) (2025-07-06)
 
 
