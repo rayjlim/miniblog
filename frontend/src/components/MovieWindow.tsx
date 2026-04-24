@@ -4,14 +4,14 @@ import './MovieWindow.css';
 
 const MovieWindow = ({ movie }: { movie: MovieType }) => {
   const { MOVIES_POSTERS } = useSetting() as SettingsType;
-  const { title, imdbImageId, imdbId } = movie;
+  const { title, imdbImageId, imdbId, season } = movie;
   const imageUrl = `${MOVIES_POSTERS}/${imdbImageId}.jpg`;
   const imdbUrl = `https://www.imdb.com/title/${imdbId}/`;
 
   return (
     <div className="movie">
       <a href={imdbUrl} target="_blank" rel="noreferrer">
-        <img src={imageUrl} height="100px" alt="movie" title={title} />
+        <img src={imageUrl} height="100px" alt="movie" title={season ? `${title} s${season}` : title} />
       </a>
       {/* <div>{title}</div> */}
     </div>

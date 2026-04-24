@@ -16,6 +16,7 @@ interface MovieType extends BaseEntity {
   title: string;
   imdbImageId: string;
   imdbId: string;
+  season: string;
 }
 
 // Media related types
