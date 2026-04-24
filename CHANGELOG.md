@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.43.0](https://github.com/rayjlim/miniblog/compare/v2.42.3...v2.43.0) (2026-04-24)
+
+
+### Features
+
+* **frontend:** [#372](https://github.com/rayjlim/miniblog/issues/372) add season field to movie display ([6ad3ea4](https://github.com/rayjlim/miniblog/commit/6ad3ea4a624d36831d333beef1f635584267349e))
+
 ### [2.42.3](https://github.com/rayjlim/miniblog/compare/v2.42.2...v2.42.3) (2025-11-09)
 
 
