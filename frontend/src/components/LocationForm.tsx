@@ -141,23 +141,22 @@ const LocationForm = ({ content = "", initialLocation }: LocationFormProps) => {
           className="form-control"
           placeholder="URL or lat, lon"
         />
-
       </div>
 
-      <div className="d-flex justify-content-around location-action-btns">
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={getCoordinatesByBrowser}
-        >
-          Use Current Location
-        </button>
+      <div className="d-flex justify-content-between location-action-btns">
         <button
           type="button"
           className="btn btn-success"
           onClick={createNewLocation}
         >
           Parse
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={getCoordinatesByBrowser}
+        >
+          Use Current Location
         </button>
       </div>
       <p style={{fontSize: 'small'}}>

@@ -86,6 +86,14 @@ code {
   justify-content: space-between;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
 button:nth-of-type(3) {
   margin-left: auto;
 }
